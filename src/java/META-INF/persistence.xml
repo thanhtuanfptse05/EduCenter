@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+    <persistence-unit name="EduCenterPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        
+        <class>com.educenter.entity.Role</class>
+        <class>com.educenter.entity.User</class>
+        <class>com.educenter.entity.AuditLog</class>
+        <class>com.educenter.entity.PasswordResetToken</class>
+        <class>com.educenter.entity.Subject</class>
+        <class>com.educenter.entity.Course</class>
+        <class>com.educenter.entity.Teacher</class>
+        <class>com.educenter.entity.EduClass</class>
+        <class>com.educenter.entity.Lead</class>
+        <class>com.educenter.entity.RegistrationCartItem</class>
+        
+        <!-- Cấu hình kết nối Microsoft SQL Server -->
+        <properties>
+            <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=EduCenterDB;encrypt=false;trustServerCertificate=true;"/>
+            <property name="jakarta.persistence.jdbc.user" value="sa"/>
+            <property name="jakarta.persistence.jdbc.password" value="123"/>
+
+            <!-- Cấu hình Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+        </properties>
+    </persistence-unit>
+</persistence>
