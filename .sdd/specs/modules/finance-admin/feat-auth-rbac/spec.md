@@ -27,14 +27,25 @@
 
 > **Quy ước định danh MVP:** Vai trò **System Admin** và **Center Manager** được gộp làm **1 vai trò duy nhất (`ADMIN`)** để tinh gọn vận hành theo đúng định hướng SRS v1.1 (Mục II: *"Trong MVP, quyền System Admin có thể gộp với quản trị trung tâm"*).
 
-| Vai trò (Role) | Mã Code | Quyền hạn & Không gian truy cập |
-|---|---|---|
-| **Guest** | `GUEST` | Xem danh mục khóa học public, gửi yêu cầu tư vấn, đăng ký tài khoản, đăng nhập, quên mật khẩu. |
-| **Admin & Center Manager** | `ADMIN` | **Gộp toàn quyền Quản trị & Điều hành:** Cấu hình hệ thống, quản lý tài khoản, cấp/thu hồi vai trò, khóa/mở tài khoản, phê duyệt, điều hành học vụ, xem toàn bộ báo cáo doanh thu, công nợ và Audit Logs. |
-| **Admission & Academic Staff** | `STAFF` | Quản lý Leads, tư vấn CRM, hồ sơ học viên/phụ huynh, ghi danh, xếp lịch, lập hóa đơn, thu học phí. |
-| **Teacher / Tutor** | `TEACHER` | Xem lịch giảng dạy, buổi học được phân công, điểm danh, viết nhật ký dạy, tạo bài kiểm tra, nhập điểm. |
-| **Student** | `STUDENT` | Xem lịch học cá nhân, kết quả học tập công bố, chuyên cần, tra cứu học phí, gửi câu hỏi Q&A. |
-| **Parent / Guardian** | `PARENT` | Theo dõi chuyên cần, điểm số, học phí của con (chỉ học sinh đã được xác thực liên kết giám hộ). |
+| Vai trò (Role) | Mã Code | Quyền hạn & Không gian truy cập | Cơ chế cấp tài khoản |
+|---|---|---|---|
+| **Guest** | `GUEST` | Xem danh mục khóa học public, gửi yêu cầu tư vấn, đăng ký tài khoản, đăng nhập, quên mật khẩu. | Tự do truy cập |
+| **Admin & Center Manager** | `ADMIN` | **Gộp toàn quyền Quản trị & Điều hành:** Cấu hình hệ thống, quản lý tài khoản, cấp/thu hồi vai trò, khóa/mở tài khoản, phê duyệt, điều hành học vụ, xem toàn bộ báo cáo doanh thu, công nợ và Audit Logs. | **Cấp sẵn trong CSDL** |
+| **Admission & Academic Staff** | `STAFF` | Quản lý Leads, tư vấn CRM, hồ sơ học viên/phụ huynh, ghi danh, xếp lịch, lập hóa đơn, thu học phí. | **Cấp sẵn trong CSDL** |
+| **Teacher / Tutor** | `TEACHER` | Xem lịch giảng dạy, buổi học được phân công, điểm danh, viết nhật ký dạy, tạo bài kiểm tra, nhập điểm. | **Cấp sẵn trong CSDL** |
+| **Student** | `STUDENT` | Xem lịch học cá nhân, kết quả học tập công bố, chuyên cần, tra cứu học phí, gửi câu hỏi Q&A. | Tự đăng ký (`/register`) hoặc cấp sẵn |
+| **Parent / Guardian** | `PARENT` | Theo dõi chuyên cần, điểm số, học phí của con (chỉ học sinh đã được xác thực liên kết giám hộ). | Tự đăng ký (`/register`) hoặc cấp sẵn |
+
+### Danh Sách Tài Khoản Demo Cấp Sẵn (Mật khẩu chung: `123456`)
+*Phục vụ chấm thi Assignment PRJ301 và kiểm thử toàn diện:*
+
+| Vai trò | Email đăng nhập | Mật khẩu mẫu | Tên hiển thị demo |
+|---|---|---|---|
+| **Admin & Manager** | `admin@educenter.vn` | `123456` | Nguyễn Quản Trị |
+| **Staff (Tuyển sinh)** | `staff@educenter.vn` | `123456` | Trần Thu Hà |
+| **Teacher (Toán 12)** | `teacher.hung@educenter.vn` | `123456` | ThS. Lê Mạnh Hùng |
+| **Student (Học viên)** | `student.nam@educenter.vn` | `123456` | Trần Hoàng Nam (Lớp 12) |
+| **Parent (Phụ huynh)** | `parent.tuan@educenter.vn` | `123456` | Trần Quốc Tuấn (Phụ huynh em Nam) |
 
 ---
 

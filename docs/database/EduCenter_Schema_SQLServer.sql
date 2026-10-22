@@ -670,15 +670,17 @@ INSERT INTO dbo.Roles (code, name, description) VALUES
 ('PARENT', N'Phụ huynh học sinh', N'Theo dõi chuyên cần, kết quả học tập và công nợ của con');
 GO
 
--- 2. Tài khoản Admin mặc định (mật khẩu mẫu: 123456 -> băm BCrypt cost 10)
--- $2a$10$wO08fM2uV2iWq3kF4B8L0.yKq6pXzY/rJjE12.uH8.y9dZ4t2k1nS (ví dụ chuẩn BCrypt)
+-- 2. Tài khoản Demo cho 5 vai trò hệ thống (Mật khẩu chung cho tất cả: 123456)
+-- Hash BCrypt cho '123456': $2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO
 INSERT INTO dbo.Users (email, password_hash, full_name, phone, status) VALUES
-('admin@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Quản Trị Viên', '0901234567', 'ACTIVE'),
-('staff@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Nguyễn Thị Thu (Tư Vấn)', '0912345678', 'ACTIVE'),
-('teacher.hung@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'ThS. Lê Mạnh Hùng', '0987654321', 'ACTIVE');
+('admin@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Nguyễn Quản Trị (Admin & Manager)', '0901234567', 'ACTIVE'),
+('staff@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Trần Thu Hà (Tư Vấn & Tuyển Sinh)', '0912345678', 'ACTIVE'),
+('teacher.hung@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'ThS. Lê Mạnh Hùng (Giáo Viên Toán)', '0987654321', 'ACTIVE'),
+('student.nam@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Trần Hoàng Nam (Học Viên Lớp 12)', '0933112233', 'ACTIVE'),
+('parent.tuan@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Trần Quốc Tuấn (Phụ Huynh)', '0944556677', 'ACTIVE');
 GO
 
--- Gán vai trò cho Admin, Staff, Teacher
+-- Gán vai trò tương ứng cho từng tài khoản demo
 INSERT INTO dbo.UserRoles (user_id, role_id)
 SELECT u.id, r.id FROM dbo.Users u, dbo.Roles r 
 WHERE u.email = 'admin@educenter.vn' AND r.code = 'ADMIN';
@@ -690,12 +692,38 @@ WHERE u.email = 'staff@educenter.vn' AND r.code = 'STAFF';
 INSERT INTO dbo.UserRoles (user_id, role_id)
 SELECT u.id, r.id FROM dbo.Users u, dbo.Roles r 
 WHERE u.email = 'teacher.hung@educenter.vn' AND r.code = 'TEACHER';
+
+INSERT INTO dbo.UserRoles (user_id, role_id)
+SELECT u.id, r.id FROM dbo.Users u, dbo.Roles r 
+WHERE u.email = 'student.nam@educenter.vn' AND r.code = 'STUDENT';
+
+INSERT INTO dbo.UserRoles (user_id, role_id)
+SELECT u.id, r.id FROM dbo.Users u, dbo.Roles r 
+WHERE u.email = 'parent.tuan@educenter.vn' AND r.code = 'PARENT';
 GO
 
--- Hồ sơ giáo viên mẫu
+-- Hồ sơ giáo viên mẫu (liên kết 1:1 với teacher.hung)
 INSERT INTO dbo.Teachers (user_id, full_name, phone, email, specialization, degree, bio, hourly_rate)
 SELECT id, full_name, phone, email, N'Toán THPT, Ôn thi tốt nghiệp & Đánh giá năng lực', N'Thạc sĩ Toán học - ĐH Sư Phạm Hà Nội', N'12 năm kinh nghiệm luyện thi THPT Quốc gia', 350000.00
 FROM dbo.Users WHERE email = 'teacher.hung@educenter.vn';
+
+-- Hồ sơ học viên mẫu (liên kết với student.nam)
+INSERT INTO dbo.Students (user_id, full_name, dob, gender, phone, email, school, grade_level, target_goal)
+SELECT id, full_name, '2008-05-15', 'MALE', phone, email, N'THPT Chu Văn An', 12, N'Đạt 8.5+ môn Toán thi Tốt nghiệp THPT'
+FROM dbo.Users WHERE email = 'student.nam@educenter.vn';
+
+-- Hồ sơ phụ huynh mẫu (liên kết với parent.tuan)
+INSERT INTO dbo.Guardians (user_id, full_name, phone, email, occupation, address)
+SELECT id, full_name, phone, email, N'Kỹ sư CNTT', N'Số 45 Hoàng Quốc Việt, Cầu Giấy, Hà Nội'
+FROM dbo.Users WHERE email = 'parent.tuan@educenter.vn';
+
+-- Liên kết xác thực phụ huynh - học viên (BR15)
+INSERT INTO dbo.StudentGuardians (student_id, guardian_id, relationship, is_primary, verified_at, verified_by)
+SELECT s.id, g.id, N'Bố', 1, GETDATE(), u.id
+FROM dbo.Students s, dbo.Guardians g, dbo.Users u
+WHERE s.email = 'student.nam@educenter.vn' 
+  AND g.email = 'parent.tuan@educenter.vn' 
+  AND u.email = 'admin@educenter.vn';
 GO
 
 -- 3. Môn học chuẩn
