@@ -17,3 +17,9 @@
 4. **CODE XONG TÍNH NĂNG LÀ PHẢI ĐẨY LÊN MAIN:**
    * Ngay khi hoàn tất triển khai một tính năng hoặc một cụm Use Case P0 và pass kiểm thử/DoD: **BẮT BUỘC** commit và push lên nhánh `main` (với commit format `feat([scope]): [description]`).
    * Nhánh `main` luôn là bản build chạy ổn định và sẵn sàng demo.
+
+5. **BẮT BUỘC TUÂN THỦ DESIGN SYSTEM (DESIGN.MD):**
+   * Mọi màn hình JSP, CSS, JavaScript, bố cục layout, typography, màu sắc, components **BẮT BUỘC** tuân thủ tuyệt đối theo đặc tả trong [`design.md`](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/design.md) (tức [`design (1).md`](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/design%20(1).md)).
+   * **Default Light Mode:** Lần đầu truy cập luôn luôn là giao diện sáng (Light mode). Chỉ kích hoạt Dark mode khi người dùng chủ động chuyển đổi qua nút toggle.
+   * **Icon chuẩn hóa:** Tuyệt đối KHÔNG dùng emoji làm icon, không dùng icon 3D hay sticker hoạt hình. Bắt buộc dùng bộ icon outline SVG đồng nhất (khuyến nghị Lucide SVG 18–20px).
+   * **Design Tokens & No External CDN:** Dùng CSS cục bộ với CSS variables token (`--bg`, `--surface`, `--primary`, `--text`...), typography chuẩn `Inter`, bo góc và khoảng cách chuẩn hóa. CẤM dùng Tailwind CDN hay các framework lạ làm lệch chuẩn giao diện.

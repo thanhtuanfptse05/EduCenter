@@ -12,6 +12,7 @@
 * **Architecture Pattern:** Phân tầng MVC truyền thống:
   `Client Browser -> Filter -> Jakarta Servlet Controller -> Service -> JPA Repository (EntityManager) -> Hibernate ORM -> SQL Server`
 * **View Layer:** JSP + JSTL (Jakarta Tags: `jakarta.tags.core`, `jakarta.tags.fmt`) + Expression Language (EL). JSP nằm dưới `WEB-INF/views/`. Tuyệt đối KHÔNG dùng Java Scriptlet (`<% %>`) trong JSP.
+* **UI/UX Design System (IMMUTABLE):** Bắt buộc tuân thủ 100% tài liệu [`design.md`](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/design.md) (tức [`design (1).md`](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/design%20(1).md)) làm Single Source of Truth cho toàn bộ giao diện. Default Light Mode; cấm dùng emoji làm icon; dùng icon outline SVG (Lucide 18–20px); tuân thủ biến CSS Design Tokens (`--bg`, `--surface`, `--primary`, `--text`...) và responsive 3 cấp độ; cấm dùng Tailwind CDN.
 * **ORM & Database:** JPA 3.1 + Hibernate ORM tương thích Jakarta Persistence. CSDL Microsoft SQL Server.
 * **STRICT REQUIREMENT (ASM PRJ301):** Phải kết nối và thao tác dữ liệu qua JPA `EntityManager`, **TUYỆT ĐỐI KHÔNG DÙNG JDBC THUẦN** (`Connection`, `PreparedStatement`) cho logic nghiệp vụ.
 * **Build System:** Ant (NetBeans Standard Web Application) kết hợp thư viện trong `allowedlib` hoặc Maven nếu cả nhóm đồng thuận chuyển đổi.
@@ -76,7 +77,11 @@
 3. **NGUYÊN TẮC SPEC-FIRST (SỬA SPEC RỒI MỚI SỬA CODE):**
    * Mọi thay đổi về yêu cầu kỹ thuật/nghiệp vụ bắt buộc phải cập nhật và làm rõ trong `SPEC.md` / `PLAN.md` TRƯỚC, tránh tuyệt đối sự mơ hồ (Spec-Code Drift).
    * Chỉ tiến hành sửa code sau khi Spec đã được cập nhật xong.
-4. **CẤM TUYỆT ĐỐI:**
-   * Tự ý dùng thư viện ngoài stack (Spring Boot, MyBatis, JDBC thuần).
+4. **BẮT BUỘC TUÂN THỦ DESIGN SYSTEM (DESIGN.MD):**
+   * Mọi màn hình JSP, CSS, JavaScript, bố cục layout, typography, màu sắc, components **BẮT BUỘC** tuân thủ tuyệt đối theo đặc tả trong [`design.md`](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/design.md) (tức [`design (1).md`](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/design%20(1).md)).
+   * Default Light Mode; cấm dùng emoji làm icon; dùng icon outline SVG (Lucide 18–20px); dùng Design Tokens CSS cục bộ; không dùng Tailwind CDN hay framework frontend lạ.
+5. **CẤM TUYỆT ĐỐI:**
+   * Tự ý dùng thư viện ngoài stack (Spring Boot, MyBatis, JDBC thuần, Tailwind CDN).
    * Viết Java Scriptlet (`<% %>`) trực tiếp vào file JSP.
+   * Vi phạm chuẩn giao diện trong `design.md` (dùng emoji, tự chế màu, auto dark mode khi chưa có lựa chọn của người dùng).
    * Bỏ qua kiểm tra phân quyền hoặc validate input.

@@ -29,3 +29,13 @@
   * `@Id`, `@GeneratedValue(strategy = GenerationType.IDENTITY)`
   * Kiểu dữ liệu tiền tệ: `@Column(name = "...", precision = 18, scale = 2) private BigDecimal fee;`
   * Quan hệ: `@ManyToOne`, `@OneToMany`, `@JoinColumn`. Tránh lazy loading exception bằng cách dùng JOIN FETCH trong JPQL khi cần load dữ liệu liên quan cho view.
+
+## 4. UI/UX & DESIGN SYSTEM CONSTRAINTS (`design.md` / `design (1).md`)
+* Toàn bộ giao diện JSP, CSS và JavaScript **BẮT BUỘC** tuân thủ 100% tài liệu [`design.md`](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/design.md) (tức [`design (1).md`](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/design%20(1).md)) làm Single Source of Truth.
+* **Default Light Mode:** Lần đầu vào luôn là Light mode (thậm chí khi OS là Dark). Theme lưu tại `localStorage['educenter-theme']`. Script set theme phải đặt trong `<head>` trước CSS để chống giật màn hình (FOUC).
+* **No Emoji / 3D Icons:** Tuyệt đối không dùng emoji làm icon hệ thống. Dùng bộ icon outline SVG Lucide (16px inline, 18–20px navigation).
+* **Design Tokens:** Bắt buộc dùng CSS custom properties (`--bg`, `--surface`, `--surface-muted`, `--text`, `--text-muted`, `--border`, `--primary`, `--success`, `--warning`, `--danger`, `--focus`).
+* **Typography:** Font chữ chính là `Inter`, fallback `system-ui, -apple-system, sans-serif`.
+* **Cấm thư viện ngoài:** Không dùng CDN Tailwind hay React/Vue trong sản phẩm nộp. Dùng CSS cục bộ + Vanilla JS + JSP/JSTL.
+* **Tương tác thật:** Mọi nút bấm, link điều hướng, form, bảng số liệu phải chạy thật; cấm `href="#"` hoặc dữ liệu ảo hardcode.
+

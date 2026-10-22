@@ -54,6 +54,11 @@
    * Cấm tuyệt đối: Code trước rồi bổ sung spec sau (Spec-Code Drift).
 4. **CODE XONG TÍNH NĂNG PHẢI ĐẨY LÊN MAIN:**
    * Ngay sau khi một tính năng hoàn tất kiểm thử và thỏa mãn Definition of Done, **BẮT BUỘC** commit và push lên nhánh `main` (hoặc merge vào `main`) với thông điệp `feat([scope]): [description]`. Nhánh `main` luôn luôn ở trạng thái chạy được và sẵn sàng demo.
+5. **BẮT BUỘC TUÂN THỦ DESIGN SYSTEM (DESIGN.MD):**
+   * Mọi giao diện người dùng (JSP, CSS, JavaScript, bố cục layout, typography, màu sắc, components) **BẮT BUỘC** tuân thủ tuyệt đối theo đặc tả trong [`design.md`](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/design.md) (tức [`design (1).md`](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/design%20(1).md)).
+   * **Default Light Mode:** Lần đầu truy cập luôn luôn là giao diện sáng (Light mode), bất kể hệ điều hành đang dùng Dark mode. Chỉ chuyển Dark mode khi người dùng chủ động chọn và lưu vào `localStorage`.
+   * **Icon chuẩn hóa:** Tuyệt đối KHÔNG dùng emoji làm icon giao diện, không dùng icon 3D hay hoạt hình. Bắt buộc dùng bộ icon outline SVG đồng nhất (khuyến nghị Lucide SVG 18–20px).
+   * **Design Tokens & Local CSS:** Bắt buộc dùng biến CSS token (`--bg`, `--surface`, `--primary`, `--text`...), typography chuẩn `Inter`, khoảng cách (spacing scale), bo góc (radius). Không dùng Tailwind CDN hay các framework ngoài quy định.
 
 ---
 
@@ -62,11 +67,13 @@
 * **NEVER store plain-text passwords:** Mật khẩu phải được băm bằng BCrypt (cost >= 10).
 * **NEVER hard delete financial records:** Không xóa vật lý dữ liệu trong `Invoices`, `Payments`, `Enrollments`. Phải dùng soft delete.
 * **NEVER bypass authorization checks:** Luôn kiểm tra phân quyền cả ở Filter và tầng Service.
+* **NEVER violate Design System (design.md):** Cấm tự ý sửa đổi token màu sắc, typography, tự chế icon emoji, tự động bật Dark mode, hoặc đưa CDN ngoài/Tailwind vào làm lệch chuẩn `design.md`.
 
 ---
 
 ## 6. DEFINITION OF DONE (PER TASK)
 * [ ] Spec tương ứng trong `.sdd/specs/` đã được cập nhật và khóa (Locked).
+* [ ] Giao diện tuân thủ 100% Design System trong `design.md` (Default Light mode, outline SVG, Design Tokens, Responsive 3 cấp độ).
 * [ ] Code tuân thủ Java 17 và Jakarta EE 10 namespace.
 * [ ] Không có cảnh báo lọt kết nối: `EntityManager` được quản lý đóng mở an toàn.
 * [ ] Kiểm tra lỗi nghiệp vụ (Validation, Business Rules) đầy đủ trước khi thực hiện giao dịch.

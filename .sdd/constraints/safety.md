@@ -9,6 +9,7 @@
 2. **DÙNG CODEGRAPH ĐỌC CODE:** Mọi thao tác tìm kiếm, trace quan hệ, đọc mã nguồn phải ưu tiên qua MCP `codegraph_explore` hoặc lệnh `codegraph explore`.
 3. **NGUYÊN TẮC SPEC-FIRST:** Bắt buộc sửa `SPEC.md` / `PLAN.md` trước khi sửa mã nguồn để tránh mơ hồ và Spec-Code Drift.
 4. **ĐẨY LÊN MAIN KHI XONG TÍNH NĂNG:** Mọi tính năng hoàn thành và pass kiểm thử phải được đẩy lên nhánh `main` ngay.
+5. **BẮT BUỘC TUÂN THỦ DESIGN SYSTEM (DESIGN.MD):** Mọi giao diện (JSP, CSS, JS) bắt buộc tuân thủ 100% đặc tả trong `design.md` (tức `design (1).md`): default Light mode, không dùng emoji làm icon (dùng outline SVG Lucide), tuân thủ CSS Design Tokens, không dùng Tailwind CDN hay CDN lạ.
 
 ---
 
@@ -18,11 +19,13 @@
 3. **NO JAVA SCRIPTLETS IN JSP:** Không dùng `<% ... %>`, `<%= ... %>` trong các file `.jsp`. Phải dùng JSTL `<c:...>` và Expression Language `${...}`.
 4. **NO HARD DELETIONS ON FINANCIAL RECORDS:** Không thực thi câu lệnh SQL/JPQL `DELETE` trên các bảng `Invoices`, `Payments`, `Enrollments`, `Attendances`.
 5. **NO UNAUTHORIZED DATA EXPOSURE:** Không được bỏ qua kiểm tra quyền theo bản ghi (ví dụ: Phụ huynh A truy cập học viên B không thuộc quyền giám hộ).
+6. **NO DESIGN SYSTEM VIOLATIONS:** Cấm đưa Tailwind CDN vào ứng dụng bàn giao, cấm dùng emoji/3D icons, cấm tự chế style phá vỡ design tokens, cấm tự động bật dark mode.
 
 ---
 
 ## 3. PRE-COMMIT CHECKLIST FOR AGENTS
 * [ ] Spec tương ứng trong `.sdd/specs/` đã được cập nhật trước khi code?
+* [ ] Giao diện đã được đối chiếu và tuân thủ tuyệt đối `design.md` (Default Light theme, outline SVG, không có nút chết/link giả)?
 * [ ] Code đã tuân thủ chuẩn Jakarta EE (namespace `jakarta.servlet.*`, `jakarta.persistence.*`, `jakarta.tags.*`)?
 * [ ] Đã đóng `EntityManager` an toàn và rollback khi có lỗi transaction?
 * [ ] Đã kiểm tra null và validate định dạng dữ liệu đầu vào?
