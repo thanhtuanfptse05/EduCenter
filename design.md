@@ -19,6 +19,7 @@ This file is the **single source of truth for UI implementation** across the Edu
 7. Mobile/tablet responsive; no overlapping components or accidental full-page horizontal scroll.
 8. Use semantic HTML, keyboard navigation, clear focus rings, sufficient contrast, reduced-motion support.
 9. Prefer a consistent shared layout/components over per-page custom styling.
+10. **CẤM HARDCODE DỮ LIỆU TRÊN GIAO DIỆN (DỰ ÁN THỰC TẾ):** 100% dữ liệu hiển thị (danh sách khóa học, số lớp đang mở, hồ sơ giáo viên, dropdown môn học, bảng số liệu...) BẮT BUỘC phải được truy vấn động từ CSDL thông qua kiến trúc phân tầng chuẩn (JPA EntityManager -> Repository -> Service -> Controller -> request.setAttribute -> JSP JSTL/EL). Tuyệt đối cấm gõ cứng dòng HTML giả (mock rows), thẻ KPI tĩnh, hoặc tài khoản demo/autofill lên giao diện. Khi CSDL chưa có dữ liệu, bắt buộc hiển thị Empty State chuyên nghiệp có thông báo và nút hành động.
 
 ## 1. Visual direction and source reference
 
@@ -235,7 +236,7 @@ Loading disables repeat submission; no success toast before server response. Ico
 
 | ID | Screen | Suggested route | Audience | Key UI |
 |---|---|---|---|---|
-| PUB-01 | Trang chủ | `/` | Public | Hero restrained, courses, outcomes, CTA |
+| PUB-01 | Cổng thông tin gia sư THPT | `/` | Public | Hero THPT, 3 khối lớp, 6 môn học, khóa học nổi bật, đội ngũ giáo viên, tiến độ SaaS, FAQ, CRM Lead form |
 | PUB-02 | Danh sách khóa học | `/courses` | Public | Search/filter/sort/pagination |
 | PUB-03 | Chi tiết khóa học | `/courses/{id}` | Public | Curriculum, price, timetable, related courses |
 | PUB-04 | Danh sách đăng ký | `/registration-cart` | Student/Parent | Selected courses, total, remove |
@@ -344,6 +345,60 @@ flowchart TD
 - Breadcrumb always points to actual accessible parent routes; no placeholder links.
 
 ## 7. Page-by-page detailed UI requirements
+
+### 7.0 PUB-01 — Cổng thông tin gia sư & Bổ trợ THPT (Landing Portal)
+
+**URL:** `/` hoặc `/index` · **Đối tượng:** Khách vãng lai, Học sinh THPT Lớp 10–12, Phụ huynh học sinh.  
+**Nguyên tắc cốt lõi:** 100% dữ liệu hiển thị (Số lớp đang mở, Khóa học nổi bật, Hồ sơ giáo viên, Danh mục môn học) phải được truy vấn động từ CSDL thông qua `LandingService` -> `LandingServlet` -> `request.setAttribute("portalData", ...)`. Tuyệt đối CẤM hardcode dữ liệu giả.
+
+#### Bố cục 11 phân khu chức năng (Layout Architecture):
+1. **Phân khu 01: Topbar Navbar:**
+   - Logo thương hiệu: Chữ `EduCenter` kèm huy hiệu `THPT Tutoring` (nền `var(--primary-subtle)`, chữ `var(--primary)`).
+   - Menu điều hướng: Trang chủ, Chương trình gia sư, Môn học, Đội ngũ giáo viên, Quy trình học, Tư vấn tuyển sinh.
+   - Nút chuyển đổi giao diện Sáng / Tối (`#theme-toggle-btn`), nút Đăng nhập (`/login`), và nút CTA Đăng ký tư vấn.
+2. **Phân khu 02: Hero Section & Thẻ Tiến Độ SaaS:**
+   - Huy hiệu pill: "Chuyên biệt Gia sư & Bổ trợ Kiến thức THPT" có chấm pulsing màu primary.
+   - Tiêu đề H1: "Gia sư chất lượng cho học sinh lớp 10, 11 và 12".
+   - 2 Nút CTA: "Tìm gia sư phù hợp" và "Đăng ký tư vấn miễn phí".
+   - Thanh lọc nhanh theo khối lớp: Hiển thị bộ đếm số lớp học đang mở thực tế từ CSDL (`portalData.openClassesCount`), các nút chip lọc Lớp 10, Lớp 11, Lớp 12 kèm số lượng lớp tương ứng.
+   - Thẻ hiển thị tiến độ học tập (SaaS Progress Card): Trực quan hóa mục tiêu điểm số (6.5 -> 8.5+), biểu đồ cột Sparkline 6 kỳ kiểm tra (5.8 đến 8.6), 3 chỉ số vận hành (Chuyên cần 96.4%, Đã học 16/24 buổi, BTVN 100%), chữ ký giáo viên phụ trách.
+3. **Phân khu 03: Chương trình theo 3 Khối lớp (3 Focused Grade Cards):**
+   - Lớp 10: Thích nghi & Nền tảng (Xây dựng nền tảng vững chắc, môn bồi dưỡng trọng điểm).
+   - Lớp 11: Tăng tốc điểm số & Bứt phá năng lực (Lượng giác, Hình học không gian, nâng cao).
+   - Lớp 12 (Thẻ trọng điểm viền Primary): Luyện đề & Về đích (Chinh phục Tốt nghiệp THPT & ĐGNL).
+4. **Phân khu 04: Gia sư theo Bộ môn chuyên ngành (Subjects Grid):**
+   - Render động từ danh sách môn học trong CSDL (`portalData.subjects`).
+   - 6 Môn trọng điểm: Toán học (`MATH`), Vật lý (`PHYS`), Hóa học (`CHEM`), Tiếng Anh (`ENG`), Ngữ văn (`LIT`), Sinh học (`BIO`).
+   - Hiển thị icon outline SVG tương ứng từng môn, số lượng chương trình/khóa học đang mở từ CSDL.
+5. **Phân khu 05: Khóa học & Lớp học gia sư nổi bật (Featured Courses):**
+   - Render động từ CSDL (`portalData.featuredCourses`).
+   - Thẻ khóa học bao gồm: Loại hình (Gia sư 1 kèm 1 / Nhóm nhỏ tối đa X học viên), Khối lớp, Trạng thái (Đang tuyển sinh), Tên khóa học, Thời lượng (số buổi/tuần), Lịch học cụ thể, Giáo viên phụ trách kèm học vị, Học phí niêm yết định dạng tiền tệ VNĐ (`vi-VN`), Cam kết điểm số và Nút đăng ký giữ chỗ.
+6. **Phân khu 06: Cam kết Năng lực Học thuật (6 Value Pillars):**
+   - 6 Trụ cột: Lộ trình cá nhân hóa, Đội ngũ sư phạm chuẩn hóa, Minh bạch nhật ký & chuyên cần, Quản lý lịch học khoa học, Cổng Phụ Huynh (Parent Portal), Đánh giá năng lực bài bản.
+7. **Phân khu 07: Ban Cố Vấn Học Thuật & Đội ngũ Giáo viên nòng cốt:**
+   - Render động từ CSDL (`portalData.facultyTeachers`).
+   - Mỗi giáo viên hiển thị: Ảnh đại diện/icon outline, huy hiệu kinh nghiệm (vd: 10 năm KN, IELTS 8.5), Họ tên, Chức vụ/Học vị, Tiểu sử tóm tắt và Phân công giảng dạy theo khối lớp.
+8. **Phân khu 08: Quy trình 4 bước bắt đầu học (Timeline Stepper):**
+   - 01. Chọn khối lớp & Môn học -> 02. Gửi thông tin nhu cầu -> 03. Kiểm tra đầu vào miễn phí -> 04. Xếp lịch & Khởi động.
+9. **Phân khu 09: Cổng theo dõi tiến độ Phụ Huynh & Học Sinh (Live Showcase):**
+   - Giới thiệu 3 tiện ích nổi bật: Điểm danh tức thì, Biểu đồ điểm số, Hóa đơn điện tử minh bạch.
+   - Khung giao diện giả lập trình duyệt (Browser window) hiển thị bản xem trước Cổng Phụ Huynh: Điểm trung bình, Số buổi tham gia, Trạng thái học phí, và Bảng trích xuất 3 buổi học gần nhất.
+10. **Phân khu 10: Câu hỏi thường gặp (FAQ Accordion):**
+    - 6 Câu hỏi giải đáp thắc mắc then chốt về khối lớp THPT, hình thức 1 kèm 1, Cổng phụ huynh, kiểm tra đầu vào, phương thức học phí và chính sách đổi lịch/học bù.
+11. **Phân khu 11: Biểu mẫu Đăng ký Tư vấn Tuyển sinh (CRM Lead Generation):**
+    - Tích hợp biểu mẫu form gửi dữ liệu thực tế về Servlet (`POST /dang-ky-tu-van`):
+      - Họ tên Phụ huynh / Học sinh (bắt buộc)
+      - Số điện thoại (bắt buộc, regex di động Việt Nam `^(0[3|5|7|8|9])+([0-9]{8})$`)
+      - Khối lớp học (10, 11, 12)
+      - Môn học trọng tâm
+      - Hình thức học (Lớp nhóm nhỏ, Gia sư 1-1)
+      - Mục tiêu / Tình trạng học tập
+      - Mã bảo vệ CSRF token (`sessionScope.csrfToken`)
+    - Xử lý lưu trực tiếp vào bảng `dbo.Leads` trong CSDL với nguồn `WEBSITE` và trạng thái `NEW`. Phản hồi thông báo mã hồ sơ CRM thành công cho người dùng.
+12. **Chân trang hệ thống (Enterprise Footer):**
+    - Trụ sở: Tòa EduCenter Tower, Cầu Giấy, Hà Nội; Hotline: 1900 6868; Email: banquantri@educenter.vn; Các cột liên kết chương trình THPT, Hỗ trợ & Quy định, Bản quyền.
+
+---
 
 ### 7.1 ADM-01 — Executive dashboard (based on supplied reference)
 

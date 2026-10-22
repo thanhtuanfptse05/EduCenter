@@ -9,6 +9,11 @@
         <class>com.educenter.entity.User</class>
         <class>com.educenter.entity.AuditLog</class>
         <class>com.educenter.entity.PasswordResetToken</class>
+        <class>com.educenter.entity.Subject</class>
+        <class>com.educenter.entity.Course</class>
+        <class>com.educenter.entity.Teacher</class>
+        <class>com.educenter.entity.EduClass</class>
+        <class>com.educenter.entity.Lead</class>
         
         <!-- Cấu hình kết nối Microsoft SQL Server -->
         <properties>
