@@ -15,26 +15,26 @@ GO
 -- Hash BCrypt: $2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO
 IF NOT EXISTS (SELECT 1 FROM dbo.Users WHERE email = 'teacher.nam@educenter.vn')
 BEGIN
-    INSERT INTO dbo.Users (email, password_hash, full_name, phone, status)
-    VALUES ('teacher.nam@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'ThS. Đặng Vũ Nam', '0912888999', 'ACTIVE');
+    INSERT INTO dbo.Users (email, password_hash, full_name, phone, avatar_url, status)
+    VALUES ('teacher.nam@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'ThS. Đặng Vũ Nam', '0912888999', '/assets/images/teachers/teacher-nam.jpg', 'ACTIVE');
 END;
 
 IF NOT EXISTS (SELECT 1 FROM dbo.Users WHERE email = 'teacher.maianh@educenter.vn')
 BEGIN
-    INSERT INTO dbo.Users (email, password_hash, full_name, phone, status)
-    VALUES ('teacher.maianh@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Cô Lê Mai Anh', '0934777888', 'ACTIVE');
+    INSERT INTO dbo.Users (email, password_hash, full_name, phone, avatar_url, status)
+    VALUES ('teacher.maianh@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Cô Lê Mai Anh', '0934777888', '/assets/images/teachers/teacher-maianh.jpg', 'ACTIVE');
 END;
 
 IF NOT EXISTS (SELECT 1 FROM dbo.Users WHERE email = 'teacher.ngoc@educenter.vn')
 BEGIN
-    INSERT INTO dbo.Users (email, password_hash, full_name, phone, status)
-    VALUES ('teacher.ngoc@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'TS. Hoàng Như Ngọc', '0988666555', 'ACTIVE');
+    INSERT INTO dbo.Users (email, password_hash, full_name, phone, avatar_url, status)
+    VALUES ('teacher.ngoc@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'TS. Hoàng Như Ngọc', '0988666555', '/assets/images/teachers/teacher-ngoc.jpg', 'ACTIVE');
 END;
 
 IF NOT EXISTS (SELECT 1 FROM dbo.Users WHERE email = 'teacher.hoang@educenter.vn')
 BEGIN
-    INSERT INTO dbo.Users (email, password_hash, full_name, phone, status)
-    VALUES ('teacher.hoang@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'ThS. Trần Huy Hoàng', '0977333222', 'ACTIVE');
+    INSERT INTO dbo.Users (email, password_hash, full_name, phone, avatar_url, status)
+    VALUES ('teacher.hoang@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'ThS. Trần Huy Hoàng', '0977333222', '/assets/images/teachers/teacher-hoang.jpg', 'ACTIVE');
 END;
 GO
 

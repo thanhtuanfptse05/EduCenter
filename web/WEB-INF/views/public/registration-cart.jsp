@@ -61,7 +61,7 @@
                                             <div class="cart-item-thumb">
                                                 <c:choose>
                                                     <c:when test="${not empty item.imageUrl}">
-                                                        <img src="<c:out value='${item.imageUrl}' />" alt="<c:out value='${item.courseName}' />" />
+                                                        <img src="<c:url value='${item.imageUrl}' />" alt="<c:out value='${item.courseName}' />" />
                                                     </c:when>
                                                     <c:otherwise>
                                                         <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--surface-muted); color: var(--primary);">

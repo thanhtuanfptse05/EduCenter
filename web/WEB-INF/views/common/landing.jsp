@@ -690,11 +690,18 @@
                                         <div class="teacher-card">
                                             <div>
                                                 <div class="teacher-avatar-box">
-                                                    <!-- Outline avatar graphic icon -->
-                                                    <svg class="icon icon-xl" viewBox="0 0 24 24" style="color: var(--primary);" aria-hidden="true">
-                                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                                        <circle cx="12" cy="7" r="4"></circle>
-                                                    </svg>
+                                                    <c:choose>
+                                                        <c:when test="${not empty t.photoUrl}">
+                                                            <img src="<c:url value='${t.photoUrl}' />" alt="<c:out value='${t.fullName}' />" />
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <!-- Outline avatar graphic icon -->
+                                                            <svg class="icon icon-xl" viewBox="0 0 24 24" style="color: var(--primary);" aria-hidden="true">
+                                                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                                <circle cx="12" cy="7" r="4"></circle>
+                                                            </svg>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                     <span class="teacher-exp-tag"><c:out value="${t.experienceBadge}" /></span>
                                                 </div>
                                                 <h3 class="teacher-name"><c:out value="${t.fullName}" /></h3>

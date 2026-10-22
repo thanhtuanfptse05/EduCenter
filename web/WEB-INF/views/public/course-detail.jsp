@@ -173,7 +173,7 @@
                     <div class="action-card-header">
                         <c:choose>
                             <c:when test="${not empty detail.course.imageUrl}">
-                                <img src="<c:out value='${detail.course.imageUrl}' />" alt="<c:out value='${detail.course.name}' />" />
+                                <img src="<c:url value='${detail.course.imageUrl}' />" alt="<c:out value='${detail.course.name}' />" />
                             </c:when>
                             <c:otherwise>
                                 <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);"></div>

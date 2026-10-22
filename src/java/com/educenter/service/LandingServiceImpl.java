@@ -115,6 +115,9 @@ public class LandingServiceImpl implements LandingService {
                 }
 
                 td.setGradesText("Phụ trách: Lớp 10, 11, 12");
+                if (t.getUser() != null) {
+                    td.setPhotoUrl(t.getUser().getAvatarUrl());
+                }
                 teacherDTOs.add(td);
             }
             data.setFacultyTeachers(teacherDTOs);

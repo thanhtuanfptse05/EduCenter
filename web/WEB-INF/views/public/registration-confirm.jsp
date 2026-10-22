@@ -280,20 +280,33 @@
                             <span class="badge" style="background: var(--surface-muted); color: var(--text-muted); font-size: 11px;">2026</span>
                         </div>
 
+                        <!-- Classroom Banner -->
+                        <div style="width: 100%; height: 120px; border-radius: var(--radius-md); overflow: hidden; position: relative; margin-bottom: 12px;">
+                            <img src="<c:url value='/assets/images/courses/classroom.jpg' />" alt="EduCenter Giảng đường" style="width: 100%; height: 100%; object-fit: cover;" />
+                            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 60%); display: flex; align-items: flex-end; padding: 10px;">
+                                <span style="color: #ffffff; font-size: 11px; font-weight: 600;">Trung tâm bồi dưỡng &amp; Luyện thi THPT EduCenter</span>
+                            </div>
+                        </div>
+
                         <!-- Item list -->
                         <div style="display: flex; flex-direction: column; gap: 10px;">
                             <c:forEach var="item" items="${cart.items}">
-                                <div style="background: var(--surface-muted); border-radius: var(--radius-md); padding: 12px; display: flex; flex-direction: column; gap: 6px;">
-                                    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;">
-                                        <div>
-                                            <strong style="font-size: 13px; color: var(--text); display: block;"><c:out value="${item.courseName}" /></strong>
-                                            <span style="font-size: 11px; color: var(--text-muted);">Mã: <c:out value="${item.courseCode}" /> • <c:out value="${item.totalSessions}" /> Buổi</span>
+                                <div style="background: var(--surface-muted); border-radius: var(--radius-md); padding: 12px; display: flex; gap: 10px; align-items: center;">
+                                    <c:if test="${not empty item.imageUrl}">
+                                        <img src="<c:url value='${item.imageUrl}' />" alt="<c:out value='${item.courseName}' />" style="width: 52px; height: 52px; object-fit: cover; border-radius: var(--radius-sm); flex-shrink: 0;" />
+                                    </c:if>
+                                    <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px;">
+                                        <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;">
+                                            <div>
+                                                <strong style="font-size: 13px; color: var(--text); display: block;"><c:out value="${item.courseName}" /></strong>
+                                                <span style="font-size: 11px; color: var(--text-muted);">Mã: <c:out value="${item.courseCode}" /> • <c:out value="${item.totalSessions}" /> Buổi</span>
+                                            </div>
+                                            <span style="font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap;"><c:out value="${item.formattedFee}" /></span>
                                         </div>
-                                        <span style="font-size: 13px; font-weight: 700; color: var(--text); white-space: nowrap;"><c:out value="${item.formattedFee}" /></span>
-                                    </div>
-                                    <div style="font-size: 11px; color: var(--primary); font-weight: 500; display: inline-flex; align-items: center; gap: 4px;">
-                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
-                                        <span>Môn: <c:out value="${item.subjectName}" /></span>
+                                        <div style="font-size: 11px; color: var(--primary); font-weight: 500; display: inline-flex; align-items: center; gap: 4px;">
+                                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                                            <span>Môn: <c:out value="${item.subjectName}" /></span>
+                                        </div>
                                     </div>
                                 </div>
                             </c:forEach>

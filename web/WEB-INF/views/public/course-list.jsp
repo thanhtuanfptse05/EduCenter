@@ -322,7 +322,7 @@
                                             <div class="course-card-thumb">
                                                 <c:choose>
                                                     <c:when test="${not empty c.imageUrl}">
-                                                        <img src="<c:out value='${c.imageUrl}' />" alt="<c:out value='${c.name}' />" class="course-card-img" />
+                                                        <img src="<c:url value='${c.imageUrl}' />" alt="<c:out value='${c.name}' />" class="course-card-img" />
                                                     </c:when>
                                                     <c:otherwise>
                                                         <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--surface-muted); color: var(--primary);">

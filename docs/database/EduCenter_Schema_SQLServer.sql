@@ -688,12 +688,12 @@ GO
 
 -- 2. Tài khoản Demo cho 5 vai trò hệ thống (Mật khẩu chung cho tất cả: 123456)
 -- Hash BCrypt cho '123456': $2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO
-INSERT INTO dbo.Users (email, password_hash, full_name, phone, status) VALUES
-('admin@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Nguyễn Quản Trị (Admin & Manager)', '0901234567', 'ACTIVE'),
-('staff@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Trần Thu Hà (Tư Vấn & Tuyển Sinh)', '0912345678', 'ACTIVE'),
-('teacher.hung@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'ThS. Lê Mạnh Hùng (Giáo Viên Toán)', '0987654321', 'ACTIVE'),
-('student.nam@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Trần Hoàng Nam (Học Viên Lớp 12)', '0933112233', 'ACTIVE'),
-('parent.tuan@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Trần Quốc Tuấn (Phụ Huynh)', '0944556677', 'ACTIVE');
+INSERT INTO dbo.Users (email, password_hash, full_name, phone, avatar_url, status) VALUES
+('admin@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Nguyễn Quản Trị (Admin & Manager)', '0901234567', NULL, 'ACTIVE'),
+('staff@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Trần Thu Hà (Tư Vấn & Tuyển Sinh)', '0912345678', NULL, 'ACTIVE'),
+('teacher.hung@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'ThS. Lê Mạnh Hùng (Giáo Viên Toán)', '0987654321', '/assets/images/teachers/teacher-hung.jpg', 'ACTIVE'),
+('student.nam@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Trần Hoàng Nam (Học Viên Lớp 12)', '0933112233', NULL, 'ACTIVE'),
+('parent.tuan@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Trần Quốc Tuấn (Phụ Huynh)', '0944556677', NULL, 'ACTIVE');
 GO
 
 -- Gán vai trò tương ứng cho từng tài khoản demo
@@ -762,12 +762,12 @@ INSERT INTO dbo.Rooms (code, name, capacity, status) VALUES
 GO
 
 -- 5. Khóa học mẫu
-INSERT INTO dbo.Courses (subject_id, code, name, grade_level, target_exam, fee, duration_weeks, total_sessions, max_capacity, description, is_featured)
-SELECT id, 'TOAN12-TN', N'Toán 12 – Luyện Thi Tốt Nghiệp THPT Điểm 8+', 12, N'Tốt nghiệp THPT', 4200000.00, 12, 24, 15, N'Khóa học trọng điểm tổng ôn toàn bộ kiến thức Toán 12 và phương pháp giải đề nhanh.', 1
+INSERT INTO dbo.Courses (subject_id, code, name, grade_level, target_exam, fee, duration_weeks, total_sessions, max_capacity, description, image_url, is_featured)
+SELECT id, 'TOAN12-TN', N'Toán 12 – Luyện Thi Tốt Nghiệp THPT Điểm 8+', 12, N'Tốt nghiệp THPT', 4200000.00, 12, 24, 15, N'Khóa học trọng điểm tổng ôn toàn bộ kiến thức Toán 12 và phương pháp giải đề nhanh.', '/assets/images/courses/math.jpg', 1
 FROM dbo.Subjects WHERE code = 'MATH';
 
-INSERT INTO dbo.Courses (subject_id, code, name, grade_level, target_exam, fee, duration_weeks, total_sessions, max_capacity, description, is_featured)
-SELECT id, 'ENG9-VAO10', N'Tiếng Anh 9 – Chinh Phục Kỳ Thi Vào Lớp 10', 9, N'Vào 10 Chuyên & Không Chuyên', 3600000.00, 10, 20, 12, N'Hệ thống hóa ngữ pháp trọng tâm, từ vựng theo chủ đề và rèn kỹ năng làm bài thi trắc nghiệm.', 1
+INSERT INTO dbo.Courses (subject_id, code, name, grade_level, target_exam, fee, duration_weeks, total_sessions, max_capacity, description, image_url, is_featured)
+SELECT id, 'ENG9-VAO10', N'Tiếng Anh 9 – Chinh Phục Kỳ Thi Vào Lớp 10', 9, N'Vào 10 Chuyên & Không Chuyên', 3600000.00, 10, 20, 12, N'Hệ thống hóa ngữ pháp trọng tâm, từ vựng theo chủ đề và rèn kỹ năng làm bài thi trắc nghiệm.', '/assets/images/courses/english.jpg', 1
 FROM dbo.Subjects WHERE code = 'ENG';
 GO
 
