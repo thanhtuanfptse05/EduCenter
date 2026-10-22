@@ -1,7 +1,7 @@
 /**
- * EduCenter ERP — Interactive UI Script
+ * EduCenter ERP — Interactive Authentication UI Script
  * Handles password visibility, live password strength meter (4 bars & rules checklist),
- * role segmented selectors, password match confirmation, countdown timer, and tab navigation.
+ * role segmented selectors (STUDENT / PARENT), password match confirmation, countdown timer, and tab navigation.
  */
 
 (function () {
@@ -29,11 +29,9 @@
       });
     });
 
-    // 2. Register role selector buttons (Segmented buttons & cards)
+    // 2. Register role selector buttons (STUDENT or PARENT per FR-001)
     var roleBtns = document.querySelectorAll('.role-segmented-btn');
     var roleInput = document.getElementById('roleCodeInput');
-    var gradeLabel = document.getElementById('grade-label');
-    var gradeSelect = document.getElementById('grade-select');
 
     if (roleBtns.length > 0) {
       roleBtns.forEach(function (btn) {
@@ -44,35 +42,6 @@
 
           if (roleInput) {
             roleInput.value = role;
-          }
-
-          // Adapt grade dropdown options dynamically
-          if (gradeSelect && gradeLabel) {
-            if (role === 'PARENT') {
-              gradeLabel.innerHTML = 'Khối lớp của con <span class="required" style="color: var(--danger);">*</span>';
-              gradeSelect.innerHTML = 
-                '<option value="" disabled selected>Chọn khối lớp hiện tại của con</option>' +
-                '<option value="10">Con học Khối 10 THPT (Chương trình mới)</option>' +
-                '<option value="11">Con học Khối 11 THPT (Chuyên đề nâng cao)</option>' +
-                '<option value="12">Con học Khối 12 THPT (Thi TN & Đại học)</option>';
-            } else if (role === 'TEACHER') {
-              gradeLabel.innerHTML = 'Bộ môn & Khối dự kiến giảng dạy <span class="required" style="color: var(--danger);">*</span>';
-              gradeSelect.innerHTML = 
-                '<option value="" disabled selected>Chọn chuyên môn đào tạo</option>' +
-                '<option value="math">Toán THPT & Tư duy định lượng ĐGNL</option>' +
-                '<option value="physics">Vật Lý THPT & Chuyên đề nâng cao</option>' +
-                '<option value="chemistry">Hóa Học THPT & Luyện thi</option>' +
-                '<option value="english">Tiếng Anh & IELTS Academic</option>' +
-                '<option value="literature">Ngữ Văn & Đọc hiểu ĐGNL</option>';
-            } else {
-              gradeLabel.innerHTML = 'Khối lớp quan tâm <span class="required" style="color: var(--danger);">*</span>';
-              gradeSelect.innerHTML = 
-                '<option value="" disabled selected>Chọn khối lớp đào tạo</option>' +
-                '<option value="10">Khối 10 (Chương trình mới GDPT 2018)</option>' +
-                '<option value="11">Khối 11 (Chuyên đề nâng cao & ĐGNL sớm)</option>' +
-                '<option value="12">Khối 12 (Tổng ôn tốt nghiệp & Đại học)</option>' +
-                '<option value="dgnl">Luyện thi Đánh Giá Năng Lực (ĐHQG / ĐHBK)</option>';
-            }
           }
         });
       });
@@ -93,8 +62,8 @@
 
     // 3. Live Password Strength Meter (Continuous bar + 4-Segment Bars & Rules Checklist)
     var passInputs = [
-      document.getElementById('reg-pass'),
       document.getElementById('password'),
+      document.getElementById('reg-pass'),
       document.getElementById('newPassword'),
       document.getElementById('reset-pass'),
       document.getElementById('new_pass')
@@ -103,7 +72,7 @@
     passInputs.forEach(function (pwdInput) {
       pwdInput.addEventListener('input', function () {
         var val = pwdInput.value || '';
-        var hasLen = val.length >= 8;
+        var hasLen = val.length >= 6;
         var hasUpper = /[A-Z]/.test(val);
         var hasNum = /[0-9]/.test(val);
         var hasSpecial = /[^A-Za-z0-9]/.test(val);
@@ -178,20 +147,26 @@
       if (isValid) {
         elem.classList.add('valid');
         var icon = elem.querySelector('svg');
-        if (icon) icon.style.color = 'var(--success)';
+        if (icon) {
+          icon.innerHTML = '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>';
+          icon.style.color = 'var(--success)';
+        }
       } else {
         elem.classList.remove('valid');
         var icon = elem.querySelector('svg');
-        if (icon) icon.style.color = 'var(--text-muted)';
+        if (icon) {
+          icon.innerHTML = '<circle cx="12" cy="12" r="10"></circle>';
+          icon.style.color = 'var(--text-muted)';
+        }
       }
     }
 
     // 4. Password confirmation matching
     var confirmInputs = [
-      document.getElementById('reg-confirm-pass'),
-      document.getElementById('confirmPassword'),
       document.getElementById('confirm-password'),
+      document.getElementById('confirmPassword'),
       document.getElementById('confirmNewPassword'),
+      document.getElementById('reg-confirm-pass'),
       document.getElementById('reset-confirm'),
       document.getElementById('confirm_pass')
     ].filter(Boolean);
@@ -201,11 +176,11 @@
     });
 
     function triggerMatchCheck() {
-      var pwdInput = document.getElementById('reg-pass') || document.getElementById('password') ||
+      var pwdInput = document.getElementById('password') || document.getElementById('reg-pass') ||
                      document.getElementById('newPassword') || document.getElementById('reset-pass') ||
                      document.getElementById('new_pass');
-      var confInput = document.getElementById('reg-confirm-pass') || document.getElementById('confirmPassword') ||
-                      document.getElementById('confirm-password') || document.getElementById('confirmNewPassword') ||
+      var confInput = document.getElementById('confirm-password') || document.getElementById('confirmPassword') ||
+                      document.getElementById('confirmNewPassword') || document.getElementById('reg-confirm-pass') ||
                       document.getElementById('reset-confirm') || document.getElementById('confirm_pass');
       var indicator = document.getElementById('match-indicator') || document.getElementById('match-status');
       var errorElem = document.getElementById('match-error');
@@ -272,7 +247,7 @@
       });
     });
 
-    // 7. Accessible Modal handling (ADM-18 role modal and status modal)
+    // 7. Accessible Modal handling
     window.EduCenterModal = {
       open: function (modalId) {
         var modal = document.getElementById(modalId);

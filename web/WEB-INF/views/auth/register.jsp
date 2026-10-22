@@ -35,11 +35,11 @@
 
                     <!-- Registration Form Card -->
                     <div class="register-form-card">
-                        <!-- Role Selector (Segmented) -->
+                        <!-- Role Selector (STUDENT or PARENT only per FR-001) -->
                         <div class="role-segmented-container">
                             <div class="role-segmented-header">
                                 <span style="font-weight: 600; color: var(--text);">Vai trò đăng ký sử dụng <span class="required" style="color: var(--danger);">*</span></span>
-                                <span style="color: var(--text-muted); font-size: var(--font-size-xs);">Chọn đúng quyền hạn để nhận lộ trình phù hợp</span>
+                                <span style="color: var(--text-muted); font-size: var(--font-size-xs);">Chọn đối tượng tài khoản (Học sinh hoặc Phụ huynh)</span>
                             </div>
                             <div class="role-segmented-grid">
                                 <!-- Role 1: Học sinh -->
@@ -50,7 +50,7 @@
                                     </svg>
                                     <div>
                                         <span class="role-btn-title">Học sinh THPT</span>
-                                        <span class="role-btn-desc">Lớp 10, 11, 12 &amp; ĐGNL</span>
+                                        <span class="role-btn-desc">Luyện thi, xem thời khóa biểu &amp; tra cứu điểm</span>
                                     </div>
                                 </button>
                                 <!-- Role 2: Phụ huynh -->
@@ -63,19 +63,7 @@
                                     </svg>
                                     <div>
                                         <span class="role-btn-title">Phụ huynh</span>
-                                        <span class="role-btn-desc">Giám sát điểm &amp; học phí</span>
-                                    </div>
-                                </button>
-                                <!-- Role 3: Gia sư / Giảng viên -->
-                                <button type="button" class="role-segmented-btn" data-role="TEACHER">
-                                    <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
-                                        <rect width="18" height="18" x="3" y="3" rx="2"></rect>
-                                        <circle cx="12" cy="10" r="3"></circle>
-                                        <path d="M7 21v-2a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"></path>
-                                    </svg>
-                                    <div>
-                                        <span class="role-btn-title">Gia sư / Giảng viên</span>
-                                        <span class="role-btn-desc">Ứng tuyển &amp; giảng dạy</span>
+                                        <span class="role-btn-desc">Giám sát chuyên cần, học bạ &amp; đối soát học phí</span>
                                     </div>
                                 </button>
                             </div>
@@ -91,7 +79,7 @@
                             <!-- Hidden Role Code (Updated by role-segmented-btn) -->
                             <input type="hidden" name="roleCode" id="roleCodeInput" value="STUDENT">
 
-                            <!-- 2-Column Grid -->
+                            <!-- Row 1: Full Name & Phone Number -->
                             <div class="form-grid-2col">
                                 <!-- Full Name -->
                                 <div class="form-group">
@@ -125,45 +113,27 @@
                                     </div>
                                     <c:remove var="preserved_phone" scope="session" />
                                 </div>
+                            </div>
 
-                                <!-- Email -->
-                                <div class="form-group">
-                                    <label for="email" class="form-label">
-                                        Email cá nhân <span class="required" style="color: var(--danger);">*</span>
-                                    </label>
-                                    <div class="input-wrapper">
-                                        <svg class="icon icon-sm input-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                                        </svg>
-                                        <input type="email" id="email" name="email" class="form-control"
-                                               placeholder="hocsinh@thpt.edu.vn" required
-                                               value="<c:out value='${not empty sessionScope.preserved_email ? sessionScope.preserved_email : ""}' />">
-                                    </div>
-                                    <c:remove var="preserved_email" scope="session" />
+                            <!-- Row 2: Email -->
+                            <div class="form-group">
+                                <label for="email" class="form-label">
+                                    Email cá nhân <span class="required" style="color: var(--danger);">*</span>
+                                </label>
+                                <div class="input-wrapper">
+                                    <svg class="icon icon-sm input-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                        <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                                    </svg>
+                                    <input type="email" id="email" name="email" class="form-control"
+                                           placeholder="hocsinh@thpt.edu.vn" required
+                                           value="<c:out value='${not empty sessionScope.preserved_email ? sessionScope.preserved_email : ""}' />">
                                 </div>
+                                <c:remove var="preserved_email" scope="session" />
+                            </div>
 
-                                <!-- Grade / Specialization Selector -->
-                                <div class="form-group" id="grade-selection-wrapper">
-                                    <label for="grade-select" class="form-label" id="grade-label">
-                                        Khối lớp quan tâm <span class="required" style="color: var(--danger);">*</span>
-                                    </label>
-                                    <div class="input-wrapper">
-                                        <svg class="icon icon-sm input-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                                            <polyline points="2 17 12 22 22 17"></polyline>
-                                            <polyline points="2 12 12 17 22 12"></polyline>
-                                        </svg>
-                                        <select class="form-control" id="grade-select" name="grade" style="cursor: pointer;">
-                                            <option value="" disabled selected>Chọn khối lớp đào tạo</option>
-                                            <option value="10">Khối 10 (Chương trình mới GDPT 2018)</option>
-                                            <option value="11">Khối 11 (Chuyên đề nâng cao &amp; ĐGNL sớm)</option>
-                                            <option value="12">Khối 12 (Tổng ôn tốt nghiệp &amp; Đại học)</option>
-                                            <option value="dgnl">Luyện thi Đánh Giá Năng Lực (ĐHQG / ĐHBK)</option>
-                                        </select>
-                                    </div>
-                                </div>
-
+                            <!-- Row 3: Password & Confirm Password Grid -->
+                            <div class="form-grid-2col">
                                 <!-- Password -->
                                 <div class="form-group">
                                     <div class="pwd-strength-header">
@@ -178,7 +148,7 @@
                                             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                                         </svg>
                                         <input type="password" id="password" name="password" class="form-control"
-                                               placeholder="Tối thiểu 8 ký tự" required autocomplete="new-password">
+                                               placeholder="Tối thiểu 6 ký tự" required autocomplete="new-password">
                                         <button type="button" class="auth-password-toggle" data-password-toggle="password"
                                                 aria-label="Hiện/Ẩn mật khẩu" title="Hiện/Ẩn mật khẩu">
                                             <svg class="icon icon-sm icon-eye" viewBox="0 0 24 24" aria-hidden="true">
@@ -205,7 +175,7 @@
                                     <ul class="pwd-rules-checklist">
                                         <li class="pwd-rule-item" id="rule-len">
                                             <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle></svg>
-                                            <span>≥ 8 ký tự</span>
+                                            <span>≥ 6 ký tự</span>
                                         </li>
                                         <li class="pwd-rule-item" id="rule-upper">
                                             <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle></svg>
@@ -262,7 +232,7 @@
                             </div>
 
                             <!-- Terms Checkboxes -->
-                            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;">
+                            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
                                 <label class="auth-checkbox-label" style="align-items: flex-start;">
                                     <input type="checkbox" id="terms-agree" required style="margin-top: 3px;">
                                     <span>
@@ -349,7 +319,7 @@
                             <!-- Item 2 -->
                             <div class="bento-benefit-item">
                                 <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--primary);">
-                                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                    <rect width="18" height="18" x="3" y="4" rx="2"></rect>
                                     <line x1="16" y1="2" x2="16" y2="6"></line>
                                     <line x1="8" y1="2" x2="8" y2="6"></line>
                                     <line x1="3" y1="10" x2="21" y2="10"></line>

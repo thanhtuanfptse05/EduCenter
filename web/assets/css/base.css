@@ -167,22 +167,33 @@ a:hover {
   margin-left: 2px;
 }
 
-.input-wrapper {
+.input-wrapper,
+.auth-password-wrapper {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
-.input-wrapper .input-icon {
+.input-wrapper .input-icon,
+.auth-password-wrapper .input-icon {
   position: absolute;
   left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--text-muted);
   pointer-events: none;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
 }
 
 .form-control {
   width: 100%;
-  height: 40px;
+  height: 42px;
   padding: 8px 12px;
   font-family: inherit;
   font-size: var(--font-size-base);
@@ -190,11 +201,39 @@ a:hover {
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
+  box-sizing: border-box;
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.input-wrapper .form-control {
+.input-wrapper .form-control,
+.auth-password-wrapper .form-control {
   padding-left: 38px;
+}
+
+.auth-password-wrapper .form-control {
+  padding-right: 42px;
+}
+
+.auth-password-toggle {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  z-index: 2;
+}
+
+.auth-password-toggle:hover {
+  color: var(--text);
+  background-color: var(--surface-hover);
 }
 
 .form-control:focus {
@@ -540,7 +579,8 @@ html[data-theme="dark"] .badge-parent {
 /* ==========================================================================
    Standardized App Header & Navigation Bar
    ========================================================================== */
-.app-header {
+.app-header,
+.admin-topbar {
   position: sticky;
   top: 0;
   left: 0;
@@ -551,13 +591,18 @@ html[data-theme="dark"] .badge-parent {
   border-bottom: 1px solid var(--border);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
   backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-sizing: border-box;
 }
 
 .app-header-container {
+  width: 100%;
   max-width: 1280px;
   height: 100%;
   margin: 0 auto;
-  padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
