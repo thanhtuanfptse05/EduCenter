@@ -96,11 +96,11 @@ HTTP Request
 * **`EncodingFilter.java`**: Áp dụng cho mọi URL (`/*`), set `request.setCharacterEncoding("UTF-8")` và `response.setCharacterEncoding("UTF-8")`.
 * **`AuthenticationFilter.java`**: Kiểm tra các URL yêu cầu đăng nhập (`/admin/*`, `/staff/*`, `/teacher/*`, `/student/*`, `/parent/*`, `/profile`). Chuyển hướng `/login` nếu chưa đăng nhập.
 * **`RoleFilter.java`**: Kiểm tra vai trò trong `UserPrincipalDTO`:
-  * Route `/admin/*`: yêu cầu role `ADMIN`.
-  * Route `/staff/*`: yêu cầu role `STAFF`, `MANAGER`, hoặc `ADMIN`.
-  * Route `/teacher/*`: yêu cầu role `TEACHER`, hoặc `ADMIN`.
-  * Route `/student/*`: yêu cầu role `STUDENT`, hoặc `ADMIN`.
-  * Route `/parent/*`: yêu cầu role `PARENT`, hoặc `ADMIN`.
+  * Route `/admin/*`: yêu cầu role `ADMIN` (Quản trị viên kiêm Quản lý trung tâm).
+  * Route `/staff/*`: yêu cầu role `STAFF` hoặc `ADMIN`.
+  * Route `/teacher/*`: yêu cầu role `TEACHER` hoặc `ADMIN`.
+  * Route `/student/*`: yêu cầu role `STUDENT` hoặc `ADMIN`.
+  * Route `/parent/*`: yêu cầu role `PARENT` hoặc `ADMIN`.
   * Sai quyền: chuyển tiếp về `/errors/403`.
 
 ### 2.7 Package `com.educenter.controller`

@@ -27,7 +27,7 @@
 
 ### SEC-02: Role-Based Access Control (RBAC) & Data Isolation
 * **THE SYSTEM SHALL** áp dụng Servlet Filter và kiểm tra quyền tại tầng Service trên từng request và từng bản ghi dữ liệu.
-* Chỉ cho phép 6 vai trò: `System Admin`, `Center Manager`, `Academic/Admission Staff`, `Tutor/Teacher`, `Student`, `Parent/Guardian`.
+* Chỉ cho phép 5 vai trò chuẩn (MVP gộp Admin & Center Manager): `ADMIN` (Quản trị viên & Quản lý trung tâm), `STAFF` (Nhân viên tuyển sinh & Học vụ), `TEACHER` (Giáo viên / Gia sư), `STUDENT` (Học viên), `PARENT` (Phụ huynh / Người giám hộ).
 * **THE SYSTEM SHALL** cô lập dữ liệu phụ huynh: Phụ huynh CHỈ được xem thông tin học viên đã xác thực liên kết hợp lệ (`StudentGuardians`).
 
 ### SEC-03: Financial & Attendance Integrity

@@ -18,22 +18,23 @@
   2. Đăng nhập / Đăng xuất (`/login`, `/logout`)
   3. Quên / Đặt lại mật khẩu (`/forgot-password`, `/reset-password`)
   4. Cập nhật hồ sơ tài khoản và đổi mật khẩu (`/profile`)
-  5. Quản lý vai trò và phân quyền theo 6 vai trò chuẩn (`/admin/users`)
+  5. Quản lý vai trò và phân quyền theo 5 vai trò chuẩn (gộp Admin & Manager theo MVP SRS v1.1) tại `/admin/users`
 * **Impact:** Tác động trực tiếp lên toàn bộ 12 module của hệ thống. Kiểm soát toàn bộ lưu lượng truy cập qua bộ lọc `AuthenticationFilter` và `RoleFilter`.
 
 ---
 
 ## 2. User Personas & Roles
 
+> **Quy ước định danh MVP:** Vai trò **System Admin** và **Center Manager** được gộp làm **1 vai trò duy nhất (`ADMIN`)** để tinh gọn vận hành theo đúng định hướng SRS v1.1 (Mục II: *"Trong MVP, quyền System Admin có thể gộp với quản trị trung tâm"*).
+
 | Vai trò (Role) | Mã Code | Quyền hạn & Không gian truy cập |
 |---|---|---|
 | **Guest** | `GUEST` | Xem danh mục khóa học public, gửi yêu cầu tư vấn, đăng ký tài khoản, đăng nhập, quên mật khẩu. |
-| **System Admin** | `ADMIN` | Toàn quyền cấu hình hệ thống, quản lý tài khoản, cấp/thu hồi vai trò, khóa/mở tài khoản, xem Audit Logs. |
-| **Center Manager** | `MANAGER` | Xem báo cáo tài chính, học vụ, điều hành lớp học, phê duyệt khóa học/kết quả. |
-| **Admission Staff** | `STAFF` | Quản lý Leads, tư vấn, hồ sơ học viên/phụ huynh, ghi danh, xếp lịch, lập hóa đơn, thu học phí. |
+| **Admin & Center Manager** | `ADMIN` | **Gộp toàn quyền Quản trị & Điều hành:** Cấu hình hệ thống, quản lý tài khoản, cấp/thu hồi vai trò, khóa/mở tài khoản, phê duyệt, điều hành học vụ, xem toàn bộ báo cáo doanh thu, công nợ và Audit Logs. |
+| **Admission & Academic Staff** | `STAFF` | Quản lý Leads, tư vấn CRM, hồ sơ học viên/phụ huynh, ghi danh, xếp lịch, lập hóa đơn, thu học phí. |
 | **Teacher / Tutor** | `TEACHER` | Xem lịch giảng dạy, buổi học được phân công, điểm danh, viết nhật ký dạy, tạo bài kiểm tra, nhập điểm. |
 | **Student** | `STUDENT` | Xem lịch học cá nhân, kết quả học tập công bố, chuyên cần, tra cứu học phí, gửi câu hỏi Q&A. |
-| **Parent / Guardian**| `PARENT` | Theo dõi chuyên cần, điểm số, học phí của con (chỉ học sinh đã được xác thực liên kết giám hộ). |
+| **Parent / Guardian** | `PARENT` | Theo dõi chuyên cần, điểm số, học phí của con (chỉ học sinh đã được xác thực liên kết giám hộ). |
 
 ---
 
@@ -148,7 +149,7 @@
   * `roles`: `@ManyToMany` thông qua bảng liên kết `UserRoles`
 * **`Role` (`Roles`):**
   * `id`: `Integer` (`@Id @GeneratedValue(strategy = GenerationType.IDENTITY)`)
-  * `code`: `String` (unique, uppercase: `ADMIN`, `MANAGER`, `STAFF`, `TEACHER`, `STUDENT`, `PARENT`)
+  * `code`: `String` (unique, uppercase: `ADMIN`, `STAFF`, `TEACHER`, `STUDENT`, `PARENT`)
   * `name`: `String` (Nationalized, length 100)
   * `description`: `String`
 * **`AuditLog` (`AuditLogs`):**
@@ -183,8 +184,8 @@ Client Request
 
 | Tiền tố URL | Vai trò được phép truy cập | Xử lý khi vi phạm |
 |---|---|---|
-| `/admin/*` | `ADMIN` | Chuyển hướng `/errors/403` |
-| `/staff/*` | `STAFF`, `MANAGER`, `ADMIN` | Chuyển hướng `/errors/403` |
+| `/admin/*` | `ADMIN` (Quản trị viên kiêm Quản lý trung tâm) | Chuyển hướng `/errors/403` |
+| `/staff/*` | `STAFF`, `ADMIN` | Chuyển hướng `/errors/403` |
 | `/teacher/*` | `TEACHER`, `ADMIN` | Chuyển hướng `/errors/403` |
 | `/student/*` | `STUDENT`, `ADMIN` | Chuyển hướng `/errors/403` |
 | `/parent/*` | `PARENT`, `ADMIN` | Chuyển hướng `/errors/403` |

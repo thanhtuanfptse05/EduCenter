@@ -661,10 +661,9 @@ GO
 -- PHẦN 4: DỮ LIỆU KHỞI TẠO (SEED DATA)
 -- ============================================================================
 
--- 1. 6 Vai trò hệ thống
+-- 1. 5 Vai trò hệ thống chuẩn (Admin kiêm Quản lý trung tâm)
 INSERT INTO dbo.Roles (code, name, description) VALUES
-('ADMIN', N'Quản trị viên hệ thống', N'Quản trị toàn quyền cấu hình, tài khoản và hệ thống'),
-('MANAGER', N'Quản lý trung tâm', N'Điều hành học vụ, phê duyệt và xem báo cáo tài chính'),
+('ADMIN', N'Quản trị viên & Quản lý trung tâm', N'Toàn quyền quản trị hệ thống, tài khoản, cấu hình, phê duyệt và xem báo cáo tài chính'),
 ('STAFF', N'Nhân viên tuyển sinh & Học vụ', N'Tư vấn CRM, ghi danh học viên, xếp lịch và thu học phí'),
 ('TEACHER', N'Giáo viên / Gia sư', N'Giảng dạy, điểm danh, ra bài kiểm tra và chấm điểm'),
 ('STUDENT', N'Học viên', N'Xem lịch học, tiến độ, điểm số, học phí và hỏi đáp'),

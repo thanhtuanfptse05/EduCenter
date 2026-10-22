@@ -101,13 +101,13 @@ erDiagram
 ### PHÂN HỆ 1: TÀI KHOẢN & PHÂN QUYỀN (IDENTITY & RBAC)
 
 #### 1. Bảng `Roles` (Vai trò người dùng)
-*Quản lý 6 vai trò chuẩn trong hệ thống: `ADMIN`, `MANAGER`, `STAFF`, `TEACHER`, `STUDENT`, `PARENT`.*
+*Quản lý 5 vai trò chuẩn trong hệ thống (MVP gộp Admin & Manager): `ADMIN`, `STAFF`, `TEACHER`, `STUDENT`, `PARENT`.*
 
 | Tên Cột | Kiểu Dữ Liệu | Ràng Buộc | Mô Tả |
 |---|---|---|---|
 | `id` | `INT IDENTITY(1,1)` | PK | Mã định danh vai trò |
-| `code` | `VARCHAR(50)` | NOT NULL, UNIQUE | Mã vai trò (`ADMIN`, `MANAGER`, `STAFF`, `TEACHER`, `STUDENT`, `PARENT`) |
-| `name` | `NVARCHAR(100)` | NOT NULL | Tên hiển thị (Quản trị viên, Tư vấn viên, Giáo viên, ...) |
+| `code` | `VARCHAR(50)` | NOT NULL, UNIQUE | Mã vai trò (`ADMIN`, `STAFF`, `TEACHER`, `STUDENT`, `PARENT`) |
+| `name` | `NVARCHAR(100)` | NOT NULL | Tên hiển thị (Quản trị viên & Quản lý, Nhân viên, Giáo viên, ...) |
 | `description` | `NVARCHAR(255)` | NULL | Mô tả quyền hạn vai trò |
 | `created_at` | `DATETIME2(0)` | NOT NULL, DEFAULT GETDATE() | Thời điểm tạo |
 
