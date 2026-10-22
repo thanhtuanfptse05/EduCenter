@@ -50,6 +50,7 @@ IF OBJECT_ID(N'dbo.Guardians', N'U') IS NOT NULL DROP TABLE dbo.Guardians;
 IF OBJECT_ID(N'dbo.Students', N'U') IS NOT NULL DROP TABLE dbo.Students;
 IF OBJECT_ID(N'dbo.Teachers', N'U') IS NOT NULL DROP TABLE dbo.Teachers;
 IF OBJECT_ID(N'dbo.UserRoles', N'U') IS NOT NULL DROP TABLE dbo.UserRoles;
+IF OBJECT_ID(N'dbo.PasswordResetTokens', N'U') IS NOT NULL DROP TABLE dbo.PasswordResetTokens;
 IF OBJECT_ID(N'dbo.Users', N'U') IS NOT NULL DROP TABLE dbo.Users;
 IF OBJECT_ID(N'dbo.Roles', N'U') IS NOT NULL DROP TABLE dbo.Roles;
 GO
@@ -86,6 +87,21 @@ CREATE TABLE dbo.Users (
     updated_at DATETIME2(0) NOT NULL CONSTRAINT DF_Users_UpdatedAt DEFAULT GETDATE()
 );
 GO
+
+-- ----------------------------------------------------------------------------
+-- 2b. PasswordResetTokens (FR-004 Quên & đặt lại mật khẩu)
+-- ----------------------------------------------------------------------------
+CREATE TABLE dbo.PasswordResetTokens (
+    id BIGINT IDENTITY(1,1) CONSTRAINT PK_PasswordResetTokens PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    token_hash VARCHAR(64) NOT NULL CONSTRAINT UQ_PasswordResetTokens_Hash UNIQUE,
+    expires_at DATETIME2(0) NOT NULL,
+    created_at DATETIME2(0) NOT NULL CONSTRAINT DF_PasswordResetTokens_CreatedAt DEFAULT GETDATE(),
+    consumed_at DATETIME2(0) NULL,
+    CONSTRAINT FK_PasswordResetTokens_User FOREIGN KEY (user_id) REFERENCES dbo.Users(id) ON DELETE NO ACTION
+);
+GO
+
 
 -- ----------------------------------------------------------------------------
 -- 3. UserRoles (Bảng nối Người dùng - Vai trò)

@@ -1,0 +1,63 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<aside class="admin-sidebar">
+    <div class="sidebar-brand">
+        <span style="display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: var(--primary); color: #FFF; border-radius: var(--radius-sm);">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+        </span>
+        <span>EduCenter ERP</span>
+    </div>
+
+    <nav class="sidebar-nav">
+        <!-- 1. Tổng quan -->
+        <div class="nav-group-title">Tổng quan</div>
+        <a href="${pageContext.request.contextPath}/admin/dashboard" class="nav-link ${activeNav == 'dashboard' ? 'active' : ''}">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+            </svg>
+            <span>Bảng điều khiển</span>
+        </a>
+
+        <!-- 2. Tuyển sinh & CRM -->
+        <div class="nav-group-title">Tuyển sinh & CRM</div>
+        <a href="${pageContext.request.contextPath}/staff/leads" class="nav-link ${activeNav == 'leads' ? 'active' : ''}">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span>Khách hàng & Tư vấn</span>
+        </a>
+
+        <!-- 3. Quản trị hệ thống (Chỉ Admin) -->
+        <c:if test="${sessionScope.currentUser != null and sessionScope.currentUser.admin}">
+            <div class="nav-group-title">Hệ thống & Tài khoản</div>
+            <a href="${pageContext.request.contextPath}/admin/users" class="nav-link ${activeNav == 'users' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <polyline points="16 11 18 13 22 9"></polyline>
+                </svg>
+                <span>Quản lý người dùng & Vai trò</span>
+            </a>
+        </c:if>
+
+        <!-- 4. Cá nhân -->
+        <div class="nav-group-title">Cá nhân</div>
+        <a href="${pageContext.request.contextPath}/profile" class="nav-link ${activeNav == 'profile' ? 'active' : ''}">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <span>Hồ sơ & Đổi mật khẩu</span>
+        </a>
+    </nav>
+</aside>

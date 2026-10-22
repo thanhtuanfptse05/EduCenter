@@ -1,0 +1,139 @@
+/**
+ * EduCenter ERP — Design Tokens
+ * Single source of truth for presentation per design.md (Section 2)
+ * Default theme: LIGHT (always light on first visit)
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces & Backgrounds */
+  --bg: #F8FAFC;
+  --surface: #FFFFFF;
+  --surface-muted: #F1F5F9;
+  --surface-hover: #EAF0F8;
+
+  /* Text & Typography */
+  --text: #0F172A;
+  --text-muted: #64748B;
+  --text-inverse: #FFFFFF;
+
+  /* Borders & Dividers */
+  --border: #E2E8F0;
+  --border-focus: #2563EB;
+
+  /* Brand & Status Colors */
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --primary-subtle: #EFF6FF;
+  --primary-border: #BFDBFE;
+
+  --success: #15803D;
+  --success-subtle: #F0FDF4;
+  --success-border: #BBF7D0;
+
+  --warning: #B45309;
+  --warning-subtle: #FFFBEB;
+  --warning-border: #FDE68A;
+
+  --danger: #B91C1C;
+  --danger-subtle: #FEF2F2;
+  --danger-border: #FECACA;
+
+  --focus: #2563EB;
+
+  /* Buttons */
+  --button-primary-bg: #2563EB;
+  --button-primary-hover: #1D4ED8;
+  --button-primary-text: #FFFFFF;
+
+  --button-secondary-bg: #FFFFFF;
+  --button-secondary-hover: #F1F5F9;
+  --button-secondary-text: #0F172A;
+  --button-secondary-border: #E2E8F0;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+
+  /* Layout Dimensions */
+  --sidebar-width: 256px;
+  --header-height: 56px;
+  --content-max-width: 1440px;
+
+  /* Typography Scale */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 13px;
+  --font-size-base: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 28px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Surfaces & Backgrounds */
+  --bg: #0B1120;
+  --surface: #111827;
+  --surface-muted: #182234;
+  --surface-hover: #223047;
+
+  /* Text & Typography */
+  --text: #F1F5F9;
+  --text-muted: #94A3B8;
+  --text-inverse: #0B1120;
+
+  /* Borders & Dividers */
+  --border: #29374B;
+  --border-focus: #60A5FA;
+
+  /* Brand & Status Colors */
+  --primary: #60A5FA;
+  --primary-hover: #93C5FD;
+  --primary-subtle: #1E293B;
+  --primary-border: #2563EB;
+
+  --success: #4ADE80;
+  --success-subtle: #064E3B;
+  --success-border: #059669;
+
+  --warning: #FBBF24;
+  --warning-subtle: #78350F;
+  --warning-border: #D97706;
+
+  --danger: #F87171;
+  --danger-subtle: #7F1D1D;
+  --danger-border: #DC2626;
+
+  --focus: #93C5FD;
+
+  /* Buttons */
+  --button-primary-bg: #2563EB;
+  --button-primary-hover: #1D4ED8;
+  --button-primary-text: #FFFFFF;
+
+  --button-secondary-bg: #111827;
+  --button-secondary-hover: #182234;
+  --button-secondary-text: #F1F5F9;
+  --button-secondary-border: #29374B;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+}

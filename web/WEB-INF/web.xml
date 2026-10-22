@@ -6,28 +6,66 @@
     <display-name>EduCenter Management System</display-name>
 
     <session-config>
-        <session-timeout>60</session-timeout>
+        <session-timeout>30</session-timeout>
         <cookie-config>
             <http-only>true</http-only>
+            <name>EDUCENTER_JSESSIONID</name>
         </cookie-config>
+        <tracking-mode>COOKIE</tracking-mode>
     </session-config>
 
-    <!-- Trang chào mặc định -->
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
+    <!-- Filters Pipeline (Order is critical!) -->
+    <!-- 1. Encoding & Security Headers Filter -->
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>com.educenter.filter.EncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
-    <!-- Xử lý lỗi hệ thống -->
+    <!-- 2. CSRF Protection Filter -->
+    <filter>
+        <filter-name>CsrfFilter</filter-name>
+        <filter-class>com.educenter.filter.CsrfFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CsrfFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 3. Authentication Filter -->
+    <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>com.educenter.filter.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 4. RBAC Role Authorization Filter -->
+    <filter>
+        <filter-name>RoleFilter</filter-name>
+        <filter-class>com.educenter.filter.RoleFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>RoleFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- Standard Error Pages -->
     <error-page>
         <error-code>403</error-code>
-        <location>/WEB-INF/views/errors/403.jsp</location>
+        <location>/WEB-INF/views/common/403.jsp</location>
     </error-page>
     <error-page>
         <error-code>404</error-code>
-        <location>/WEB-INF/views/errors/404.jsp</location>
+        <location>/WEB-INF/views/common/404.jsp</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
-        <location>/WEB-INF/views/errors/500.jsp</location>
+        <location>/WEB-INF/views/common/500.jsp</location>
     </error-page>
 </web-app>

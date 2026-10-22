@@ -5,6 +5,11 @@
     <persistence-unit name="EduCenterPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         
+        <class>com.educenter.entity.Role</class>
+        <class>com.educenter.entity.User</class>
+        <class>com.educenter.entity.AuditLog</class>
+        <class>com.educenter.entity.PasswordResetToken</class>
+        
         <!-- Cấu hình kết nối Microsoft SQL Server -->
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>

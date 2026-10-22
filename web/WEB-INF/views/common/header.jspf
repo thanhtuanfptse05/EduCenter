@@ -1,0 +1,62 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<header class="admin-topbar">
+    <div class="topbar-left">
+        <a href="${pageContext.request.contextPath}/" style="display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); font-weight: 700;">
+            <span style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: var(--primary); color: #FFF; border-radius: var(--radius-md);">
+                <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                </svg>
+            </span>
+            <span>EduCenter ERP</span>
+        </a>
+        <c:if test="${not empty breadcrumb}">
+            <span style="color: var(--border);">/</span>
+            <span style="color: var(--text-muted); font-size: var(--font-size-sm);"><c:out value="${breadcrumb}" /></span>
+        </c:if>
+    </div>
+
+    <div class="topbar-right">
+        <!-- Theme Toggle Button with Lucide Sun/Moon SVG icons per design.md -->
+        <button type="button" class="btn btn-ghost btn-sm" data-theme-toggle aria-label="Chuyển chế độ sáng/tối" title="Chuyển chế độ sáng/tối">
+            <svg class="icon icon-md theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true" style="display: none;">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+            </svg>
+            <svg class="icon icon-md theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+            </svg>
+        </button>
+
+        <c:choose>
+            <c:when test="${not empty sessionScope.currentUser}">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <a href="${pageContext.request.contextPath}/profile" class="btn btn-ghost btn-sm" style="display: flex; align-items: center; gap: 6px;">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span><c:out value="${sessionScope.currentUser.fullName}" /></span>
+                        <span class="badge badge-admin" style="font-size: 10px; padding: 1px 6px;">
+                            <c:out value="${sessionScope.currentUser.primaryRole}" />
+                        </span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/logout" class="btn btn-secondary btn-sm" title="Đăng xuất">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        <span>Đăng xuất</span>
+                    </a>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <a href="${pageContext.request.contextPath}/login" class="btn btn-ghost btn-sm">Đăng nhập</a>
+                <a href="${pageContext.request.contextPath}/register" class="btn btn-primary btn-sm">Đăng ký</a>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</header>

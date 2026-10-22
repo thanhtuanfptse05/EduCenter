@@ -1,0 +1,245 @@
+/**
+ * EduCenter ERP — Authentication & Account Pages Stylesheet
+ * Strictly implements design.md: Centered Card 440px SaaS styling, Lucide outline icons
+ */
+
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 16px;
+  background-color: var(--bg);
+}
+
+.auth-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.auth-brand-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: var(--primary);
+  color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  margin-bottom: 12px;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+}
+
+.auth-brand-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.auth-brand-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 32px;
+}
+
+.auth-card-header {
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.auth-card-title {
+  font-size: var(--font-size-xl);
+  font-weight: 650;
+  color: var(--text);
+}
+
+.auth-card-description {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.auth-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-password-wrapper .form-control {
+  padding-left: 38px;
+  padding-right: 40px;
+}
+
+.auth-password-toggle {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+}
+
+.auth-password-toggle:hover {
+  color: var(--text);
+  background-color: var(--surface-hover);
+}
+
+.auth-auxiliary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: var(--font-size-sm);
+}
+
+.auth-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--text);
+}
+
+.auth-checkbox-label input[type="checkbox"] {
+  accent-color: var(--primary);
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-sm);
+}
+
+.auth-footer {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+.auth-footer a {
+  font-weight: 600;
+}
+
+/* Demo accounts chips for Assignment PRJ301 evaluator */
+.auth-demo-accounts {
+  margin-top: 20px;
+  padding: 14px;
+  background-color: var(--surface-muted);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+}
+
+.auth-demo-title {
+  font-size: var(--font-size-xs);
+  font-weight: 650;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.auth-demo-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.auth-demo-chip {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-size: var(--font-size-xs);
+  font-family: inherit;
+  color: var(--text);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.auth-demo-chip:hover {
+  border-color: var(--primary);
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+}
+
+/* Role Selector for Register Form */
+.role-selector-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.role-selector-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background-color: var(--surface);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.role-selector-card input[type="radio"] {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  accent-color: var(--primary);
+}
+
+.role-selector-card.selected,
+.role-selector-card:has(input[type="radio"]:checked) {
+  border-color: var(--primary);
+  background-color: var(--primary-subtle);
+}
+
+.role-card-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 6px;
+}
+
+.role-card-desc {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Profile page specific layout */
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .profile-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
