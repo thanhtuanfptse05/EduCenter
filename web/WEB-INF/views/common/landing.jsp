@@ -113,57 +113,120 @@
 
         <%-- Public Landing Page (Unauthenticated Guests & High School Tutoring Portal) --%>
         <c:otherwise>
-            <!-- TOP NAVBAR -->
+            <!-- TOP NAVBAR (REDESIGNED FOR SLEEK, MODERN ERP & EDTECH STANDARD) -->
             <header class="portal-header">
                 <div class="portal-nav-container">
-                    <div style="display: flex; items: center; gap: 12px;">
-                        <a href="${pageContext.request.contextPath}/" class="portal-brand">
-                            <span class="portal-brand-icon">
-                                <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                                </svg>
-                            </span>
-                            <span>EduCenter</span>
-                            <span class="portal-brand-badge">THPT Tutoring</span>
-                        </a>
-                    </div>
+                    <!-- Brand Section -->
+                    <a href="${pageContext.request.contextPath}/" class="portal-brand">
+                        <span class="portal-brand-icon">
+                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                            </svg>
+                        </span>
+                        <span class="portal-brand-name">EduCenter</span>
+                        <span class="portal-brand-badge">Lớp 10–12</span>
+                    </a>
 
+                    <!-- Center Navigation Links (Clean, No-Wrap) -->
                     <nav class="portal-nav-links">
                         <a href="${pageContext.request.contextPath}/" class="portal-nav-link active">Trang chủ</a>
-                        <a href="${pageContext.request.contextPath}/courses" class="portal-nav-link">Danh mục khóa học</a>
-                        <a href="#chuong-trinh" class="portal-nav-link">Chương trình gia sư</a>
+                        <a href="${pageContext.request.contextPath}/courses" class="portal-nav-link">Khóa học</a>
+                        <a href="#chuong-trinh" class="portal-nav-link">Chương trình</a>
                         <a href="#mon-hoc" class="portal-nav-link">Môn học</a>
-                        <a href="#doi-ngu" class="portal-nav-link">Đội ngũ giáo viên</a>
-                        <a href="#quy-trinh" class="portal-nav-link">Quy trình học</a>
-                        <a href="#dang-ky-tu-van" class="portal-nav-link">Tư vấn tuyển sinh</a>
+                        <a href="#doi-ngu" class="portal-nav-link">Giáo viên</a>
+                        <a href="#quy-trinh" class="portal-nav-link">Quy trình</a>
                     </nav>
 
+                    <!-- Right Side Utility Actions -->
                     <div class="portal-nav-actions">
-                        <!-- Theme Toggle Button -->
-                        <button type="button" class="btn btn-ghost btn-sm" id="theme-toggle-btn"
-                                onclick="const next = (document.documentElement.getAttribute('data-theme') === 'dark') ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', next); localStorage.setItem('educenter-theme', next);"
-                                title="Chuyển đổi giao diện Sáng / Tối">
+                        <!-- Course Registration Cart Shortcut -->
+                        <a href="${pageContext.request.contextPath}/registration-cart" class="portal-icon-btn" title="Giỏ đăng ký khóa học">
                             <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                <circle cx="12" cy="12" r="5"></circle>
-                                <line x1="12" y1="1" x2="12" y2="3"></line>
-                                <line x1="12" y1="21" x2="12" y2="23"></line>
-                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                                <line x1="1" y1="12" x2="3" y2="12"></line>
-                                <line x1="21" y1="12" x2="23" y2="12"></line>
-                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                            <c:if test="${not empty sessionScope.registrationCart && sessionScope.registrationCart.itemCount > 0}">
+                                <span class="portal-cart-badge"><c:out value="${sessionScope.registrationCart.itemCount}" /></span>
+                            </c:if>
+                        </a>
+
+                        <!-- Theme Toggle Button (Light / Dark) -->
+                        <button type="button" class="portal-icon-btn" data-theme-toggle aria-label="Chuyển chế độ sáng/tối" title="Chuyển chế độ sáng/tối">
+                            <svg class="icon icon-sm theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true" style="display: none;">
+                                <circle cx="12" cy="12" r="4"></circle>
+                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                            </svg>
+                            <svg class="icon icon-sm theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
                             </svg>
                         </button>
 
-                        <a href="${pageContext.request.contextPath}/login" class="btn btn-secondary btn-sm">Đăng nhập</a>
-                        <a href="#dang-ky-tu-van" class="btn btn-primary btn-sm">Đăng ký tư vấn</a>
+                        <div class="portal-nav-divider"></div>
+
+                        <c:choose>
+                            <c:when test="${not empty sessionScope.currentUser}">
+                                <a href="${pageContext.request.contextPath}/profile" class="portal-btn-ghost">
+                                    <c:out value="${sessionScope.currentUser.fullName}" />
+                                </a>
+                                <a href="${pageContext.request.contextPath}/logout" class="portal-icon-btn" title="Đăng xuất">
+                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                        <polyline points="16 17 21 12 16 7"></polyline>
+                                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                                    </svg>
+                                </a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/login" class="portal-btn-ghost">Đăng nhập</a>
+                                <a href="#dang-ky-tu-van" class="portal-btn-cta">
+                                    <span>Đăng ký tư vấn</span>
+                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                        <polyline points="12 5 19 12 12 19"></polyline>
+                                    </svg>
+                                </a>
+                            </c:otherwise>
+                        </c:choose>
+
+                        <!-- Mobile Hamburger Button -->
+                        <button type="button" class="portal-hamburger-btn" onclick="toggleMobilePortalMenu()" aria-label="Mở menu điều hướng">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                <line x1="3" y1="12" x2="21" y2="12"></line>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <line x1="3" y1="18" x2="21" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile Drawer Navigation -->
+                <div class="portal-mobile-drawer" id="portalMobileDrawer">
+                    <nav class="portal-mobile-links">
+                        <a href="${pageContext.request.contextPath}/" class="portal-mobile-link active" onclick="closeMobilePortalMenu()">Trang chủ</a>
+                        <a href="${pageContext.request.contextPath}/courses" class="portal-mobile-link" onclick="closeMobilePortalMenu()">Khóa học THPT</a>
+                        <a href="#chuong-trinh" class="portal-mobile-link" onclick="closeMobilePortalMenu()">Chương trình gia sư</a>
+                        <a href="#mon-hoc" class="portal-mobile-link" onclick="closeMobilePortalMenu()">Môn học chuyên sâu</a>
+                        <a href="#doi-ngu" class="portal-mobile-link" onclick="closeMobilePortalMenu()">Đội ngũ giáo viên</a>
+                        <a href="#quy-trinh" class="portal-mobile-link" onclick="closeMobilePortalMenu()">Quy trình đào tạo</a>
+                    </nav>
+                    <div class="portal-mobile-actions">
+                        <c:choose>
+                            <c:when test="${not empty sessionScope.currentUser}">
+                                <a href="${pageContext.request.contextPath}/profile" class="btn btn-secondary btn-sm" style="width: 100%; justify-content: center;">Hồ sơ cá nhân</a>
+                                <a href="${pageContext.request.contextPath}/logout" class="btn btn-danger btn-sm" style="width: 100%; justify-content: center;">Đăng xuất</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/login" class="btn btn-secondary btn-sm" style="width: 100%; justify-content: center;">Đăng nhập hệ thống</a>
+                                <a href="#dang-ky-tu-van" class="btn btn-primary btn-sm" style="width: 100%; justify-content: center;" onclick="closeMobilePortalMenu()">Đăng ký tư vấn ngay</a>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
             </header>
 
-            <main style="padding-top: 64px;">
+            <main style="padding-top: 68px;">
                 <!-- SECTION 02: HERO SECTION -->
                 <section class="portal-hero">
                     <div class="portal-hero-container">
@@ -1220,7 +1283,22 @@
                         }
                     });
                 }
+
+                function toggleMobilePortalMenu() {
+                    const drawer = document.getElementById('portalMobileDrawer');
+                    if (drawer) {
+                        drawer.classList.toggle('open');
+                    }
+                }
+
+                function closeMobilePortalMenu() {
+                    const drawer = document.getElementById('portalMobileDrawer');
+                    if (drawer) {
+                        drawer.classList.remove('open');
+                    }
+                }
             </script>
+            <script src="${pageContext.request.contextPath}/assets/js/theme.js"></script>
         </c:otherwise>
     </c:choose>
 </body>
