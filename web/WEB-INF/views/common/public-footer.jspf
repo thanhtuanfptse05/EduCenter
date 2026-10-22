@@ -1,0 +1,89 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<footer class="public-page-footer">
+    <div class="public-footer-container">
+        <div class="footer-grid-cols">
+            <!-- Brand Column -->
+            <div class="footer-col-brand">
+                <div class="footer-brand-title">
+                    <div class="footer-brand-logo">
+                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" style="color: #ffffff;">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                        </svg>
+                    </div>
+                    <span class="footer-brand-text">EduCenter</span>
+                </div>
+                <p class="footer-brand-desc">
+                    Hệ thống đào tạo và ôn luyện chuyên sâu bậc THPT, luyện thi Đại học và chứng chỉ quốc tế. Đảm bảo lộ trình cá nhân hóa và tiêu chuẩn học thuật cao cấp.
+                </p>
+                <div class="footer-cert-badges">
+                    <span class="cert-pill">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--success);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        ISO 27001:2022 Certified
+                    </span>
+                    <span class="cert-pill">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--primary);"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+                        Bộ GD &amp; ĐT Kiểm Định
+                    </span>
+                </div>
+            </div>
+
+            <!-- Programs Column -->
+            <div class="footer-col">
+                <h4 class="footer-col-title">Chương Trình Học</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="${pageContext.request.contextPath}/courses?gradeLevel=12">Luyện thi THPT Quốc Gia</a></li>
+                    <li><a href="${pageContext.request.contextPath}/courses?gradeLevel=12&keyword=DGNL">Ôn thi Đánh giá Năng lực</a></li>
+                    <li><a href="${pageContext.request.contextPath}/courses?gradeLevel=11">Lớp 11 Nền tảng Chuyên sâu</a></li>
+                    <li><a href="${pageContext.request.contextPath}/courses?gradeLevel=10">Lớp 10 Đổi mới GDPT</a></li>
+                    <li><a href="${pageContext.request.contextPath}/courses">Biểu phí &amp; Đợt khai giảng</a></li>
+                </ul>
+            </div>
+
+            <!-- Campus Locations Column -->
+            <div class="footer-col">
+                <h4 class="footer-col-title">Hệ Thống Cơ Sở</h4>
+                <div class="footer-location-list">
+                    <div class="location-item">
+                        <strong>Trụ sở Ba Đình:</strong>
+                        <span>Số 45 Liễu Giai, Q. Ba Đình, Hà Nội</span>
+                    </div>
+                    <div class="location-item">
+                        <strong>Cơ sở Cầu Giấy:</strong>
+                        <span>Tòa nhà EduTech, 128 Xuân Thủy, Hà Nội</span>
+                    </div>
+                    <div class="location-item">
+                        <strong>Cơ sở Quận 1 (TP.HCM):</strong>
+                        <span>Số 86 Lê Thánh Tôn, Bến Nghé, TP.HCM</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admissions Support Column -->
+            <div class="footer-col">
+                <h4 class="footer-col-title">Hỗ Trợ &amp; Tuyển Sinh</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="${pageContext.request.contextPath}/#tu-van">Đặt lịch kiểm tra đầu vào</a></li>
+                    <li><a href="${pageContext.request.contextPath}/#doi-ngu">Đăng ký gia sư kèm 1:1</a></li>
+                    <li><a href="${pageContext.request.contextPath}/#faq">Quy chế học vụ &amp; Hoàn phí</a></li>
+                    <li><a href="tel:19008866">Tổng đài: <strong>1900 8866</strong></a></li>
+                    <li><a href="mailto:tuyensinh@educenter.edu.vn">tuyensinh@educenter.edu.vn</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-sub-bottom">
+            <p>&copy; 2026 EduCenter Corporation. Bảo lưu mọi quyền. Hệ thống quản lý chất lượng đào tạo chuẩn hóa.</p>
+            <div class="footer-legal-links">
+                <a href="${pageContext.request.contextPath}/#dieu-khoan">Điều khoản sử dụng</a>
+                <a href="${pageContext.request.contextPath}/#bao-mat">Chính sách bảo mật</a>
+                <a href="${pageContext.request.contextPath}/#lien-he">Sơ đồ website</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="${pageContext.request.contextPath}/assets/js/theme.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/auth.js"></script>

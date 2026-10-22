@@ -131,6 +131,7 @@
 
                     <nav class="portal-nav-links">
                         <a href="${pageContext.request.contextPath}/" class="portal-nav-link active">Trang chủ</a>
+                        <a href="${pageContext.request.contextPath}/courses" class="portal-nav-link">Danh mục khóa học</a>
                         <a href="#chuong-trinh" class="portal-nav-link">Chương trình gia sư</a>
                         <a href="#mon-hoc" class="portal-nav-link">Môn học</a>
                         <a href="#doi-ngu" class="portal-nav-link">Đội ngũ giáo viên</a>
@@ -511,7 +512,11 @@
                                                     </div>
                                                 </div>
 
-                                                <h3 class="course-card-title"><c:out value="${course.name}" /></h3>
+                                                <h3 class="course-card-title">
+                                                    <a href="${pageContext.request.contextPath}/courses/detail?id=${course.id}" style="color: inherit; text-decoration: none;">
+                                                        <c:out value="${course.name}" />
+                                                    </a>
+                                                </h3>
 
                                                 <div class="course-meta-row">
                                                     <div class="course-meta-item">
@@ -547,13 +552,7 @@
                                             </div>
 
                                             <div class="course-card-foot">
-                                                <span style="font-size: var(--font-size-xs); color: var(--text-muted); display: flex; align-items: center; gap: 4px;">
-                                                    <svg class="icon icon-sm" viewBox="0 0 24 24" style="color: var(--success);" aria-hidden="true">
-                                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                                    </svg>
-                                                    Cam kết kiểm tra &ge; 7.5
-                                                </span>
+                                                <a href="${pageContext.request.contextPath}/courses/detail?id=${course.id}" class="btn btn-secondary btn-sm">Xem chi tiết</a>
                                                 <a href="#dang-ky-tu-van" class="btn btn-primary btn-sm">Đăng ký giữ chỗ</a>
                                             </div>
                                         </div>

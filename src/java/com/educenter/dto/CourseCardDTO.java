@@ -13,18 +13,23 @@ public class CourseCardDTO implements Serializable {
     private String code;
     private String name;
     private Integer gradeLevel;
+    private String targetExam;
     private BigDecimal fee;
     private String formattedFee;
     private Integer durationWeeks;
     private Integer totalSessions;
     private Integer maxCapacity;
     private String description;
+    private String imageUrl;
+    private Boolean isFeatured = false;
+    private String status = "OPEN";
     private String subjectName;
     private String subjectCode;
     private String teacherName;
     private String teacherTitle;
     private String scheduleText;
-    private String modelText; // e.g. "Nhóm nhỏ (Tối đa 12 HV)" hoặc "Gia sư 1 kèm 1"
+    private String modelText; // e.g. "Nhóm nhỏ (Tối đa 15 HV)" hoặc "Gia sư 1 kèm 1"
+    private int openClassCount = 0;
 
     public CourseCardDTO() {}
 
@@ -39,6 +44,9 @@ public class CourseCardDTO implements Serializable {
 
     public Integer getGradeLevel() { return gradeLevel; }
     public void setGradeLevel(Integer gradeLevel) { this.gradeLevel = gradeLevel; }
+
+    public String getTargetExam() { return targetExam; }
+    public void setTargetExam(String targetExam) { this.targetExam = targetExam; }
 
     public BigDecimal getFee() { return fee; }
     public void setFee(BigDecimal fee) {
@@ -68,6 +76,15 @@ public class CourseCardDTO implements Serializable {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
+    public Boolean getIsFeatured() { return isFeatured; }
+    public void setIsFeatured(Boolean isFeatured) { this.isFeatured = isFeatured; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
     public String getSubjectName() { return subjectName; }
     public void setSubjectName(String subjectName) { this.subjectName = subjectName; }
 
@@ -85,4 +102,7 @@ public class CourseCardDTO implements Serializable {
 
     public String getModelText() { return modelText; }
     public void setModelText(String modelText) { this.modelText = modelText; }
+
+    public int getOpenClassCount() { return openClassCount; }
+    public void setOpenClassCount(int openClassCount) { this.openClassCount = openClassCount; }
 }
