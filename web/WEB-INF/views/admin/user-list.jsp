@@ -30,17 +30,43 @@
 
                 <!-- KPI Summary Cards -->
                 <div class="kpi-grid">
-                    <div class="kpi-card">
-                        <div class="kpi-label">Tổng số người dùng</div>
-                        <div class="kpi-value"><c:out value="${pageData.totalRecords}" /></div>
+                    <div class="kpi-card" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div class="kpi-label">Tổng số người dùng</div>
+                            <div class="kpi-value"><c:out value="${pageData.totalRecords}" /></div>
+                        </div>
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--primary-subtle); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg class="icon icon-md" style="width: 24px; height: 24px;" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
                     </div>
-                    <div class="kpi-card">
-                        <div class="kpi-label">Đang hoạt động (Active)</div>
-                        <div class="kpi-value" style="color: var(--success);"><c:out value="${pageData.totalActive}" /></div>
+                    <div class="kpi-card" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div class="kpi-label">Đang hoạt động (Active)</div>
+                            <div class="kpi-value" style="color: var(--success);"><c:out value="${pageData.totalActive}" /></div>
+                        </div>
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--success-subtle); color: var(--success); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg class="icon icon-md" style="width: 24px; height: 24px;" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
                     </div>
-                    <div class="kpi-card">
-                        <div class="kpi-label">Tài khoản bị khóa (Locked)</div>
-                        <div class="kpi-value" style="color: var(--danger);"><c:out value="${pageData.totalLocked}" /></div>
+                    <div class="kpi-card" style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div class="kpi-label">Tài khoản bị khóa</div>
+                            <div class="kpi-value" style="color: var(--danger);"><c:out value="${pageData.totalLocked}" /></div>
+                        </div>
+                        <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--danger-subtle); color: var(--danger); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg class="icon icon-md" style="width: 24px; height: 24px;" viewBox="0 0 24 24" aria-hidden="true">
+                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </div>
                     </div>
                 </div>
 

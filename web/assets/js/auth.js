@@ -1,6 +1,6 @@
 /**
  * EduCenter ERP — Interactive UI Script
- * Handles password visibility, demo accounts autofill, and accessible modal interactions.
+ * Handles password visibility, live password strength meter, tabs, and accessible modal interactions.
  */
 
 (function () {
@@ -28,24 +28,7 @@
       });
     });
 
-    // 2. Demo account chips autofill for PRJ301 evaluation
-    var demoChips = document.querySelectorAll('[data-demo-email]');
-    demoChips.forEach(function (chip) {
-      chip.addEventListener('click', function (e) {
-        e.preventDefault();
-        var email = chip.getAttribute('data-demo-email');
-        var emailInput = document.getElementById('login-email');
-        var passwordInput = document.getElementById('login-password');
-        if (emailInput) {
-          emailInput.value = email;
-        }
-        if (passwordInput) {
-          passwordInput.value = '123456';
-        }
-      });
-    });
-
-    // 3. Register role selector cards
+    // 2. Register role selector cards
     var roleCards = document.querySelectorAll('.role-selector-card');
     roleCards.forEach(function (card) {
       card.addEventListener('click', function () {
@@ -58,14 +41,71 @@
       });
     });
 
-    // 4. Modal handling (ADM-18 role modal and status modal)
+    // 3. Live Password Strength Meter (for register and password change)
+    var newPasswordInput = document.getElementById('reg-pass') || document.getElementById('newPassword');
+    var strengthBar = document.getElementById('password-strength-bar');
+    var strengthText = document.getElementById('password-strength-text');
+
+    if (newPasswordInput && strengthBar && strengthText) {
+      newPasswordInput.addEventListener('input', function () {
+        var val = newPasswordInput.value || '';
+        var score = 0;
+        if (val.length >= 6) score += 1;
+        if (val.length >= 8) score += 1;
+        if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score += 1;
+        if (/[0-9]/.test(val)) score += 1;
+        if (/[^A-Za-z0-9]/.test(val)) score += 1;
+
+        var percent = Math.min(100, Math.round((score / 5) * 100));
+        var label = 'Rất yếu';
+        var color = '#ef4444';
+
+        if (score === 1) {
+          label = 'Yếu';
+          color = '#ef4444';
+        } else if (score === 2) {
+          label = 'Trung bình';
+          color = '#f59e0b';
+        } else if (score >= 3 && score <= 4) {
+          label = 'Khá mạnh';
+          color = '#3b82f6';
+        } else if (score >= 5) {
+          label = 'Rất mạnh';
+          color = '#10b981';
+        }
+
+        strengthBar.style.width = (val.length === 0 ? '0%' : percent + '%');
+        strengthBar.style.backgroundColor = color;
+        strengthText.textContent = (val.length === 0 ? '' : 'Độ bảo mật: ' + label);
+        strengthText.style.color = color;
+      });
+    }
+
+    // 4. Tab Navigation for Profile & Settings
+    var tabTriggers = document.querySelectorAll('[data-tab-target]');
+    tabTriggers.forEach(function (trigger) {
+      trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        var targetId = trigger.getAttribute('data-tab-target');
+        var targetPane = document.getElementById(targetId);
+        if (!targetPane) return;
+
+        tabTriggers.forEach(function (t) { t.classList.remove('active'); });
+        trigger.classList.add('active');
+
+        var allPanes = document.querySelectorAll('.tab-pane');
+        allPanes.forEach(function (pane) { pane.classList.remove('active'); });
+        targetPane.classList.add('active');
+      });
+    });
+
+    // 5. Accessible Modal handling (ADM-18 role modal and status modal)
     window.EduCenterModal = {
       open: function (modalId) {
         var modal = document.getElementById(modalId);
         if (modal) {
           modal.classList.add('active');
           document.body.style.overflow = 'hidden';
-          // Trap focus on first focusable element
           var focusable = modal.querySelector('button, [href], input, select, textarea');
           if (focusable) focusable.focus();
         }

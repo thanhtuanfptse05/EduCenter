@@ -16,7 +16,7 @@
                     <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
                 </svg>
             </div>
-            <h1 class="auth-brand-title">EduCenter ERP</h1>
+            <h1 class="auth-brand-title">EduCenter</h1>
             <p class="auth-brand-subtitle">Thiết Lập Mật Khẩu Mới</p>
         </div>
 
@@ -59,6 +59,12 @@
                                 <line x1="2" y1="2" x2="22" y2="22"></line>
                             </svg>
                         </button>
+                    </div>
+                    <div class="password-strength-container">
+                        <div class="password-strength-track">
+                            <div id="password-strength-bar" class="password-strength-bar"></div>
+                        </div>
+                        <div id="password-strength-text" class="password-strength-text"></div>
                     </div>
                 </div>
 

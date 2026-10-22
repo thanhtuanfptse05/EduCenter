@@ -10,7 +10,7 @@
                     <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
                 </svg>
             </span>
-            <span>EduCenter ERP</span>
+            <span>EduCenter</span>
         </a>
         <c:if test="${not empty breadcrumb}">
             <span style="color: var(--border);">/</span>

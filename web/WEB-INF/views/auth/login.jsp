@@ -10,21 +10,23 @@
     <div class="auth-container">
         <!-- Brand Header -->
         <div class="auth-brand">
-            <div class="auth-brand-logo">
-                <svg class="icon icon-lg" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                </svg>
-            </div>
-            <h1 class="auth-brand-title">EduCenter ERP</h1>
-            <p class="auth-brand-subtitle">Hệ Thống Quản Trị Trung Tâm Gia Sư & Luyện Thi</p>
+            <a href="${pageContext.request.contextPath}/" style="display: inline-flex; flex-direction: column; align-items: center; text-decoration: none;">
+                <div class="auth-brand-logo">
+                    <svg class="icon icon-lg" viewBox="0 0 24 24" aria-hidden="true" style="color: #ffffff;">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                    </svg>
+                </div>
+                <h1 class="auth-brand-title">EduCenter</h1>
+                <p class="auth-brand-subtitle">Hệ Thống Quản Trị Trung Tâm Gia Sư & Luyện Thi Chất Lượng Cao</p>
+            </a>
         </div>
 
-        <!-- Login Card (460px SaaS style) -->
+        <!-- Login Card -->
         <div class="auth-card">
             <div class="auth-card-header">
-                <h2 class="auth-card-title">Đăng nhập tài khoản</h2>
-                <p class="auth-card-description">Nhập email và mật khẩu của bạn để truy cập hệ thống</p>
+                <h2 class="auth-card-title">Đăng nhập hệ thống</h2>
+                <p class="auth-card-description">Nhập thông tin tài khoản để truy cập cổng thông tin đào tạo</p>
             </div>
 
             <!-- Alerts (Success / Error / Info) -->
@@ -49,7 +51,7 @@
                             <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
                         </svg>
                         <input type="email" id="login-email" name="email" class="form-control"
-                               placeholder="vi-du@educenter.vn" required autofocus
+                               placeholder="name@educenter.vn" required autofocus
                                value="<c:out value='${not empty sessionScope.preserved_email ? sessionScope.preserved_email : param.email}' />">
                     </div>
                     <c:remove var="preserved_email" scope="session" />
@@ -57,16 +59,21 @@
 
                 <!-- Password Input -->
                 <div class="form-group">
-                    <label for="login-password" class="form-label">
-                        Mật khẩu <span class="required">*</span>
-                    </label>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label for="login-password" class="form-label" style="margin-bottom: 0;">
+                            Mật khẩu <span class="required">*</span>
+                        </label>
+                        <a href="${pageContext.request.contextPath}/forgot-password" style="font-size: var(--font-size-xs); font-weight: 500; color: var(--primary);">
+                            Quên mật khẩu?
+                        </a>
+                    </div>
                     <div class="auth-password-wrapper">
                         <svg class="icon icon-sm input-icon" viewBox="0 0 24 24" aria-hidden="true">
                             <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
                             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                         </svg>
                         <input type="password" id="login-password" name="password" class="form-control"
-                               placeholder="Nhập mật khẩu của bạn" required autocomplete="current-password">
+                               placeholder="••••••••" required autocomplete="current-password">
                         <button type="button" class="auth-password-toggle" data-password-toggle="login-password"
                                 aria-label="Hiện hoặc ẩn mật khẩu" title="Hiện/Ẩn mật khẩu">
                             <svg class="icon icon-sm icon-eye" viewBox="0 0 24 24" aria-hidden="true">
@@ -83,17 +90,16 @@
                     </div>
                 </div>
 
-                <!-- Auxiliary Controls -->
-                <div class="auth-auxiliary">
+                <!-- Remember Me -->
+                <div class="auth-auxiliary" style="margin-bottom: 20px;">
                     <label class="auth-checkbox-label">
                         <input type="checkbox" name="rememberMe" value="true">
-                        <span>Ghi nhớ phiên đăng nhập</span>
+                        <span>Ghi nhớ đăng nhập trên thiết bị này</span>
                     </label>
-                    <a href="${pageContext.request.contextPath}/forgot-password">Quên mật khẩu?</a>
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary btn-block">
+                <button type="submit" class="btn btn-primary btn-block" style="padding: 11px 16px; font-size: var(--font-size-md);">
                     <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
                         <polyline points="10 17 15 12 10 7"></polyline>
@@ -103,32 +109,19 @@
                 </button>
             </form>
 
-            <!-- Demo Accounts Section (PRJ301 Evaluation Convenience) -->
-            <div class="auth-demo-accounts">
-                <div class="auth-demo-title">Tài khoản Demo chấm thi (Mật khẩu: 123456)</div>
-                <div class="auth-demo-chips">
-                    <button type="button" class="auth-demo-chip" data-demo-email="admin@educenter.vn" title="Admin & Center Manager">
-                        👑 Admin
-                    </button>
-                    <button type="button" class="auth-demo-chip" data-demo-email="staff@educenter.vn" title="Nhân viên tuyển sinh & học vụ">
-                        📋 Staff
-                    </button>
-                    <button type="button" class="auth-demo-chip" data-demo-email="teacher.hung@educenter.vn" title="Giáo viên / Gia sư Toán">
-                        🎓 Teacher
-                    </button>
-                    <button type="button" class="auth-demo-chip" data-demo-email="student.nam@educenter.vn" title="Học viên Nam (Lớp 12)">
-                        🎒 Student
-                    </button>
-                    <button type="button" class="auth-demo-chip" data-demo-email="parent.tuan@educenter.vn" title="Phụ huynh học sinh">
-                        👨‍👧 Parent
-                    </button>
-                </div>
+            <!-- Trust Badge -->
+            <div class="auth-trust-badge">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--success);">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <polyline points="9 12 11 14 15 10"></polyline>
+                </svg>
+                <span>Hệ thống bảo mật TLS 1.3 & Mã hóa mật khẩu BCrypt (SEC-01)</span>
             </div>
 
             <!-- Footer Links -->
             <div class="auth-footer">
-                Chưa có tài khoản? 
-                <a href="${pageContext.request.contextPath}/register">Đăng ký tài khoản ngay</a>
+                Chưa có tài khoản học viên? 
+                <a href="${pageContext.request.contextPath}/register">Đăng ký tài khoản mới</a>
             </div>
         </div>
     </div>

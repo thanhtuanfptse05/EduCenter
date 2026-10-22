@@ -135,6 +135,12 @@
                             </svg>
                         </button>
                     </div>
+                    <div class="password-strength-container">
+                        <div class="password-strength-track">
+                            <div id="password-strength-bar" class="password-strength-bar"></div>
+                        </div>
+                        <div id="password-strength-text" class="password-strength-text"></div>
+                    </div>
                 </div>
 
                 <!-- Confirm Password -->

@@ -16,7 +16,7 @@
                     <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
                 </svg>
             </div>
-            <h1 class="auth-brand-title">EduCenter ERP</h1>
+            <h1 class="auth-brand-title">EduCenter</h1>
             <p class="auth-brand-subtitle">Khôi Phục Quyền Truy Cập Tài Khoản</p>
         </div>
 

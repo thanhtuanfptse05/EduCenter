@@ -33,7 +33,7 @@
     </div>
 </c:if>
 
-<c:if test="${not empty flash_info or not empty sessionScope.demo_reset_link}">
+<c:if test="${not empty flash_info or not empty sessionScope.reset_link or not empty sessionScope.demo_reset_link}">
     <div class="alert alert-info" role="alert">
         <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="10"></circle>
@@ -42,13 +42,14 @@
         </svg>
         <div>
             <c:if test="${not empty flash_info}"><p><c:out value="${flash_info}" /></p></c:if>
-            <c:if test="${not empty sessionScope.demo_reset_link}">
-                <p style="margin-top: 4px;">
-                    <strong>[Môi trường kiểm thử]:</strong>
-                    <a href="${sessionScope.demo_reset_link}" style="font-weight: 600; text-decoration: underline;">
-                        Bấm vào đây để mở liên kết đặt lại mật khẩu
+            <c:set var="activeResetLink" value="${not empty sessionScope.reset_link ? sessionScope.reset_link : sessionScope.demo_reset_link}" />
+            <c:if test="${not empty activeResetLink}">
+                <p style="margin-top: 6px;">
+                    <a href="${activeResetLink}" style="font-weight: 600; text-decoration: underline;">
+                        Bấm vào đây để mở liên kết đặt lại mật khẩu của bạn &rarr;
                     </a>
                 </p>
+                <c:remove var="reset_link" scope="session" />
                 <c:remove var="demo_reset_link" scope="session" />
             </c:if>
         </div>
