@@ -1,113 +1,156 @@
 /**
  * EduCenter ERP — Authentication & Account Pages Stylesheet
- * Strictly implements design.md: Centered Card 440px SaaS styling, Lucide outline icons
+ * Strictly implements design.md: Centered Card & Split-Screen SaaS styling, Lucide outline icons
+ * Default Light mode with seamless Dark Mode support
  */
 
-.auth-container {
+/* ==========================================================================
+   1. Base Authentication Layout
+   ========================================================================== */
+
+.auth-page-wrapper {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 16px;
-  background: radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.06) 0%, transparent 60%), var(--bg);
+  justify-content: space-between;
+  background-color: var(--bg);
+  background-image: radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.05) 0%, transparent 60%);
 }
 
-.auth-brand {
+.auth-main-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  width: 100%;
+}
+
+.auth-brand-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.auth-brand-logo-sq {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25);
+}
+
+/* ==========================================================================
+   2. Login Split Layout (7 Cols Form / 5 Cols Academic Showcase)
+   ========================================================================== */
+
+.auth-split-card {
+  width: 100%;
+  max-width: 1120px;
+  min-height: 680px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+}
+
+@media (max-width: 960px) {
+  .auth-split-card {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .auth-split-showcase {
+    display: none !important;
+  }
+}
+
+.auth-split-form {
+  padding: 40px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 24px;
-  text-align: center;
+  justify-content: space-between;
+  background-color: var(--surface);
 }
 
-.auth-brand-logo {
+.auth-split-header-badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.auth-badge-group {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  background-color: var(--primary);
-  color: #FFFFFF;
-  border-radius: var(--radius-lg);
-  margin-bottom: 12px;
-  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+  gap: 8px;
 }
 
-.auth-brand-title {
+.auth-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background-color: var(--surface-muted);
+  color: var(--text);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.auth-pill-badge .pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--success);
+}
+
+.auth-security-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+}
+
+.auth-title-block {
+  margin-bottom: 24px;
+}
+
+.auth-main-heading {
   font-size: var(--font-size-2xl);
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.02em;
+  margin-bottom: 6px;
 }
 
-.auth-brand-subtitle {
-  font-size: var(--font-size-sm);
+.auth-sub-desc {
+  font-size: var(--font-size-base);
   color: var(--text-muted);
-  margin-top: 4px;
+  line-height: 1.5;
 }
 
-.auth-card {
-  width: 100%;
-  max-width: 460px;
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
-  padding: 36px 32px;
-}
-
-.auth-card-header {
-  margin-bottom: 24px;
-  text-align: left;
-}
-
-.auth-card-title {
-  font-size: var(--font-size-xl);
-  font-weight: 650;
-  color: var(--text);
-}
-
-.auth-card-description {
-  font-size: var(--font-size-sm);
-  color: var(--text-muted);
-  margin-top: 4px;
-}
-
-.auth-password-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.auth-password-wrapper .form-control {
-  padding-left: 38px;
-  padding-right: 40px;
-}
-
-.auth-password-toggle {
-  position: absolute;
-  right: 8px;
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 6px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-sm);
-}
-
-.auth-password-toggle:hover {
-  color: var(--text);
-  background-color: var(--surface-hover);
-}
-
-.auth-auxiliary {
+/* Auxiliary rows and toggles */
+.auth-aux-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: 14px;
   margin-bottom: 20px;
   font-size: var(--font-size-sm);
 }
@@ -119,6 +162,7 @@
   cursor: pointer;
   user-select: none;
   color: var(--text);
+  font-size: var(--font-size-sm);
 }
 
 .auth-checkbox-label input[type="checkbox"] {
@@ -126,118 +170,930 @@
   width: 16px;
   height: 16px;
   border-radius: var(--radius-sm);
+  cursor: pointer;
 }
 
-.auth-footer {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border);
-  text-align: center;
-  font-size: var(--font-size-sm);
-  color: var(--text-muted);
-}
-
-.auth-footer a {
+.auth-forgot-link {
+  color: var(--primary);
   font-weight: 600;
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  transition: color var(--transition-fast);
 }
 
-/* Live Password Strength Meter */
-.password-strength-container {
-  margin-top: 6px;
+.auth-forgot-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
 }
 
-.password-strength-track {
-  height: 4px;
-  background-color: var(--border);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-  margin-bottom: 4px;
-}
-
-.password-strength-bar {
-  height: 100%;
-  width: 0%;
-  border-radius: var(--radius-full);
-  transition: width 0.3s ease, background-color 0.3s ease;
-}
-
-.password-strength-text {
-  font-size: var(--font-size-xs);
-  font-weight: 550;
-  min-height: 16px;
-}
-
-/* Security Trust Badge */
-.auth-trust-badge {
+/* Divider with text */
+.auth-divider-line {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-top: 20px;
-  padding: 8px 12px;
-  background: var(--surface-muted);
-  border: 1px solid var(--border);
+  margin: 24px 0;
+}
+
+.auth-divider-line::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--border);
+}
+
+.auth-divider-text {
+  position: relative;
+  background-color: var(--surface);
+  padding: 0 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* SSO Google button */
+.btn-sso-google {
+  width: 100%;
+  height: 42px;
   border-radius: var(--radius-md);
-  font-size: var(--font-size-xs);
+  background-color: var(--surface-muted);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: var(--font-size-sm);
+  font-weight: 550;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+
+.btn-sso-google:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--border-focus);
+}
+
+.auth-footer-note {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
   color: var(--text-muted);
 }
 
-/* Role Selector for Register Form */
-.role-selector-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-bottom: 16px;
+.auth-footer-note a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
 }
 
-.role-selector-card {
-  position: relative;
+.auth-footer-note a:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   3. Right Column: Enterprise Academic & Trust Showcase
+   ========================================================================== */
+
+.auth-split-showcase {
+  background-color: var(--surface-muted);
+  padding: 40px 32px;
   display: flex;
   flex-direction: column;
-  padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background-color: var(--surface);
-  cursor: pointer;
-  transition: all var(--transition-fast);
+  justify-content: space-between;
+  border-left: 1px solid var(--border);
+  position: relative;
 }
 
-.role-selector-card input[type="radio"] {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  accent-color: var(--primary);
+.showcase-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-.role-selector-card.selected {
-  border-color: var(--primary);
-  background-color: var(--primary-subtle);
-}
-
-.role-card-title {
+.showcase-brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--text);
-  margin-top: 6px;
 }
 
-.role-card-desc {
+.showcase-brand-letter {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}
+
+.showcase-category-tag {
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+  border: 1px solid var(--primary-border);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+/* Academic metrics card */
+.academic-metrics-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  margin: 20px 0;
+}
+
+.metrics-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.metrics-title {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.metrics-highlight {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--success);
+}
+
+.multi-progress-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: var(--surface-muted);
+  display: flex;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-segment-1 { width: 65%; background-color: var(--primary); }
+.progress-segment-2 { width: 25%; background-color: #0d9488; }
+.progress-segment-3 { width: 10%; background-color: var(--warning); }
+
+.metrics-scores-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: var(--font-size-xs);
   color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Academic architecture keypoints */
+.academic-keypoints-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.keypoint-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.keypoint-item svg {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.keypoint-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.keypoint-desc {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Quote Box */
+.academic-quote-box {
+  background-color: rgba(37, 99, 235, 0.04);
+  border: 1px solid var(--primary-border);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.academic-quote-text {
+  font-size: var(--font-size-xs);
+  font-style: italic;
+  color: var(--text);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.academic-quote-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.showcase-bottom-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* ==========================================================================
+   4. Register 2-Column Grid Layout (8 Cols Form / 4 Cols Trust & Benefits)
+   ========================================================================== */
+
+.auth-register-grid {
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .auth-register-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.register-main-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Stepper Status Bar */
+.register-stepper-bar {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+  flex-wrap: wrap;
+}
+
+.stepper-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stepper-num-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+  font-weight: 700;
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stepper-sub {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.stepper-title {
+  font-size: var(--font-size-md);
+  font-weight: 650;
+  color: var(--text);
+}
+
+/* Form Card */
+.register-form-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Segmented Role Selector */
+.role-segmented-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.role-segmented-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-sm);
+}
+
+.role-segmented-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  background-color: var(--surface-muted);
+  padding: 6px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 640px) {
+  .role-segmented-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.role-segmented-btn {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-fast);
+  color: var(--text);
+}
+
+.role-segmented-btn:hover {
+  background-color: var(--surface-hover);
+}
+
+.role-segmented-btn.active {
+  background-color: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--primary);
+}
+
+.role-segmented-btn svg {
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.role-segmented-btn.active svg {
+  color: var(--primary);
+}
+
+.role-btn-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  display: block;
+  color: var(--text);
+}
+
+.role-btn-desc {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  display: block;
   margin-top: 2px;
 }
 
-/* Profile page specific layout */
-.profile-grid {
+/* Form Two Column Row */
+.form-grid-2col {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-  max-width: 800px;
-  margin: 0 auto;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
 }
 
-@media (min-width: 768px) {
-  .profile-grid {
-    grid-template-columns: 1fr 1fr;
+@media (max-width: 640px) {
+  .form-grid-2col {
+    grid-template-columns: 1fr;
   }
+}
+
+/* 4-Bar Password Strength Meter */
+.pwd-strength-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.pwd-strength-bars-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.pwd-bar-segment {
+  height: 4px;
+  border-radius: var(--radius-full);
+  background-color: var(--border);
+  transition: background-color 0.25s ease;
+}
+
+.pwd-rules-checklist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.pwd-rule-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color var(--transition-fast);
+}
+
+.pwd-rule-item.valid {
+  color: var(--success);
+  font-weight: 500;
+}
+
+.pwd-rule-item.valid svg {
+  color: var(--success);
+}
+
+.match-status-text {
+  font-size: var(--font-size-xs);
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.match-status-text.matched {
+  color: var(--success);
+}
+
+.match-status-text.mismatch {
+  color: var(--danger);
+}
+
+/* Right column for Register */
+.register-trust-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.campus-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.campus-banner-image {
+  height: 180px;
+  width: 100%;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #0d9488 100%);
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
+}
+
+.campus-banner-tag {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(4px);
+  color: #FFFFFF;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+}
+
+.campus-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bento-box-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bento-benefit-item {
+  background-color: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.support-action-box {
+  background-color: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+/* ==========================================================================
+   5. Centered Card Layout (Forgot Password & Reset Password)
+   ========================================================================== */
+
+.auth-centered-box {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.auth-token-badge-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background-color: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.auth-single-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  position: relative;
+  padding: 36px 32px;
+}
+
+.top-accent-bar {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--primary) 0%, #38bdf8 50%, var(--success) 100%);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.security-emblem-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.security-emblem-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--surface-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border: 1px solid var(--border);
+}
+
+.security-emblem-inner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-subtle);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.security-spark-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--success-subtle);
+  color: var(--success);
+  border: 2px solid var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.turnstile-box {
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  background-color: var(--surface-muted);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+/* ==========================================================================
+   6. Profile Page Enterprise Layout (Overview Header + 7/5 Grid)
+   ========================================================================== */
+
+.profile-header-overview {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 32px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-header-main-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.profile-identity-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 700;
+  border: 3px solid var(--surface);
+  box-shadow: var(--shadow-md);
+  flex-shrink: 0;
+}
+
+.profile-avatar-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-avatar-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+  border: none;
+  font-size: 11px;
+}
+
+.profile-avatar-wrapper:hover .profile-avatar-overlay {
+  opacity: 1;
+}
+
+.profile-identity-info h1 {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.profile-identity-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.profile-metric-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.profile-metric-chip {
+  background-color: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-metric-chip-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.profile-metric-chip-value {
+  font-size: var(--font-size-md);
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Profile Segmented Tabs */
+.profile-tabs-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+  padding-top: 16px;
+  overflow-x: auto;
+}
+
+.profile-tab-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.profile-tab-pill:hover {
+  background-color: var(--surface-muted);
+  color: var(--text);
+}
+
+.profile-tab-pill.active {
+  background-color: var(--primary);
+  color: #FFFFFF;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Profile 2-column workstation */
+.profile-workstation-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .profile-workstation-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-panel-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+}
+
+.profile-panel-card:last-child {
+  margin-bottom: 0;
+}
+
+.profile-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-panel-title {
+  font-size: var(--font-size-md);
+  font-weight: 650;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.session-device-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background-color: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-bottom: 10px;
+}
+
+.danger-zone-card {
+  background-color: var(--surface);
+  border: 1px solid var(--danger-border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.danger-zone-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--danger);
+  font-size: var(--font-size-md);
+  font-weight: 650;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--danger-border);
+}
+
+.danger-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
 }

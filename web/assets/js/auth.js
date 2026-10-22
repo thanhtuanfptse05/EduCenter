@@ -1,6 +1,7 @@
 /**
  * EduCenter ERP — Interactive UI Script
- * Handles password visibility, live password strength meter, tabs, and accessible modal interactions.
+ * Handles password visibility, live password strength meter (4 bars & rules checklist),
+ * role segmented selectors, password match confirmation, countdown timer, and tab navigation.
  */
 
 (function () {
@@ -28,7 +29,56 @@
       });
     });
 
-    // 2. Register role selector cards
+    // 2. Register role selector buttons (Segmented buttons & cards)
+    var roleBtns = document.querySelectorAll('.role-segmented-btn');
+    var roleInput = document.getElementById('roleCodeInput');
+    var gradeLabel = document.getElementById('grade-label');
+    var gradeSelect = document.getElementById('grade-select');
+
+    if (roleBtns.length > 0) {
+      roleBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var role = btn.getAttribute('data-role');
+          roleBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+
+          if (roleInput) {
+            roleInput.value = role;
+          }
+
+          // Adapt grade dropdown options dynamically
+          if (gradeSelect && gradeLabel) {
+            if (role === 'PARENT') {
+              gradeLabel.innerHTML = 'Khối lớp của con <span class="required" style="color: var(--danger);">*</span>';
+              gradeSelect.innerHTML = 
+                '<option value="" disabled selected>Chọn khối lớp hiện tại của con</option>' +
+                '<option value="10">Con học Khối 10 THPT (Chương trình mới)</option>' +
+                '<option value="11">Con học Khối 11 THPT (Chuyên đề nâng cao)</option>' +
+                '<option value="12">Con học Khối 12 THPT (Thi TN & Đại học)</option>';
+            } else if (role === 'TEACHER') {
+              gradeLabel.innerHTML = 'Bộ môn & Khối dự kiến giảng dạy <span class="required" style="color: var(--danger);">*</span>';
+              gradeSelect.innerHTML = 
+                '<option value="" disabled selected>Chọn chuyên môn đào tạo</option>' +
+                '<option value="math">Toán THPT & Tư duy định lượng ĐGNL</option>' +
+                '<option value="physics">Vật Lý THPT & Chuyên đề nâng cao</option>' +
+                '<option value="chemistry">Hóa Học THPT & Luyện thi</option>' +
+                '<option value="english">Tiếng Anh & IELTS Academic</option>' +
+                '<option value="literature">Ngữ Văn & Đọc hiểu ĐGNL</option>';
+            } else {
+              gradeLabel.innerHTML = 'Khối lớp quan tâm <span class="required" style="color: var(--danger);">*</span>';
+              gradeSelect.innerHTML = 
+                '<option value="" disabled selected>Chọn khối lớp đào tạo</option>' +
+                '<option value="10">Khối 10 (Chương trình mới GDPT 2018)</option>' +
+                '<option value="11">Khối 11 (Chuyên đề nâng cao & ĐGNL sớm)</option>' +
+                '<option value="12">Khối 12 (Tổng ôn tốt nghiệp & Đại học)</option>' +
+                '<option value="dgnl">Luyện thi Đánh Giá Năng Lực (ĐHQG / ĐHBK)</option>';
+            }
+          }
+        });
+      });
+    }
+
+    // Legacy card selectors compatibility
     var roleCards = document.querySelectorAll('.role-selector-card');
     roleCards.forEach(function (card) {
       card.addEventListener('click', function () {
@@ -41,57 +91,180 @@
       });
     });
 
-    // 3. Live Password Strength Meter (for register and password change)
-    var newPasswordInput = document.getElementById('reg-pass') || document.getElementById('newPassword');
-    var strengthBar = document.getElementById('password-strength-bar');
-    var strengthText = document.getElementById('password-strength-text');
+    // 3. Live Password Strength Meter (Continuous bar + 4-Segment Bars & Rules Checklist)
+    var passInputs = [
+      document.getElementById('reg-pass'),
+      document.getElementById('password'),
+      document.getElementById('newPassword'),
+      document.getElementById('reset-pass'),
+      document.getElementById('new_pass')
+    ].filter(Boolean);
 
-    if (newPasswordInput && strengthBar && strengthText) {
-      newPasswordInput.addEventListener('input', function () {
-        var val = newPasswordInput.value || '';
-        var score = 0;
-        if (val.length >= 6) score += 1;
-        if (val.length >= 8) score += 1;
-        if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score += 1;
-        if (/[0-9]/.test(val)) score += 1;
-        if (/[^A-Za-z0-9]/.test(val)) score += 1;
+    passInputs.forEach(function (pwdInput) {
+      pwdInput.addEventListener('input', function () {
+        var val = pwdInput.value || '';
+        var hasLen = val.length >= 8;
+        var hasUpper = /[A-Z]/.test(val);
+        var hasNum = /[0-9]/.test(val);
+        var hasSpecial = /[^A-Za-z0-9]/.test(val);
 
-        var percent = Math.min(100, Math.round((score / 5) * 100));
-        var label = 'Rất yếu';
-        var color = '#ef4444';
+        // Update 4 rules checklist items
+        updateChecklistRule('rule-len', hasLen);
+        updateChecklistRule('rule-upper', hasUpper);
+        updateChecklistRule('rule-num', hasNum);
+        updateChecklistRule('rule-special', hasSpecial);
 
-        if (score === 1) {
-          label = 'Yếu';
-          color = '#ef4444';
-        } else if (score === 2) {
-          label = 'Trung bình';
-          color = '#f59e0b';
-        } else if (score >= 3 && score <= 4) {
-          label = 'Khá mạnh';
-          color = '#3b82f6';
-        } else if (score >= 5) {
-          label = 'Rất mạnh';
-          color = '#10b981';
+        // 4-bar segments
+        var score = [hasLen, hasUpper, hasNum, hasSpecial].filter(Boolean).length;
+        var bars = [
+          document.getElementById('bar-1'),
+          document.getElementById('bar-2'),
+          document.getElementById('bar-3'),
+          document.getElementById('bar-4')
+        ];
+        var strengthLabel = document.getElementById('pwd-strength-label') || document.getElementById('strength-label');
+
+        bars.forEach(function (b) {
+          if (b) b.style.backgroundColor = 'var(--border)';
+        });
+
+        if (strengthLabel) {
+          if (val.length === 0) {
+            strengthLabel.textContent = 'Chưa nhập';
+            strengthLabel.style.color = 'var(--text-muted)';
+          } else if (score <= 1) {
+            strengthLabel.textContent = 'Yếu';
+            strengthLabel.style.color = 'var(--danger)';
+            if (bars[0]) bars[0].style.backgroundColor = 'var(--danger)';
+          } else if (score === 2) {
+            strengthLabel.textContent = 'Trung bình';
+            strengthLabel.style.color = 'var(--warning)';
+            if (bars[0]) bars[0].style.backgroundColor = 'var(--warning)';
+            if (bars[1]) bars[1].style.backgroundColor = 'var(--warning)';
+          } else if (score === 3) {
+            strengthLabel.textContent = 'Khá';
+            strengthLabel.style.color = 'var(--primary)';
+            if (bars[0]) bars[0].style.backgroundColor = 'var(--primary)';
+            if (bars[1]) bars[1].style.backgroundColor = 'var(--primary)';
+            if (bars[2]) bars[2].style.backgroundColor = 'var(--primary)';
+          } else {
+            strengthLabel.textContent = 'Rất mạnh';
+            strengthLabel.style.color = 'var(--success)';
+            bars.forEach(function (b) {
+              if (b) b.style.backgroundColor = 'var(--success)';
+            });
+          }
         }
 
-        strengthBar.style.width = (val.length === 0 ? '0%' : percent + '%');
-        strengthBar.style.backgroundColor = color;
-        strengthText.textContent = (val.length === 0 ? '' : 'Độ bảo mật: ' + label);
-        strengthText.style.color = color;
+        // Continuous progress bar fallback if present
+        var strengthBar = document.getElementById('password-strength-bar');
+        var strengthText = document.getElementById('password-strength-text');
+        if (strengthBar && strengthText) {
+          var percent = Math.min(100, Math.round((score / 4) * 100));
+          var color = score <= 1 ? '#ef4444' : score === 2 ? '#f59e0b' : score === 3 ? '#3b82f6' : '#10b981';
+          strengthBar.style.width = (val.length === 0 ? '0%' : percent + '%');
+          strengthBar.style.backgroundColor = color;
+          strengthText.textContent = (val.length === 0 ? '' : 'Độ bảo mật: ' + (score <= 1 ? 'Yếu' : score === 2 ? 'Trung bình' : score === 3 ? 'Khá' : 'Rất mạnh'));
+          strengthText.style.color = color;
+        }
+
+        triggerMatchCheck();
       });
+    });
+
+    function updateChecklistRule(ruleId, isValid) {
+      var elem = document.getElementById(ruleId);
+      if (!elem) return;
+      if (isValid) {
+        elem.classList.add('valid');
+        var icon = elem.querySelector('svg');
+        if (icon) icon.style.color = 'var(--success)';
+      } else {
+        elem.classList.remove('valid');
+        var icon = elem.querySelector('svg');
+        if (icon) icon.style.color = 'var(--text-muted)';
+      }
     }
 
-    // 4. Tab Navigation for Profile & Settings
-    var tabTriggers = document.querySelectorAll('[data-tab-target]');
-    tabTriggers.forEach(function (trigger) {
-      trigger.addEventListener('click', function (e) {
+    // 4. Password confirmation matching
+    var confirmInputs = [
+      document.getElementById('reg-confirm-pass'),
+      document.getElementById('confirmPassword'),
+      document.getElementById('confirm-password'),
+      document.getElementById('confirmNewPassword'),
+      document.getElementById('reset-confirm'),
+      document.getElementById('confirm_pass')
+    ].filter(Boolean);
+
+    confirmInputs.forEach(function (confInput) {
+      confInput.addEventListener('input', triggerMatchCheck);
+    });
+
+    function triggerMatchCheck() {
+      var pwdInput = document.getElementById('reg-pass') || document.getElementById('password') ||
+                     document.getElementById('newPassword') || document.getElementById('reset-pass') ||
+                     document.getElementById('new_pass');
+      var confInput = document.getElementById('reg-confirm-pass') || document.getElementById('confirmPassword') ||
+                      document.getElementById('confirm-password') || document.getElementById('confirmNewPassword') ||
+                      document.getElementById('reset-confirm') || document.getElementById('confirm_pass');
+      var indicator = document.getElementById('match-indicator') || document.getElementById('match-status');
+      var errorElem = document.getElementById('match-error');
+
+      if (!pwdInput || !confInput) return;
+      var pwd = pwdInput.value || '';
+      var conf = confInput.value || '';
+
+      if (conf.length > 0) {
+        if (pwd === conf) {
+          if (indicator) {
+            indicator.style.opacity = '1';
+            indicator.style.display = 'inline-flex';
+          }
+          if (errorElem) errorElem.style.display = 'none';
+        } else {
+          if (indicator) {
+            indicator.style.opacity = '0';
+          }
+          if (errorElem) errorElem.style.display = 'inline-flex';
+        }
+      } else {
+        if (indicator) indicator.style.opacity = '0';
+        if (errorElem) errorElem.style.display = 'none';
+      }
+    }
+
+    // 5. Countdown Timer for Reset Password (15 minutes token lifetime)
+    var countdownEl = document.getElementById('countdown-timer');
+    if (countdownEl) {
+      var remaining = 14 * 60 + 59;
+      var timerInterval = setInterval(function () {
+        if (remaining <= 0) {
+          clearInterval(timerInterval);
+          countdownEl.textContent = '00:00';
+          var tokenBadge = document.getElementById('token-valid-badge');
+          if (tokenBadge) {
+            tokenBadge.innerHTML = '<span style="color: var(--danger); font-weight: 700;">TOKEN HẾT HẠN</span>';
+          }
+          return;
+        }
+        remaining--;
+        var m = Math.floor(remaining / 60);
+        var s = remaining % 60;
+        countdownEl.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+      }, 1000);
+    }
+
+    // 6. Tab Navigation for Profile & Settings
+    var tabPills = document.querySelectorAll('.profile-tab-pill, [data-tab-target]');
+    tabPills.forEach(function (pill) {
+      pill.addEventListener('click', function (e) {
         e.preventDefault();
-        var targetId = trigger.getAttribute('data-tab-target');
+        var targetId = pill.getAttribute('data-tab-target');
         var targetPane = document.getElementById(targetId);
         if (!targetPane) return;
 
-        tabTriggers.forEach(function (t) { t.classList.remove('active'); });
-        trigger.classList.add('active');
+        tabPills.forEach(function (p) { p.classList.remove('active'); });
+        pill.classList.add('active');
 
         var allPanes = document.querySelectorAll('.tab-pane');
         allPanes.forEach(function (pane) { pane.classList.remove('active'); });
@@ -99,7 +272,7 @@
       });
     });
 
-    // 5. Accessible Modal handling (ADM-18 role modal and status modal)
+    // 7. Accessible Modal handling (ADM-18 role modal and status modal)
     window.EduCenterModal = {
       open: function (modalId) {
         var modal = document.getElementById(modalId);
@@ -119,7 +292,6 @@
       }
     };
 
-    // Close modal on escape key or clicking backdrop
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         var activeModals = document.querySelectorAll('.modal-backdrop.active');
