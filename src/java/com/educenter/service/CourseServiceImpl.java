@@ -124,6 +124,9 @@ public class CourseServiceImpl implements CourseService {
                 tDto.setSpecialization(primaryTeacherEntity.getSpecialization());
                 tDto.setBio(primaryTeacherEntity.getBio() != null ? primaryTeacherEntity.getBio() : "Giảng viên giàu kinh nghiệm luyện thi THPT và ĐGNL tại EduCenter.");
                 tDto.setExperienceBadge("10+ năm kinh nghiệm");
+                if (primaryTeacherEntity.getUser() != null) {
+                    tDto.setPhotoUrl(primaryTeacherEntity.getUser().getAvatarUrl());
+                }
                 detail.setPrimaryTeacher(tDto);
             }
 

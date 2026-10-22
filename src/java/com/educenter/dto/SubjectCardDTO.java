@@ -12,6 +12,8 @@ public class SubjectCardDTO implements Serializable {
     private long courseCount;
     private String iconSymbol;
 
+    private String imageUrl;
+
     public SubjectCardDTO() {}
 
     public Long getId() { return id; }
@@ -31,4 +33,7 @@ public class SubjectCardDTO implements Serializable {
 
     public String getIconSymbol() { return iconSymbol; }
     public void setIconSymbol(String iconSymbol) { this.iconSymbol = iconSymbol; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 }

@@ -99,6 +99,18 @@ public class LandingRepository {
         }
     }
 
+    public String findRepresentativeImageBySubject(EntityManager em, Long subjectId) {
+        try {
+            TypedQuery<String> query = em.createQuery(
+                    "SELECT c.imageUrl FROM Course c WHERE c.subject.id = :subjectId AND c.imageUrl IS NOT NULL ORDER BY c.id ASC", String.class);
+            query.setParameter("subjectId", subjectId);
+            List<String> list = query.setMaxResults(1).getResultList();
+            return list.isEmpty() ? null : list.get(0);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public Lead saveLead(EntityManager em, Lead lead) {
         if (lead.getId() == null) {
             em.persist(lead);

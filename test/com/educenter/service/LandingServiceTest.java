@@ -108,6 +108,11 @@ public class LandingServiceTest {
         }
 
         @Override
+        public String findRepresentativeImageBySubject(EntityManager em, Long subjectId) {
+            return "/assets/images/courses/math.jpg";
+        }
+
+        @Override
         public Lead saveLead(EntityManager em, Lead lead) {
             lead.setId(leadIdGen++);
             savedLeads.add(lead);

@@ -235,6 +235,15 @@
                         <!-- Right Column: Personal Progress Showcase Card -->
                         <div>
                             <div class="progress-card">
+                                <!-- Campus Hero Showcase Banner -->
+                                <div class="hero-campus-banner">
+                                    <img src="<c:url value='/assets/images/courses/classroom-hero.jpg' />" alt="Không gian giảng đường & phòng học chuyên đề EduCenter" class="hero-campus-img" />
+                                    <div class="hero-campus-tag">
+                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                                        <span>EduCenter Campus • Cơ sở học thuật chuẩn quốc gia</span>
+                                    </div>
+                                </div>
+
                                 <div class="progress-header">
                                     <div class="progress-student-meta">
                                         <h3>Hồ sơ Tiến độ Cá nhân</h3>
@@ -423,38 +432,50 @@
                                     <c:forEach var="sub" items="${portalData.subjects}">
                                         <div class="subject-card">
                                             <div>
-                                                <div class="subject-icon-box">
-                                                    <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
-                                                        <c:choose>
-                                                            <c:when test="${sub.code == 'MATH'}">
-                                                                <rect x="4" y="2" width="16" height="20" rx="2"></rect>
-                                                                <line x1="8" y1="6" x2="16" y2="6"></line>
-                                                                <line x1="16" y1="14" x2="16" y2="18"></line>
-                                                                <path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"></path>
-                                                            </c:when>
-                                                            <c:when test="${sub.code == 'PHYS'}">
-                                                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                                                            </c:when>
-                                                            <c:when test="${sub.code == 'CHEM'}">
-                                                                <path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"></path>
-                                                                <line x1="8.5" y1="2" x2="15.5" y2="2"></line>
-                                                            </c:when>
-                                                            <c:when test="${sub.code == 'ENG'}">
-                                                                <circle cx="12" cy="12" r="10"></circle>
-                                                                <line x1="2" y1="12" x2="22" y2="12"></line>
-                                                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                                                            </c:when>
-                                                            <c:when test="${sub.code == 'LIT'}">
-                                                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </svg>
+                                                <c:if test="${not empty sub.imageUrl}">
+                                                    <div class="subject-card-thumb">
+                                                        <img src="<c:url value='${sub.imageUrl}' />" alt="<c:out value='${sub.name}' />" class="subject-card-img" />
+                                                        <span class="subject-card-tag"><c:out value="${sub.name}" /></span>
+                                                    </div>
+                                                </c:if>
+
+                                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                                    <div class="subject-icon-box" style="margin-bottom: 0;">
+                                                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
+                                                            <c:choose>
+                                                                <c:when test="${sub.code == 'MATH' || sub.code == 'MAT'}">
+                                                                    <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                                                                    <line x1="8" y1="6" x2="16" y2="6"></line>
+                                                                    <line x1="16" y1="14" x2="16" y2="18"></line>
+                                                                    <path d="M16 10h.01M12 10h.01M8 10h.01M12 14h.01M8 14h.01M12 18h.01M8 18h.01"></path>
+                                                                </c:when>
+                                                                <c:when test="${sub.code == 'PHYS' || sub.code == 'PHY'}">
+                                                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                                                </c:when>
+                                                                <c:when test="${sub.code == 'CHEM' || sub.code == 'CHE'}">
+                                                                    <path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"></path>
+                                                                    <line x1="8.5" y1="2" x2="15.5" y2="2"></line>
+                                                                </c:when>
+                                                                <c:when test="${sub.code == 'ENG'}">
+                                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                                                </c:when>
+                                                                <c:when test="${sub.code == 'LIT'}">
+                                                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </svg>
+                                                    </div>
+                                                    <div>
+                                                        <h3 class="subject-card-title" style="margin: 0;"><c:out value="${sub.name}" /></h3>
+                                                        <span style="font-size: 11px; color: var(--text-muted);"><c:out value="${sub.courseCount}" /> chương trình đào tạo</span>
+                                                    </div>
                                                 </div>
-                                                <h3 class="subject-card-title"><c:out value="${sub.name}" /></h3>
                                                 <p class="subject-card-desc"><c:out value="${sub.description}" /></p>
 
                                                 <div class="subject-grades-badge">
@@ -466,7 +487,7 @@
 
                                             <div class="subject-card-foot">
                                                 <span class="subject-prog-count"><c:out value="${sub.courseCount}" /> chương trình</span>
-                                                <a href="#dang-ky-tu-van" class="subject-explore-link">
+                                                <a href="${pageContext.request.contextPath}/courses?keyword=<c:out value='${sub.name}' />" class="subject-explore-link">
                                                     <span>Khám phá môn học</span>
                                                     <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
                                                 </a>
@@ -504,6 +525,23 @@
                                     <c:forEach var="course" items="${portalData.featuredCourses}">
                                         <div class="course-card" data-course-grade="${course.gradeLevel}">
                                             <div>
+                                                <!-- Dynamic Course Thumbnail from Database -->
+                                                <div class="course-card-thumb">
+                                                    <c:choose>
+                                                        <c:when test="${not empty course.imageUrl}">
+                                                            <img src="<c:url value='${course.imageUrl}' />" alt="<c:out value='${course.name}' />" class="course-card-img" />
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--surface-muted); color: var(--primary);">
+                                                                <svg class="icon icon-lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10"></path><path d="M6 10h10"></path></svg>
+                                                            </div>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <span class="course-card-thumb-tag">
+                                                        <c:out value="${course.subjectName}" /> • Khối <c:out value="${course.gradeLevel}" />
+                                                    </span>
+                                                </div>
+
                                                 <div class="course-card-top-badges">
                                                     <span class="course-model-pill"><c:out value="${course.modelText}" /></span>
                                                     <div style="display: flex; gap: 6px;">

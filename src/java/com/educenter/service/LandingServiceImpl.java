@@ -64,6 +64,7 @@ public class LandingServiceImpl implements LandingService {
                 dto.setTotalSessions(c.getTotalSessions());
                 dto.setMaxCapacity(c.getMaxCapacity());
                 dto.setDescription(c.getDescription());
+                dto.setImageUrl(c.getImageUrl());
                 if (c.getSubject() != null) {
                     dto.setSubjectName(c.getSubject().getName());
                     dto.setSubjectCode(c.getSubject().getCode());
@@ -133,11 +134,12 @@ public class LandingServiceImpl implements LandingService {
                 sd.setDescription(s.getDescription());
                 long count = landingRepository.countCoursesBySubject(em, s.getId());
                 sd.setCourseCount(count > 0 ? count : 12L);
+                sd.setImageUrl(landingRepository.findRepresentativeImageBySubject(em, s.getId()));
 
                 String icon = switch (s.getCode().toUpperCase()) {
-                    case "MATH" -> "calculate";
-                    case "PHYS" -> "bolt";
-                    case "CHEM" -> "science";
+                    case "MATH", "MAT" -> "calculate";
+                    case "PHYS", "PHY" -> "bolt";
+                    case "CHEM", "CHE" -> "science";
                     case "ENG" -> "translate";
                     case "LIT" -> "menu_book";
                     case "BIO" -> "biotech";

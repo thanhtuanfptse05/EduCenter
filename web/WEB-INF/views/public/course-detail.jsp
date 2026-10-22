@@ -139,9 +139,18 @@
 
                     <!-- Teacher Spotlight Card -->
                     <div class="teacher-spotlight-card">
-                        <div class="teacher-avatar-circle">
-                            <c:out value="${detail.primaryTeacher != null && detail.primaryTeacher.fullName != null ? detail.primaryTeacher.fullName.substring(0, 1).toUpperCase() : 'G'}" />
-                        </div>
+                        <c:choose>
+                            <c:when test="${not empty detail.primaryTeacher && not empty detail.primaryTeacher.photoUrl}">
+                                <div class="teacher-avatar-circle" style="overflow: hidden; padding: 0;">
+                                    <img src="<c:url value='${detail.primaryTeacher.photoUrl}' />" alt="<c:out value='${detail.primaryTeacher.fullName}' />" style="width: 100%; height: 100%; object-fit: cover;" />
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="teacher-avatar-circle">
+                                    <c:out value="${detail.primaryTeacher != null && detail.primaryTeacher.fullName != null ? detail.primaryTeacher.fullName.substring(0, 1).toUpperCase() : 'G'}" />
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                         <div class="teacher-meta-details">
                             <div class="teacher-name-row">
                                 <h3 class="teacher-name-title">
@@ -470,6 +479,15 @@
                                         <span class="course-code-tag"><c:out value="${rc.code}" /></span>
                                         <span class="badge-open">Đang mở</span>
                                     </div>
+
+                                    <c:if test="${not empty rc.imageUrl}">
+                                        <div class="course-card-thumb" style="height: 120px;">
+                                            <img src="<c:url value='${rc.imageUrl}' />" alt="<c:out value='${rc.name}' />" class="course-card-img" />
+                                            <span class="course-card-thumb-tag">
+                                                <c:out value="${rc.subjectName}" /> • Khối <c:out value="${rc.gradeLevel}" />
+                                            </span>
+                                        </div>
+                                    </c:if>
 
                                     <h4 class="course-card-title">
                                         <a href="${pageContext.request.contextPath}/courses/detail?id=${rc.id}" style="color: inherit; text-decoration: none;">
