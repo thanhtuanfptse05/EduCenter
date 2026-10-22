@@ -347,3 +347,15 @@
     display: none;
   }
 }
+
+.admin-layout + .app-footer {
+  margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
+}
+
+@media (max-width: 1024px) {
+  .admin-layout + .app-footer {
+    margin-left: 0;
+    width: 100%;
+  }
+}

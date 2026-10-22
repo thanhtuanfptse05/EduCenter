@@ -1,5 +1,44 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
+<c:if test="${empty hideStandardFooter}">
+    <footer class="app-footer">
+        <div class="app-footer-container">
+            <div class="app-footer-copyright">
+                &copy; 2026 EduCenter. Nền tảng gia sư & Luyện thi THPT (Lớp 10, 11, 12).
+            </div>
+            <div class="app-footer-links">
+                <a href="${pageContext.request.contextPath}/" class="app-footer-link">Trang chủ</a>
+                <span class="app-footer-sep">•</span>
+                <a href="${pageContext.request.contextPath}/#chuong-trinh" class="app-footer-link">Chương trình gia sư</a>
+                <span class="app-footer-sep">•</span>
+                <a href="${pageContext.request.contextPath}/#faq" class="app-footer-link">Điều khoản</a>
+                <span class="app-footer-sep">•</span>
+                <a href="mailto:hotro@educenter.vn" class="app-footer-link">Hỗ trợ kỹ thuật</a>
+            </div>
+        </div>
+    </footer>
+</c:if>
+
 <script src="${pageContext.request.contextPath}/assets/js/theme.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/auth.js"></script>
+
+<script>
+// Global Alert Dismissal Handler
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.alert-close-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var alertEl = this.closest('.alert');
+            if (alertEl) {
+                alertEl.style.opacity = '0';
+                alertEl.style.transform = 'translateY(-6px)';
+                setTimeout(function () {
+                    if (alertEl.parentNode) {
+                        alertEl.parentNode.removeChild(alertEl);
+                    }
+                }, 200);
+            }
+        });
+    });
+});
+</script>

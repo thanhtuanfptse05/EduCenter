@@ -1,56 +1,140 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isErrorPage="true" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<c:set var="pageTitle" value="403 - Không Có Quyền Truy Cập | EduCenter" scope="request" />
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <%@ include file="/WEB-INF/views/common/head.jspf" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/auth.css">
 </head>
-<body>
-    <div class="auth-container" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);">
-        <div class="auth-card" style="text-align: center; max-width: 520px; width: 100%; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 48px 36px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);">
-            <div style="display: inline-flex; align-items: center; justify-content: center; width: 72px; height: 72px; border-radius: 50%; background-color: #fee2e2; color: #dc2626; margin-bottom: 24px;">
-                <svg class="icon icon-lg" style="width: 36px; height: 36px;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-            </div>
+<body class="error-shell">
+    <%@ include file="/WEB-INF/views/common/header.jspf" %>
 
-            <h1 style="font-size: 26px; font-weight: 700; color: #0f172a; margin: 0 0 10px 0; letter-spacing: -0.02em;">403 — Từ chối truy cập</h1>
-            <p style="font-size: 15px; color: #64748b; line-height: 1.6; margin: 0 0 24px 0;">
-                Bạn không có quyền truy cập vào chức năng hoặc đường dẫn này. Vui lòng kiểm tra lại vai trò tài khoản hoặc liên hệ Quản trị viên trung tâm.
-            </p>
+    <main class="error-main">
+        <div class="error-container">
+            <div class="error-card">
+                <!-- Subtle Ambient Backdrop Accent -->
+                <div class="error-ambient-accent" aria-hidden="true"></div>
 
-            <c:if test="${not empty forbiddenPath}">
-                <div style="padding: 10px 14px; background: var(--surface-muted); border: 1px solid var(--border); border-radius: var(--radius-md); font-family: monospace; font-size: var(--font-size-xs); color: var(--text-muted); margin-bottom: 24px;">
-                    Đường dẫn yêu cầu: <code><c:out value="${forbiddenPath}" /></code>
-                </div>
-            </c:if>
-
-            <div style="display: flex; justify-content: center; gap: 12px;">
-                <a href="${pageContext.request.contextPath}/" class="btn btn-secondary">
-                    <svg class="icon icon-sm" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                <!-- Error Status Badge -->
+                <div class="error-status-badge">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--danger);">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
                     </svg>
-                    <span>Về trang chủ</span>
-                </a>
-                <c:choose>
-                    <c:when test="${not empty sessionScope.currentUser}">
-                        <a href="${pageContext.request.contextPath}${sessionScope.currentUser.defaultDashboardUrl}" class="btn btn-primary">
-                            <span>Về Bảng điều khiển</span>
-                        </a>
-                    </c:when>
-                    <c:otherwise>
-                        <a href="${pageContext.request.contextPath}/login" class="btn btn-primary">
-                            <span>Đăng nhập lại</span>
-                        </a>
-                    </c:otherwise>
-                </c:choose>
+                    <span>Mã lỗi HTTP 403 • Truy cập bị từ chối</span>
+                </div>
+
+                <!-- Massive Crisp Numeric Display with Lock Badge -->
+                <div class="error-massive-num-wrap">
+                    <span class="error-massive-num">403</span>
+                    <div class="error-icon-overlay">
+                        <div class="error-lock-badge">
+                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
+                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Authoritative Heading -->
+                <h1 class="error-heading">Bạn không có quyền truy cập trang này</h1>
+
+                <!-- Contextual Description -->
+                <p class="error-desc">
+                    Tài khoản của bạn hiện không được cấp quyền xem nội dung này. Vui lòng quay lại khu vực làm việc phù hợp với vai trò của bạn hoặc liên hệ quản trị viên nếu bạn cho rằng đây là sự nhầm lẫn về phân quyền.
+                </p>
+
+                <!-- Role-Based Context Hint Card -->
+                <div class="error-hint-card">
+                    <div class="error-hint-row">
+                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--primary); margin-top: 2px;">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            <polyline points="9 12 11 14 15 10"></polyline>
+                        </svg>
+                        <div>
+                            <span class="error-hint-title">Trạng thái tài khoản</span>
+                            <c:choose>
+                                <c:when test="${not empty sessionScope.currentUser}">
+                                    <span class="error-hint-sub">
+                                        Đang đăng nhập: <strong><c:out value="${sessionScope.currentUser.fullName}" /></strong> 
+                                        (Vai trò: <strong><c:out value="${sessionScope.currentUser.primaryRole}" /></strong>) • Quyền hạn hiện tại được kiểm soát bởi cơ chế phân quyền vai trò (RBAC).
+                                    </span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="error-hint-sub">
+                                        Chưa đăng nhập • Quyền hạn hiện tại bị giới hạn cho khách vãng lai. Vui lòng đăng nhập với tài khoản có thẩm quyền.
+                                    </span>
+                                </c:otherwise>
+                            </c:choose>
+                            <c:if test="${not empty forbiddenPath}">
+                                <div style="font-family: monospace; font-size: 11px; color: var(--danger); margin-top: 4px; word-break: break-all;">
+                                    Đường dẫn bị hạn chế: <code><c:out value="${forbiddenPath}" /></code>
+                                </div>
+                            </c:if>
+                        </div>
+                    </div>
+
+                    <div class="error-hint-divider"></div>
+
+                    <div class="error-hint-row">
+                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--text-muted); margin-top: 2px;">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="16" x2="12" y2="12"></line>
+                            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                        </svg>
+                        <div>
+                            <span class="error-hint-title">Gợi ý điều hướng</span>
+                            <span class="error-hint-sub">
+                                Nếu bạn là Học sinh / Phụ huynh, hãy trở về Cổng thông tin cá nhân. Nếu bạn là Giáo viên, vui lòng truy cập Lịch dạy & Sổ giảng dạy.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="error-actions">
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.currentUser}">
+                            <a class="btn btn-primary" href="${pageContext.request.contextPath}${sessionScope.currentUser.defaultDashboardUrl}">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                </svg>
+                                <span>Về trang của tôi</span>
+                            </a>
+                        </c:when>
+                        <c:otherwise>
+                            <a class="btn btn-primary" href="${pageContext.request.contextPath}/login">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                    <polyline points="10 17 15 12 10 7"></polyline>
+                                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                                </svg>
+                                <span>Đăng nhập ngay</span>
+                            </a>
+                        </c:otherwise>
+                    </c:choose>
+
+                    <button class="btn btn-secondary" onclick="window.history.length > 1 ? window.history.back() : window.location.href='${pageContext.request.contextPath}/';" type="button">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        <span>Quay lại</span>
+                    </button>
+                </div>
+
+                <!-- Technical Support Direct Link -->
+                <div class="error-support-footer">
+                    <span>Bạn cần nâng cấp quyền hạn? Liên hệ quản trị viên:</span>
+                    <a href="mailto:hotro@educenter.vn">hotro@educenter.vn</a>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
+
     <%@ include file="/WEB-INF/views/common/footer.jspf" %>
 </body>
 </html>
