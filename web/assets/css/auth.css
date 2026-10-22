@@ -210,8 +210,7 @@
   accent-color: var(--primary);
 }
 
-.role-selector-card.selected,
-.role-selector-card:has(input[type="radio"]:checked) {
+.role-selector-card.selected {
   border-color: var(--primary);
   background-color: var(--primary-subtle);
 }
