@@ -20,10 +20,23 @@ public class CsrfFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        if (request instanceof HttpServletRequest httpRequest && response instanceof HttpServletResponse httpResponse) {
+        if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+
+            String uri = httpRequest.getRequestURI();
+            String contextPath = httpRequest.getContextPath();
+            String path = uri.substring(contextPath.length());
+
+            // Bypass static assets from CSRF filter
+            if (path.startsWith("/assets/")) {
+                chain.doFilter(request, response);
+                return;
+            }
+
             String method = httpRequest.getMethod();
 
-            // Auto-create CSRF token for any GET request that visits a page
+            // Auto-create CSRF token for page requests
             HttpSession session = httpRequest.getSession(true);
             String csrfToken = CsrfUtil.getOrCreateToken(session);
             httpRequest.setAttribute(CsrfUtil.CSRF_PARAM_NAME, csrfToken);

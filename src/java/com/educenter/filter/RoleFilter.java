@@ -19,7 +19,10 @@ public class RoleFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        if (request instanceof HttpServletRequest httpRequest && response instanceof HttpServletResponse httpResponse) {
+        if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+
             String contextPath = httpRequest.getContextPath();
             String path = httpRequest.getRequestURI().substring(contextPath.length());
 

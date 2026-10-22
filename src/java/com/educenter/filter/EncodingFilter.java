@@ -25,14 +25,23 @@ public class EncodingFilter implements Filter {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
 
-        if (request instanceof HttpServletRequest httpRequest && response instanceof HttpServletResponse httpResponse) {
-            // Transfer any flash messages from session to request attributes for JSP rendering
-            FlashMessageUtil.transferFlashMessagesToRequest(httpRequest);
+        if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-            // Ensure CSRF token exists for forms
-            HttpSession session = httpRequest.getSession(false);
-            if (session != null) {
-                httpRequest.setAttribute(CsrfUtil.CSRF_PARAM_NAME, CsrfUtil.getOrCreateToken(session));
+            String uri = httpRequest.getRequestURI();
+            String contextPath = httpRequest.getContextPath();
+            String path = uri.substring(contextPath.length());
+
+            if (!path.startsWith("/assets/")) {
+                // Transfer any flash messages from session to request attributes for JSP rendering
+                FlashMessageUtil.transferFlashMessagesToRequest(httpRequest);
+
+                // Ensure CSRF token exists for forms
+                HttpSession session = httpRequest.getSession(false);
+                if (session != null) {
+                    httpRequest.setAttribute(CsrfUtil.CSRF_PARAM_NAME, CsrfUtil.getOrCreateToken(session));
+                }
             }
 
             // Security headers
