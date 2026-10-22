@@ -35,6 +35,9 @@
 
                     <!-- Registration Form Card -->
                     <div class="register-form-card">
+                        <c:set var="selectedRole" value="${not empty sessionScope.preserved_roleCode ? sessionScope.preserved_roleCode : 'STUDENT'}" />
+                        <c:remove var="preserved_roleCode" scope="session" />
+
                         <!-- Role Selector (STUDENT or PARENT only per FR-001) -->
                         <div class="role-segmented-container">
                             <div class="role-segmented-header">
@@ -43,7 +46,7 @@
                             </div>
                             <div class="role-segmented-grid">
                                 <!-- Role 1: Học sinh -->
-                                <button type="button" class="role-segmented-btn active" data-role="STUDENT">
+                                <button type="button" class="role-segmented-btn ${selectedRole == 'STUDENT' ? 'active' : ''}" data-role="STUDENT">
                                     <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
                                         <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
                                         <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
@@ -54,7 +57,7 @@
                                     </div>
                                 </button>
                                 <!-- Role 2: Phụ huynh -->
-                                <button type="button" class="role-segmented-btn" data-role="PARENT">
+                                <button type="button" class="role-segmented-btn ${selectedRole == 'PARENT' ? 'active' : ''}" data-role="PARENT">
                                     <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
                                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                                         <circle cx="9" cy="7" r="4"></circle>
@@ -77,7 +80,7 @@
                             <!-- CSRF Token -->
                             <input type="hidden" name="csrfToken" value="<c:out value='${csrfToken}' />">
                             <!-- Hidden Role Code (Updated by role-segmented-btn) -->
-                            <input type="hidden" name="roleCode" id="roleCodeInput" value="STUDENT">
+                            <input type="hidden" name="roleCode" id="roleCodeInput" value="<c:out value='${selectedRole}' />">
 
                             <!-- Row 1: Full Name & Phone Number -->
                             <div class="form-grid-2col">
