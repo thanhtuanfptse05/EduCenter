@@ -1,5 +1,5 @@
 # Implementation Plan: Authentication & Role-Based Access Control (feat-auth-rbac)
-**Status:** Approved | **Version:** 1.0.0 | **Feature Spec:** `spec.md`  
+**Status:** Approved / Locked | **Version:** 1.1.0 | **Feature Spec:** `spec.md`  
 **Target Module:** `MOD-FINANCE-ADMIN` | **Owner:** Member 03  
 **Architecture Pattern:** MVC (Jakarta Servlet + JPA 3.1 Hibernate + JSP/JSTL + SQL Server)  
 
@@ -165,6 +165,19 @@ web/
 ---
 
 ## 4. Test Strategy & Verification Plan
+
+### Implementation supplement (locked 2026-10-22)
+
+- Keep NetBeans Ant import; add portable Ant targets `dependencies`, `verify`, `war` with pinned dependency manifest. Runtime libraries go to web/WEB-INF/lib; test libraries stay in build/tools. No Maven build migration.
+- JPAUtil reads EDUCENTER_DB_URL/USER/PASSWORD (or corresponding system properties), disables automatic DDL and closes the factory at shutdown. Preserve existing SQL schema; add a non-destructive PasswordResetTokens migration.
+- Add PasswordResetToken entity (user_id, token_hash unique, expires_at, consumed_at, created_at). Service owns every transaction; repositories receive its EntityManager and never close it.
+- Inject EntityManager supplier and ResetMailSender for tests; SMTP uses Jakarta Mail/Angus with STARTTLS, configured public application URL, no Host-header-derived reset links. No automatic email during tests.
+- CsrfFilter follows Encoding/Authentication/Role filters. Denied requests forward to 403 with HTTP 403. Authentication refreshes principal and compares a session credential fingerprint against current password hash; changed passwords expire old sessions.
+- Admin changes lock the ADMIN role first, then actor/target to serialize last-admin checks. User/password/reset writes lock user before tokens to avoid inverse lock ordering. Audit uses exact SQL column mappings and nationalized text.
+- Add reset-password JSP and controller paths; common head/header/footer/alerts; role landing servlet provides only actual account data and links implemented here.
+- Test with JUnit 5 + H2 in MSSQLServer mode for isolated persistence tests, embedded Tomcat/Jasper for HTTP/JSP contract tests; SQL Server remains production and requires a separate integration gate. Browser QA is distinct from HTTP tests.
+- Dependencies: Hibernate ORM 6.4.10.Final, Jakarta Persistence 3.1, Servlet 6, Tags 3, jBCrypt 0.4, SQL Server JDBC 12.6.1.jre11; exact transitives recorded in dependencies.json.
+
 
 1. **Unit Testing (JUnit 5):**
    * `PasswordUtilTest`: Kiểm tra băm BCrypt, so khớp pass đúng/sai.

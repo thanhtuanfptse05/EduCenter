@@ -1,5 +1,5 @@
 # Feature: Authentication & Role-Based Access Control (feat-auth-rbac) — SPECIFICATION
-**Status:** Approved | **Version:** 1.0.0 | **Date:** 2026-10-22  
+**Status:** Approved / Locked | **Version:** 1.1.0 | **Date:** 2026-10-22  
 **Module ID:** `MOD-FINANCE-ADMIN` (M02 – Authentication & Account Management, M12 – User Administration)  
 **Author / Owner:** Member 03 (Finance & Infrastructure)  
 **Inherits From:**  
@@ -80,6 +80,11 @@
 > Là một **Học viên cố tình gõ URL quản trị** (ví dụ `/admin/users` hoặc `/staff/invoices`),  
 > Tôi muốn hệ thống chặn lại và chuyển hướng về trang `/errors/403` (Forbidden) với thông báo từ chối truy cập rõ ràng.
 
+### Story 7 (Happy Path - Quên và đặt lại mật khẩu):
+> Là một **Người dùng bị quên mật khẩu**,  
+> Tôi muốn nhập email tại trang `/forgot-password` để nhận liên kết đặt lại mật khẩu, sau đó nhập mật khẩu mới tại trang `/reset-password`,  
+> Để khôi phục quyền truy cập tài khoản một cách an toàn và thuận tiện.
+
 ---
 
 ## 4. Acceptance Criteria (EARS Notation)
@@ -92,11 +97,16 @@
 
 ### 4.2 Event-Driven Requirements (Yêu cầu xử lý sự kiện)
 * **WHEN** người dùng gửi form đăng ký tại `/register` với email chưa từng tồn tại và mật khẩu hợp lệ (tối thiểu 6 ký tự):
-  * **THE SYSTEM SHALL** tạo bản ghi trong `Users` (trạng thái `ACTIVE`), băm mật khẩu, gán vai trò được chọn vào `UserRoles`, lưu flash message thành công vào session và chuyển hướng (`redirect`) sang `/login`.
+  * **THE SYSTEM SHALL** tạo bản ghi trong `Users` (trạng thái `ACTIVE`), băm mật khẩu, gán vai trò được chọn (`STUDENT` hoặc `PARENT`) vào `UserRoles`, lưu flash message thành công vào session và chuyển hướng (`redirect`) sang `/login`.
 * **WHEN** người dùng đăng nhập tại `/login` với thông tin chính xác và trạng thái `ACTIVE`:
-  * **THE SYSTEM SHALL** lưu đối tượng `UserPrincipalDTO` (chứa `userId`, `fullName`, `email`, `roleCodes`) vào `session.setAttribute("currentUser", principal)`, đồng thời chuyển hướng (`redirect`) đến Dashboard của vai trò có quyền cao nhất.
+  * **THE SYSTEM SHALL** lưu đối tượng `UserPrincipalDTO` (chứa `userId`, `fullName`, `email`, `roleCodes`) vào `session.setAttribute("currentUser", principal)`, đồng thời chuyển hướng (`redirect`) đến Dashboard của vai trò tương ứng.
 * **WHEN** người dùng bấm nút Đăng xuất (`POST /logout` hoặc `GET /logout`):
   * **THE SYSTEM SHALL** hủy `HttpSession` hiện tại (`session.invalidate()`) và chuyển hướng về `/login?loggedOut=true`.
+* **WHEN** người dùng gửi yêu cầu quên mật khẩu tại `/forgot-password`:
+  * **IF** email tồn tại trong CSDL: **THE SYSTEM SHALL** sinh mã `resetToken` ngẫu nhiên có hiệu lực 15 phút, đồng thời hiển thị thông báo thành công kèm đường link đặt lại mật khẩu trực tiếp (`/reset-password?token=...`) để hỗ trợ kiểm thử và demo thuận tiện.
+  * **IF** email không tồn tại: **THE SYSTEM SHALL** hiển thị thông báo lỗi: *"Không tìm thấy tài khoản gắn với email này."*
+* **WHEN** người dùng nhập mật khẩu mới tại `/reset-password?token=...` với token hợp lệ:
+  * **THE SYSTEM SHALL** băm mật khẩu mới bằng BCrypt, cập nhật vào bảng `Users`, hủy token và chuyển hướng về `/login` kèm thông báo *"Đặt lại mật khẩu thành công!"*.
 * **WHEN** người dùng yêu cầu đổi mật khẩu tại `/profile`:
   * **THE SYSTEM SHALL** kiểm tra mật khẩu hiện tại bằng `BCrypt.checkpw()`. Nếu trùng khớp, băm mật khẩu mới và lưu vào CSDL; nếu không khớp, trả về thông báo lỗi "Mật khẩu hiện tại không đúng".
 * **WHEN** Quản trị viên thay đổi trạng thái hoặc vai trò người dùng tại `/admin/users`:
@@ -206,6 +216,20 @@ Client Request
 ---
 
 ## 8. Definition of Done (DoD)
+
+### Implementation clarifications (2026-10-22)
+
+- FR-001: Register only STUDENT or PARENT; email normalized with Locale.ROOT; password 6 characters minimum, 72 UTF-8 bytes maximum (BCrypt limit). Confirmation must match. No remember-me persistence in this MVP.
+- FR-002: Renew session on login, timeout 30 minutes, cookie-only tracking, HttpOnly; every mutating action uses POST and a session CSRF token. GET /logout renders a confirmation; POST invalidates the session (supersedes earlier GET mutation examples).
+- FR-003: Re-read ACTIVE status and roles on every protected request; password change/reset invalidates other sessions. Only safe, local, authorized redirect_url paths may be restored.
+- FR-004: Password recovery returns the same public response for existing/missing/locked emails. Deliver a 32-byte random, single-use token by configured SMTP, expire after 30 minutes, store SHA-256 hash only. A new request invalidates prior tokens. Never show/log reset links. Rate-limit repeated recovery for an account. Missing SMTP fails safely and requires deployment configuration.
+- FR-005: Profile and password changes require the authenticated actor; validate phone, name and optional HTTPS avatar URL. Updates are atomic; never preserve passwords in flash/session. Profile editing cannot change email, roles or status.
+- FR-006: Admin mutations re-check actor authorization in the service transaction, audit CHANGE_ROLE / UPDATE_USER_STATUS with actor and before/after values. Serialize admin changes by locking the ADMIN role row, then lock affected users; prevent removal/locking of the final ACTIVE ADMIN (including another account).
+- FR-007: Filter/search/page users in SQL using bound JPQL; maintain filters after updates; role assignment accepts only the five canonical roles and at least one role.
+- FR-008: All auth/error/profile/admin pages use the shared layout, escaped output, design tokens, default light theme, explicit persisted theme toggle and responsive layouts. Provide authenticated landing routes without fabricated business statistics while other modules are unbuilt.
+- SC-001: Automated tests cover login, registration, reset expiry/reuse, authorization, last-admin safety, transaction rollback, CSRF, safe redirects and all five role landing routes.
+- SC-002: Ant produces a deployable Java 17 WAR with Jakarta Tags 3, JPA 3.1/Hibernate and SQL Server driver; SQL Server integration and browser acceptance must be reported separately if the local environment cannot run them.
+
 
 - [ ] Spec này được phê duyệt và khóa nội dung (`Status: Approved`).
 - [ ] JPA Entities (`User`, `Role`, `AuditLog`) ánh xạ chính xác với SQL Server schema `EduCenterDB`.

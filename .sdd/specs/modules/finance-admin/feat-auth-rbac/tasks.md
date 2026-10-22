@@ -79,7 +79,7 @@ flowchart TD
 ## Phase 5: Controller Servlets (PRG Pattern)
 
 - [ ] **TASK-05-01**: Tạo [AuthServlet.java](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/src/java/com/educenter/controller/AuthServlet.java) kế thừa `HttpServlet`:
-  - Xử lý routes: `/login`, `/register`, `/logout`, `/forgot-password`, `/profile`.
+  - Xử lý routes: `/login`, `/register`, `/logout`, `/forgot-password`, `/reset-password`, `/profile`.
   - Áp dụng Post/Redirect/Get với flash message qua `FlashMessageUtil`.
 - [ ] **TASK-05-02**: Tạo [UserManagementServlet.java](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/src/java/com/educenter/controller/UserManagementServlet.java):
   - Xử lý route: `/admin/users`, `/admin/users/status`, `/admin/users/roles`.
@@ -98,12 +98,18 @@ flowchart TD
   - [login.jsp](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/web/WEB-INF/views/auth/login.jsp) (AUTH-01)
   - [register.jsp](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/web/WEB-INF/views/auth/register.jsp) (AUTH-02)
   - [forgot-password.jsp](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/web/WEB-INF/views/auth/forgot-password.jsp) (AUTH-03)
+  - [reset-password.jsp](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/web/WEB-INF/views/auth/reset-password.jsp) (AUTH-04)
   - [profile.jsp](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/web/WEB-INF/views/auth/profile.jsp) (AUTH-05)
 - [ ] **TASK-06-06**: Xây dựng trang quản trị người dùng [user-list.jsp](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/web/WEB-INF/views/admin/user-list.jsp) (ADM-18) với bảng danh sách, bộ lọc role, tìm kiếm và nút khóa/mở tài khoản.
 
 ---
 
 ## Phase 7: Verification & Testing
+
+- [ ] T001 Implement FR-001..FR-007 supplement: CSRF, session renewal/revocation, safe redirect and last ACTIVE ADMIN protection in src/java/com/educenter.
+- [ ] T002 Implement FR-004 password recovery entity/repository/service/SMTP/controller/JSP and non-destructive SQL migration; test expiry/reuse/locked account.
+- [ ] T003 Supply reproducible Ant dependency bootstrap, Java 17 WAR packaging and isolated JPA/HTTP/JSP tests per SC-001/SC-002.
+- [ ] T004 Document environment configuration, SQL migration, SMTP, role landing routes and independent SQL Server/browser acceptance in quickstart.md.
 
 - [ ] **TASK-07-01**: Viết JUnit 5 test `PasswordUtilTest` kiểm tra độ tin cậy của thuật toán băm BCrypt.
 - [ ] **TASK-07-02**: Viết JUnit 5 test `AuthServiceTest` kiểm thử các luồng đăng nhập, đăng ký, bắt lỗi email trùng, bắt lỗi tài khoản khóa.
