@@ -1,0 +1,10 @@
+# .agentignore — Files and directories AI agents should not read or modify
+build/
+dist/
+nbproject/private/
+*.jar
+*.war
+*.class
+.codegraph/
+.git/
+allowedlib/

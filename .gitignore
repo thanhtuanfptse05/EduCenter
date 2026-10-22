@@ -1,0 +1,15 @@
+# NetBeans & Ant Build Artifacts
+build/
+dist/
+nbproject/private/
+
+# Temporary & Local index
+.codegraph/
+.DS_Store
+*.class
+*.war
+*.ear
+
+# Logs & Environment
+*.log
+.env
