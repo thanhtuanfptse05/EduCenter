@@ -651,6 +651,11 @@ GO
 -- ============================================================================
 -- PHẦN 3: TẠO CHỈ MỤC NON-CLUSTERED INDEX (TỐI ƯU HIỆU NĂNG QUERY)
 -- ============================================================================
+SET ANSI_NULLS ON;
+GO
+SET QUOTED_IDENTIFIER ON;
+GO
+
 CREATE NONCLUSTERED INDEX IX_Users_Status ON dbo.Users(status);
 CREATE NONCLUSTERED INDEX IX_Courses_Subject ON dbo.Courses(subject_id, grade_level, status);
 CREATE NONCLUSTERED INDEX IX_Classes_Course ON dbo.Classes(course_id, status);
