@@ -59,6 +59,11 @@
    * **Default Light Mode:** Lần đầu truy cập luôn luôn là giao diện sáng (Light mode), bất kể hệ điều hành đang dùng Dark mode. Chỉ chuyển Dark mode khi người dùng chủ động chọn và lưu vào `localStorage`.
    * **Icon chuẩn hóa:** Tuyệt đối KHÔNG dùng emoji làm icon giao diện, không dùng icon 3D hay hoạt hình. Bắt buộc dùng bộ icon outline SVG đồng nhất (khuyến nghị Lucide SVG 18–20px).
    * **Design Tokens & Local CSS:** Bắt buộc dùng biến CSS token (`--bg`, `--surface`, `--primary`, `--text`...), typography chuẩn `Inter`, khoảng cách (spacing scale), bo góc (radius). Không dùng Tailwind CDN hay các framework ngoài quy định.
+6. **CẤM HARDCODE DỮ LIỆU TRÊN GIAO DIỆN (CHUẨN DỰ ÁN THỰC TẾ):**
+   * Mọi dữ liệu hiển thị (bảng danh sách, thẻ thống kê KPI, biểu đồ, dropdown bộ lọc, chi tiết đối tượng...) **BẮT BUỘC** phải truy vấn thực tế từ CSDL qua tầng Repository -> Service -> Controller -> JSP (`request.setAttribute`).
+   * Sử dụng JSTL (`<c:forEach>`, `<c:if>`, `<c:choose>`) và EL `${...}` để render dữ liệu động.
+   * Xử lý triệt để trạng thái rỗng (Empty State) bằng component thông báo chuyên nghiệp khi chưa có dữ liệu từ DB, tuyệt đối không được hardcode rows/cards HTML tĩnh để lấp chỗ trống.
+   * Tuyệt đối không để tài khoản demo, gợi ý đăng nhập thử nghiệm, bảng test guide, hay autofill mock trên giao diện. Toàn bộ phải hoạt động như sản phẩm thương mại thật (production-grade ERP).
 
 ---
 
@@ -68,12 +73,14 @@
 * **NEVER hard delete financial records:** Không xóa vật lý dữ liệu trong `Invoices`, `Payments`, `Enrollments`. Phải dùng soft delete.
 * **NEVER bypass authorization checks:** Luôn kiểm tra phân quyền cả ở Filter và tầng Service.
 * **NEVER violate Design System (design.md):** Cấm tự ý sửa đổi token màu sắc, typography, tự chế icon emoji, tự động bật Dark mode, hoặc đưa CDN ngoài/Tailwind vào làm lệch chuẩn `design.md`.
+* **NEVER hardcode UI mock data or demo helpers:** CẤM tuyệt đối việc hardcode danh sách dữ liệu giả, thẻ KPI tĩnh, rows bảng tĩnh, hoặc tài khoản demo/autofill trên JSP. Toàn bộ phải là luồng dữ liệu động từ backend và CSDL.
 
 ---
 
 ## 6. DEFINITION OF DONE (PER TASK)
 * [ ] Spec tương ứng trong `.sdd/specs/` đã được cập nhật và khóa (Locked).
 * [ ] Giao diện tuân thủ 100% Design System trong `design.md` (Default Light mode, outline SVG, Design Tokens, Responsive 3 cấp độ).
+* [ ] 100% dữ liệu hiển thị là dữ liệu động từ Backend/CSDL (có xử lý Empty State chuyên nghiệp), không còn bất kỳ dữ liệu fake hay tài khoản demo hardcode nào.
 * [ ] Code tuân thủ Java 17 và Jakarta EE 10 namespace.
 * [ ] Không có cảnh báo lọt kết nối: `EntityManager` được quản lý đóng mở an toàn.
 * [ ] Kiểm tra lỗi nghiệp vụ (Validation, Business Rules) đầy đủ trước khi thực hiện giao dịch.

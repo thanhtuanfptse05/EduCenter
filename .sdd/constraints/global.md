@@ -37,5 +37,9 @@
 * **Design Tokens:** Bắt buộc dùng CSS custom properties (`--bg`, `--surface`, `--surface-muted`, `--text`, `--text-muted`, `--border`, `--primary`, `--success`, `--warning`, `--danger`, `--focus`).
 * **Typography:** Font chữ chính là `Inter`, fallback `system-ui, -apple-system, sans-serif`.
 * **Cấm thư viện ngoài:** Không dùng CDN Tailwind hay React/Vue trong sản phẩm nộp. Dùng CSS cục bộ + Vanilla JS + JSP/JSTL.
-* **Tương tác thật:** Mọi nút bấm, link điều hướng, form, bảng số liệu phải chạy thật; cấm `href="#"` hoặc dữ liệu ảo hardcode.
+* **Tương tác thật & Tuyệt đối không hardcode dữ liệu:**
+  * Mọi nút bấm, link điều hướng, form, bảng số liệu phải chạy thật; cấm `href="#"` hoặc dữ liệu ảo hardcode.
+  * **CẤM HARDCODE DỮ LIỆU HIỂN THỊ:** Mọi danh sách, bảng dữ liệu (table), thẻ thống kê (KPI cards), dropdown options, chi tiết thực thể... BẮT BUỘC phải lấy từ CSDL qua tầng Repository -> Service -> Servlet -> `request.setAttribute` -> JSTL (`<c:forEach>`, `${...}`).
+  * **Xử lý Empty State:** Khi CSDL rỗng hoặc chưa có dữ liệu, hiển thị giao diện Empty State chuyên nghiệp (thông báo + nút kêu gọi hành động), tuyệt đối không hardcode hàng mẫu / thẻ giả trên HTML.
+  * **Chuẩn dự án thực tế (Production-grade):** Không đưa tài khoản demo, gợi ý đăng nhập thử nghiệm, bảng test guide hay nút autofill lên giao diện người dùng. Dữ liệu mẫu (nếu có) phải được seed trực tiếp vào CSDL qua file SQL migration.
 

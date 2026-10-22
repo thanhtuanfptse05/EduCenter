@@ -23,3 +23,8 @@
    * **Default Light Mode:** Lần đầu truy cập luôn luôn là giao diện sáng (Light mode). Chỉ kích hoạt Dark mode khi người dùng chủ động chuyển đổi qua nút toggle.
    * **Icon chuẩn hóa:** Tuyệt đối KHÔNG dùng emoji làm icon, không dùng icon 3D hay sticker hoạt hình. Bắt buộc dùng bộ icon outline SVG đồng nhất (khuyến nghị Lucide SVG 18–20px).
    * **Design Tokens & No External CDN:** Dùng CSS cục bộ với CSS variables token (`--bg`, `--surface`, `--primary`, `--text`...), typography chuẩn `Inter`, bo góc và khoảng cách chuẩn hóa. CẤM dùng Tailwind CDN hay các framework lạ làm lệch chuẩn giao diện.
+
+6. **CẤM HARDCODE DỮ LIỆU TRÊN GIAO DIỆN — TUÂN THỦ DỰ ÁN THỰC TẾ:**
+   * Mọi màn hình (JSP) phải lấy dữ liệu thực tế từ CSDL thông qua kiến trúc phân tầng chuẩn (JPA -> Service -> Servlet -> `request.setAttribute` -> JSTL/EL).
+   * CẤM tuyệt đối việc chèn dòng dữ liệu giả (mock rows), thẻ KPI tĩnh, bảng demo, tài khoản/mật khẩu gợi ý trên giao diện.
+   * Khi CSDL chưa có dữ liệu, hiển thị Empty State chuẩn UI có thông báo và nút hành động, không chèn mockup. Dữ liệu thử nghiệm chỉ được nạp qua script SQL vào CSDL.
