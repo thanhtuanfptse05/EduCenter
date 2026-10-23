@@ -25,6 +25,8 @@
         <class>com.educenter.entity.Attendance</class>
         <class>com.educenter.entity.Assessment</class>
         <class>com.educenter.entity.AssessmentScore</class>
+        <class>com.educenter.entity.Invoice</class>
+        <class>com.educenter.entity.InvoiceItem</class>
 
         <!-- Cấu hình kết nối Microsoft SQL Server -->
         <properties>
