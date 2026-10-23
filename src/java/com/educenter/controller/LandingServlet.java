@@ -26,9 +26,7 @@ import java.io.IOException;
         "/dang-ky-tu-van",
         "/admin/dashboard",
         "/staff/leads",
-        "/teacher/dashboard",
-        "/student/dashboard",
-        "/parent/dashboard"
+        "/teacher/dashboard"
 })
 public class LandingServlet extends HttpServlet {
 
@@ -74,8 +72,6 @@ public class LandingServlet extends HttpServlet {
             case "/admin/dashboard" -> "Quản Trị Viên & Giám Đốc Trung Tâm";
             case "/staff/leads" -> "Tuyển Sinh & Quản Lý Học Vụ";
             case "/teacher/dashboard" -> "Giáo Viên / Gia Sư Giảng Dạy";
-            case "/student/dashboard" -> "Học Viên Luyện Thi";
-            case "/parent/dashboard" -> "Phụ Huynh Học Sinh";
             default -> "Người Dùng Hệ Thống";
         };
 
