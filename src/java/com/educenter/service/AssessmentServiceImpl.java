@@ -204,13 +204,29 @@ public class AssessmentServiceImpl implements AssessmentService {
 
             checkTeacherPermission(a.getEduClass(), teacherUserId, isAdmin);
 
-            if ("PUBLISHED".equals(a.getStatus()) && !isAdmin) {
-                throw new ValidationException("Bài kiểm tra đã được công bố. Chỉ Quản trị viên (ADMIN) mới có quyền sửa điểm (BR18).");
+            if ("PUBLISHED".equals(a.getStatus())) {
+                throw new ValidationException("Bài kiểm tra đã công bố không thể sửa điểm trực tiếp. Vui lòng mở lại bài kiểm tra (Reopen) với lý do chính đáng để hiệu chỉnh điểm (BR18).");
+            }
+
+            // B01: Lấy danh sách học viên hợp lệ thuộc lớp học
+            List<Student> classStudents = assessmentRepository.findActiveStudentsInClass(em, a.getEduClass().getId());
+            Set<Long> validStudentIds = new HashSet<>();
+            for (Student st : classStudents) {
+                validStudentIds.add(st.getId());
             }
 
             User grader = em.find(User.class, teacherUserId);
 
             for (StudentScoreItemDTO item : scoreItems) {
+                if (item.getStudentId() == null) continue;
+
+                // B01: Chặn nếu học viên gửi lên không thuộc lớp
+                if (!validStudentIds.contains(item.getStudentId())) {
+                    throw new ValidationException("Học viên (ID: " + item.getStudentId() + ") không thuộc danh sách lớp học " + a.getEduClass().getCode() + "!");
+                }
+
+                Optional<AssessmentScore> opt = assessmentRepository.findScore(em, assessmentId, item.getStudentId());
+
                 if (item.getScore() != null) {
                     if (item.getScore().compareTo(BigDecimal.ZERO) < 0 || item.getScore().compareTo(a.getMaxScore()) > 0) {
                         throw new ValidationException("Điểm số của học viên (Mã ID: " + item.getStudentId() + ") phải từ 0 đến " + a.getMaxScore() + " (BR09).");
@@ -219,7 +235,6 @@ public class AssessmentServiceImpl implements AssessmentService {
                     Student st = em.find(Student.class, item.getStudentId());
                     if (st == null) continue;
 
-                    Optional<AssessmentScore> opt = assessmentRepository.findScore(em, assessmentId, item.getStudentId());
                     if (opt.isPresent()) {
                         AssessmentScore existing = opt.get();
                         existing.setScore(item.getScore());
@@ -236,6 +251,11 @@ public class AssessmentServiceImpl implements AssessmentService {
                         newScore.setGradedBy(grader);
                         newScore.setGradedAt(LocalDateTime.now());
                         assessmentRepository.saveScore(em, newScore);
+                    }
+                } else {
+                    // B03: Xóa điểm khi người dùng xóa trắng ô điểm
+                    if (opt.isPresent()) {
+                        assessmentRepository.deleteScore(em, opt.get());
                     }
                 }
             }
@@ -280,6 +300,13 @@ public class AssessmentServiceImpl implements AssessmentService {
             a.setUpdatedAt(LocalDateTime.now());
             assessmentRepository.updateAssessment(em, a);
 
+            // B12: Ghi nhận Audit Log nghiệp vụ khi công bố điểm
+            AuditLog audit = new AuditLog(teacherUserId, "PUBLISH_ASSESSMENT", "Assessment", a.getId(),
+                    "{\"status\":\"DRAFT\"}",
+                    "{\"status\":\"PUBLISHED\",\"scoresCount\":" + scores.size() + "}",
+                    null);
+            em.persist(audit);
+
             tx.commit();
             LOGGER.info("Công bố bài kiểm tra thành công: " + a.getTitle());
         } catch (Exception e) {
@@ -312,6 +339,14 @@ public class AssessmentServiceImpl implements AssessmentService {
             a.setStatus("DRAFT");
             a.setUpdatedAt(LocalDateTime.now());
             assessmentRepository.updateAssessment(em, a);
+
+            // B12: Ghi nhận Audit Log nghiệp vụ khi mở lại bài kiểm tra (BR18)
+            String sanitizedReason = reason.replace("\"", "\\\"").trim();
+            AuditLog audit = new AuditLog(actorUserId, "REOPEN_ASSESSMENT", "Assessment", a.getId(),
+                    "{\"status\":\"PUBLISHED\"}",
+                    "{\"status\":\"DRAFT\",\"reason\":\"" + sanitizedReason + "\"}",
+                    null);
+            em.persist(audit);
 
             tx.commit();
             LOGGER.info("Admin mở lại bài kiểm tra " + a.getTitle() + " sang DRAFT với lý do: " + reason);

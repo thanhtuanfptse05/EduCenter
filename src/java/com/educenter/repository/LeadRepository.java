@@ -94,6 +94,10 @@ public class LeadRepository {
             jpql.append(" AND l.assignedTo.id = :aid");
             params.put("aid", filter.getAssignedToId());
         }
+        if (filter.getStaffUserId() != null && filter.getStaffUserId() > 0) {
+            jpql.append(" AND (l.assignedTo.id = :staffUserId OR l.assignedTo IS NULL)");
+            params.put("staffUserId", filter.getStaffUserId());
+        }
     }
 
     public Map<String, Long> getLeadStats(EntityManager em) {

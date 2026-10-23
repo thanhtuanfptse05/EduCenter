@@ -226,12 +226,24 @@ public class LeadServiceImpl implements LeadService {
             throw new ValidationException("Trạng thái tư vấn không hợp lệ: " + newStatus);
         }
 
+        // B10: Chặn chuyển sang ENROLLED thủ công (chỉ cập nhật qua giao dịch ghi danh)
+        if ("ENROLLED".equalsIgnoreCase(newStatus.trim())) {
+            throw new ValidationException("Không thể chuyển trực tiếp trạng thái sang ENROLLED. Trạng thái này chỉ được tự động ghi nhận khi hoàn tất thủ tục ghi danh vào lớp!");
+        }
+
         EntityManager em = emSupplier.get();
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
             Lead lead = leadRepository.findById(em, leadId)
                     .orElseThrow(() -> new ValidationException("Không tìm thấy Lead (ID: " + leadId + ")."));
+
+            // B10: Kiểm tra quyền STAFF đối với Lead cụ thể
+            if (actor != null && actor.isStaff() && !actor.isAdmin()) {
+                if (lead.getAssignedTo() != null && !lead.getAssignedTo().getId().equals(actor.getUserId())) {
+                    throw new ValidationException("Bạn chỉ có quyền cập nhật tiến trình tư vấn đối với các Lead được phân công cho mình!");
+                }
+            }
 
             lead.setStatus(newStatus.toUpperCase());
             if (notes != null && !notes.trim().isEmpty()) {

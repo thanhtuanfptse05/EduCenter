@@ -188,18 +188,25 @@ public class PortalServiceImpl implements PortalService {
         List<PortalScoreItemDTO> scores = portalRepository.findPublishedScoresByStudentId(em, student.getId());
         summary.setRecentScores(scores);
 
-        // Calculate average score
+        // Calculate average score (B02: Normalized to 10-scale and weighted)
         if (!scores.isEmpty()) {
-            BigDecimal totalScore = BigDecimal.ZERO;
-            int count = 0;
+            BigDecimal totalWeightedScore = BigDecimal.ZERO;
+            BigDecimal totalWeight = BigDecimal.ZERO;
             for (PortalScoreItemDTO s : scores) {
                 if (s.getScore() != null) {
-                    totalScore = totalScore.add(s.getScore());
-                    count++;
+                    BigDecimal maxScore = (s.getMaxScore() != null && s.getMaxScore().compareTo(BigDecimal.ZERO) > 0)
+                            ? s.getMaxScore() : BigDecimal.TEN;
+                    BigDecimal weight = (s.getWeight() != null && s.getWeight().compareTo(BigDecimal.ZERO) > 0)
+                            ? s.getWeight() : BigDecimal.ONE;
+
+                    // normScore = (score / maxScore) * 10
+                    BigDecimal normScore = s.getScore().divide(maxScore, 4, RoundingMode.HALF_UP).multiply(BigDecimal.TEN);
+                    totalWeightedScore = totalWeightedScore.add(normScore.multiply(weight));
+                    totalWeight = totalWeight.add(weight);
                 }
             }
-            if (count > 0) {
-                summary.setAverageScore(totalScore.divide(BigDecimal.valueOf(count), 2, RoundingMode.HALF_UP));
+            if (totalWeight.compareTo(BigDecimal.ZERO) > 0) {
+                summary.setAverageScore(totalWeightedScore.divide(totalWeight, 2, RoundingMode.HALF_UP));
             }
         }
 

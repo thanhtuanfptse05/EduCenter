@@ -3,6 +3,7 @@ package com.educenter.service;
 import com.educenter.dto.*;
 import com.educenter.entity.*;
 import com.educenter.repository.LandingRepository;
+import com.educenter.repository.SystemSettingRepository;
 import com.educenter.util.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -12,14 +13,20 @@ import java.util.function.Supplier;
 public class LandingServiceImpl implements LandingService {
 
     private final LandingRepository landingRepository;
+    private final SystemSettingRepository systemSettingRepository;
     private final Supplier<EntityManager> emSupplier;
 
     public LandingServiceImpl() {
-        this(new LandingRepository(), JPAUtil::getEntityManager);
+        this(new LandingRepository(), new SystemSettingRepository(), JPAUtil::getEntityManager);
     }
 
     public LandingServiceImpl(LandingRepository landingRepository, Supplier<EntityManager> emSupplier) {
+        this(landingRepository, new SystemSettingRepository(), emSupplier);
+    }
+
+    public LandingServiceImpl(LandingRepository landingRepository, SystemSettingRepository systemSettingRepository, Supplier<EntityManager> emSupplier) {
         this.landingRepository = landingRepository;
+        this.systemSettingRepository = systemSettingRepository;
         this.emSupplier = emSupplier;
     }
 
@@ -252,9 +259,16 @@ public class LandingServiceImpl implements LandingService {
 
         if (form.getGradeLevel() != null && (form.getGradeLevel() < 6 || form.getGradeLevel() > 12))
             throw new ValidationException("Khối lớp phải từ 6 đến 12.");
+
         EntityManager em = emSupplier.get();
         EntityTransaction tx = em.getTransaction();
         try {
+            // B13: Kiểm tra cờ đóng mở tuyển sinh của trung tâm
+            String admissionsOpen = systemSettingRepository.getValueByKey(em, SystemSettingServiceImpl.KEY_ADMISSIONS_OPEN);
+            if ("false".equalsIgnoreCase(admissionsOpen)) {
+                throw new ValidationException("Hệ thống hiện đang tạm đóng tiếp nhận đăng ký tư vấn và tuyển sinh mới!");
+            }
+
             tx.begin();
 
             Lead lead = new Lead();
@@ -279,6 +293,9 @@ public class LandingServiceImpl implements LandingService {
             lead = landingRepository.saveLead(em, lead);
             tx.commit();
             return lead;
+        } catch (ValidationException ve) {
+            if (tx.isActive()) tx.rollback();
+            throw ve;
         } catch (Exception e) {
             if (tx.isActive()) tx.rollback();
             throw new RuntimeException("Lỗi hệ thống khi lưu thông tin tư vấn: " + e.getMessage(), e);

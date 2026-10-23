@@ -101,6 +101,16 @@ public class PaymentServiceTest {
             }
             return list;
         }
+
+        @Override
+        public boolean existsRecentDuplicatePayment(EntityManager em, Long invoiceId, BigDecimal amount, Long actorId) {
+            return false;
+        }
+
+        @Override
+        public boolean existsByTransactionRef(EntityManager em, String transactionRef) {
+            return false;
+        }
     }
 
     static class StubEntityTransaction implements EntityTransaction {

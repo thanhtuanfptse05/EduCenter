@@ -33,12 +33,22 @@ public class ReportRepository {
             ).setParameter("yr", currentYear).setParameter("mo", currentMonth).getSingleResult();
             dto.setTotalInvoiced(monthInv != null ? monthInv : BigDecimal.ZERO);
 
-            // 3. Công nợ chưa thanh toán (tất cả các hóa đơn UNPAID hoặc PARTIALLY_PAID)
-            BigDecimal debt = em.createQuery(
+            // 3. Công nợ chưa thanh toán (B06: Tổng học phí cần thu trừ đi các khoản đã thu confirmed của hóa đơn chưa thanh toán đủ)
+            BigDecimal totalInvoicedUnpaid = em.createQuery(
                     "SELECT SUM(i.finalAmount) FROM Invoice i WHERE i.status IN ('UNPAID', 'PARTIALLY_PAID')",
                     BigDecimal.class
             ).getSingleResult();
-            dto.setOutstandingDebt(debt != null ? debt : BigDecimal.ZERO);
+            if (totalInvoicedUnpaid == null) totalInvoicedUnpaid = BigDecimal.ZERO;
+
+            BigDecimal totalPaidForUnpaid = em.createQuery(
+                    "SELECT SUM(p.amount) FROM Payment p WHERE p.invoice.status IN ('UNPAID', 'PARTIALLY_PAID') AND p.status = 'CONFIRMED'",
+                    BigDecimal.class
+            ).getSingleResult();
+            if (totalPaidForUnpaid == null) totalPaidForUnpaid = BigDecimal.ZERO;
+
+            BigDecimal debt = totalInvoicedUnpaid.subtract(totalPaidForUnpaid);
+            if (debt.compareTo(BigDecimal.ZERO) < 0) debt = BigDecimal.ZERO;
+            dto.setOutstandingDebt(debt);
 
             // 4. Học viên đang theo học (ACTIVE)
             Long activeStudents = em.createQuery(
@@ -54,14 +64,14 @@ public class ReportRepository {
             ).getSingleResult();
             dto.setOpenClassesCount(openClasses != null ? openClasses : 0L);
 
-            // 6. Tỷ lệ chuyên cần toàn trung tâm
-            Long totalAtt = em.createQuery("SELECT COUNT(a) FROM Attendance a", Long.class).getSingleResult();
-            Long presentAtt = em.createQuery("SELECT COUNT(a) FROM Attendance a WHERE a.status = 'PRESENT'", Long.class).getSingleResult();
-            if (totalAtt != null && totalAtt > 0 && presentAtt != null) {
-                double rate = ((double) presentAtt / totalAtt) * 100.0;
+            // 6. Tỷ lệ chuyên cần toàn trung tâm (B04: tính trên các buổi COMPLETED, bao gồm cả PRESENT và LATE, không mặc định 100% khi rỗng)
+            Long totalAtt = em.createQuery("SELECT COUNT(a) FROM Attendance a JOIN a.session s WHERE s.status = 'COMPLETED'", Long.class).getSingleResult();
+            Long attendedCount = em.createQuery("SELECT COUNT(a) FROM Attendance a JOIN a.session s WHERE s.status = 'COMPLETED' AND a.status IN ('PRESENT', 'LATE')", Long.class).getSingleResult();
+            if (totalAtt != null && totalAtt > 0 && attendedCount != null) {
+                double rate = ((double) attendedCount / totalAtt) * 100.0;
                 dto.setAttendanceRate(Math.round(rate * 10.0) / 10.0);
             } else {
-                dto.setAttendanceRate(100.0);
+                dto.setAttendanceRate(0.0);
             }
 
             // 7. Tuyển sinh tháng này
@@ -200,12 +210,22 @@ public class ReportRepository {
             ).setParameter("startDt", startDt).setParameter("endDt", endDt).getSingleResult();
             dto.setTotalInvoiced(totalInv != null ? totalInv : BigDecimal.ZERO);
 
-            // Công nợ
-            BigDecimal debt = em.createQuery(
+            // B06: Công nợ thực tế (tổng finalAmount trừ khoản đã thu confirmed)
+            BigDecimal totalInvoicedUnpaid = em.createQuery(
                     "SELECT SUM(i.finalAmount) FROM Invoice i WHERE i.status IN ('UNPAID', 'PARTIALLY_PAID')",
                     BigDecimal.class
             ).getSingleResult();
-            dto.setOutstandingDebt(debt != null ? debt : BigDecimal.ZERO);
+            if (totalInvoicedUnpaid == null) totalInvoicedUnpaid = BigDecimal.ZERO;
+
+            BigDecimal totalPaidForUnpaid = em.createQuery(
+                    "SELECT SUM(p.amount) FROM Payment p WHERE p.invoice.status IN ('UNPAID', 'PARTIALLY_PAID') AND p.status = 'CONFIRMED'",
+                    BigDecimal.class
+            ).getSingleResult();
+            if (totalPaidForUnpaid == null) totalPaidForUnpaid = BigDecimal.ZERO;
+
+            BigDecimal debt = totalInvoicedUnpaid.subtract(totalPaidForUnpaid);
+            if (debt.compareTo(BigDecimal.ZERO) < 0) debt = BigDecimal.ZERO;
+            dto.setOutstandingDebt(debt);
 
             // Doanh thu theo phương thức thanh toán
             List<Object[]> methodRows = em.createQuery(
@@ -243,9 +263,9 @@ public class ReportRepository {
                 dto.setAvgClassCapacity(classAggs[3] != null ? Math.round(((Double) classAggs[3]) * 10.0) / 10.0 : 0.0);
             }
 
-            // 4. Chuyên cần học vụ trong kỳ
+            // 4. Chuyên cần học vụ trong kỳ (B04: tính các buổi COMPLETED, bao gồm PRESENT và LATE, không mặc định 100% khi rỗng)
             List<Object[]> attRows = em.createQuery(
-                    "SELECT a.status, COUNT(a) FROM Attendance a JOIN a.session s WHERE s.sessionDate >= :fromD AND s.sessionDate <= :toD GROUP BY a.status",
+                    "SELECT a.status, COUNT(a) FROM Attendance a JOIN a.session s WHERE s.status = 'COMPLETED' AND s.sessionDate >= :fromD AND s.sessionDate <= :toD GROUP BY a.status",
                     Object[].class
             ).setParameter("fromD", fromDate).setParameter("toD", toDate).getResultList();
             long totAtt = 0;
@@ -260,10 +280,10 @@ public class ReportRepository {
             }
             dto.setTotalAttendances(totAtt);
             if (totAtt > 0) {
-                double aRate = ((double) dto.getPresentCount() / totAtt) * 100.0;
+                double aRate = ((double) (dto.getPresentCount() + dto.getLateCount()) / totAtt) * 100.0;
                 dto.setAttendanceRate(Math.round(aRate * 10.0) / 10.0);
             } else {
-                dto.setAttendanceRate(100.0);
+                dto.setAttendanceRate(0.0);
             }
 
             // 5. Điểm số bài kiểm tra đã công bố: MIN, MAX, AVG, COUNT (ASM 3.5 Requirement)

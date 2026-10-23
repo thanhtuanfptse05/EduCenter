@@ -1,6 +1,7 @@
 package com.educenter.service;
 
 import com.educenter.dto.*;
+import com.educenter.entity.AuditLog;
 import com.educenter.entity.EduClass;
 import com.educenter.entity.Invoice;
 import com.educenter.entity.Payment;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,17 +25,23 @@ public class PaymentServiceImpl implements PaymentService {
     private static final Logger LOGGER = Logger.getLogger(PaymentServiceImpl.class.getName());
 
     private final PaymentRepository paymentRepository;
+    private final Supplier<EntityManager> emSupplier;
 
     public PaymentServiceImpl() {
-        this.paymentRepository = new PaymentRepository();
+        this(new PaymentRepository(), JPAUtil::getEntityManager);
     }
 
     public PaymentServiceImpl(PaymentRepository paymentRepository) {
+        this(paymentRepository, JPAUtil::getEntityManager);
+    }
+
+    public PaymentServiceImpl(PaymentRepository paymentRepository, Supplier<EntityManager> emSupplier) {
         this.paymentRepository = paymentRepository;
+        this.emSupplier = emSupplier;
     }
 
     protected EntityManager getEntityManager() {
-        return JPAUtil.getEntityManager();
+        return emSupplier != null ? emSupplier.get() : JPAUtil.getEntityManager();
     }
 
     @Override
@@ -146,6 +154,13 @@ public class PaymentServiceImpl implements PaymentService {
         }
         method = method.trim().toUpperCase();
 
+        // B11: Chuyển khoản bắt buộc phải có mã tham chiếu giao dịch
+        if ("BANK_TRANSFER".equals(method)) {
+            if (form.getTransactionRef() == null || form.getTransactionRef().trim().isEmpty()) {
+                throw new ValidationException("Phương thức chuyển khoản ngân hàng bắt buộc phải nhập mã tham chiếu giao dịch (Transaction Reference)!");
+            }
+        }
+
         if (actorUserId == null || actorUserId <= 0) {
             throw new ValidationException("Người thực hiện giao dịch thu tiền không hợp lệ.");
         }
@@ -170,6 +185,16 @@ public class PaymentServiceImpl implements PaymentService {
                 throw new ValidationException("Hóa đơn đã được thanh toán đầy đủ trước đó.");
             }
 
+            // B11: Kiểm tra chống gửi lặp và kiểm tra trùng tham chiếu giao dịch
+            if (form.getTransactionRef() != null && !form.getTransactionRef().trim().isEmpty()) {
+                if (paymentRepository.existsByTransactionRef(em, form.getTransactionRef().trim())) {
+                    throw new ValidationException("Mã tham chiếu giao dịch '" + form.getTransactionRef().trim() + "' đã tồn tại trên hệ thống. Vui lòng kiểm tra lại để tránh ghi thu trùng lặp!");
+                }
+            }
+            if (paymentRepository.existsRecentDuplicatePayment(em, invoice.getId(), form.getAmount(), actor.getId())) {
+                throw new ValidationException("Phát hiện yêu cầu thanh toán trùng lặp vừa được thực hiện trong vài giây trước. Vui lòng không gửi lặp thao tác!");
+            }
+
             BigDecimal currentPaid = paymentRepository.calculateInvoicePaidAmount(em, invoice.getId());
             BigDecimal debt = invoice.getFinalAmount().subtract(currentPaid);
             if (debt.compareTo(BigDecimal.ZERO) <= 0) {
@@ -190,7 +215,7 @@ public class PaymentServiceImpl implements PaymentService {
             payment.setInvoice(invoice);
             payment.setAmount(form.getAmount());
             payment.setPaymentMethod(method);
-            payment.setTransactionRef(form.getTransactionRef());
+            payment.setTransactionRef(form.getTransactionRef() != null ? form.getTransactionRef().trim() : null);
             payment.setPaidAt(LocalDateTime.now());
             payment.setConfirmedBy(actor);
             payment.setNotes(form.getNotes());
@@ -207,6 +232,18 @@ public class PaymentServiceImpl implements PaymentService {
             }
             invoice.setUpdatedAt(LocalDateTime.now());
             paymentRepository.updateInvoice(em, invoice);
+
+            // B12: Ghi Audit Log cho nghiệp vụ thu tiền
+            AuditLog auditLog = new AuditLog(
+                    actor.getId(),
+                    "RECORD_PAYMENT",
+                    "Payment",
+                    payment.getId(),
+                    null,
+                    "PaymentCode: " + paymentCode + ", InvoiceCode: " + invoice.getInvoiceCode() + ", Amount: " + form.getAmount() + ", Method: " + method + ", Ref: " + (form.getTransactionRef() != null ? form.getTransactionRef().trim() : "N/A"),
+                    null
+            );
+            em.persist(auditLog);
 
             tx.commit();
 

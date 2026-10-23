@@ -253,13 +253,13 @@
                 <label class="auth-checkbox-label" style="align-items: flex-start;">
                   <input type="checkbox" id="terms-agree" required checked style="margin-top: 3px;"/>
                   <span style="font-size: 13px; line-height: 1.4;">
-                    Tôi đồng ý với <a href="${pageContext.request.contextPath}/#" class="auth-forgot-link">Điều khoản dịch vụ trung tâm</a> và <a href="${pageContext.request.contextPath}/#" class="auth-forgot-link">Quy chế kiểm tra &amp; đánh giá</a> của hệ thống EduCenter.
+                    Tôi đồng ý với <a href="${pageContext.request.contextPath}/terms" target="_blank" class="auth-forgot-link">Điều khoản dịch vụ trung tâm</a> và <a href="${pageContext.request.contextPath}/terms" target="_blank" class="auth-forgot-link">Quy chế kiểm tra &amp; đánh giá</a> của hệ thống EduCenter.
                   </span>
                 </label>
                 <label class="auth-checkbox-label" style="align-items: flex-start;">
                   <input type="checkbox" id="privacy-agree" required checked style="margin-top: 3px;"/>
                   <span style="font-size: 13px; line-height: 1.4;">
-                    Tôi cho phép lưu trữ và bảo mật dữ liệu học tập/học bạ theo chuẩn ISO/IEC 27001 &amp; Nghị định 13/2023/NĐ-CP.
+                    Tôi cho phép lưu trữ và bảo mật dữ liệu học tập/học bạ theo <a href="${pageContext.request.contextPath}/privacy" target="_blank" class="auth-forgot-link">Chính sách bảo mật ISO/IEC 27001 &amp; Nghị định 13/2023/NĐ-CP</a>.
                   </span>
                 </label>
               </div>

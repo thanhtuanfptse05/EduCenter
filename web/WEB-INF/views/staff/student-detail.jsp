@@ -479,7 +479,10 @@
                                             <div style="display: flex; align-items: center; gap: 8px;">
                                                 <c:choose>
                                                     <c:when test="${g.verified}">
-                                                        <button type="button" class="btn btn-outline" style="font-size: 12px; padding: 4px 10px; color: var(--danger); border-color: rgba(220, 38, 38, 0.3);" onclick="openRevokeModal(${g.id}, '${g.guardianName}')">
+                                                        <button type="button" class="btn btn-outline" style="font-size: 12px; padding: 4px 10px; color: var(--danger); border-color: rgba(220, 38, 38, 0.3);"
+                                                                data-linkid="${g.id}"
+                                                                data-guardianname="<c:out value='${g.guardianName}'/>"
+                                                                onclick="openRevokeModalFromBtn(this)">
                                                             Thu hồi xác thực
                                                         </button>
                                                     </c:when>
@@ -843,6 +846,11 @@ function openAddGuardianModal() {
 }
 function closeAddGuardianModal() {
     document.getElementById('addGuardianModal').classList.remove('active');
+}
+
+function openRevokeModalFromBtn(btn) {
+    if (!btn) return;
+    openRevokeModal(btn.getAttribute('data-linkid'), btn.getAttribute('data-guardianname'));
 }
 
 function openRevokeModal(linkId, guardianName) {

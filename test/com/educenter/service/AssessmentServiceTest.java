@@ -280,6 +280,7 @@ public class AssessmentServiceTest {
         mockRepo.assessment = a;
 
         Student s = createMockStudent(20L, "Trần Văn Bình");
+        mockRepo.students.add(s);
         stubEm.student = s;
         stubEm.user = c.getTeacher().getUser();
 
@@ -307,6 +308,10 @@ public class AssessmentServiceTest {
         a.setMaxScore(new BigDecimal("10.00"));
         a.setStatus("DRAFT");
         mockRepo.assessment = a;
+
+        Student s = createMockStudent(20L, "Trần Văn Bình");
+        mockRepo.students.add(s);
+        stubEm.student = s;
 
         StudentScoreItemDTO scoreItem = new StudentScoreItemDTO();
         scoreItem.setStudentId(20L);

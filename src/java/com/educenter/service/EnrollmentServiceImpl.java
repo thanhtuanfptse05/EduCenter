@@ -3,6 +3,7 @@ package com.educenter.service;
 import com.educenter.dto.*;
 import com.educenter.entity.*;
 import com.educenter.repository.EnrollmentRepository;
+import com.educenter.repository.SystemSettingRepository;
 import com.educenter.util.JPAUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -20,13 +21,16 @@ public class EnrollmentServiceImpl implements EnrollmentService {
     private static final Logger LOGGER = Logger.getLogger(EnrollmentServiceImpl.class.getName());
 
     private final EnrollmentRepository enrollmentRepository;
+    private final SystemSettingRepository systemSettingRepository;
 
     public EnrollmentServiceImpl() {
         this.enrollmentRepository = new EnrollmentRepository();
+        this.systemSettingRepository = new SystemSettingRepository();
     }
 
     public EnrollmentServiceImpl(EnrollmentRepository repository) {
         this.enrollmentRepository = repository;
+        this.systemSettingRepository = new SystemSettingRepository();
     }
 
     @Override
@@ -69,17 +73,28 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
+            // B13: Kiểm tra cờ đóng mở tuyển sinh của trung tâm
+            String admissionsOpen = systemSettingRepository.getValueByKey(em, SystemSettingServiceImpl.KEY_ADMISSIONS_OPEN);
+            if ("false".equalsIgnoreCase(admissionsOpen)) {
+                throw new ValidationException("Hệ thống hiện đang tạm đóng tiếp nhận tuyển sinh và ghi danh mới!");
+            }
+
             Student student = em.find(Student.class, form.getStudentId());
             if (student == null) {
                 throw new ValidationException("Học sinh không tồn tại trên hệ thống!");
             }
-            if ("DROPPED".equalsIgnoreCase(student.getStatus())) {
-                throw new ValidationException("Hồ sơ học sinh đã thôi học, không thể ghi danh!");
+            if (student.getStatus() != null && ("DROPPED".equalsIgnoreCase(student.getStatus()) || "INACTIVE".equalsIgnoreCase(student.getStatus()))) {
+                throw new ValidationException("Hồ sơ học sinh không ở trạng thái hoạt động (" + student.getStatus() + "), không thể ghi danh!");
             }
 
             EduClass eduClass = em.find(EduClass.class, form.getClassId());
             if (eduClass == null) {
                 throw new ValidationException("Lớp học không tồn tại!");
+            }
+
+            // B07: Kiểm tra trạng thái khóa học
+            if (eduClass.getCourse() == null || !"OPEN".equalsIgnoreCase(eduClass.getCourse().getStatus())) {
+                throw new ValidationException("Khóa học của lớp đang không ở trạng thái mở tiếp nhận tuyển sinh!");
             }
 
             // BR02, BR19: Kiểm tra trạng thái lớp học
@@ -99,18 +114,18 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 throw new ValidationException("Học sinh này đã có ghi danh đang theo học hoặc đang bảo lưu trong lớp " + eduClass.getName() + "!");
             }
 
-            // BR04: Kiểm soát sĩ số tối đa
-            long currentActive = enrollmentRepository.countActiveByClassId(em, eduClass.getId());
-            if (currentActive >= eduClass.getCapacity()) {
-                throw new ValidationException("Lớp học đã đạt sĩ số tối đa (" + eduClass.getCapacity() + " học viên). Không thể ghi danh thêm!");
-            }
-
             // BR07: Kiểm tra xung đột thời khóa biểu
             if (enrollmentRepository.hasScheduleConflict(em, student.getId(), eduClass.getId())) {
                 throw new ValidationException("Học sinh bị xung đột lịch học giữa lớp " + eduClass.getCode() + " và lớp học khác đang tham gia!");
             }
 
             tx.begin();
+
+            // B07: Khóa kiểm tra sĩ số bên trong transaction để bảo vệ chỗ cuối
+            long currentActive = enrollmentRepository.countActiveByClassId(em, eduClass.getId());
+            if (currentActive >= eduClass.getCapacity()) {
+                throw new ValidationException("Lớp học đã đạt sĩ số tối đa (" + eduClass.getCapacity() + " học viên). Không thể ghi danh thêm!");
+            }
 
             // 1. Tạo Enrollment
             Enrollment enrollment = new Enrollment();
@@ -137,7 +152,16 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             invoice.setDiscountAmount(BigDecimal.ZERO);
             invoice.setFinalAmount(courseFee);
             invoice.setStatus("UNPAID");
-            invoice.setDueDate(LocalDate.now().plusDays(10));
+
+            // B13: Đọc thời hạn nộp học phí từ SystemSetting
+            int dueDays = 10;
+            try {
+                String dueDaysSetting = systemSettingRepository.getValueByKey(em, SystemSettingServiceImpl.KEY_TUITION_DUE_DAYS);
+                if (dueDaysSetting != null && !dueDaysSetting.isBlank()) {
+                    dueDays = Integer.parseInt(dueDaysSetting.trim());
+                }
+            } catch (Exception ignored) {}
+            invoice.setDueDate(LocalDate.now().plusDays(dueDays));
             invoice.setNotes("Hóa đơn học phí ban đầu ghi danh lớp " + eduClass.getName());
             invoice.setCreatedAt(LocalDateTime.now());
             invoice.setUpdatedAt(LocalDateTime.now());
@@ -224,8 +248,13 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 throw new ValidationException("Lớp học chuyển đến (" + newClass.getName() + ") đã đầy sĩ số!");
             }
 
-            // Kiểm tra xung đột lịch học lớp mới
-            if (enrollmentRepository.hasScheduleConflict(em, oldEnrollment.getStudent().getId(), newClass.getId())) {
+            // B08: Chặn ghi danh trùng ở lớp đích
+            if (enrollmentRepository.isStudentActiveOrReservedInClass(em, oldEnrollment.getStudent().getId(), newClass.getId())) {
+                throw new ValidationException("Học sinh này đã có ghi danh đang theo học hoặc bảo lưu trong lớp đích " + newClass.getName() + "!");
+            }
+
+            // B08: Kiểm tra xung đột lịch học lớp mới (loại trừ các buổi của lớp cũ đang chuyển đi)
+            if (enrollmentRepository.hasScheduleConflictExcludingClass(em, oldEnrollment.getStudent().getId(), newClass.getId(), oldEnrollment.getEduClass().getId())) {
                 throw new ValidationException("Học sinh bị xung đột lịch học với lớp chuyển đến!");
             }
 
@@ -328,6 +357,11 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             long activeCount = enrollmentRepository.countActiveByClassId(em, eduClass.getId());
             if (activeCount >= eduClass.getCapacity()) {
                 throw new ValidationException("Lớp học đã đầy sĩ số (" + eduClass.getCapacity() + " học viên). Không thể phục hồi vào lớp này!");
+            }
+
+            // B08: Khôi phục sau bảo lưu phải kiểm tra lại xung đột thời khóa biểu
+            if (enrollmentRepository.hasScheduleConflict(em, enrollment.getStudent().getId(), eduClass.getId())) {
+                throw new ValidationException("Học sinh bị xung đột lịch học giữa lớp " + eduClass.getCode() + " và lớp học khác đang tham gia!");
             }
 
             tx.begin();

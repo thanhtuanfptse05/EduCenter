@@ -29,6 +29,10 @@ public class LeadFilterDTO implements Serializable {
     public Long getAssignedToId() { return assignedToId; }
     public void setAssignedToId(Long assignedToId) { this.assignedToId = assignedToId; }
 
+    private Long staffUserId;
+    public Long getStaffUserId() { return staffUserId; }
+    public void setStaffUserId(Long staffUserId) { this.staffUserId = staffUserId; }
+
     public int getPage() { return page <= 0 ? 1 : page; }
     public void setPage(int page) { this.page = page; }
 

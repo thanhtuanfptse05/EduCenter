@@ -12,6 +12,7 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -262,5 +263,28 @@ public class PaymentRepository {
         } catch (NoResultException e) {
             return new String[] { null, null };
         }
+    }
+
+    public boolean existsByTransactionRef(EntityManager em, String transactionRef) {
+        if (transactionRef == null || transactionRef.trim().isEmpty()) {
+            return false;
+        }
+        Long count = em.createQuery(
+                "SELECT COUNT(p) FROM Payment p WHERE LOWER(p.transactionRef) = :ref", Long.class)
+                .setParameter("ref", transactionRef.trim().toLowerCase())
+                .getSingleResult();
+        return count != null && count > 0;
+    }
+
+    public boolean existsRecentDuplicatePayment(EntityManager em, Long invoiceId, BigDecimal amount, Long actorId) {
+        LocalDateTime recentThreshold = LocalDateTime.now().minusSeconds(15);
+        Long count = em.createQuery(
+                "SELECT COUNT(p) FROM Payment p WHERE p.invoice.id = :invoiceId AND p.amount = :amount AND p.confirmedBy.id = :actorId AND p.paidAt >= :threshold", Long.class)
+                .setParameter("invoiceId", invoiceId)
+                .setParameter("amount", amount)
+                .setParameter("actorId", actorId)
+                .setParameter("threshold", recentThreshold)
+                .getSingleResult();
+        return count != null && count > 0;
     }
 }

@@ -489,6 +489,9 @@ public class ClassTimetableServiceImpl implements ClassTimetableService {
             if ("MAINTENANCE".equalsIgnoreCase(room.getStatus())) {
                 throw new ValidationException("Phòng " + room.getCode() + " đang bảo trì, không thể xếp lịch!");
             }
+            if (room.getCapacity() != null && eduClass.getCapacity() != null && room.getCapacity() < eduClass.getCapacity()) {
+                throw new ValidationException("Phòng " + room.getCode() + " (sức chứa " + room.getCapacity() + " chỗ) không đủ sức chứa cho sĩ số lớp (" + eduClass.getCapacity() + " học viên)!");
+            }
 
             int targetSessions = dto.getTotalSessions() != null && dto.getTotalSessions() > 0 ? dto.getTotalSessions() : 10;
             LocalDate currentDate = dto.getStartDate() != null ? dto.getStartDate() : eduClass.getStartDate();
@@ -499,7 +502,7 @@ public class ClassTimetableServiceImpl implements ClassTimetableService {
             DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
             int generatedCount = 0;
-            while (generatedCount < targetSessions && !currentDate.isAfter(maxDate.plusMonths(3))) {
+            while (generatedCount < targetSessions && !currentDate.isAfter(maxDate)) {
                 int dayOfWeekCode = toVietnameseDayOfWeek(currentDate.getDayOfWeek());
 
                 if (dto.getDaysOfWeek().contains(dayOfWeekCode)) {

@@ -158,4 +158,12 @@ public class AssessmentRepository {
     public void updateScore(EntityManager em, AssessmentScore score) {
         em.merge(score);
     }
+
+    public void deleteScore(EntityManager em, AssessmentScore score) {
+        if (em.contains(score)) {
+            em.remove(score);
+        } else {
+            em.remove(em.merge(score));
+        }
+    }
 }

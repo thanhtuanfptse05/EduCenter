@@ -20,18 +20,28 @@ public class AttendanceServiceImpl implements AttendanceService {
     private static final Logger LOGGER = Logger.getLogger(AttendanceServiceImpl.class.getName());
 
     private final AttendanceRepository attendanceRepository;
+    private final java.util.function.Supplier<EntityManager> emSupplier;
 
     public AttendanceServiceImpl() {
-        this.attendanceRepository = new AttendanceRepository();
+        this(new AttendanceRepository(), JPAUtil::getEntityManager);
     }
 
     public AttendanceServiceImpl(AttendanceRepository attendanceRepository) {
+        this(attendanceRepository, JPAUtil::getEntityManager);
+    }
+
+    public AttendanceServiceImpl(AttendanceRepository attendanceRepository, java.util.function.Supplier<EntityManager> emSupplier) {
         this.attendanceRepository = attendanceRepository;
+        this.emSupplier = (emSupplier != null) ? emSupplier : JPAUtil::getEntityManager;
+    }
+
+    protected EntityManager getEntityManager() {
+        return emSupplier.get();
     }
 
     @Override
     public List<AttendanceSessionViewDTO> getTeacherSessions(Long teacherUserId, LocalDate sessionDate, boolean isAdmin) {
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = getEntityManager();
         try {
             Long queryUserId = isAdmin ? null : teacherUserId;
             return attendanceRepository.findSessionsForTeacher(em, queryUserId, sessionDate);
@@ -46,7 +56,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             throw new ValidationException("Mã buổi học không được để trống!");
         }
 
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = getEntityManager();
         try {
             ClassSession session = attendanceRepository.findSessionById(em, sessionId)
                     .orElseThrow(() -> new ValidationException("Buổi học không tồn tại!"));
@@ -111,7 +121,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             throw new ValidationException("Mã buổi học không được để trống!");
         }
 
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             ClassSession session = attendanceRepository.findSessionById(em, sessionId)
@@ -150,8 +160,16 @@ public class AttendanceServiceImpl implements AttendanceService {
                         throw new ValidationException("Trạng thái điểm danh '" + status + "' không hợp lệ!");
                     }
 
+                    // B01: Kiểm tra học viên có thuộc danh sách hợp lệ của lớp tại thời điểm buổi học
+                    long validCount = attendanceRepository.countValidEnrollmentForStudent(em, session.getEduClass().getId(), item.getStudentId(), session.getSessionDate());
+                    if (validCount <= 0) {
+                        throw new ValidationException("Học viên (ID: " + item.getStudentId() + ") không có ghi danh hợp lệ trong lớp " + session.getEduClass().getCode() + " vào ngày " + session.getSessionDate() + "!");
+                    }
+
                     Student student = em.find(Student.class, item.getStudentId());
-                    if (student == null) continue;
+                    if (student == null) {
+                        throw new ValidationException("Học viên (ID: " + item.getStudentId() + ") không tồn tại trong hệ thống!");
+                    }
 
                     Optional<Attendance> existingOpt = attendanceRepository.findAttendanceBySessionAndStudent(em, sessionId, student.getId());
                     Attendance attendance = existingOpt.orElseGet(() -> {
@@ -189,7 +207,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             throw new ValidationException("Mã buổi học không được để trống!");
         }
 
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             ClassSession session = attendanceRepository.findSessionById(em, sessionId)
@@ -235,7 +253,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             throw new ValidationException("Mã buổi học không được để trống!");
         }
 
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = getEntityManager();
         try {
             ClassSession session = attendanceRepository.findSessionById(em, sessionId)
                     .orElseThrow(() -> new ValidationException("Buổi học không tồn tại!"));
@@ -263,7 +281,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             throw new ValidationException("Nội dung bài học không được để trống!");
         }
 
-        EntityManager em = JPAUtil.getEntityManager();
+        EntityManager em = getEntityManager();
         EntityTransaction tx = em.getTransaction();
         try {
             ClassSession session = attendanceRepository.findSessionById(em, sessionId)

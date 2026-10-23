@@ -16,16 +16,23 @@ public class SystemSettingRepository {
         if (key == null || key.trim().isEmpty()) {
             return Optional.empty();
         }
-        TypedQuery<SystemSetting> query = em.createQuery(
-                "SELECT s FROM SystemSetting s WHERE s.settingKey = :key",
-                SystemSetting.class
-        );
-        query.setParameter("key", key.trim());
         try {
+            TypedQuery<SystemSetting> query = em.createQuery(
+                    "SELECT s FROM SystemSetting s WHERE s.settingKey = :key",
+                    SystemSetting.class
+            );
+            if (query == null) {
+                return Optional.empty();
+            }
+            query.setParameter("key", key.trim());
             return Optional.of(query.getSingleResult());
         } catch (NoResultException e) {
             return Optional.empty();
         }
+    }
+
+    public String getValueByKey(EntityManager em, String key) {
+        return findByKey(em, key).map(SystemSetting::getSettingValue).orElse(null);
     }
 
     public List<SystemSetting> findAll(EntityManager em) {

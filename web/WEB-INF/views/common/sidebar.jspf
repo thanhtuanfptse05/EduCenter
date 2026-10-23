@@ -169,6 +169,15 @@
         <!-- 3a. Giảng dạy (Teacher) -->
         <c:if test="${sessionScope.currentUser != null and (sessionScope.currentUser.teacher or sessionScope.currentUser.admin)}">
             <div class="nav-group-title">Giảng dạy & Học vụ</div>
+            <a href="${pageContext.request.contextPath}/teacher/dashboard" class="nav-link ${activeNav == 'teacher-dashboard' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                    <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                    <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                    <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                </svg>
+                <span>Bàn làm việc giảng dạy</span>
+            </a>
             <a href="${pageContext.request.contextPath}/teacher/attendance" class="nav-link ${activeNav == 'attendance' ? 'active' : ''}">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                     <polyline points="9 11 12 14 22 4"></polyline>

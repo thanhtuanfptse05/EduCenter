@@ -75,6 +75,12 @@ public class StaffLeadServlet extends HttpServlet {
             try { filter.setPage(Integer.parseInt(pageStr.trim())); } catch (NumberFormatException ignored) {}
         }
 
+        HttpSession session = req.getSession(false);
+        UserPrincipalDTO currentUser = (session != null) ? (UserPrincipalDTO) session.getAttribute("currentUser") : null;
+        if (currentUser != null && currentUser.isStaff() && !currentUser.isAdmin()) {
+            filter.setStaffUserId(currentUser.getUserId());
+        }
+
         Map<String, Object> data = leadService.getLeadListPage(filter);
         req.setAttribute("data", data);
         req.setAttribute("filter", filter);

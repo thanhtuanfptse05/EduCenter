@@ -23,8 +23,7 @@ import java.io.IOException;
 @WebServlet(name = "LandingServlet", urlPatterns = {
         "",
         "/index",
-        "/dang-ky-tu-van",
-        "/teacher/dashboard"
+        "/dang-ky-tu-van"
 })
 public class LandingServlet extends HttpServlet {
 

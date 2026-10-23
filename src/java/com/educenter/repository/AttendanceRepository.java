@@ -9,6 +9,7 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -138,12 +139,26 @@ public class AttendanceRepository {
         return query.getSingleResult() > 0;
     }
 
+    public long countValidEnrollmentForStudent(EntityManager em, Long classId, Long studentId, LocalDate sessionDate) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(e) FROM Enrollment e " +
+                "WHERE e.eduClass.id = :classId " +
+                "AND e.student.id = :studentId " +
+                "AND e.startDate <= :sessionDate " +
+                "AND (e.endDate IS NULL OR e.endDate >= :sessionDate)",
+                Long.class
+        );
+        query.setParameter("classId", classId);
+        query.setParameter("studentId", studentId);
+        query.setParameter("sessionDate", sessionDate);
+        return query.getSingleResult();
+    }
+
     public List<AttendanceRosterItemDTO> findRosterForSession(EntityManager em, Long sessionId, Long classId, LocalDate sessionDate) {
-        // 1. Lấy danh sách học viên có Enrollment hợp lệ
+        // 1. Lấy danh sách học viên có Enrollment hiệu lực vào ngày buổi học diễn ra
         TypedQuery<Student> query = em.createQuery(
                 "SELECT DISTINCT e.student FROM Enrollment e " +
                 "WHERE e.eduClass.id = :classId " +
-                "AND e.status IN ('ACTIVE', 'COMPLETED') " +
                 "AND e.startDate <= :sessionDate " +
                 "AND (e.endDate IS NULL OR e.endDate >= :sessionDate) " +
                 "ORDER BY e.student.fullName ASC",
@@ -151,7 +166,7 @@ public class AttendanceRepository {
         );
         query.setParameter("classId", classId);
         query.setParameter("sessionDate", sessionDate);
-        List<Student> students = query.getResultList();
+        List<Student> students = new ArrayList<>(query.getResultList());
 
         // 2. Lấy điểm danh hiện có của buổi học
         TypedQuery<Attendance> attQuery = em.createQuery(
@@ -162,6 +177,14 @@ public class AttendanceRepository {
         );
         attQuery.setParameter("sessionId", sessionId);
         List<Attendance> attendances = attQuery.getResultList();
+
+        // B05: Đảm bảo học viên đã có bản ghi điểm danh trong quá khứ không bị mất khỏi danh sách
+        for (Attendance a : attendances) {
+            if (students.stream().noneMatch(s -> s.getId().equals(a.getStudent().getId()))) {
+                students.add(a.getStudent());
+            }
+        }
+        students.sort(Comparator.comparing(Student::getFullName, String.CASE_INSENSITIVE_ORDER));
 
         List<AttendanceRosterItemDTO> roster = new ArrayList<>();
         for (Student s : students) {

@@ -9,6 +9,7 @@
 
   /* Surfaces & Backgrounds */
   --bg: #F8FAFC;
+  --bg-alt: #F1F5F9;
   --surface: #FFFFFF;
   --surface-muted: #F1F5F9;
   --surface-hover: #EAF0F8;
@@ -27,6 +28,10 @@
   --primary-hover: #1D4ED8;
   --primary-subtle: #EFF6FF;
   --primary-border: #BFDBFE;
+
+  --info: #0284C7;
+  --info-subtle: #F0F9FF;
+  --info-border: #BAE6FD;
 
   --success: #15803D;
   --success-subtle: #F0FDF4;
@@ -53,6 +58,7 @@
   --button-secondary-border: #E2E8F0;
 
   /* Radii */
+  --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 10px;
@@ -89,6 +95,7 @@ html[data-theme="dark"] {
 
   /* Surfaces & Backgrounds */
   --bg: #0B1120;
+  --bg-alt: #182234;
   --surface: #111827;
   --surface-muted: #182234;
   --surface-hover: #223047;
@@ -107,6 +114,10 @@ html[data-theme="dark"] {
   --primary-hover: #93C5FD;
   --primary-subtle: #1E293B;
   --primary-border: #2563EB;
+
+  --info: #38BDF8;
+  --info-subtle: #082F49;
+  --info-border: #0284C7;
 
   --success: #4ADE80;
   --success-subtle: #064E3B;

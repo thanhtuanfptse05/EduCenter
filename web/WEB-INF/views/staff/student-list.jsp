@@ -635,7 +635,19 @@
                                                             <circle cx="12" cy="12" r="3"></circle>
                                                         </svg>
                                                     </a>
-                                                    <button type="button" class="btn-icon" title="Sửa thông tin nhanh" onclick='editStudent(${s.id}, "${s.fullName}", "${s.dob}", "${s.gender}", "${s.phone}", "${s.email}", "${s.school}", ${s.gradeLevel}, "${s.targetGoal}", "${s.status}", "${s.userId}")'>
+                                                    <button type="button" class="btn-icon" title="Sửa thông tin nhanh"
+                                                            data-id="${s.id}"
+                                                            data-fullname="<c:out value='${s.fullName}'/>"
+                                                            data-dob="<c:out value='${s.dob}'/>"
+                                                            data-gender="<c:out value='${s.gender}'/>"
+                                                            data-phone="<c:out value='${s.phone}'/>"
+                                                            data-email="<c:out value='${s.email}'/>"
+                                                            data-school="<c:out value='${s.school}'/>"
+                                                            data-grade="<c:out value='${s.gradeLevel}'/>"
+                                                            data-goal="<c:out value='${s.targetGoal}'/>"
+                                                            data-status="<c:out value='${s.status}'/>"
+                                                            data-userid="<c:out value='${s.userId}'/>"
+                                                            onclick="editStudentFromBtn(this)">
                                                         <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                                             <path d="M12 20h9"></path>
                                                             <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
@@ -852,6 +864,23 @@ function openStudentModal() {
     document.getElementById('formUserId').value = '';
     document.getElementById('btnSaveStudent').innerText = 'Tạo học viên';
     document.getElementById('studentModal').classList.add('active');
+}
+
+function editStudentFromBtn(btn) {
+    if (!btn) return;
+    editStudent(
+        btn.getAttribute('data-id'),
+        btn.getAttribute('data-fullname'),
+        btn.getAttribute('data-dob'),
+        btn.getAttribute('data-gender'),
+        btn.getAttribute('data-phone'),
+        btn.getAttribute('data-email'),
+        btn.getAttribute('data-school'),
+        btn.getAttribute('data-grade'),
+        btn.getAttribute('data-goal'),
+        btn.getAttribute('data-status'),
+        btn.getAttribute('data-userid')
+    );
 }
 
 function editStudent(id, fullName, dob, gender, phone, email, school, grade, goal, status, userId) {

@@ -319,7 +319,11 @@
                                                 <c:if test="${item.status == 'ACTIVE'}">
                                                     <!-- Nút Chuyển lớp -->
                                                     <button type="button" class="btn btn-ghost btn-sm" title="Chuyển lớp cho học viên"
-                                                            onclick="openTransferModal('${item.enrollmentId}', '${item.studentName}', '${item.classId}', '${item.className}')">
+                                                            data-id="${item.enrollmentId}"
+                                                            data-student-name="<c:out value='${item.studentName}'/>"
+                                                            data-class-id="${item.classId}"
+                                                            data-class-name="<c:out value='${item.className}'/>"
+                                                            onclick="openTransferModalFromBtn(this)">
                                                         <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                                             <path d="m16 3 4 4-4 4"></path>
                                                             <path d="M20 7H4"></path>
@@ -329,7 +333,10 @@
                                                     </button>
                                                     <!-- Nút Bảo lưu -->
                                                     <button type="button" class="btn btn-ghost btn-sm" title="Bảo lưu học tập"
-                                                            onclick="openReserveModal('${item.enrollmentId}', '${item.studentName}', '${item.className}')">
+                                                            data-id="${item.enrollmentId}"
+                                                            data-student-name="<c:out value='${item.studentName}'/>"
+                                                            data-class-name="<c:out value='${item.className}'/>"
+                                                            onclick="openReserveModalFromBtn(this)">
                                                         <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                                             <circle cx="12" cy="12" r="10"></circle>
                                                             <polyline points="12 6 12 12 16 14"></polyline>
@@ -337,7 +344,10 @@
                                                     </button>
                                                     <!-- Nút Thôi học -->
                                                     <button type="button" class="btn btn-ghost btn-sm" style="color: var(--danger);" title="Thôi học / Rút hồ sơ"
-                                                            onclick="openDropModal('${item.enrollmentId}', '${item.studentName}', '${item.className}')">
+                                                            data-id="${item.enrollmentId}"
+                                                            data-student-name="<c:out value='${item.studentName}'/>"
+                                                            data-class-name="<c:out value='${item.className}'/>"
+                                                            onclick="openDropModalFromBtn(this)">
                                                         <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                                             <circle cx="12" cy="12" r="10"></circle>
                                                             <line x1="15" y1="9" x2="9" y2="15"></line>
@@ -348,7 +358,9 @@
 
                                                 <c:if test="${item.status == 'RESERVED'}">
                                                     <!-- Nút Phục hồi học tập -->
-                                                    <form action="${pageContext.request.contextPath}/staff/enrollments/resume" method="post" style="display: inline;" onsubmit="return confirm('Xác nhận phục hồi học tập cho học viên ${item.studentName}? (Sẽ kiểm tra sĩ số lớp)');">
+                                                    <form action="${pageContext.request.contextPath}/staff/enrollments/resume" method="post" style="display: inline;"
+                                                          data-student-name="<c:out value='${item.studentName}'/>"
+                                                          onsubmit="return confirm('Xác nhận phục hồi học tập cho học viên ' + this.getAttribute('data-student-name') + '? (Sẽ kiểm tra sĩ số lớp)');">
                                                         <input type="hidden" name="enrollmentId" value="${item.enrollmentId}">
                                                         <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--success);" title="Quay lại học">
                                                             <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
@@ -606,6 +618,34 @@
         if (startDate && startDate !== "") {
             document.getElementById('enrollStartDate').value = startDate;
         }
+    }
+
+    function openTransferModalFromBtn(btn) {
+        if (!btn) return;
+        openTransferModal(
+            btn.getAttribute('data-id'),
+            btn.getAttribute('data-student-name'),
+            btn.getAttribute('data-class-id'),
+            btn.getAttribute('data-class-name')
+        );
+    }
+
+    function openReserveModalFromBtn(btn) {
+        if (!btn) return;
+        openReserveModal(
+            btn.getAttribute('data-id'),
+            btn.getAttribute('data-student-name'),
+            btn.getAttribute('data-class-name')
+        );
+    }
+
+    function openDropModalFromBtn(btn) {
+        if (!btn) return;
+        openDropModal(
+            btn.getAttribute('data-id'),
+            btn.getAttribute('data-student-name'),
+            btn.getAttribute('data-class-name')
+        );
     }
 
     function openTransferModal(id, studentName, classId, className) {

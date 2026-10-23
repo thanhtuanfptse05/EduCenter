@@ -154,8 +154,11 @@ public class EnrollmentRepository {
     }
 
     public boolean hasScheduleConflict(EntityManager em, Long studentId, Long newClassId) {
-        // Kiểm tra xem có buổi học nào trong tương lai của lớp mới trùng ngày và thời gian với các lớp ACTIVE khác của học sinh không
-        TypedQuery<Long> query = em.createQuery(
+        return hasScheduleConflictExcludingClass(em, studentId, newClassId, null);
+    }
+
+    public boolean hasScheduleConflictExcludingClass(EntityManager em, Long studentId, Long newClassId, Long excludeClassId) {
+        StringBuilder jpql = new StringBuilder(
                 "SELECT COUNT(s1) FROM ClassSession s1, ClassSession s2 " +
                 "JOIN s2.eduClass c2 " +
                 "JOIN Enrollment e ON e.eduClass.id = c2.id " +
@@ -166,12 +169,19 @@ public class EnrollmentRepository {
                 "AND s1.sessionDate = s2.sessionDate " +
                 "AND s1.sessionDate >= :today " +
                 "AND s1.startAt < s2.endAt AND s1.endAt > s2.startAt " +
-                "AND s1.status != 'CANCELLED' AND s2.status != 'CANCELLED'",
-                Long.class
+                "AND s1.status != 'CANCELLED' AND s2.status != 'CANCELLED' "
         );
+        if (excludeClassId != null && excludeClassId > 0) {
+            jpql.append("AND e.eduClass.id != :excludeClassId ");
+        }
+
+        TypedQuery<Long> query = em.createQuery(jpql.toString(), Long.class);
         query.setParameter("newClassId", newClassId);
         query.setParameter("studentId", studentId);
         query.setParameter("today", LocalDate.now());
+        if (excludeClassId != null && excludeClassId > 0) {
+            query.setParameter("excludeClassId", excludeClassId);
+        }
         return query.getSingleResult() > 0;
     }
 

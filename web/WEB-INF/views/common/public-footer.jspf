@@ -131,9 +131,10 @@
           Hỗ trợ &amp; Pháp lý
         </h3>
         <ul>
-          <li><a href="${pageContext.request.contextPath}/#">Quy chế đào tạo &amp; Đánh giá định kỳ</a></li>
-          <li><a href="${pageContext.request.contextPath}/#">Chính sách bảo mật dữ liệu học tập</a></li>
-          <li><a href="${pageContext.request.contextPath}/#">Quy định hoàn trả học phí &amp; Bảo lưu</a></li>
+          <li><a href="${pageContext.request.contextPath}/terms">Quy chế đào tạo &amp; Đánh giá định kỳ</a></li>
+          <li><a href="${pageContext.request.contextPath}/privacy">Chính sách bảo mật dữ liệu học tập</a></li>
+          <li><a href="${pageContext.request.contextPath}/refund-policy">Quy định hoàn trả học phí &amp; Bảo lưu</a></li>
+          <li><a href="${pageContext.request.contextPath}/support">Trung tâm hỗ trợ &amp; Liên hệ</a></li>
           <li><a href="${pageContext.request.contextPath}/login">Cổng xác thực &amp; Tài khoản</a></li>
           <li><a href="${pageContext.request.contextPath}/forgot-password">Khôi phục mật khẩu tài khoản</a></li>
         </ul>
@@ -150,9 +151,10 @@
         <span>Cụm máy chủ EduCenter: Hoạt động bình thường (99.98% Uptime)</span>
       </div>
       <div class="site-footer-bottom-links">
-        <a href="${pageContext.request.contextPath}/#">Quy chế đào tạo</a>
-        <a href="${pageContext.request.contextPath}/#">Chính sách bảo mật</a>
-        <a href="${pageContext.request.contextPath}/#">Hỗ trợ kỹ thuật</a>
+        <a href="${pageContext.request.contextPath}/terms">Quy chế đào tạo</a>
+        <a href="${pageContext.request.contextPath}/privacy">Chính sách bảo mật</a>
+        <a href="${pageContext.request.contextPath}/refund-policy">Hoàn phí &amp; Bảo lưu</a>
+        <a href="${pageContext.request.contextPath}/support">Hỗ trợ kỹ thuật</a>
       </div>
     </div>
   </div>

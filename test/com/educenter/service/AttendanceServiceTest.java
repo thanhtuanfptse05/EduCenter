@@ -84,12 +84,65 @@ public class AttendanceServiceTest {
             this.journal = j;
             if (j.getId() == null) j.setId(1L);
         }
+
+        @Override
+        public long countValidEnrollmentForStudent(EntityManager em, Long classId, Long studentId, LocalDate sessionDate) {
+            return (studentId != null && (studentId.equals(1L) || studentId.equals(2L))) ? 1L : 0L;
+        }
+    }
+
+    static class StubEntityTransaction implements jakarta.persistence.EntityTransaction {
+        boolean active = false;
+        @Override public void begin() { active = true; }
+        @Override public void commit() { active = false; }
+        @Override public void rollback() { active = false; }
+        @Override public void setRollbackOnly() {}
+        @Override public boolean getRollbackOnly() { return false; }
+        @Override public boolean isActive() { return active; }
+    }
+
+    private EntityManager createStubEntityManager(Student s1, Student s2, User u) {
+        final StubEntityTransaction tx = new StubEntityTransaction();
+        return (EntityManager) java.lang.reflect.Proxy.newProxyInstance(
+                EntityManager.class.getClassLoader(),
+                new Class<?>[]{EntityManager.class},
+                (proxy, method, args) -> {
+                    String name = method.getName();
+                    if ("getTransaction".equals(name)) return tx;
+                    if ("find".equals(name) && args != null && args.length >= 2) {
+                        Class<?> clazz = (Class<?>) args[0];
+                        Object id = args[1];
+                        if (User.class.equals(clazz)) return u;
+                        if (Student.class.equals(clazz)) {
+                            if (Long.valueOf(1L).equals(id)) return s1;
+                            if (Long.valueOf(2L).equals(id)) return s2;
+                        }
+                    }
+                    if ("merge".equals(name) && args != null && args.length > 0) return args[0];
+                    if ("isOpen".equals(name)) return true;
+                    return null;
+                }
+        );
     }
 
     @BeforeEach
     void setUp() {
         mockRepo = new MockAttendanceRepository();
-        attendanceService = new AttendanceServiceImpl(mockRepo);
+
+        Student s1 = new Student();
+        s1.setId(1L);
+        s1.setFullName("Học sinh 1");
+
+        Student s2 = new Student();
+        s2.setId(2L);
+        s2.setFullName("Học sinh 2");
+
+        User u = new User();
+        u.setId(50L);
+        u.setFullName("Thầy Nguyễn Văn A");
+
+        EntityManager stubEm = createStubEntityManager(s1, s2, u);
+        attendanceService = new AttendanceServiceImpl(mockRepo, () -> stubEm);
 
         // Tạo mock session
         ClassSession s = new ClassSession();
@@ -115,9 +168,6 @@ public class AttendanceServiceTest {
 
         Teacher t = new Teacher();
         t.setId(5L);
-        User u = new User();
-        u.setId(50L);
-        u.setFullName("Thầy Nguyễn Văn A");
         t.setUser(u);
         s.setTeacher(t);
 
@@ -181,5 +231,28 @@ public class AttendanceServiceTest {
         assertNotNull(dto);
         assertEquals("Ôn tập phương trình bậc hai", dto.getContent());
         assertEquals("Bài 1 đến 5 trang 42 SGK", dto.getHomework());
+    }
+
+    @Test
+    @DisplayName("B01: Chặn lưu điểm danh cho học sinh không thuộc lớp")
+    void testSaveAttendance_StudentNotInClass_Blocked() {
+        List<AttendanceRosterItemDTO> roster = new ArrayList<>();
+        roster.add(new AttendanceRosterItemDTO(999L, "HV0999", "Học sinh Ngoài", "0999999999", "PRESENT", ""));
+
+        assertThrows(ValidationException.class, () -> {
+            attendanceService.saveAttendance(10L, roster, 50L, false);
+        });
+    }
+
+    @Test
+    @DisplayName("FR-002: Lưu điểm danh thành công cho học sinh hợp lệ")
+    void testSaveAttendance_ValidStudents_Success() {
+        List<AttendanceRosterItemDTO> roster = new ArrayList<>();
+        roster.add(new AttendanceRosterItemDTO(1L, "HV0001", "Học sinh 1", "0912345678", "PRESENT", ""));
+
+        assertDoesNotThrow(() -> {
+            attendanceService.saveAttendance(10L, roster, 50L, false);
+        });
+        assertEquals(1, mockRepo.attendances.size());
     }
 }

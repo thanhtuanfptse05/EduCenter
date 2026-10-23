@@ -559,7 +559,16 @@
                                             </td>
                                             <td style="text-align: right;">
                                                 <div class="action-btns">
-                                                    <button type="button" class="btn-icon" title="Sửa thông tin phụ huynh" onclick='editGuardian(${g.id}, ${g.userId}, "${g.fullName}", "${g.phone}", "${g.email}", "${g.occupation}", "${g.address}", "${g.status}")'>
+                                                    <button type="button" class="btn-icon" title="Sửa thông tin phụ huynh"
+                                                            data-id="${g.id}"
+                                                            data-userid="${g.userId}"
+                                                            data-fullname="<c:out value='${g.fullName}'/>"
+                                                            data-phone="<c:out value='${g.phone}'/>"
+                                                            data-email="<c:out value='${g.email}'/>"
+                                                            data-occupation="<c:out value='${g.occupation}'/>"
+                                                            data-address="<c:out value='${g.address}'/>"
+                                                            data-status="<c:out value='${g.status}'/>"
+                                                            onclick="editGuardianFromBtn(this)">
                                                         <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                                             <path d="M12 20h9"></path>
                                                             <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
@@ -761,6 +770,20 @@ function openGuardianModal() {
     document.getElementById('formStatus').value = 'ACTIVE';
     document.getElementById('btnSaveGuardian').innerText = 'Tạo phụ huynh';
     document.getElementById('guardianModal').classList.add('active');
+}
+
+function editGuardianFromBtn(btn) {
+    if (!btn) return;
+    editGuardian(
+        btn.getAttribute('data-id'),
+        btn.getAttribute('data-userid'),
+        btn.getAttribute('data-fullname'),
+        btn.getAttribute('data-phone'),
+        btn.getAttribute('data-email'),
+        btn.getAttribute('data-occupation'),
+        btn.getAttribute('data-address'),
+        btn.getAttribute('data-status')
+    );
 }
 
 function editGuardian(id, userId, fullName, phone, email, occupation, address, status) {
