@@ -25,4 +25,21 @@ public class AuditLogRepository {
         query.setMaxResults(Math.max(1, limit));
         return query.getResultList();
     }
+
+    public List<AuditLog> findRecentLogs(EntityManager em, int limit) {
+        TypedQuery<AuditLog> query = em.createQuery(
+                "SELECT a FROM AuditLog a ORDER BY a.createdAt DESC",
+                AuditLog.class
+        );
+        query.setMaxResults(Math.max(1, limit));
+        return query.getResultList();
+    }
+
+    public long countLogs(EntityManager em) {
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(a) FROM AuditLog a",
+                Long.class
+        );
+        return query.getSingleResult();
+    }
 }

@@ -1,9 +1,7 @@
 package com.educenter.controller;
 
 import com.educenter.dto.*;
-import com.educenter.service.ValidationException;
-import com.educenter.service.CartService;
-import com.educenter.service.CartServiceImpl;
+import com.educenter.service.*;
 import com.educenter.util.CsrfUtil;
 import com.educenter.util.FlashMessageUtil;
 import jakarta.servlet.ServletException;
@@ -26,14 +24,20 @@ import java.util.Arrays;
 public class RegistrationCartServlet extends HttpServlet {
 
     private CartService cartService;
+    private SystemSettingService systemSettingService;
 
     @Override
     public void init() throws ServletException {
         this.cartService = new CartServiceImpl();
+        this.systemSettingService = new SystemSettingServiceImpl();
     }
 
     public void setCartService(CartService cartService) {
         this.cartService = cartService;
+    }
+
+    public void setSystemSettingService(SystemSettingService systemSettingService) {
+        this.systemSettingService = systemSettingService;
     }
 
     @Override
@@ -54,6 +58,11 @@ public class RegistrationCartServlet extends HttpServlet {
         req.setAttribute("cartCount", cart.getTotalCourses());
 
         if ("/registration/confirm".equals(path)) {
+            if (!systemSettingService.isAdmissionsOpen()) {
+                FlashMessageUtil.setWarning(req, "Hiện tại trung tâm đang tạm dừng tiếp nhận đơn đăng ký mới. Quý khách vui lòng liên hệ hotline để được hỗ trợ.");
+                resp.sendRedirect(req.getContextPath() + "/registration-cart");
+                return;
+            }
             if (cart.isEmpty()) {
                 FlashMessageUtil.setWarning(req, "Danh sách đăng ký đang trống. Vui lòng chọn ít nhất 1 khóa học.");
                 resp.sendRedirect(req.getContextPath() + "/registration-cart");
@@ -164,6 +173,12 @@ public class RegistrationCartServlet extends HttpServlet {
     }
 
     private void handleConfirmRegistration(HttpServletRequest req, HttpServletResponse resp, HttpSession session, Long userId) throws IOException {
+        if (!systemSettingService.isAdmissionsOpen()) {
+            FlashMessageUtil.setWarning(req, "Hiện tại trung tâm đang tạm dừng tiếp nhận đơn đăng ký mới. Quý khách vui lòng liên hệ hotline để được hỗ trợ.");
+            resp.sendRedirect(req.getContextPath() + "/registration-cart");
+            return;
+        }
+
         RegistrationCheckoutDTO checkout = new RegistrationCheckoutDTO();
         checkout.setFullName(req.getParameter("fullName"));
         checkout.setPhoneNumber(req.getParameter("phoneNumber"));
