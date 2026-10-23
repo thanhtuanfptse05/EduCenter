@@ -389,7 +389,19 @@
                                 <!-- Card 5 -->
                                 <div class="milestone-dark-card">
                                     <div class="milestone-icon-top">
-                                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.8                <!-- SECTION 03A: HÀNH TRÌNH BỨT PHÁ NĂNG LỰC & CHINH PHỤC ĐẠI HỌC (ASCENDING ROADMAP PATHWAY) -->
+                                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="milestone-num-val">1.200+</div>
+                                        <p class="milestone-label-main">Học sinh đạt điểm 9-10 và thủ khoa các kỳ thi THPT &amp; ĐGNL.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 03A: HÀNH TRÌNH BỨT PHÁ NĂNG LỰC & CHINH PHỤC ĐẠI HỌC (ASCENDING ROADMAP PATHWAY) -->
                 <section class="roadmap-section" id="lo-trinh-hoc-tap">
                     <div class="portal-container">
                         <div class="section-head text-center">
