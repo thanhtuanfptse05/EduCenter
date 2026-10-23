@@ -43,6 +43,27 @@
           if (roleInput) {
             roleInput.value = role;
           }
+
+          var gradeLabel = document.getElementById('grade-label');
+          var gradeSelect = document.getElementById('grade');
+          if (role === 'PARENT') {
+            if (gradeLabel) gradeLabel.innerHTML = 'Khối lớp của con <span style="color:var(--danger)">*</span>';
+            if (gradeSelect) {
+              gradeSelect.innerHTML = '<option value="" disabled selected>Chọn khối lớp của con</option>' +
+                '<option value="k10">Con đang học Khối 10 THPT</option>' +
+                '<option value="k11">Con đang học Khối 11 THPT</option>' +
+                '<option value="k12">Con đang học Khối 12 THPT (Thi TN & ĐH)</option>';
+            }
+          } else {
+            if (gradeLabel) gradeLabel.innerHTML = 'Khối lớp quan tâm <span style="color:var(--danger)">*</span>';
+            if (gradeSelect) {
+              gradeSelect.innerHTML = '<option value="" disabled selected>Chọn khối lớp đào tạo</option>' +
+                '<option value="k10">Khối 10 (Chương trình GDPT 2018)</option>' +
+                '<option value="k11">Khối 11 (Chuyên đề nâng cao & ĐGNL sớm)</option>' +
+                '<option value="k12">Khối 12 (Tổng ôn tốt nghiệp & Tuyển sinh ĐH)</option>' +
+                '<option value="dgnl">Luyện thi Đánh Giá Năng Lực (ĐHQG / ĐHBK)</option>';
+            }
+          }
         });
       });
     }
@@ -219,6 +240,15 @@
           var tokenBadge = document.getElementById('token-valid-badge');
           if (tokenBadge) {
             tokenBadge.innerHTML = '<span style="color: var(--danger); font-weight: 700;">TOKEN HẾT HẠN</span>';
+          }
+          var expiredCard = document.getElementById('token-expired-card');
+          var resetForm = document.getElementById('reset-password-form') || document.querySelector('[data-reset-form]');
+          if (expiredCard) {
+            expiredCard.style.display = 'flex';
+          }
+          if (resetForm) {
+            resetForm.style.opacity = '0.35';
+            resetForm.style.pointerEvents = 'none';
           }
           return;
         }

@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/base.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/public-shell.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/screens.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/auth.css">
 <script defer src="${pageContext.request.contextPath}/assets/js/theme.js"></script>
 <script defer src="${pageContext.request.contextPath}/assets/js/auth.js"></script>
 <script defer src="${pageContext.request.contextPath}/assets/js/public-shell.js"></script>
