@@ -4,6 +4,21 @@
 
 ---
 
+
+## Baseline đặc tả đầy đủ — 2026-10-23
+
+[Danh mục chung](../../README.md), [hợp đồng dữ liệu](../../data-contract.md), [tích hợp/quyền](../../integration.md), [screen-map chuẩn](../../screen-map.md) và [thứ tự code](../../implementation-order.md) áp dụng cho mọi feature bên dưới. Các tên Controller trong tài liệu module là hợp đồng logic đề xuất, cần đối chiếu code hiện hữu khi plan; không tạo Controller/route trùng. Danh sách này mô tả phạm vi, không chứng nhận đã implement.
+
+| Feature | Spec | UC liên quan |
+|---|---|---|
+| feat-academic-programs | [Quản lý môn học và chương trình/khóa học](feat-academic-programs/spec.md) | UC11 |
+| feat-teacher-management | [Hồ sơ giáo viên và quyền phân công](feat-teacher-management/spec.md) | UC12 |
+| feat-class-timetable | [Lớp học, phòng học và lịch giảng dạy](feat-class-timetable/spec.md) | UC15, UC16, UC19, UC34 |
+| feat-attendance-journal | [Điểm danh và nhật ký giảng dạy](feat-attendance-journal/spec.md) | UC20, UC21 |
+| feat-assessment-progress | [Bài kiểm tra, công bố điểm và tiến bộ](feat-assessment-progress/spec.md) | UC22, UC23, UC24, UC33 |
+
+Không tự định nghĩa lại công thức, trạng thái, quyền hoặc transaction khác hợp đồng chung. P1 được ghi rõ trong feature, không bỏ qua khi viết spec.
+
 ## 1. PHẠM VI NGHIỆP VỤ (SCOPE)
 * **M04 – Academic Programs & Courses:** Quản lý môn học (`Subjects`), khóa học (`Courses`), phân cấp khối 6-12, định mức học phí, số buổi học.
 * **M05 – Class & Timetable Management:** Tạo và quản lý lớp học (`Classes`), xếp giáo viên chính, phân bổ phòng (`Rooms`), sinh lịch định kỳ thành các buổi học (`ClassSessions`). Kiểm tra xung đột lịch:

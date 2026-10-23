@@ -1,4 +1,6 @@
 # TÀI LIỆU THIẾT KẾ CƠ SỞ DỮ LIỆU EDUCENTER (SQL SERVER)
+
+> Tài liệu này mô tả schema nền đã có. [Hợp đồng dữ liệu baseline2026-10-23](../../.sdd/specs/data-contract.md) chỉ rõ mô hình đích, các cột/6 bảng hỗ trợ còn cần migration, công thức tài chính và lịch sử membership. Không coi30 bảng đề xuất là bằng chứng schema đã đáp ứng đủ mọi feature; đợt viết spec chưa chạy migration hoặc cập nhật ERD triển khai.
 **Dự án:** EduCenter – Tutoring & Exam Preparation Management System  
 **Hệ Quản Trị CSDL:** Microsoft SQL Server (2019 / 2022)  
 **Tương thích ORM:** Jakarta Persistence (JPA 3.1) + Hibernate ORM (Tomcat 10.1, Java 17)  

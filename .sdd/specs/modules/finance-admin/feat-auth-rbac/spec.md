@@ -1,245 +1,119 @@
-# Feature: Authentication & Role-Based Access Control (feat-auth-rbac) — SPECIFICATION
-**Status:** Approved / Locked | **Version:** 1.1.0 | **Date:** 2026-10-22
-**Module ID:** `MOD-FINANCE-ADMIN` (M02 – Authentication & Account Management, M12 – User Administration)
-**Author / Owner:** Member 03 (Finance & Infrastructure)
-**Inherits From:**
-- Layer 1: `.sdd/constitution.md` (Article 1, Article 2 SEC-01, SEC-02)
-- Layer 2: `.sdd/specs/modules/finance-admin/module.md`
-- Constraints: `.sdd/constraints/global.md`, `.sdd/constraints/safety.md`, `.sdd/constraints/business.md` (BR01, BR02, BR18)
-- UI/UX Standard: `design.md` (Default Light mode, Design Tokens, Lucide SVG outline icons, No Tailwind CDN)
+# Feature Specification: Xác thực, hồ sơ và quản lý tài khoản
 
----
+**Feature:** `feat-auth-rbac` | **Module SRS:** M02, M12 | **Owner:** Member 03
+**Created/Updated:** 2026-10-23 | **Version:** 2.0.0 | **Status:** Locked — baseline đặc tả nội bộ theo yêu cầu chủ dự án.
+**Implementation:** Có code nền auth/RBAC; phiên bản 2.0 cần plan/tasks và nghiệm thu lại các thay đổi, không coi checklist cũ là bằng chứng đạt.
+**Nguồn:** SRS v1.1 II, III M02/M12, V UC01–05, VI BR01/02/18, VIII AUTH-01–05, ADM-18; **Use cases:** UC01, UC02, UC03, UC04, UC05.
 
-## 1. Business Context & Goal
+Kế thừa [quyết định chung](../../../decisions.md), [quality gates](../../../quality-gates.md), [hợp đồng dữ liệu](../../../data-contract.md), [tích hợp](../../../integration.md), [màn hình](../../../screen-map.md) và [module](../module.md). FR/SC là mã cục bộ của feature này. Locked không thay thế phê duyệt khách hàng/giảng viên.
 
-### Approved repair amendment — 2026-10-23
+## Business Context & Scope
 
-The owner-approved [portal/cart repair](../../admission/feat-portal-cart-repair/spec.md) controls current corrections. Preserve direct reset-link display and profile 2FA/device demonstration content as explicitly excluded. Repair credential-session invalidation, token status/time, safe redirects, last-admin serialization, admin forms and contextual escaping. No 30-day remember-me behavior is promised. MVP has five roles, ADMIN combining manager/admin. Initial task checkmarks do not certify all supplemental requirements.
+Định danh, phân quyền và hồ sơ là nền tảng bảo vệ toàn hệ thống. Spec này hợp nhất nội dung cũ và các clarification, thay thế các đoạn mâu thuẫn trước đó.
 
-* **Why:** Mọi hoạt động trong EduCenter (tiếp nhận Lead, tư vấn, xếp lớp, điểm danh, nhập điểm, thanh toán học phí) đều gắn liền với danh tính và vai trò của người thực hiện. Tính năng này thiết lập hạ tầng định danh, bảo mật phiên làm việc và phân quyền đa cấp bậc.
-* **Mục tiêu Assignment PRJ301:** Đáp ứng trọn vẹn **Mục 3.1 – Xác thực người dùng (1,0 điểm)** với đầy đủ 5 chức năng bắt buộc:
-  1. Đăng ký tài khoản (`/register`)
-  2. Đăng nhập / Đăng xuất (`/login`, `/logout`)
-  3. Quên / Đặt lại mật khẩu (`/forgot-password`, `/reset-password`)
-  4. Cập nhật hồ sơ tài khoản và đổi mật khẩu (`/profile`)
-  5. Quản lý vai trò và phân quyền theo 5 vai trò chuẩn (gộp Admin & Manager theo MVP SRS v1.1) tại `/admin/users`
-* **Impact:** Tác động trực tiếp lên toàn bộ 12 module của hệ thống. Kiểm soát toàn bộ lưu lượng truy cập qua bộ lọc `AuthenticationFilter` và `RoleFilter`.
+**Trong phạm vi:** Đăng ký Student/Parent, login/logout, khôi phục/đổi mật khẩu, hồ sơ, ADMIN tạo/quản lý User/role/status, phiên/CSRF và lỗi truy cập.
 
----
+**Ngoài phạm vi:** OAuth, 2FA, remember-me dài ngày, quản lý thiết bị giả, tự đăng ký Teacher/Staff/Admin hoặc tự nhận quan hệ giám hộ.
 
-## 2. User Personas & Roles
+**Actors & Permissions:** Guest đăng ký/khôi phục; User ACTIVE thao tác cá nhân; ADMIN quản trị tài khoản. D01 ánh xạ 6 trách nhiệm SRS thành 5 mã role MVP, không bỏ trách nhiệm Manager.
 
-> **Quy ước định danh MVP:** Vai trò **System Admin** và **Center Manager** được gộp làm **1 vai trò duy nhất (`ADMIN`)** để tinh gọn vận hành theo đúng định hướng SRS v1.1 (Mục II: *"Trong MVP, quyền System Admin có thể gộp với quản trị trung tâm"*).
+## User Scenarios & Testing
 
-| Vai trò (Role) | Mã Code | Quyền hạn & Không gian truy cập | Cơ chế cấp tài khoản |
+### User Story 1 — Đăng ký và đăng nhập (Priority: P0)
+
+Là Guest, tôi muốn đăng ký đúng vai trò và đăng nhập để sử dụng cổng cá nhân.
+
+**Giá trị/ưu tiên:** Tiền đề mọi UC bảo vệ.
+
+**Independent Test:** Đăng ký Student/Parent, login/logout rồi kiểm tra tài khoản bị khóa.
+
+**Acceptance Scenarios:**
+1. Given email mới và mật khẩu hợp lệ, When đăng ký, Then một User ACTIVE chỉ có STUDENT/PARENT đã chọn.
+2. Given login hợp lệ, When xác thực xong, Then đổi session ID, vào dashboard đúng role; POST logout hủy phiên.
+
+### User Story 2 — Khôi phục và hồ sơ (Priority: P0)
+
+Là User, tôi muốn đổi hồ sơ/mật khẩu hoặc khôi phục an toàn để giữ quyền truy cập.
+
+**Giá trị/ưu tiên:** Đủ UC03/04, không công khai token.
+
+**Independent Test:** Xin reset qua SMTP, dùng token, thử dùng lại và thử phiên cũ.
+
+**Acceptance Scenarios:**
+1. Given email có/không/khóa, When xin reset, Then cùng thông báo công khai, không hiện reset link.
+2. Given token hợp lệ chưa dùng trong 30 phút, When đổi mật khẩu, Then token bị tiêu thụ, phiên cũ vô hiệu và replay bị từ chối.
+
+### User Story 3 — Quản trị và cô lập quyền (Priority: P0)
+
+Là ADMIN, tôi muốn cấp/thu hồi tài khoản nội bộ để bảo vệ trung tâm.
+
+**Giá trị/ưu tiên:** Đủ UC05 và BR02/18.
+
+**Independent Test:** Tạo Teacher nội bộ, đổi role/status rồi thử tước ADMIN cuối cùng.
+
+**Acceptance Scenarios:**
+1. Given ADMIN có quyền, When đổi role/status, Then audit có before/after và phiên đích được kiểm tra lại request kế tiếp.
+2. Given chỉ còn một ACTIVE ADMIN, When hai request cùng khóa/tước quyền, Then luôn còn ít nhất một ACTIVE ADMIN.
+
+### Edge Cases
+
+- Email hoa/thường/khoảng trắng, trùng đồng thời; mật khẩu Unicode vượt 72 UTF-8 bytes.
+- Token sai/hết hạn/đã dùng/yêu cầu mới thay cũ; SMTP chưa cấu hình hoặc gửi lỗi.
+- CSRF sai, session fixation, open redirect, User bị khóa/role đổi sau login.
+- Hai ADMIN cùng thu hồi quyền; form profile gửi role/email/status ngoài phạm vi.
+
+## Requirements
+
+### Functional Requirements
+
+Các yêu cầu áp dụng đồng thời QG01–QG12. Cột nghiệm thu là kết quả bắt buộc khi chạy trường hợp tương ứng; không phải bằng chứng test đã pass.
+
+| ID | Yêu cầu kiểm chứng được | Truy vết nguồn | Nghiệm thu / kết quả quan sát |
 |---|---|---|---|
-| **Guest** | `GUEST` | Xem danh mục khóa học public, gửi yêu cầu tư vấn, đăng ký tài khoản, đăng nhập, quên mật khẩu. | Tự do truy cập |
-| **Admin & Center Manager** | `ADMIN` | **Gộp toàn quyền Quản trị & Điều hành:** Cấu hình hệ thống, quản lý tài khoản, cấp/thu hồi vai trò, khóa/mở tài khoản, phê duyệt, điều hành học vụ, xem toàn bộ báo cáo doanh thu, công nợ và Audit Logs. | **Cấp sẵn trong CSDL** |
-| **Admission & Academic Staff** | `STAFF` | Quản lý Leads, tư vấn CRM, hồ sơ học viên/phụ huynh, ghi danh, xếp lịch, lập hóa đơn, thu học phí. | **Cấp sẵn trong CSDL** |
-| **Teacher / Tutor** | `TEACHER` | Xem lịch giảng dạy, buổi học được phân công, điểm danh, viết nhật ký dạy, tạo bài kiểm tra, nhập điểm. | **Cấp sẵn trong CSDL** |
-| **Student** | `STUDENT` | Xem lịch học cá nhân, kết quả học tập công bố, chuyên cần, tra cứu học phí, gửi câu hỏi Q&A. | Tự đăng ký (`/register`) hoặc cấp sẵn |
-| **Parent / Guardian** | `PARENT` | Theo dõi chuyên cần, điểm số, học phí của con (chỉ học sinh đã được xác thực liên kết giám hộ). | Tự đăng ký (`/register`) hoặc cấp sẵn |
+| FR-001 | THE SYSTEM SHALL chỉ cho tự đăng ký STUDENT/PARENT, chuẩn hóa email trim/lowercase theo Locale.ROOT duy nhất; mật khẩu≥6 ký tự,≤72 UTF-8 bytes, xác nhận trùng, BCrypt cost≥10. | UC01; BR01; SEC-01 | Email trùng đồng thời chỉ một User; gửi role ADMIN/STAFF/TEACHER bị từ chối; không lưu/log mật khẩu thô. |
+| FR-002 | WHEN login thành công, THE SYSTEM SHALL đổi session ID, timeout 30 phút, cookie HttpOnly/cookie-only, CSRF cho mọi POST; chỉ POST /logout hủy phiên. | UC02; QG02 | GET /logout chỉ form xác nhận; không kéo dài 30 ngày; Session cookie Secure khi HTTPS. |
+| FR-003 | THE SYSTEM SHALL đọc lại status/roles/credential version trên mỗi request bảo vệ; đổi/reset mật khẩu làm vô hiệu các phiên cũ; redirect_url chỉ local và được phép. | UC02; BR02 | Khóa/thu quyền có hiệu lực request kế tiếp; external/path ngoài quyền không được redirect. |
+| FR-004 | WHEN khôi phục, THE SYSTEM SHALL trả cùng thông báo cho email tồn tại/không/khóa; token random 32 bytes dùng một lần/30 phút, chỉ lưu SHA-256 hash, gửi SMTP cấu hình, yêu cầu mới vô hiệu token cũ và rate-limit. | UC03; SEC-01; D04 | Không hiển thị/log token/link; thiếu SMTP fail safely với mã sự cố; hết hạn/replay không đổi password. |
+| FR-005 | WHEN cập nhật profile/password, THE SYSTEM SHALL chỉ sửa tên/phone/avatar HTTPS hợp lệ của actor; đổi password kiểm tra cũ và policy; không sửa email/role/status qua profile. | UC03; UC04; BR02 | Password không vào flash/session; lỗi giữ input không nhạy cảm; update nguyên tử. |
+| FR-006 | WHEN ADMIN đổi role/status, THE SYSTEM SHALL kiểm quyền trong transaction, audit và khóa hàng ADMIN cùng target theo thứ tự; không để mất ACTIVE ADMIN cuối cùng. | UC05; BR18 | Thu quyền hai ADMIN đồng thời không khóa cả hệ thống; lỗi audit rollback. |
+| FR-007 | THE SYSTEM SHALL tìm/lọc/page User bằng truy vấn bind, role/status allowlist và giữ bộ lọc; gán ít nhất một trong 5 mã canonical. | UC05; BR02 | Role lạ/tập rỗng bị chặn; actionStatus khác tham số filter status. |
+| FR-008 | THE SYSTEM SHALL hiển thị auth/profile/admin/errors theo shell/design chung, escape output, empty/error state thật; dashboard role chưa có nguồn chỉ hiện điều hướng rõ. | UC01–05; QG03/04/09 | Không demo account, 2FA/device/history giả, link reset hoặc KPI mẫu; home vẫn public sau login. |
+| FR-009 | WHEN ADMIN tạo tài khoản nội bộ, THE SYSTEM SHALL kiểm email/policy, lưu hash, gán role được phép trong cùng transaction và audit; không cho STAFF tự cấp quyền. | UC05; M12 | Tạo/đọc/sửa/khóa tài khoản; password không trả lại sau save hoặc gửi qua URL. |
+| FR-010 | THE SYSTEM SHALL bảo vệ function và từng record bằng Filter+Service, trả 403 trái quyền/404 đối tượng không có, không lộ stacktrace và sinh mã sự cố cho lỗi hệ thống. | BR02; SYS-01/02 | STUDENT không đọc /admin, Teacher không phí, Parent chưa verified không đọc con. |
 
-### Danh Sách Tài Khoản Demo Cấp Sẵn (Mật khẩu chung: `123456`)
-*Phục vụ chấm thi Assignment PRJ301 và kiểm thử toàn diện:*
+### Key Entities
 
-| Vai trò | Email đăng nhập | Mật khẩu mẫu | Tên hiển thị demo |
-|---|---|---|---|
-| **Admin & Manager** | `admin@educenter.vn` | `123456` | Nguyễn Quản Trị |
-| **Staff (Tuyển sinh)** | `staff@educenter.vn` | `123456` | Trần Thu Hà |
-| **Teacher (Toán 12)** | `teacher.hung@educenter.vn` | `123456` | ThS. Lê Mạnh Hùng |
-| **Student (Học viên)** | `student.nam@educenter.vn` | `123456` | Trần Hoàng Nam (Lớp 12) |
-| **Parent (Phụ huynh)** | `parent.tuan@educenter.vn` | `123456` | Trần Quốc Tuấn (Phụ huynh em Nam) |
+- User/Role/UserRole: định danh, 5 mã role MVP, trạng thái và quan hệ nhiều role.
+- PasswordResetToken: hash, hết hạn, tiêu thụ, gắn User; không có link demo.
+- Principal/credential version: định danh phiên phục vụ thu hồi quyền.
+- AuditLog: tạo User, đổi role/status và hành vi trọng yếu.
 
----
+### State & Business Rules
 
-## 3. User Stories
+User ACTIVE/INACTIVE/LOCKED; chỉ ACTIVE đăng nhập. Role: ADMIN, STAFF, TEACHER, STUDENT, PARENT. Thứ tự dashboard khi nhiều role: ADMIN→STAFF→TEACHER→STUDENT→PARENT; redirect local hợp lệ có thể ưu tiên trước dashboard.
 
-### Story 1 (Happy Path - Đăng nhập phân luồng):
-> Là một **Người dùng đã có tài khoản**,
-> Tôi muốn nhập email và mật khẩu tại trang `/login` để đăng nhập vào hệ thống,
-> Để hệ thống xác thực, lưu thông tin vào Session và tự động chuyển hướng tôi về Dashboard tương ứng với vai trò của tôi (Admin -> `/admin/dashboard`, Staff -> `/staff/leads`, Teacher -> `/teacher/dashboard`, Student -> `/student/dashboard`, Parent -> `/parent/dashboard`).
+**Business rules:** BR01, BR02, BR15, BR18. Chi tiết và chủ sở hữu tại traceability.md; không tự định nghĩa lại công thức chung.
 
-### Story 2 (Happy Path - Đăng ký tài khoản):
-> Là một **Khách ghé thăm (Guest)**,
-> Tôi muốn điền form đăng ký gồm Họ tên, Email, Số điện thoại và Mật khẩu tại `/register`,
-> Để tạo tài khoản mới với vai trò mặc định là `STUDENT` (hoặc `PARENT` theo lựa chọn) và được chuyển đến trang đăng nhập với thông báo thành công.
+### UI & Navigation
 
-### Story 3 (Edge/Error Path - Sai mật khẩu hoặc tài khoản bị khóa):
-> Là một **Người dùng đăng nhập không hợp lệ**,
-> Khi tôi nhập sai mật khẩu hoặc tài khoản của tôi đang ở trạng thái `LOCKED`,
-> Tôi muốn nhận được thông báo lỗi rõ ràng trên giao diện, giữ lại email đã nhập và không bị chuyển trang vô cớ.
+**Screens:** AUTH-01, AUTH-02, AUTH-03, AUTH-04, AUTH-05, ADM-18, SYS-01, SYS-02. URL/quyền/GET/POST được quy định ở screen-map.md; mỗi ID có đúng một chủ sở hữu. Auth và errors dùng public shell chung; profile dùng shell theo role. Đăng ký Student/Parent không tự cấp hồ sơ học viên/giám hộ; dữ liệu nghiệp vụ cần liên kết qua STAFF.
 
-### Story 4 (Happy Path - Cập nhật hồ sơ & Đổi mật khẩu):
-> Là một **Người dùng đã đăng nhập**,
-> Tôi muốn vào trang `/profile` để cập nhật họ tên, số điện thoại, ảnh đại diện và đổi mật khẩu mới (yêu cầu xác thực mật khẩu cũ),
-> Để thông tin cá nhân của tôi luôn chính xác và tài khoản được bảo mật an toàn.
+## Success Criteria
 
-### Story 5 (Happy Path - Quản trị viên phân quyền & Khóa tài khoản):
-> Là một **System Admin**,
-> Tôi muốn xem danh sách tài khoản tại `/admin/users`, thực hiện tìm kiếm, lọc theo vai trò/trạng thái, gán/hủy vai trò và chuyển trạng thái `ACTIVE` <-> `LOCKED`,
-> Để quản lý nhân sự trung tâm và bảo vệ hệ thống trước các tài khoản vi phạm.
+- **SC-001:** 100% đăng ký/login/logout/profile/reset hợp lệ hoàn tất và mọi ca token hết hạn/reuse/CSRF/redirect ngoài miền bị chặn.
+- **SC-002:** Không thao tác role/status đồng thời nào làm mất ACTIVE ADMIN cuối cùng.
+- **SC-003:** 0 password/token/reset link/demo helpers hoặc dữ liệu ngoài quyền xuất hiện ở UI/log công khai.
 
-### Story 6 (Security Path - Truy cập trái phép bị chặn):
-> Là một **Học viên cố tình gõ URL quản trị** (ví dụ `/admin/users` hoặc `/staff/invoices`),
-> Tôi muốn hệ thống chặn lại và chuyển hướng về trang `/errors/403` (Forbidden) với thông báo từ chối truy cập rõ ràng.
+## Assumptions
 
-### Story 7 (Happy Path - Quên và đặt lại mật khẩu):
-> Là một **Người dùng bị quên mật khẩu**,
-> Tôi muốn nhập email tại trang `/forgot-password` để nhận liên kết đặt lại mật khẩu, sau đó nhập mật khẩu mới tại trang `/reset-password`,
-> Để khôi phục quyền truy cập tài khoản một cách an toàn và thuận tiện.
+- Giữ policy tối thiểu 6 ký tự theo baseline hiện tại, không đổi âm thầm lên policy khác.
+- SMTP là cấu hình cần xác minh môi trường; không tuyên bố gửi mail đã hoạt động.
+- Sẵn sàng triển khai cần thay/đồng bộ các ngoại lệ lịch sử của repair theo D04.
+- Các lựa chọn chưa được SRS quyết định được ghi tại decisions.md; không coi đây là xác nhận của khách hàng.
+- Cần plan/tasks cập nhật và bằng chứng quality gates trước khi triển khai/đánh dấu hoàn thành.
 
----
+## Dependencies & Handoff
 
-## 4. Acceptance Criteria (EARS Notation)
+Tất cả feature phụ thuộc auth; student-guardian cấp liên kết dữ liệu riêng. Plan/tasks cũ phải cập nhật theo v2 trước code; FR-001–008 giữ chủ đề clarification cũ để giữ truy vết.
 
-### 4.1 Ubiquitous Requirements (Yêu cầu phổ quát hệ thống)
-* **THE SYSTEM SHALL** băm toàn bộ mật khẩu người dùng bằng thuật toán **BCrypt** với work factor/cost >= 10 trước khi lưu trữ vào CSDL (**SEC-01**).
-* **THE SYSTEM SHALL** chuẩn hóa địa chỉ email về chữ thường (`email.trim().toLowerCase()`) trước khi kiểm tra tồn tại hoặc lưu vào bảng `Users` (**BR01**).
-* **THE SYSTEM SHALL** mã hóa toàn bộ dữ liệu request/response bằng bảng mã **UTF-8** thông qua `EncodingFilter`.
-* **THE SYSTEM SHALL** duy trì phiên làm việc người dùng qua `HttpSession` với timeout mặc định là 30 phút.
-
-### 4.2 Event-Driven Requirements (Yêu cầu xử lý sự kiện)
-* **WHEN** người dùng gửi form đăng ký tại `/register` với email chưa từng tồn tại và mật khẩu hợp lệ (tối thiểu 6 ký tự):
-  * **THE SYSTEM SHALL** tạo bản ghi trong `Users` (trạng thái `ACTIVE`), băm mật khẩu, gán vai trò được chọn (`STUDENT` hoặc `PARENT`) vào `UserRoles`, lưu flash message thành công vào session và chuyển hướng (`redirect`) sang `/login`.
-* **WHEN** người dùng đăng nhập tại `/login` với thông tin chính xác và trạng thái `ACTIVE`:
-  * **THE SYSTEM SHALL** lưu đối tượng `UserPrincipalDTO` (chứa `userId`, `fullName`, `email`, `roleCodes`) vào `session.setAttribute("currentUser", principal)`, đồng thời chuyển hướng (`redirect`) đến Dashboard của vai trò tương ứng.
-* **WHEN** người dùng bấm nút Đăng xuất (`POST /logout` hoặc `GET /logout`):
-  * **THE SYSTEM SHALL** hủy `HttpSession` hiện tại (`session.invalidate()`) và chuyển hướng về `/login?loggedOut=true`.
-* **WHEN** người dùng gửi yêu cầu quên mật khẩu tại `/forgot-password`:
-  * **IF** email tồn tại trong CSDL: **THE SYSTEM SHALL** sinh mã `resetToken` ngẫu nhiên có hiệu lực 15 phút, đồng thời hiển thị thông báo thành công kèm đường link đặt lại mật khẩu trực tiếp (`/reset-password?token=...`) để hỗ trợ kiểm thử và demo thuận tiện.
-  * **IF** email không tồn tại: **THE SYSTEM SHALL** hiển thị thông báo lỗi: *"Không tìm thấy tài khoản gắn với email này."*
-* **WHEN** người dùng nhập mật khẩu mới tại `/reset-password?token=...` với token hợp lệ:
-  * **THE SYSTEM SHALL** băm mật khẩu mới bằng BCrypt, cập nhật vào bảng `Users`, hủy token và chuyển hướng về `/login` kèm thông báo *"Đặt lại mật khẩu thành công!"*.
-* **WHEN** người dùng yêu cầu đổi mật khẩu tại `/profile`:
-  * **THE SYSTEM SHALL** kiểm tra mật khẩu hiện tại bằng `BCrypt.checkpw()`. Nếu trùng khớp, băm mật khẩu mới và lưu vào CSDL; nếu không khớp, trả về thông báo lỗi "Mật khẩu hiện tại không đúng".
-* **WHEN** Quản trị viên thay đổi trạng thái hoặc vai trò người dùng tại `/admin/users`:
-  * **THE SYSTEM SHALL** thực thi trong Transaction, cập nhật `UserRoles` / `Users.status`, và tự động ghi một bản ghi vào `AuditLogs` với hành động `CHANGE_ROLE` hoặc `UPDATE_USER_STATUS` (**BR18**).
-
-### 4.3 State-Driven Requirements (Yêu cầu theo trạng thái)
-* **WHILE** tài khoản người dùng đang ở trạng thái `LOCKED`:
-  * **THE SYSTEM SHALL** từ chối mọi yêu cầu đăng nhập và thông báo: *"Tài khoản của bạn đã bị tạm khóa. Vui lòng liên hệ ban quản trị để được hỗ trợ."*
-* **WHILE** một request gửi tới các route bảo vệ (`/admin/*`, `/staff/*`, `/teacher/*`, `/student/*`, `/parent/*`) mà không có `currentUser` trong session:
-  * **THE SYSTEM SHALL** chặn request và chuyển hướng về `/login` kèm tham số `redirect_url` để chuyển tiếp lại sau khi đăng nhập thành công.
-
-### 4.4 Unwanted Behavior & Exception Handling (Xử lý ngoại lệ)
-* **IF** người dùng gửi form đăng ký với email đã tồn tại trong hệ thống:
-  * **THEN THE SYSTEM SHALL** hiển thị thông báo lỗi: *"Địa chỉ email này đã được đăng ký trong hệ thống."*, giữ lại các trường đã nhập (ngoại trừ mật khẩu) và không sinh bản ghi lỗi trong CSDL.
-* **IF** người dùng đã đăng nhập nhưng không có vai trò phù hợp để truy cập đường dẫn yêu cầu (ví dụ: `STUDENT` truy cập `/admin/*`):
-  * **THEN THE SYSTEM SHALL** chuyển tiếp sang trang `/errors/403` với thông báo *"Bạn không có quyền truy cập vào chức năng này."* mà không để lộ stacktrace máy chủ.
-* **IF** người dùng cố gắng tự khóa hoặc tước quyền `ADMIN` của chính mình khi là quản trị viên duy nhất:
-  * **THEN THE SYSTEM SHALL** từ chối thao tác và báo lỗi: *"Không thể vô hiệu hóa tài khoản quản trị viên tối cao đang đăng nhập."*
-
----
-
-## 5. UI/UX & Navigation Mapping (Tuân Thủ 100% design.md)
-
-### 5.1 Bảng Danh Sách Màn Hình & URL
-
-| Screen ID | Tên Màn Hình | URL (HTTP Method) | JSP View Path | Vai Trò Cho Phép |
-|---|---|---|---|---|
-| **AUTH-01** | Đăng nhập | `GET /login`<br>`POST /login` | `/WEB-INF/views/auth/login.jsp` | Guest / All |
-| **AUTH-02** | Đăng ký tài khoản | `GET /register`<br>`POST /register` | `/WEB-INF/views/auth/register.jsp` | Guest |
-| **AUTH-03** | Quên mật khẩu | `GET /forgot-password`<br>`POST /forgot-password` | `/WEB-INF/views/auth/forgot-password.jsp` | Guest |
-| **AUTH-04** | Đặt lại mật khẩu | `GET /reset-password`<br>`POST /reset-password` | `/WEB-INF/views/auth/reset-password.jsp` | Guest |
-| **AUTH-05** | Hồ sơ cá nhân | `GET /profile`<br>`POST /profile` | `/WEB-INF/views/auth/profile.jsp` | Đã đăng nhập (All) |
-| **ADM-18** | Quản lý người dùng | `GET /admin/users`<br>`POST /admin/users` | `/WEB-INF/views/admin/user-list.jsp` | Admin |
-| **SYS-01** | Lỗi 403 Forbidden | `GET /errors/403` | `/WEB-INF/views/common/403.jsp` | All |
-
-### 5.2 Quy Chuẩn Giao Diện Chi Tiết Theo design.md
-* **Default Light Mode:** Toàn bộ màn hình Auth (Card căn giữa 420–480px) và màn hình Quản trị Users (Bảng quản trị) áp dụng giao diện nền sáng `--bg: #F8FAFC`, card `--surface: #FFFFFF` với bo góc `border-radius: 10px`, đường viền `1px solid var(--border)`.
-* **Typography & Tokens:** Font chữ chuẩn `Inter`, cỡ chữ 14px cho input/label, tiêu đề màn hình 24px semi-bold (`weight: 650`).
-* **Icons:** Bộ icon Lucide outline SVG nhúng inline (SVG `stroke="currentColor"`, kích thước 18px), tuyệt đối không dùng emoji:
-  * Icon Mail (hộp thư): trường nhập email
-  * Icon Lock (khóa): trường nhập mật khẩu
-  * Icon User (người dùng): trường nhập họ tên
-  * Icon Phone (điện thoại): trường số điện thoại
-  * Icon Shield-Check (khiên bảo mật): huy hiệu vai trò
-* **Flash Message & Feedback:** Hiển thị thông báo qua component alert (`alert-success`, `alert-danger`) đặt ngay trên đầu form, tự động xóa flash message khỏi session sau khi render.
-
----
-
-## 6. Data Model & JPA Entity Design
-
-### 6.1 Entity Quan Hệ
-* **`User` (`Users`):**
-  * `id`: `Long` (`@Id @GeneratedValue(strategy = GenerationType.IDENTITY)`)
-  * `email`: `String` (unique, lowercase, length 255)
-  * `passwordHash`: `String` (length 255)
-  * `fullName`: `String` (Nationalized, length 150)
-  * `phone`: `String` (length 20)
-  * `avatarUrl`: `String` (length 500)
-  * `status`: `String` (`ACTIVE`, `INACTIVE`, `LOCKED`)
-  * `createdAt`, `updatedAt`: `LocalDateTime`
-  * `roles`: `@ManyToMany` thông qua bảng liên kết `UserRoles`
-* **`Role` (`Roles`):**
-  * `id`: `Integer` (`@Id @GeneratedValue(strategy = GenerationType.IDENTITY)`)
-  * `code`: `String` (unique, uppercase: `ADMIN`, `STAFF`, `TEACHER`, `STUDENT`, `PARENT`)
-  * `name`: `String` (Nationalized, length 100)
-  * `description`: `String`
-* **`AuditLog` (`AuditLogs`):**
-  * Lưu vết khi đổi trạng thái hoặc vai trò tài khoản (**BR18**).
-
-### 6.2 DTOs (Data Transfer Objects)
-* `LoginRequestDTO`: email, password, rememberMe.
-* `RegisterRequestDTO`: fullName, email, phone, roleCode (`STUDENT` hoặc `PARENT`), password, confirmPassword.
-* `ProfileUpdateDTO`: fullName, phone, avatarUrl, currentPassword, newPassword, confirmNewPassword.
-* `UserPrincipalDTO`: userId, email, fullName, roleCodes (Set<String>), primaryRole.
-
-### 6.3 Repository Methods (JPQL Chuẩn, Tuyệt Đối Không Dùng JDBC)
-* `User findByEmail(String email)`: `SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE LOWER(u.email) = LOWER(:email)`
-* `boolean existsByEmail(String email)`: `SELECT COUNT(u) > 0 FROM User u WHERE LOWER(u.email) = LOWER(:email)`
-* `List<User> searchUsers(String keyword, String roleCode, String status, int offset, int limit)`
-* `long countUsers(String keyword, String roleCode, String status)`
-
----
-
-## 7. Security Filters & Routing Matrix
-
-### 7.1 Filter Pipeline (Cấu hình trong `web.xml`)
-```text
-Client Request
-  ──> [EncodingFilter] (Force UTF-8 Request/Response)
-  ──> [AuthenticationFilter] (Kiểm tra session login cho các route nội bộ)
-  ──> [RoleFilter] (Kiểm tra vai trò theo tiền tố URL)
-  ──> [Target Servlet Controller]
-```
-
-### 7.2 Ma Trận Phân Quyền URL (Role Mapping)
-
-| Tiền tố URL | Vai trò được phép truy cập | Xử lý khi vi phạm |
-|---|---|---|
-| `/admin/*` | `ADMIN` (Quản trị viên kiêm Quản lý trung tâm) | Chuyển hướng `/errors/403` |
-| `/staff/*` | `STAFF`, `ADMIN` | Chuyển hướng `/errors/403` |
-| `/teacher/*` | `TEACHER`, `ADMIN` | Chuyển hướng `/errors/403` |
-| `/student/*` | `STUDENT`, `ADMIN` | Chuyển hướng `/errors/403` |
-| `/parent/*` | `PARENT`, `ADMIN` | Chuyển hướng `/errors/403` |
-| `/profile` | Tất cả người dùng đã đăng nhập | Chuyển hướng `/login` |
-| `/login`, `/register`, `/forgot-password`, `/courses`, `/` | Public (Ai cũng vào được; nếu đã đăng nhập thì tự chuyển về Dashboard) | Cho phép tiếp tục |
-
----
-
-## 8. Definition of Done (DoD)
-
-### Implementation clarifications (2026-10-22)
-
-- FR-001: Register only STUDENT or PARENT; email normalized with Locale.ROOT; password 6 characters minimum, 72 UTF-8 bytes maximum (BCrypt limit). Confirmation must match. No remember-me persistence in this MVP.
-- FR-002: Renew session on login, timeout 30 minutes, cookie-only tracking, HttpOnly; every mutating action uses POST and a session CSRF token. GET /logout renders a confirmation; POST invalidates the session (supersedes earlier GET mutation examples).
-- FR-003: Re-read ACTIVE status and roles on every protected request; password change/reset invalidates other sessions. Only safe, local, authorized redirect_url paths may be restored.
-- FR-004: Password recovery returns the same public response for existing/missing/locked emails. Deliver a 32-byte random, single-use token by configured SMTP, expire after 30 minutes, store SHA-256 hash only. A new request invalidates prior tokens. Never show/log reset links. Rate-limit repeated recovery for an account. Missing SMTP fails safely and requires deployment configuration.
-- FR-005: Profile and password changes require the authenticated actor; validate phone, name and optional HTTPS avatar URL. Updates are atomic; never preserve passwords in flash/session. Profile editing cannot change email, roles or status.
-- FR-006: Admin mutations re-check actor authorization in the service transaction, audit CHANGE_ROLE / UPDATE_USER_STATUS with actor and before/after values. Serialize admin changes by locking the ADMIN role row, then lock affected users; prevent removal/locking of the final ACTIVE ADMIN (including another account).
-- FR-007: Filter/search/page users in SQL using bound JPQL; maintain filters after updates; role assignment accepts only the five canonical roles and at least one role.
-- FR-008: All auth/error/profile/admin pages use the shared layout, escaped output, design tokens, default light theme, explicit persisted theme toggle and responsive layouts. Provide authenticated landing routes without fabricated business statistics while other modules are unbuilt.
-- SC-001: Automated tests cover login, registration, reset expiry/reuse, authorization, last-admin safety, transaction rollback, CSRF, safe redirects and all five role landing routes.
-- SC-002: Ant produces a deployable Java 17 WAR with Jakarta Tags 3, JPA 3.1/Hibernate and SQL Server driver; SQL Server integration and browser acceptance must be reported separately if the local environment cannot run them.
-
-
-- [ ] Spec này được phê duyệt và khóa nội dung (`Status: Approved`).
-- [ ] JPA Entities (`User`, `Role`, `AuditLog`) ánh xạ chính xác với SQL Server schema `EduCenterDB`.
-- [ ] Lớp `UserRepository` và `RoleRepository` dùng 100% JPA `EntityManager` & JPQL, không có bất kỳ dòng JDBC thuần nào.
-- [ ] `AuthService` triển khai đầy đủ validation, băm BCrypt cost 10, quản lý transaction.
-- [ ] `EncodingFilter`, `AuthenticationFilter`, `RoleFilter` hoạt động chính xác theo ma trận phân quyền.
-- [ ] Toàn bộ 5 màn hình (`login.jsp`, `register.jsp`, `forgot-password.jsp`, `profile.jsp`, `user-list.jsp`, `403.jsp`) tuân thủ 100% `design.md` (Default Light mode, icon outline SVG Lucide, biến Design Tokens, responsive).
-- [ ] JUnit 5 tests cho `AuthService`: kiểm thử băm mật khẩu, đăng nhập thành công, đăng nhập sai pass, email trùng lặp, tài khoản bị khóa.
-- [ ] Commit và push lên nhánh `main`.
+Checklist chất lượng: [requirements.md](checklists/requirements.md). Trạng thái hiện thực hóa và thứ tự triển khai: [README](../../../README.md).

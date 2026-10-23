@@ -1,153 +1,121 @@
-# Feature: Danh Mục Khóa Học & Giỏ Đăng Ký (feat-course-catalog) — SPECIFICATION
-**Status:** Approved / Locked | **Version:** 1.0.0 | **Date:** 2026-10-22
-**Module ID:** `MOD-ADMISSION` (M01 – Public Website & Course Catalog)
-**Author / Owner:** Member 02 (Admission & Public Portal)
-**Inherits From:**
-- Layer 1: `.sdd/constitution.md` (Article 1, Article 2 SEC-01..05)
-- Layer 2: `.sdd/specs/modules/admission/module.md`
-- Assignment PRJ301 Standard: Mục 3.2 (Home & hiển thị dữ liệu - 2,0 điểm) & Mục 3.6 (Giỏ hàng hoặc tương đương - 1,0 điểm)
-- UI/UX Standard: `design.md` (Default Light mode, Design Tokens, Lucide SVG outline icons, Local CSS)
+# Feature Specification: Website công khai, catalog và danh sách đăng ký
 
----
+**Feature:** `feat-course-catalog` | **Module SRS:** M01 | **Owner:** Member 02
+**Created/Updated:** 2026-10-23 | **Version:** 2.0.0 | **Status:** Locked — baseline đặc tả nội bộ theo yêu cầu chủ dự án.
+**Implementation:** Có code catalog/cart/tiếp nhận Lead; v2 cần nghiệm thu dữ liệu thật và hợp đồng CRM hiện hành, không xác nhận toàn M01 hoàn tất.
+**Nguồn:** SRS v1.1 III M01, V UC06–09, WF-01, VIII PUB-01–07, XVII 3.2/3.6; **Use cases:** UC06, UC07, UC08, UC09.
 
-## 1. Business Context & Goal
+Kế thừa [quyết định chung](../../../decisions.md), [quality gates](../../../quality-gates.md), [hợp đồng dữ liệu](../../../data-contract.md), [tích hợp](../../../integration.md), [màn hình](../../../screen-map.md) và [module](../module.md). FR/SC là mã cục bộ của feature này. Locked không thay thế phê duyệt khách hàng/giảng viên.
 
-### Approved repair amendment — 2026-10-23
+## Business Context & Scope
 
-The locked [portal/cart repair](../feat-portal-cart-repair/spec.md) supersedes contradictions: no coupons/combo discounts/invented original prices; guest selections survive login and merge once; editable notes; current fee/status revalidation; atomic/idempotent confirmation and session-bound persisted receipts. Operational filters cover grades 6–12; public navigation remains identical. Initial task checkmarks do not certify these later repairs.
+Người quan tâm cần tìm đúng khóa và gửi nhu cầu với thông tin/giá thật; yêu cầu tư vấn đi vào CRM, không tự thành ghi danh hoặc thanh toán.
 
-* **Why:** Website của trung tâm gia sư và luyện thi EduCenter cần một cổng giới thiệu chương trình đào tạo trực quan, chuyên nghiệp, hỗ trợ phụ huynh và học sinh dễ dàng tìm kiếm, lọc theo môn học, khối lớp, mức học phí, xem chi tiết lộ trình học và lựa chọn nhiều khóa học vào danh sách dự định đăng ký (Registration Cart) trước khi gửi yêu cầu tuyển sinh.
-* **Mục tiêu Assignment PRJ301 (Tổng 3,0 điểm):**
-  1. **Mục 3.2 – Home & Hiển thị dữ liệu (2,0 điểm):** Load dữ liệu thật từ SQL Server qua JPA; phân nhóm theo Môn học / Khối lớp 6–12; tìm kiếm từ khóa linh hoạt; lọc đa tiêu chí (môn, khối, học phí); sắp xếp (mới nhất, học phí tăng/giảm); phân trang động; trang chi tiết khóa học và gợi ý các khóa học liên quan cùng khối/môn.
-  2. **Mục 3.6 – Giỏ hàng hoặc tương đương (1,0 điểm):** Danh sách khóa học dự định đăng ký (`/registration-cart`), cho phép thêm khóa học, cập nhật ghi chú/nhu cầu, xóa khỏi danh sách, tự động tính tổng học phí dự kiến, hỗ trợ cả khách vãng lai (Session Cart) và đồng bộ CSDL (`RegistrationCartItems`) khi đăng nhập.
-* **Impact:** Kết nối trực tiếp người truy cập từ Trang chủ (`/`) sang luồng Tuyển sinh & CRM (`M03 - Leads`), kích hoạt quy trình xếp lớp và ghi danh (`M05/M06`).
+**Trong phạm vi:** Home nội dung trung tâm/giáo viên/khóa thật, tìm/lọc/sort/page, chi tiết/liên quan, giỏ Guest/tài khoản, ghi chú, tổng phí dự kiến, tư vấn/xác nhận và biên nhận thật.
 
----
+**Ngoài phạm vi:** Giữ chỗ, tự ghi danh, ngân hàng thật, coupon/combo/giá gốc giả, dữ liệu showcase học tập hardcode.
 
-## 2. User Personas & Actors
+**Actors & Permissions:** Guest/All đọc public; Guest/Student/Parent chọn khóa và gửi nhu cầu. STAFF/ADMIN xem public như người dùng; mọi truy cập giỏ tài khoản cần actor ACTIVE.
 
-| Vai trò (Actor) | Quyền hạn & Thao tác tại Module |
-|---|---|
-| **Guest (Khách vãng lai)** | Xem danh sách khóa học, tìm kiếm, lọc, xem chi tiết, thêm vào giỏ hàng session, gửi yêu cầu đăng ký tư vấn. |
-| **Student (Học viên)** | Duyệt khóa học, thêm vào giỏ hàng tài khoản, xem các khóa phù hợp với khối lớp của mình, gửi xác nhận đăng ký. |
-| **Parent (Phụ huynh)** | Tra cứu khóa học theo khối lớp của con, đối soát học phí niêm yết, chọn nhiều môn/khóa cùng lúc vào giỏ đăng ký. |
-| **Staff / Admin** | Xem danh mục khóa học public dưới góc độ khách hàng, kiểm tra hiển thị học phí và trạng thái tuyển sinh `OPEN`/`CLOSED`. |
+## User Scenarios & Testing
 
----
+### User Story 1 — Tìm và chọn khóa (Priority: P0)
 
-## 3. User Stories
+Là người quan tâm, tôi muốn lọc và xem khóa phù hợp để lựa chọn.
 
-### Story 1 (Happy Path - Tìm kiếm & Lọc khóa học):
-> Là một **Học sinh lớp 12 hoặc Phụ huynh**,
-> Tôi muốn truy cập trang `/courses`, lọc theo môn Toán/Lý/Hóa và khối 12,
-> Để nhanh chóng tìm được khóa luyện thi THPT Quốc Gia với học phí và thời lượng phù hợp.
+**Giá trị/ưu tiên:** Bao phủ UC06/07 và ASM 3.2.
 
-### Story 2 (Happy Path - Xem chi tiết & Khóa học liên quan):
-> Là một **Người dùng đang quan tâm khóa học**,
-> Tôi muốn bấm vào xem chi tiết một khóa học tại `/courses/detail?id=...`,
-> Để xem mục tiêu đào tạo, lộ trình 24 buổi, thông tin giáo viên phụ trách, lịch mở lớp dự kiến và danh sách các khóa học liên quan gợi ý.
+**Independent Test:** Lọc môn/khối/phí, sort/page, mở chi tiết và khóa liên quan.
 
-### Story 3 (Happy Path - Quản lý Giỏ đăng ký khóa học):
-> Là một **Học sinh/Phụ huynh muốn đăng ký nhiều môn**,
-> Tôi muốn bấm "Thêm vào danh sách đăng ký", mở trang `/registration-cart` để xem các khóa đã chọn, xóa môn không cần thiết và xem tổng học phí dự kiến,
-> Để chuẩn bị ngân sách và chuyển sang bước gửi hồ sơ đăng ký.
+**Acceptance Scenarios:**
+1. Given khóa OPEN trong DB, When lọc, Then list/count/page đúng và giữ bộ lọc.
+2. Given chi tiết có dữ liệu thiếu, When xem, Then báo chưa cập nhật, không tự điền giáo viên/lịch/sĩ số.
 
-### Story 4 (Happy Path - Xác nhận nhu cầu đăng ký):
-> Là một **Người dùng đã chọn xong khóa học trong giỏ**,
-> Tôi muốn điền thông tin liên hệ (hoặc tự động điền nếu đã đăng nhập) tại `/registration/confirm`,
-> Để gửi thông tin thành Lead chuyển về bộ phận tuyển sinh tư vấn xếp lớp mà không bị mất giỏ hàng.
+### User Story 2 — Giỏ và gửi nhu cầu (Priority: P0)
 
-### Story 5 (Edge Path - Giỏ hàng rỗng & Bộ lọc không có kết quả):
-> Là một **Người dùng tìm kiếm khóa học với tiêu chí quá hẹp**,
-> Tôi muốn nhận được thông báo Empty State rõ ràng kèm nút "Đặt lại bộ lọc" hoặc "Xem tất cả khóa học",
-> Để không bị gián đoạn trải nghiệm trên trang.
+Là Guest/Student/Parent, tôi muốn chỉnh danh sách và tổng phí trước khi gửi.
 
----
+**Giá trị/ưu tiên:** Bao phủ UC08 và ASM 3.6 chức năng tương đương.
 
-## 4. Acceptance Criteria (EARS Notation)
+**Independent Test:** Guest thêm khóa, login, sửa ghi chú, xóa, xác nhận và replay.
 
-### 4.1 Ubiquitous Requirements (Yêu cầu hệ thống phổ quát)
-* **THE SYSTEM SHALL** truy vấn 100% dữ liệu khóa học, môn học, giáo viên từ CSDL SQL Server qua JPA `EntityManager` và JPQL bound parameters (tuyệt đối không dùng JDBC thuần).
-* **THE SYSTEM SHALL** định dạng toàn bộ số tiền học phí bằng chuẩn tiền tệ Việt Nam (`<fmt:formatNumber value="..." pattern="#,##0" /> VNĐ`).
-* **THE SYSTEM SHALL** phân trang danh sách khóa học với kích thước trang chuẩn là **9 khóa học/trang**, hiển thị thanh điều hướng phân trang đồng bộ với các bộ lọc hiện tại.
+**Acceptance Scenarios:**
+1. Given cart Guest và tài khoản có khóa trùng, When login, Then hợp nhất một lần, không mất khóa/ghi chú.
+2. Given form hợp lệ, When xác nhận, Then một Lead NEW, giỏ chỉ xóa sau commit và receipt có dữ liệu lưu thật.
 
-### 4.2 Event-Driven Requirements (Yêu cầu xử lý sự kiện)
-* **WHEN** người dùng gửi yêu cầu lọc hoặc tìm kiếm tại `/courses`:
-  * **THE SYSTEM SHALL** áp dụng đồng thời các tiêu chuẩn: từ khóa `q` (tìm trong tên khóa và mô tả), `subjectId`, `gradeLevel` (từ 6 đến 12), khoảng học phí (`feeRange`), và `sort` (mới nhất `newest`, học phí tăng dần `fee_asc`, giảm dần `fee_desc`, tên `name_asc`).
-* **WHEN** người dùng chọn một khóa học tại danh sách:
-  * **THE SYSTEM SHALL** điều hướng đến `/courses/detail?id={id}`, hiển thị đầy đủ thông tin chi tiết, danh sách lớp học đang mở (`Classes` có trạng thái `OPEN` hoặc `PLANNING`), và truy vấn **Top 3 khóa học liên quan** (ưu tiên cùng môn học hoặc cùng khối lớp).
-* **WHEN** người dùng bấm nút "Thêm vào danh sách đăng ký" (`POST /registration-cart/add`):
-  * **THE SYSTEM SHALL** kiểm tra khóa học tồn tại và đang ở trạng thái `OPEN`. Nếu người dùng đã đăng nhập, lưu/cập nhật vào bảng `RegistrationCartItems`; nếu là khách vãng lai, lưu vào `sessionScope.registrationCart`. Sau đó redirect về `/registration-cart` kèm flash message thành công.
-* **WHEN** người dùng xóa khóa học khỏi giỏ (`POST /registration-cart/remove`):
-  * **THE SYSTEM SHALL** xóa bản ghi tương ứng khỏi CSDL/Session và cập nhật lại tổng học phí dự kiến.
-* **WHEN** người dùng bấm "Xác nhận gửi hồ sơ đăng ký" tại `/registration/confirm`:
-  * **THE SYSTEM SHALL** thực thi trong Transaction: tạo bản ghi `Leads` (nguồn `WEBSITE`, trạng thái `NEW`), lưu các khóa học đã đăng ký vào ghi chú tư vấn, làm trống giỏ hàng và chuyển hướng sang `/consultation/success` hiển thị mã hồ sơ tuyển sinh.
+### User Story 3 — Đăng ký tư vấn trực tiếp (Priority: P0)
 
-### 4.3 State-Driven Requirements (Yêu cầu theo trạng thái)
-* **WHILE** giỏ hàng chưa có khóa học nào:
-  * **THE SYSTEM SHALL** hiển thị Empty State thân thiện, vô hiệu hóa nút thanh toán/xác nhận và cung cấp nút "Khám phá khóa học ngay" dẫn về `/courses`.
-* **WHILE** một khóa học đang ở trạng thái `CLOSED` hoặc `ARCHIVED`:
-  * **THE SYSTEM SHALL** hiển thị huy hiệu "Tạm dừng tuyển sinh" và vô hiệu hóa nút thêm vào giỏ đăng ký.
+Là Guest, tôi muốn gửi nhu cầu không cần tạo tài khoản để được tư vấn.
 
-### 4.4 Unwanted Behavior & Exception Handling (Xử lý ngoại lệ)
-* **IF** tham số `id` khóa học trên URL không hợp lệ hoặc không tồn tại trong CSDL:
-  * **THEN THE SYSTEM SHALL** chuyển hướng về `/courses` kèm thông báo flash lỗi: *"Không tìm thấy thông tin khóa học yêu cầu."*
-* **IF** người dùng thêm vào giỏ một khóa học đã có sẵn trong giỏ:
-  * **THEN THE SYSTEM SHALL** hiển thị thông báo: *"Khóa học này đã có trong danh sách đăng ký của bạn."* mà không nhân bản dòng dữ liệu.
+**Giá trị/ưu tiên:** Bao phủ UC09 và PUB-06.
 
----
+**Independent Test:** Gửi form rỗng/sai/đúng rồi xem mã yêu cầu.
 
-## 5. UI/UX & Navigation Mapping (Tuân Thủ 100% design.md)
+**Acceptance Scenarios:**
+1. Given liên hệ hợp lệ, When gửi tư vấn, Then Lead NEW nguồn WEBSITE và mã receipt thật.
+2. Given mã receipt tự đoán hoặc session khác, When đọc success, Then không dựng thông báo thành công giả.
 
-### 5.1 Bảng Danh Sách Màn Hình & URL
+### Edge Cases
 
-| Screen ID | Tên Màn Hình | URL (HTTP Method) | JSP View Path | Vai Trò Cho Phép |
-|---|---|---|---|---|
-| **PUB-02** | Danh sách khóa học | `GET /courses` | `/WEB-INF/views/public/course-list.jsp` | All / Guest |
-| **PUB-03** | Chi tiết khóa học | `GET /courses/detail?id=...` | `/WEB-INF/views/public/course-detail.jsp` | All / Guest |
-| **PUB-04** | Giỏ đăng ký khóa học | `GET /registration-cart`<br>`POST /registration-cart/add`<br>`POST /registration-cart/remove` | `/WEB-INF/views/public/registration-cart.jsp` | All / Guest |
-| **PUB-05** | Xác nhận nhu cầu đăng ký | `GET /registration/confirm`<br>`POST /registration/confirm` | `/WEB-INF/views/public/registration-confirm.jsp` | All / Guest |
-| **PUB-07** | Đăng ký thành công | `GET /consultation/success` | `/WEB-INF/views/public/consultation-success.jsp` | All / Guest |
+- Cart rỗng, duplicate khóa, ID sai, phí thay/khóa đóng sau khi chọn.
+- Guest login đổi session; logout/login tài khoản khác; add/update và checkout đồng thời.
+- Từ khóa HTML/SQL, range phí đảo, grade5/13, page rất lớn.
+- DB rỗng/lỗi, không giáo viên/khóa tương tự, retry sau mất mạng.
 
-### 5.2 Quy Chuẩn Giao Diện Theo design.md
-* **Default Light Mode:** Nền sáng `--bg: #F8FAFC`, thẻ khóa học Card `--surface: #FFFFFF`, viền mỏng `1px solid var(--border)`, bo góc `border-radius: 12px`, bóng đổ nhẹ `var(--shadow-sm)`.
-* **Icons Lucide SVG:**
-  * Icon Book-Open (môn học / chương trình).
-  * Icon Clock (thời lượng / số buổi).
-  * Icon Users (sĩ số tối đa).
-  * Icon Graduation-Cap (giáo viên phụ trách).
-  * Icon Shopping-Cart / List-Plus (danh sách đăng ký).
-  * Icon Search / Filter / Check-Circle.
-* **Typography:** Chuẩn `Inter`, tiêu đề thẻ semi-bold 16px, giá tiền học phí 18px đậm màu `--primary`.
+## Requirements
 
----
+### Functional Requirements
 
-## 6. Data Model & JPA Entity Design
+Các yêu cầu áp dụng đồng thời QG01–QG12. Cột nghiệm thu là kết quả bắt buộc khi chạy trường hợp tương ứng; không phải bằng chứng test đã pass.
 
-### 6.1 Các Entity Tham Gia
-1. **`Subject` (`dbo.Subjects`):** `id`, `code`, `name`, `description`, `status`.
-2. **`Course` (`dbo.Courses`):** `id`, `subject`, `code`, `name`, `gradeLevel`, `targetExam`, `fee`, `durationWeeks`, `totalSessions`, `maxCapacity`, `description`, `imageUrl`, `isFeatured`, `status`.
-3. **`Teacher` (`dbo.Teachers`):** `id`, `user`, `fullName`, `specialization`, `degree`, `status`.
-4. **`EduClass` (`dbo.Classes`):** `id`, `course`, `teacher`, `room`, `code`, `name`, `capacity`, `startDate`, `endDate`, `status`.
-5. **`RegistrationCartItem` (`dbo.RegistrationCartItems`):** `id`, `user` (`User`), `course` (`Course`), `quantity`, `notes`, `createdAt`.
+| ID | Yêu cầu kiểm chứng được | Truy vết nguồn | Nghiệm thu / kết quả quan sát |
+|---|---|---|---|
+| FR-001 | THE SYSTEM SHALL dựng Home từ dữ liệu trung tâm/khóa nổi bật/mới, môn/khối và giáo viên được phép công bố trong DB. | M01; PUB-01; ASM 3.2 | Không hardcode KPI/thành tích/chứng nhận/showcase; thiếu dữ liệu dùng empty state. |
+| FR-002 | THE SYSTEM SHALL tìm keyword theo tên/mô tả, lọc môn/khối6–12/mục tiêu thi/minFee/maxFee, sort newest/fee_asc/fee_desc/name_asc, phân trang 9 khóa/trang. | UC06; ASM 3.2 | Bind tham số/allowlist sort; list/count cùng predicate, giữ toàn bộ bộ lọc. |
+| FR-003 | THE SYSTEM SHALL trả chi tiết mục tiêu/nội dung/trình độ/số buổi/thời lượng/phí/sĩ số/lịch dự kiến thật và tối đa 3 khóa OPEN liên quan cùng môn hoặc khối, không gồm chính nó. | UC07; M01 | Thứ tự liên quan ổn định; chưa có lớp/lịch báo rõ; không hiển thị giá trị mặc định giả. |
+| FR-004 | WHEN thêm giỏ, THE SYSTEM SHALL tải Course hiện hành, chỉ nhận OPEN và duy nhất một khóa/session hoặc tài khoản, quantity=1. | UC08; ASM 3.6; D07 | Thêm trùng không thêm dòng/nhân phí; khóa đóng bị từ chối. |
+| FR-005 | THE SYSTEM SHALL cho cập nhật ghi chú/nhu cầu, xóa một khóa hoặc clear giỏ; tính tổng=sum phí niêm yết hiện tại các lựa chọn hợp lệ. | UC08; D03/D07 | Không coupon/combo; cập nhật thay cho tăng số lượng, empty cart không xác nhận. |
+| FR-006 | WHEN Guest đăng nhập, THE SYSTEM SHALL bảo toàn cart qua đổi session ID, merge một lần với cart DB và chỉ xóa cart Guest sau persist thành công. | UC08; QG06 | Lỗi DB giữ lựa chọn; logout không lộ cart tài khoản trước cho người sau. |
+| FR-007 | WHEN xác nhận, THE SYSTEM SHALL tải lại phí/trạng thái, hiển thị thay đổi cần người dùng xác nhận lại và kiểm liên hệ/khối/khóa chọn ở server. | UC08; WF-01 | Khóa mất/đóng không submit; giá thay không âm thầm chốt tổng cũ. |
+| FR-008 | WHEN submit hợp lệ, THE SYSTEM SHALL tạo Lead NEW/WEBSITE với snapshot khóa/ghi chú/phí dự kiến và clear cart nguyên tử, idempotent theo nonce. | UC08; M03; QG06 | Retry không tạo Lead thứ hai; lỗi giữ cart/form; không tạo Enrollment/Invoice. |
+| FR-009 | THE SYSTEM SHALL cấp receipt từ submission đã persist thuộc session hiện hành; mã/giá trị URL không tự tạo success. | PUB-07; UC09 | Session khác hoặc code đoán không đọc được liên hệ/khóa/total. |
+| FR-010 | WHEN gửi tư vấn không cart, THE SYSTEM SHALL nhận tên/điện thoại, email tùy chọn, khối/nhu cầu/khóa quan tâm, loại yêu cầu CONSULTATION/TRIAL/ENTRANCE và thời gian mong muốn, tạo Lead NEW và receipt theo cùng quy tắc idempotency. | UC09; PUB-06; M03 | Không buộc tạo User; form lỗi không tạo Lead hoặc mất input an toàn. |
+| FR-011 | THE SYSTEM SHALL dùng cùng navbar/footer cho public/auth/errors, home public sau login; các filter option và dữ liệu hiển thị là nguồn backend thật. | M01; QG03/04; D04 | Giữ navigation ở 4 độ rộng; keyword là tham số chuẩn, q chỉ alias tương thích. |
+| FR-012 | IF không có dữ liệu hoặc nguồn lỗi, THE SYSTEM SHALL phân biệt empty/unavailable; detail thiếu không dựng course giả, POST luôn CSRF/PRG. | UC06–09; QG02/03/11 | Không thành công giả/KPI=0 do lỗi; khóa CLOSED/ARCHIVED không thêm dù POST tay. |
 
-### 6.2 DTOs (Data Transfer Objects)
-* `CourseFilterDTO`: keyword, subjectId, gradeLevel, minFee, maxFee, sort, page, pageSize.
-* `CourseCardDTO`: id, code, name, subjectName, subjectCode, gradeLevel, targetExam, fee, totalSessions, durationWeeks, maxCapacity, isFeatured, status, openClassCount.
-* `CourseDetailDTO`: CourseCardDTO + detailed description, teacherName, teacherDegree, openClasses list.
-* `CartItemDTO`: courseId, courseCode, courseName, subjectName, gradeLevel, fee, notes.
-* `CartViewDTO`: List<CartItemDTO>, totalCourses, totalFee.
-* `RegistrationCheckoutDTO`: fullName, phone, email, gradeLevel, notes, List<Long> courseIds.
+### Key Entities
 
----
+- Course/Subject/Class/Teacher: nội dung catalog có thật.
+- RegistrationCartItem: lựa chọn duy nhất, quantity1, notes; Guest ở session.
+- Lead/LeadCourse: yêu cầu và snapshot lựa chọn, chưa là ghi danh.
+- SubmissionReceipt: góc nhìn persisted Lead có session-scoped access.
 
-## 7. Definition of Done (DoD)
+### State & Business Rules
 
-- [ ] Lớp Entity `RegistrationCartItem` được ánh xạ chuẩn JPA và khai báo trong `persistence.xml`.
-- [ ] `CourseRepository` cung cấp đầy đủ JPQL tìm kiếm, lọc đa tiêu chí, phân trang và truy vấn khóa học liên quan.
-- [ ] `CartService` xử lý logic thêm/xóa/tính tổng tiền cho cả Guest (Session) và Authenticated User (Database).
-- [ ] `PublicCourseServlet` và `RegistrationCartServlet` áp dụng chuẩn PRG pattern và bảo vệ CSRF trên các POST actions.
-- [ ] Các trang JSP (`course-list.jsp`, `course-detail.jsp`, `registration-cart.jsp`, `registration-confirm.jsp`, `consultation-success.jsp`) tuân thủ 100% `design.md` (Default Light mode, SVG outline icons, Design tokens, Empty state).
-- [ ] Viết JUnit 5 test suite cho `CourseService` và `CartService` pass 100%.
-- [ ] Biên dịch `ant compile` đạt `BUILD SUCCESSFUL`.
-- [ ] Commit và push lên nhánh `main`.
+Course OPEN/CLOSED/ARCHIVED. Class OPEN/ONGOING có thể nhận ghi danh; PLANNING chỉ hiển thị lịch dự kiến rõ chưa nhận, không tính chỗ tuyển sinh thật. Cart không giữ chỗ, không bảo đảm phí tới khi phát hành hóa đơn.
+
+**Business rules:** BR02, BR16. Chi tiết và chủ sở hữu tại traceability.md; không tự định nghĩa lại công thức chung.
+
+### UI & Navigation
+
+**Screens:** PUB-01, PUB-02, PUB-03, PUB-04, PUB-05, PUB-06, PUB-07. URL/quyền/GET/POST được quy định ở screen-map.md; mỗi ID có đúng một chủ sở hữu. PUB-01–07 có shared public shell. Chi tiết/related có link thật; CTA/receipt rõ là yêu cầu tư vấn/nhu cầu, không ghi “thanh toán thành công”.
+
+## Success Criteria
+
+- **SC-001:** 100% tìm/lọc/sort/page/detail/related khớp DB, không dữ liệu hiển thị giả.
+- **SC-002:** Guest→login→merge→sửa/xóa→confirm giữ đủ lựa chọn hợp lệ; replay tạo đúng một Lead.
+- **SC-003:** 100% tổng giỏ khớp phí niêm yết; không coupon/combo, khóa đóng hoặc receipt tự dựng.
+
+## Assumptions
+
+- Cart chỉ là danh sách khóa duy nhất cho một nhu cầu; Parent gửi yêu cầu riêng cho từng con.
+- Home có thể nhấn THPT nhưng backend hỗ trợ đủ khối6–12.
+- Landing/auth UI spec là đặc tả hỗ trợ; dữ liệu/giá/quyền do spec này và auth quyết định.
+- Các lựa chọn chưa được SRS quyết định được ghi tại decisions.md; không coi đây là xác nhận của khách hàng.
+- Cần plan/tasks cập nhật và bằng chứng quality gates trước khi triển khai/đánh dấu hoàn thành.
+
+## Dependencies & Handoff
+
+Đọc academic-programs/teacher-management; auth bảo toàn Guest cart; CRM nhận Lead/khóa quan tâm theo integration. Baseline mới thay ngoại lệ dữ liệu minh họa lịch sử theo D04.
+
+Checklist chất lượng: [requirements.md](checklists/requirements.md). Trạng thái hiện thực hóa và thứ tự triển khai: [README](../../../README.md).

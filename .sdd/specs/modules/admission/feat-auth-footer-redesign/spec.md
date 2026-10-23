@@ -1,126 +1,84 @@
-# Feature: Cải tiến Giao diện Xác thực & Footer Dùng chung (feat-auth-footer-redesign) — SPECIFICATION
-**Status:** Approved / Locked | **Version:** 1.0.0 | **Date:** 2026-10-23  
-**Module ID:** `MOD-ADMISSION` (M01 – Public Website & Authentication Portal)  
-**Author / Owner:** Member 02 (Admission & Public Portal)  
-**Inherits From:**  
-- Layer 1: `.sdd/constitution.md` (Article 1, Article 2 SEC-01..05)  
-- Layer 2: `.sdd/specs/modules/admission/module.md`  
-- UI/UX Standard: `design.md` (Default Light mode, Design Tokens, Lucide SVG outline icons, Local CSS)  
-- PRJ301 Standard: Mục 3.1 & 3.2 (Bảo mật tài khoản, MVC, PRG pattern, CSRF, BCrypt)  
+# Feature Specification: UI xác thực và footer công khai dùng chung
 
----
+**Feature:** `feat-auth-footer-redesign` | **Module SRS:** M01, M02 | **Owner:** Member 02 UI; Member 03 auth
+**Created/Updated:** 2026-10-23 | **Version:** 2.0.0 | **Status:** Locked — baseline đặc tả nội bộ theo yêu cầu chủ dự án.
+**Implementation:** Chưa nghiệm thu; tài liệu này không xác nhận đã có code.
+**Nguồn:** SRS v1.1 VIII AUTH-01–05 và design.md; UI hỗ trợ auth/catalog v2; **Use cases:** UC01, UC02, UC03, UC04.
 
-## 1. Business Context & Goal
+Kế thừa [quyết định chung](../../../decisions.md), [quality gates](../../../quality-gates.md), [hợp đồng dữ liệu](../../../data-contract.md), [tích hợp](../../../integration.md), [màn hình](../../../screen-map.md) và [module](../module.md). FR/SC là mã cục bộ của feature này. Locked không thay thế phê duyệt khách hàng/giảng viên.
 
-* **Why:**  
-  Các trang xác thực người dùng (`/login`, `/register`, `/forgot-password`, `/reset-password`) và Footer của cổng thông tin công cộng hiện đang ở dạng tối giản (minimal skeleton). Cần nâng cấp toàn diện giao diện theo phong cách Enterprise Educational ERP hiện đại, lấy cảm hứng từ cấu trúc thiết kế tham khảo nhưng **tuyệt đối chỉ tích hợp các tính năng nghiệp vụ có thực của dự án EduCenter**.
-* **Strict Exclusions (Loại trừ triệt để theo yêu cầu dự án):**
-  1. **KHÔNG** đưa vào bảng chuyển đổi tài khoản demo nhanh (`RBAC Demo Switcher Panel`, `fillDemo(...)`).
-  2. **KHÔNG** đưa vào banner sandbox kiểm thử bỏ qua SMTP hoặc đường link demo bypass token (`?token=demo_sec...`).
-  3. **KHÔNG** đưa vào nút Google Workspace SSO (vì backend hiện tại chưa tích hợp OAuth2 Google).
-  4. **KHÔNG** đưa vào nút mô phỏng token hết hạn của developer.
-  5. **KHÔNG** cho phép tự đăng ký vai trò Gia sư/Giáo viên trên form đăng ký (`register.jsp`), bởi vì hệ thống quy định chỉ `STUDENT` (Học sinh) và `PARENT` (Phụ huynh) được phép tự đăng ký (Giáo viên và Staff do Admin cấp phát nội bộ per BR01/FR-001).
-* **Mục tiêu:**
-  1. **Đăng nhập (`/login`):** Bố cục Split-Screen SaaS 2 cột (Cột trái: Form đăng nhập chuẩn MVC + PRG, hiển thị thông báo flash, nhớ email đã nhập; Cột phải: Khối Academic Showcase giới thiệu thành tựu THPT Quốc Gia, mã hóa AES-256, RBAC).
-  2. **Đăng ký (`/register`):** Bố cục 2 cột (Cột trái: Stepper, Role Segmented Selector `STUDENT` hoặc `PARENT`, form 2 cột với Họ tên, SĐT, Email, Khối lớp quan tâm, Mật khẩu có thanh đo độ mạnh 4 vạch và checklist quy tắc trực quan, Xác nhận mật khẩu kèm chỉ báo khớp; Cột phải: Thẻ thành tựu học thuật, Bento quyền lợi và Hotline hỗ trợ).
-  3. **Quên mật khẩu (`/forgot-password`):** Thẻ bảo mật căn giữa (Centered Card max-w 480px), thanh gradient thương hiệu, huy hiệu ổ khóa bảo mật, ô nhập email xác thực, hộp Sentinel Guard bảo mật và gửi token đặt lại qua luồng nghiệp vụ chuẩn.
-  4. **Đặt lại mật khẩu (`/reset-password`):** Hiển thị thanh đếm ngược thời gian hiệu lực token (15 phút), kiểm tra độ mạnh mật khẩu mới, kiểm tra khớp mật khẩu, tùy chọn hủy phiên đăng nhập cũ, và xử lý rõ ràng khi token hết hạn.
-  5. **Footer dùng chung hiện đại (`public-footer.jspf`):** Chuẩn hóa toàn bộ hệ thống footer trên tất cả màn hình (Trang chủ, Khóa học, Giỏ đăng ký, Xác nhận, Các trang Auth, Lỗi 404/500). Gồm Logo E, Giới thiệu trung tâm, Tiêu chuẩn ISO/IEC 27001 & GDPT 2018, 4 cột điều hướng chi tiết (Chương trình học, Học viên & Phụ huynh, Tổ chức & Giảng dạy, Hỗ trợ & Pháp lý), kèm thanh bản quyền, trạng thái máy chủ và liên hệ hotline 1900 6886.
+## Business Context & Scope
 
----
+Màn hình xác thực và footer cần đồng nhất, giúp hoàn tất tác vụ an toàn mà không đưa chi tiết kỹ thuật hoặc khẳng định bảo mật chưa có vào trải nghiệm.
 
-## 2. User Personas & Actors
+**Trong phạm vi:** Layout auth, label/validation, role selector Student/Parent, reset status thực, shared footer và responsive.
 
-| Vai trò (Actor) | Thao tác tại Module Xác thực & Footer |
-|---|---|
-| **Guest (Khách vãng lai)** | Đăng ký tài khoản mới với vai trò Học sinh hoặc Phụ huynh; yêu cầu cấp lại mật khẩu qua email; duyệt điều hướng footer. |
-| **Student / Parent** | Đăng nhập vào không gian học tập; đặt lại mật khẩu an toàn khi quên; đối soát thông tin qua footer. |
-| **Staff / Admin / Tutor** | Đăng nhập tài khoản tác nghiệp vào hệ thống ERP qua cùng form chuẩn; chuyển hướng dashboard theo phân quyền. |
+**Ngoài phạm vi:** Thay policy auth/role/token, 2FA, demo helpers/reset link, 256-bit SSL/ISO/TLS/uptime chưa được xác minh hoặc chi nhánh giả.
 
----
+**Actors & Permissions:** Guest dùng auth; User dùng profile; thông tin trung tâm chỉ từ settings công khai, không lộ secrets.
 
-## 3. Functional Requirements (FR)
+## User Scenarios & Testing
 
-### FR-01: Giao diện Đăng nhập Chuẩn Enterprise (`/login`)
-- **FR-01.1:** Bố cục 2 cột (Desktop 1.25fr : 1fr, Mobile xếp dọc 1 cột).
-- **FR-01.2:** Cột trái chứa Form đăng nhập:
-  - Trường Email (`name="email"`, type="email", required, autocomplete="username", tự động nạp lại giá trị từ `sessionScope.preserved_email` nếu đăng nhập thất bại).
-  - Trường Mật khẩu (`name="password"`, type="password", required, autocomplete="current-password").
-  - Nút ẩn/hiện mật khẩu (toggle eye icon).
-  - Checkbox duy trì phiên làm việc ("Duy trì phiên đăng nhập theo quy chế bảo mật").
-  - Liên kết "Quên mật khẩu?" trỏ đến `${pageContext.request.contextPath}/forgot-password`.
-  - Nút Submit "Đăng nhập vào hệ thống" với icon mũi tên.
-  - Liên kết chuyển sang trang Đăng ký: `${pageContext.request.contextPath}/register`.
-  - Token bảo vệ CSRF: `<input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}"/>`.
-  - Tham số chuyển hướng an toàn: `<input type="hidden" name="redirect_url" value="<c:out value='${param.redirect_url}'/>"/>`.
-  - Hệ thống thông báo Flash Alert từ `alert.jsp` (hiển thị lỗi sai tài khoản/mật khẩu, thông báo vừa đăng xuất).
-- **FR-01.3:** Cột phải chứa Academic Showcase:
-  - Huy hiệu đào tạo: `M02 - Tuyển Sinh & Đào Tạo` / `THPT Quốc Gia`.
-  - Thẻ chỉ số: Tỷ lệ đỗ NV1 98.4%, thanh tiến độ đa khối (A00/A01, B00/D01, Khối khác), điểm trung bình môn Toán/Lý/Hóa.
-  - 2 khối điểm nhấn kiến trúc: Quyền hạn tác nghiệp nghiêm ngặt (RBAC) & Mã hóa dữ liệu học tập chuẩn AES-256.
-  - Hộp trích dẫn từ Hội đồng Chuyên môn EduCenter.
-  - Thông số kiểm toán hạ tầng: Cụm máy chủ Hà Nội (HN-01), Độ trễ thấp.
+### User Story 1 — Hoàn tất tác vụ xác thực (Priority: P0)
 
-### FR-02: Giao diện Đăng ký Thành viên Chuẩn Hóa (`/register`)
-- **FR-02.1:** Bố cục 2 cột (Cột chính 1.5fr, Cột quyền lợi 1fr).
-- **FR-02.2:** Thanh trạng thái quy trình (Stepper Bar): `01 · SRS AUTH-02 · Đăng ký thành viên hệ thống EduCenter` kèm huy hiệu bảo mật 256-bit SSL & BR01 Validated.
-- **FR-02.3:** Segmented Role Selector:
-  - Chọn 1 trong 2 vai trò hợp lệ: **Học sinh THPT (`STUDENT`)** hoặc **Phụ huynh (`PARENT`)**.
-  - Tự động gán vào `<input type="hidden" id="roleCodeInput" name="roleCode" value="STUDENT"/>`.
-  - Hỗ trợ khôi phục trạng thái vai trò từ `sessionScope.preserved_roleCode`.
-- **FR-02.4:** Lưới form 2 cột gồm các trường:
-  - Họ và tên (`name="fullName"`, minlength="2", maxlength="150", required).
-  - Số điện thoại (`name="phone"`, pattern="[0-9]{10}", required).
-  - Email cá nhân (`name="email"`, type="email", required).
-  - Khối lớp quan tâm (`name="grade"` hoặc thông tin đào tạo phù hợp).
-  - Mật khẩu (`name="password"`, required, minlength="6", toggle ẩn/hiện, thanh đo 4 vạch và checklist 4 tiêu chí: ≥ 6 ký tự, Chữ hoa, Chữ số, Ký tự đặc biệt).
-  - Xác nhận mật khẩu (`name="confirmPassword"`, required, minlength="6", toggle ẩn/hiện, chỉ báo trùng khớp theo thời gian thực).
-- **FR-02.5:** Checkbox đồng ý Điều khoản dịch vụ và Quy chế kiểm tra & đánh giá.
-- **FR-02.6:** Cột phải hiển thị:
-  - Thẻ hình ảnh & thành tựu đào tạo Niên khóa 2025 - 2026.
-  - Bento Box 3 quyền lợi tài khoản (Test đầu vào miễn phí, Lịch học thông minh, Biểu đồ tiến độ).
-  - Thẻ Hotline tư vấn tuyển sinh: `1900 6886`.
+Là người dùng, tôi muốn form rõ ràng và lỗi dễ hiểu để đăng ký/đăng nhập/khôi phục.
 
-### FR-03: Giao diện Quên Mật Khẩu (`/forgot-password`)
-- **FR-03.1:** Thẻ trung tâm (Centered Card) max-w 480px với thanh màu gradient thương hiệu trên đỉnh.
-- **FR-03.2:** Huy hiệu bảo mật Security Emblem (vòng tròn ổ khóa outline + icon khiên bảo mật).
-- **FR-03.3:** Tiêu đề và mô tả hướng dẫn nhập email định danh hệ thống.
-- **FR-03.4:** Form yêu cầu đặt lại mật khẩu với CSRF token, trường Email (`name="email"`), và hộp Sentinel Guard.
-- **FR-03.5:** Tích hợp hiển thị thông báo an toàn; nếu là môi trường chấm Assignment PRJ301 có `sessionScope.demo_reset_link`, hiển thị banner hướng dẫn đánh giá kèm link trực tiếp đặt lại mật khẩu.
-- **FR-03.6:** Liên kết quay lại Đăng nhập và email hỗ trợ kỹ thuật `hotro@educenter.vn`.
+**Giá trị/ưu tiên:** Hỗ trợ UC01–04.
 
-### FR-04: Giao diện Đặt Lại Mật Khẩu Mới (`/reset-password`)
-- **FR-04.1:** Thanh trạng thái token: `TOKEN VALID` kèm đồng hồ đếm ngược 15 phút (`#countdown-timer`).
-- **FR-04.2:** Thẻ trung tâm max-w 500px, tiêu đề Thiết lập mật khẩu mới (AUTH-04).
-- **FR-04.3:** Kiểm tra trạng thái token qua `resetState.valid`:
-  - Nếu token hợp lệ: Form nhập Mật khẩu mới (`name="newPassword"`, minlength="6"), Xác nhận mật khẩu mới (`name="confirmNewPassword"`), thanh đo độ mạnh, chỉ báo khớp, checkbox đăng xuất các thiết bị khác, nút lưu mật khẩu.
-  - Nếu token không hợp lệ hoặc đã hết hạn: Hiển thị Banner cảnh báo hết hạn phiên xác thực kèm nút "Yêu cầu liên kết mới" chuyển hướng về `/forgot-password`.
+**Independent Test:** Thử form hợp lệ/sai và quay lại sau redirect.
 
-### FR-05: Nâng Cấp Footer Dùng Chung Toàn Hệ Thống (`public-footer.jspf`)
-- **FR-05.1:** Thiết kế theo cấu trúc Enterprise Footer 4 cột chuyên nghiệp, hiển thị đồng nhất ở mọi trang công cộng và xác thực.
-- **FR-05.2:** Khối Brand & Định vị: Logo vuông "E", tên EduCenter, khẩu hiệu đào tạo, chứng nhận ISO/IEC 27001, Chương trình GDPT 2018, bảo mật TLS 1.3.
-- **FR-05.3:** Khối thông tin liên hệ: Cơ sở Hà Nội, Cơ sở TP.HCM, Hotline `1900 6886`, Email `hotro@educenter.vn`.
-- **FR-05.4:** 4 Cột danh mục liên kết rõ ràng:
-  - *Chương trình học*: Khóa học THPT Quốc Gia, Bổ trợ Toán - Lý - Hóa, Luyện thi ĐGNL ĐHQG, Tiếng Anh & IELTS.
-  - *Dành cho Học viên & PH*: Danh sách khóa học, Giỏ đăng ký (`/registration-cart`), Tư vấn tuyển sinh, Đăng nhập tài khoản.
-  - *Về EduCenter*: Đội ngũ giáo viên, Thành tựu học thuật, Lộ trình đào tạo, Quy chế đào tạo.
-  - *Hỗ trợ & Pháp lý*: Quy trình đăng ký, Chính sách bảo mật dữ liệu, Điều khoản sử dụng, Hỗ trợ kỹ thuật.
-- **FR-05.5:** Thanh đáy (Footer Bottom Bar): Bản quyền `&copy; ${currentYear} EduCenter ERP Platform`, trạng thái vận hành hệ thống `99.98% Uptime`, và liên kết chính sách.
+**Acceptance Scenarios:**
+1. Given form sai, When gửi, Then lỗi đúng trường và giữ input an toàn, không password.
+2. Given token hết hạn, When mở reset, Then trạng thái thật và link xin lại, không đếm ngược15phút giả.
 
----
+### Edge Cases
 
-## 4. Non-Functional Requirements (NFR)
-- **NFR-01 (Design System):** Tuân thủ tuyệt đối `design.md`: Giao diện mặc định Light Mode, sử dụng CSS tokens (`--bg`, `--surface`, `--primary`, `--text`...), font Inter, bo góc chuẩn, không sử dụng Tailwind CDN hoặc icon emoji.
-- **NFR-02 (Icons):** 100% sử dụng icon SVG outline chuẩn (Lucide SVG 16–20px).
-- **NFR-03 (Performance & CSS):** Tận dụng và hoàn thiện `web/assets/css/auth.css` và `public-shell.css`, đảm bảo `auth.css` được nhúng đầy đủ trong các trang Auth.
-- **NFR-04 (Responsive):** Thích ứng mượt mà trên cả 3 kích thước màn hình: Mobile (<768px), Tablet (768px - 1024px), Desktop (>1024px).
-- **NFR-05 (Accessibility):** Tương thích đầu đọc màn hình, trường form có nhãn `<label for="...">`, thông báo lỗi rõ ràng.
+- Email/name dài, thông báo validation dài, SMTP lỗi, localStorage bị chặn.
+- Footer thiếu thông tin liên hệ/chính sách, ảnh showcase không có nguồn, nhập Unicode password.
 
----
+## Requirements
 
-## 5. Verification & Acceptance Criteria (DoD)
-- [ ] Giao diện 4 trang `/login`, `/register`, `/forgot-password`, `/reset-password` đẹp hiện đại, chuẩn enterprise theo mẫu prototype đã lọc bỏ thành phần mock.
-- [ ] Footer ở tất cả các trang dùng chung (`public-footer.jspf`) hiển thị đồng nhất, sang trọng, đầy đủ 4 cột và thông tin thực tế.
-- [ ] Luồng đăng nhập, đăng ký, quên và đặt lại mật khẩu hoạt động trơn tru với backend JPA/Servlet hiện tại, không phát sinh lỗi validation hay CSRF.
-- [ ] Build dự án bằng Ant `verify` thành công 100%, vượt qua toàn bộ 50+ test cases JUnit 5.
-- [ ] Commit mã nguồn và push lên nhánh `main`.
+### Functional Requirements
+
+Các yêu cầu áp dụng đồng thời QG01–QG12. Cột nghiệm thu là kết quả bắt buộc khi chạy trường hợp tương ứng; không phải bằng chứng test đã pass.
+
+| ID | Yêu cầu kiểm chứng được | Truy vết nguồn | Nghiệm thu / kết quả quan sát |
+|---|---|---|---|
+| FR-001 | THE SYSTEM SHALL dựng login với label/focus/password toggle/validation và navigation chung; không hứa nhớ30ngày hoặc bảo mật chưa có. | UC02; design.md | Login dùng đúng policy/session của auth, không đoạn giới thiệu nội dung giả. |
+| FR-002 | THE SYSTEM SHALL đăng ký chỉ Student/Parent với hướng dẫn password đúng policy, không badge BR01/SRS/SSL kỹ thuật ở flow người dùng. | UC01; BR01; QG09 | Role nội bộ không xuất hiện; lỗi rõ ràng, không autofill/demo account. |
+| FR-003 | THE SYSTEM SHALL trình bày quên mật khẩu bằng phản hồi chung từ auth, không hiện link reset hoặc hướng dẫn chấm thử. | UC03; D04 | Email tồn tại/không có cùng response; SMTP lỗi không lộ token. |
+| FR-004 | THE SYSTEM SHALL lấy token validity/expiry thật từ backend ở reset và hiển thị đúng thời gian còn lại nếu có countdown; không giữ hardcode15phút. | UC03; auth FR-004 | Token30phút còn10phút hiển thị10; hết hạn/reuse không có form đổi hợp lệ. |
+| FR-005 | THE SYSTEM SHALL dùng footer chung từ center settings thật, một cơ sở, link chính sách có trang thật; không ISO/TLS/uptime/hotline giả. | M01; M12; QG03 | Thiếu trường không điền mẫu; auth/public/errors có cùng navigation ở4 độ rộng. |
+
+### Key Entities
+
+- Auth form view state: dữ liệu an toàn và reset expiry, không password/token trong flash.
+- SystemSettings public: tên/liên hệ/nội dung footer hợp lệ.
+
+### State & Business Rules
+
+Không định nghĩa lại trạng thái auth. Policy token/session/role do feat-auth-rbac v2 quyết định; layout không làm phát sinh quyền.
+
+**Business rules:** BR01, BR02. Chi tiết và chủ sở hữu tại traceability.md; không tự định nghĩa lại công thức chung.
+
+### UI & Navigation
+
+**Screens:** AUTH-01, AUTH-02, AUTH-03, AUTH-04, AUTH-05. URL/quyền/GET/POST được quy định ở screen-map.md; mỗi ID có đúng một chủ sở hữu. AUTH-01–05 vẫn do auth sở hữu; supporting spec chi tiết UI. Dùng Inter/tokens/local CSS/outline SVG, Light mặc định và label lỗi đọc được bằng bàn phím.
+
+## Success Criteria
+
+- **SC-001:** 100% trang auth/public/errors dùng cùng footer/navigation và hoạt động ở4 độ rộng.
+- **SC-002:** 0 hardcoded thời hạn/reset link/demo helpers/chứng nhận hoặc thông tin cơ sở giả.
+
+## Assumptions
+
+- FR-01..05 bản cũ ánh xạ FR-001..005 theo chủ đề; không giữ ràng buộc gradient/giả chứng nhận.
+- Trang chính sách chưa có thì không render link; không tạo href=#.
+- Các lựa chọn chưa được SRS quyết định được ghi tại decisions.md; không coi đây là xác nhận của khách hàng.
+- Cần plan/tasks cập nhật và bằng chứng quality gates trước khi triển khai/đánh dấu hoàn thành.
+
+## Dependencies & Handoff
+
+Kế thừa auth/catalog/sysadmin v2; không thay controller/policy từ UI. Plan/tasks lịch sử phải cập nhật trước code.
+
+Checklist chất lượng: [requirements.md](checklists/requirements.md). Trạng thái hiện thực hóa và thứ tự triển khai: [README](../../../README.md).

@@ -1,5 +1,7 @@
 # Tasks: Portal and cart repairs
 
+> **Historical repair scope ? 2026-10-23.** T?i li?u v? ba ngo?i l? b?n d??i ghi l?i ph?m vi ??t repair c?. [Baseline ??c t? hi?n h?nh](../../../README.md) v? [D04](../../../decisions.md) y?u c?u d? li?u th?t, kh?ng demo helpers/reset link cho s?n ph?m. Kh?ng s?a ng??c k?t qu? verification c? v? kh?ng coi ngo?i l? c? l? mi?n tr? cho feature v2.
+
 Input: spec.md, plan.md, research.md, data-model.md, contracts/http.md, quickstart.md.
 
 ## Phase 1: Setup

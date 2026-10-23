@@ -4,6 +4,22 @@
 
 ---
 
+
+## Baseline đặc tả đầy đủ — 2026-10-23
+
+[Danh mục chung](../../README.md), [hợp đồng dữ liệu](../../data-contract.md), [tích hợp/quyền](../../integration.md), [screen-map chuẩn](../../screen-map.md) và [thứ tự code](../../implementation-order.md) áp dụng cho mọi feature bên dưới. Các tên Controller trong tài liệu module là hợp đồng logic đề xuất, cần đối chiếu code hiện hữu khi plan; không tạo Controller/route trùng. Danh sách này mô tả phạm vi, không chứng nhận đã implement.
+
+| Feature | Spec | UC liên quan |
+|---|---|---|
+| feat-admission-crm | [Lead, tư vấn và kiểm tra đầu vào](feat-admission-crm/spec.md) | UC09, UC10 |
+| feat-student-guardian | [Hồ sơ học viên, phụ huynh và xác thực giám hộ](feat-student-guardian/spec.md) | UC13, UC14 |
+| feat-student-parent-portal | [Cổng học viên và phụ huynh với dữ liệu thật](feat-student-parent-portal/spec.md) | UC19, UC24, UC27 |
+| feat-enrollment | [Ghi danh, chuyển lớp, bảo lưu và lịch sử học](feat-enrollment/SPEC.md) | UC17, UC18 |
+| feat-notifications-qa | [Hỏi đáp kiểm duyệt và thông báo trong ứng dụng](feat-notifications-qa/spec.md) | UC28, UC29, UC30 |
+| feat-course-catalog | [Website công khai, catalog và danh sách đăng ký](feat-course-catalog/spec.md) | UC06, UC07, UC08, UC09 |
+
+Không tự định nghĩa lại công thức, trạng thái, quyền hoặc transaction khác hợp đồng chung. P1 được ghi rõ trong feature, không bỏ qua khi viết spec.
+
 ## 1. PHẠM VI NGHIỆP VỤ (SCOPE)
 * **M01 – Public Website & Course Catalog:** Trang chủ (`/`), danh sách khóa học có tìm kiếm/lọc/sắp xếp/phân trang (`/courses`), chi tiết khóa học và khóa học liên quan (`/courses/detail`), giỏ đăng ký khóa học (`/registration-cart`), form gửi yêu cầu tư vấn (`/consultation`).
 * **M03 – Admission & CRM:** Quản lý khách hàng tiềm năng (`Leads`), lịch sử tư vấn (`Consultations`), đặt lịch kiểm tra đầu vào (`TrialAssessments`), quản lý trạng thái (`NEW -> CONTACTED -> ASSESSED -> CONSULTING -> ENROLLED`, nhánh `LOST`).

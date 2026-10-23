@@ -7,6 +7,10 @@
 
 ## 0. Purpose and non-negotiable rules
 
+### Current specification baseline — 2026-10-23
+
+The [complete specification set](.sdd/specs/README.md) and [decisions D01–D17](.sdd/specs/decisions.md) govern current product requirements. D04 limits the three owner exclusions below to the historical repair acceptance scope: new production acceptance requires actual data, no direct reset-link display and no demonstration security/learning content. Tokens, typography and responsive rules remain governed by this document. Example numbers and decorative requirements in the historical section7.0 must not become production facts or override these rules. For Screen IDs/URLs use the SRS-aligned [screen map and alias reconciliation](.sdd/specs/screen-map.md), including AUTH-05 for profile, SYS-01 for403 and ADM-17 for moderation. MVP has5 role codes covering6 SRS responsibilities, with Manager included in ADMIN.
+
 ### Approved repair clarification — 2026-10-23
 
 For this repair, `.sdd/specs/modules/admission/feat-portal-cart-repair/spec.md` defines the owner's three explicit exclusions: existing home learning-showcase cards, profile 2FA/device demonstration content and direct reset-link delivery. No other fabricated facts are permitted. Numerical examples in section 7.0 describe only that existing excluded showcase.

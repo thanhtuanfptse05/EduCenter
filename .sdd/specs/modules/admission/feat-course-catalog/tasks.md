@@ -1,4 +1,7 @@
 # Implementation Tasks: Course Catalog & Registration Cart (feat-course-catalog)
+
+> **Artifact baseline: historical v1.** N?i dung/checkbox d??i ??y thu?c phi?n b?n tr??c; spec v2 hi?n h?nh l? [spec.md](spec.md). Ph?i c?p nh?t plan/tasks v? c?c h?p ??ng t??ng ?ng tr??c khi code v2; kh?ng d?ng tr?ng th?i Completed ho?c chi ti?t m?u thu?n ? ??y l?m b?ng ch?ng ?? ??t v2. H?p ??ng chung t?i [integration.md](../../../integration.md) v? th? t? tri?n khai t?i [implementation-order.md](../../../implementation-order.md).
+
 **Status:** Completed | **Feature:** `feat-course-catalog`
 > Historical implementation checklist. Completion claims below are superseded by the 2026-10-23 [repair specification](../../admission/feat-portal-cart-repair/spec.md) and [verification](../../admission/feat-portal-cart-repair/verification.md); owner exclusions and unbuilt ERP modules are not production-complete.
 

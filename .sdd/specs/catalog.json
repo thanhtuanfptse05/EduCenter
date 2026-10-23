@@ -1,0 +1,2258 @@
+{
+  "baseline": "2026-10-23",
+  "source": "../../EduCenter_Tutoring_Exam_Preparation_SRS_v1.1.md",
+  "features": [
+    {
+      "id": "feat-academic-programs",
+      "module": [
+        "M04"
+      ],
+      "owner": "Member 01",
+      "spec": "modules/academic/feat-academic-programs/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008"
+      ],
+      "screens": [
+        "ADM-04",
+        "ADM-05"
+      ]
+    },
+    {
+      "id": "feat-teacher-management",
+      "module": [
+        "M04",
+        "M05",
+        "M12"
+      ],
+      "owner": "Member 01; Member 03 cấp tài khoản",
+      "spec": "modules/academic/feat-teacher-management/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008"
+      ],
+      "screens": [
+        "ADM-09"
+      ]
+    },
+    {
+      "id": "feat-class-timetable",
+      "module": [
+        "M05",
+        "M12"
+      ],
+      "owner": "Member 01",
+      "spec": "modules/academic/feat-class-timetable/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "FR-011",
+        "FR-012"
+      ],
+      "screens": [
+        "ADM-10",
+        "ADM-11",
+        "ADM-13",
+        "TCH-01",
+        "TCH-02"
+      ]
+    },
+    {
+      "id": "feat-attendance-journal",
+      "module": [
+        "M07"
+      ],
+      "owner": "Member 01",
+      "spec": "modules/academic/feat-attendance-journal/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009"
+      ],
+      "screens": [
+        "TCH-03",
+        "TCH-04"
+      ]
+    },
+    {
+      "id": "feat-assessment-progress",
+      "module": [
+        "M08"
+      ],
+      "owner": "Member 01",
+      "spec": "modules/academic/feat-assessment-progress/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010"
+      ],
+      "screens": [
+        "TCH-05",
+        "TCH-06"
+      ]
+    },
+    {
+      "id": "feat-admission-crm",
+      "module": [
+        "M03"
+      ],
+      "owner": "Member 02",
+      "spec": "modules/admission/feat-admission-crm/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010"
+      ],
+      "screens": [
+        "ADM-02",
+        "ADM-03"
+      ]
+    },
+    {
+      "id": "feat-student-guardian",
+      "module": [
+        "M06"
+      ],
+      "owner": "Member 02",
+      "spec": "modules/admission/feat-student-guardian/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010"
+      ],
+      "screens": [
+        "ADM-06",
+        "ADM-07",
+        "ADM-08"
+      ]
+    },
+    {
+      "id": "feat-student-parent-portal",
+      "module": [
+        "M06",
+        "M07",
+        "M08",
+        "M09",
+        "M10"
+      ],
+      "owner": "Member 02; Member 01/03 cung cấp dữ liệu",
+      "spec": "modules/admission/feat-student-parent-portal/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010"
+      ],
+      "screens": [
+        "STD-01",
+        "STD-02",
+        "STD-03",
+        "PAR-01",
+        "PAR-02"
+      ]
+    },
+    {
+      "id": "feat-enrollment",
+      "module": [
+        "M03",
+        "M05",
+        "M06",
+        "M09"
+      ],
+      "owner": "Member 02; Member 03 lập hóa đơn trong giao dịch chung",
+      "spec": "modules/admission/feat-enrollment/SPEC.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "FR-011",
+        "FR-012"
+      ],
+      "screens": [
+        "ADM-12"
+      ]
+    },
+    {
+      "id": "feat-tuition-payment",
+      "module": [
+        "M09"
+      ],
+      "owner": "Member 03",
+      "spec": "modules/finance-admin/feat-tuition-payment/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "FR-011",
+        "FR-012",
+        "FR-013",
+        "FR-014",
+        "FR-015"
+      ],
+      "screens": [
+        "ADM-14",
+        "ADM-15",
+        "STD-04",
+        "PAR-03"
+      ]
+    },
+    {
+      "id": "feat-dashboard-reporting",
+      "module": [
+        "M11"
+      ],
+      "owner": "Member 03",
+      "spec": "modules/finance-admin/feat-dashboard-reporting/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010"
+      ],
+      "screens": [
+        "ADM-01",
+        "ADM-16"
+      ]
+    },
+    {
+      "id": "feat-system-administration",
+      "module": [
+        "M12"
+      ],
+      "owner": "Member 03",
+      "spec": "modules/finance-admin/feat-system-administration/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010"
+      ],
+      "screens": [
+        "ADM-19"
+      ]
+    },
+    {
+      "id": "feat-notifications-qa",
+      "module": [
+        "M10"
+      ],
+      "owner": "Member 02",
+      "spec": "modules/admission/feat-notifications-qa/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "FR-011",
+        "FR-012"
+      ],
+      "screens": [
+        "COM-01",
+        "COM-02",
+        "COM-03",
+        "ADM-17"
+      ]
+    },
+    {
+      "id": "feat-auth-rbac",
+      "module": [
+        "M02",
+        "M12"
+      ],
+      "owner": "Member 03",
+      "spec": "modules/finance-admin/feat-auth-rbac/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010"
+      ],
+      "screens": [
+        "AUTH-01",
+        "AUTH-02",
+        "AUTH-03",
+        "AUTH-04",
+        "AUTH-05",
+        "ADM-18",
+        "SYS-01",
+        "SYS-02"
+      ]
+    },
+    {
+      "id": "feat-course-catalog",
+      "module": [
+        "M01"
+      ],
+      "owner": "Member 02",
+      "spec": "modules/admission/feat-course-catalog/spec.md",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "FR-011",
+        "FR-012"
+      ],
+      "screens": [
+        "PUB-01",
+        "PUB-02",
+        "PUB-03",
+        "PUB-04",
+        "PUB-05",
+        "PUB-06",
+        "PUB-07"
+      ]
+    }
+  ],
+  "uc": [
+    {
+      "id": "UC01",
+      "title": "Đăng ký tài khoản",
+      "actor": "Guest",
+      "priority": "P0",
+      "feature": "feat-auth-rbac",
+      "requirements": [
+        "FR-001"
+      ]
+    },
+    {
+      "id": "UC02",
+      "title": "Đăng nhập, đăng xuất",
+      "actor": "All",
+      "priority": "P0",
+      "feature": "feat-auth-rbac",
+      "requirements": [
+        "FR-002",
+        "FR-003"
+      ]
+    },
+    {
+      "id": "UC03",
+      "title": "Quên, đổi mật khẩu",
+      "actor": "All",
+      "priority": "P0",
+      "feature": "feat-auth-rbac",
+      "requirements": [
+        "FR-004",
+        "FR-005"
+      ]
+    },
+    {
+      "id": "UC04",
+      "title": "Cập nhật hồ sơ",
+      "actor": "All",
+      "priority": "P0",
+      "feature": "feat-auth-rbac",
+      "requirements": [
+        "FR-005"
+      ]
+    },
+    {
+      "id": "UC05",
+      "title": "Quản lý tài khoản, vai trò",
+      "actor": "Admin",
+      "priority": "P0",
+      "feature": "feat-auth-rbac",
+      "requirements": [
+        "FR-006",
+        "FR-007",
+        "FR-009"
+      ]
+    },
+    {
+      "id": "UC06",
+      "title": "Xem, tìm kiếm, lọc khóa học",
+      "actor": "Guest / All",
+      "priority": "P0",
+      "feature": "feat-course-catalog",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-011",
+        "FR-012"
+      ]
+    },
+    {
+      "id": "UC07",
+      "title": "Xem chi tiết và khóa học liên quan",
+      "actor": "Guest / All",
+      "priority": "P0",
+      "feature": "feat-course-catalog",
+      "requirements": [
+        "FR-003"
+      ]
+    },
+    {
+      "id": "UC08",
+      "title": "Quản lý danh sách khóa học đăng ký",
+      "actor": "Student / Parent",
+      "priority": "P0",
+      "feature": "feat-course-catalog",
+      "requirements": [
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009"
+      ]
+    },
+    {
+      "id": "UC09",
+      "title": "Gửi yêu cầu tư vấn",
+      "actor": "Guest",
+      "priority": "P0",
+      "feature": "feat-course-catalog",
+      "requirements": [
+        "FR-010"
+      ]
+    },
+    {
+      "id": "UC10",
+      "title": "Quản lý Lead và lịch sử tư vấn",
+      "actor": "Staff",
+      "priority": "P0",
+      "feature": "feat-admission-crm",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010"
+      ]
+    },
+    {
+      "id": "UC11",
+      "title": "Quản lý môn học, khóa học",
+      "actor": "Manager / Staff",
+      "priority": "P0",
+      "feature": "feat-academic-programs",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008"
+      ]
+    },
+    {
+      "id": "UC12",
+      "title": "Quản lý giáo viên",
+      "actor": "Manager / Staff",
+      "priority": "P0",
+      "feature": "feat-teacher-management",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008"
+      ]
+    },
+    {
+      "id": "UC13",
+      "title": "Quản lý học viên, phụ huynh",
+      "actor": "Staff",
+      "priority": "P0",
+      "feature": "feat-student-guardian",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-008",
+        "FR-009",
+        "FR-010"
+      ]
+    },
+    {
+      "id": "UC14",
+      "title": "Liên kết phụ huynh – học viên",
+      "actor": "Staff",
+      "priority": "P0",
+      "feature": "feat-student-guardian",
+      "requirements": [
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007"
+      ]
+    },
+    {
+      "id": "UC15",
+      "title": "Tạo, sửa, đóng lớp",
+      "actor": "Staff",
+      "priority": "P0",
+      "feature": "feat-class-timetable",
+      "requirements": [
+        "FR-001",
+        "FR-003",
+        "FR-009"
+      ]
+    },
+    {
+      "id": "UC16",
+      "title": "Xếp lịch, kiểm tra xung đột",
+      "actor": "Staff",
+      "priority": "P0",
+      "feature": "feat-class-timetable",
+      "requirements": [
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-011",
+        "FR-012"
+      ]
+    },
+    {
+      "id": "UC17",
+      "title": "Ghi danh học viên",
+      "actor": "Staff",
+      "priority": "P0",
+      "feature": "feat-enrollment",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-012"
+      ]
+    },
+    {
+      "id": "UC18",
+      "title": "Chuyển lớp, bảo lưu",
+      "actor": "Staff",
+      "priority": "P1",
+      "feature": "feat-enrollment",
+      "requirements": [
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "FR-011"
+      ]
+    },
+    {
+      "id": "UC19",
+      "title": "Xem lịch học",
+      "actor": "Người liên quan",
+      "priority": "P0",
+      "feature": "feat-student-parent-portal",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-008"
+      ]
+    },
+    {
+      "id": "UC20",
+      "title": "Điểm danh",
+      "actor": "Teacher",
+      "priority": "P0",
+      "feature": "feat-attendance-journal",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-007",
+        "FR-008",
+        "FR-009"
+      ]
+    },
+    {
+      "id": "UC21",
+      "title": "Ghi nhật ký giảng dạy",
+      "actor": "Teacher",
+      "priority": "P1",
+      "feature": "feat-attendance-journal",
+      "requirements": [
+        "FR-006",
+        "FR-008"
+      ]
+    },
+    {
+      "id": "UC22",
+      "title": "Tạo bài kiểm tra",
+      "actor": "Teacher",
+      "priority": "P0",
+      "feature": "feat-assessment-progress",
+      "requirements": [
+        "FR-001",
+        "FR-002"
+      ]
+    },
+    {
+      "id": "UC23",
+      "title": "Nhập, công bố điểm",
+      "actor": "Teacher",
+      "priority": "P0",
+      "feature": "feat-assessment-progress",
+      "requirements": [
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-010"
+      ]
+    },
+    {
+      "id": "UC24",
+      "title": "Xem kết quả học tập",
+      "actor": "Student / Parent",
+      "priority": "P0",
+      "feature": "feat-student-parent-portal",
+      "requirements": [
+        "FR-004",
+        "FR-005",
+        "FR-006"
+      ]
+    },
+    {
+      "id": "UC25",
+      "title": "Tạo hóa đơn học phí",
+      "actor": "Staff",
+      "priority": "P0",
+      "feature": "feat-tuition-payment",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-009",
+        "FR-012"
+      ]
+    },
+    {
+      "id": "UC26",
+      "title": "Ghi nhận thanh toán",
+      "actor": "Staff",
+      "priority": "P0",
+      "feature": "feat-tuition-payment",
+      "requirements": [
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-010",
+        "FR-011",
+        "FR-015"
+      ]
+    },
+    {
+      "id": "UC27",
+      "title": "Xem công nợ, lịch sử đóng tiền",
+      "actor": "Staff / Parent",
+      "priority": "P0",
+      "feature": "feat-tuition-payment",
+      "requirements": [
+        "FR-008",
+        "FR-013",
+        "FR-014"
+      ]
+    },
+    {
+      "id": "UC28",
+      "title": "Tạo, nhận thông báo",
+      "actor": "Staff / All",
+      "priority": "P1",
+      "feature": "feat-notifications-qa",
+      "requirements": [
+        "FR-009",
+        "FR-010",
+        "FR-011",
+        "FR-012"
+      ]
+    },
+    {
+      "id": "UC29",
+      "title": "Gửi câu hỏi",
+      "actor": "Student / Parent",
+      "priority": "P0",
+      "feature": "feat-notifications-qa",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-006"
+      ]
+    },
+    {
+      "id": "UC30",
+      "title": "Trả lời, kiểm duyệt Q&A",
+      "actor": "Teacher / Staff / Admin",
+      "priority": "P0",
+      "feature": "feat-notifications-qa",
+      "requirements": [
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008"
+      ]
+    },
+    {
+      "id": "UC31",
+      "title": "Thống kê tuyển sinh",
+      "actor": "Manager",
+      "priority": "P0",
+      "feature": "feat-dashboard-reporting",
+      "requirements": [
+        "FR-001",
+        "FR-003",
+        "FR-005",
+        "FR-007",
+        "FR-008",
+        "FR-009"
+      ]
+    },
+    {
+      "id": "UC32",
+      "title": "Thống kê học phí",
+      "actor": "Manager",
+      "priority": "P0",
+      "feature": "feat-dashboard-reporting",
+      "requirements": [
+        "FR-001",
+        "FR-004",
+        "FR-005",
+        "FR-008",
+        "FR-009"
+      ]
+    },
+    {
+      "id": "UC33",
+      "title": "Thống kê chuyên cần, điểm",
+      "actor": "Manager / Teacher",
+      "priority": "P0",
+      "feature": "feat-dashboard-reporting",
+      "requirements": [
+        "FR-002",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-010"
+      ]
+    },
+    {
+      "id": "UC34",
+      "title": "Quản lý phòng học",
+      "actor": "Staff",
+      "priority": "P0",
+      "feature": "feat-class-timetable",
+      "requirements": [
+        "FR-002",
+        "FR-003"
+      ]
+    },
+    {
+      "id": "UC35",
+      "title": "Xem nhật ký thao tác",
+      "actor": "Admin",
+      "priority": "P1",
+      "feature": "feat-system-administration",
+      "requirements": [
+        "FR-006",
+        "FR-007",
+        "FR-008"
+      ]
+    }
+  ],
+  "module_requirements": [
+    {
+      "id": "M01.01",
+      "module": "M01",
+      "source": "Trang chủ: giới thiệu trung tâm, giáo viên, khóa học nổi bật/mới mở.",
+      "feature": "feat-course-catalog",
+      "requirements": [
+        "FR-001",
+        "FR-011"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M01.02",
+      "module": "M01",
+      "source": "Danh sách khóa học theo môn Toán, Văn, Anh, Lý, Hóa…, khối 6–12 và mục tiêu thi.",
+      "feature": "feat-course-catalog",
+      "requirements": [
+        "FR-002",
+        "FR-003"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M01.03",
+      "module": "M01",
+      "source": "Tìm kiếm từ khóa, lọc môn/khối/mức phí, sắp xếp, phân trang.",
+      "feature": "feat-course-catalog",
+      "requirements": [
+        "FR-002"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M01.04",
+      "module": "M01",
+      "source": "Trang chi tiết: mục tiêu, nội dung, số buổi, lịch dự kiến, học phí, sĩ số.",
+      "feature": "feat-course-catalog",
+      "requirements": [
+        "FR-003"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M01.05",
+      "module": "M01",
+      "source": "Gợi ý khóa học tương tự.",
+      "feature": "feat-course-catalog",
+      "requirements": [
+        "FR-003"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M01.06",
+      "module": "M01",
+      "source": "Form đăng ký tư vấn, kiểm tra đầu vào.",
+      "feature": "feat-course-catalog",
+      "requirements": [
+        "FR-010"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M01.07",
+      "module": "M01",
+      "source": "Danh sách chọn khóa học đăng ký: thêm, bỏ, cập nhật lựa chọn, tổng học phí dự kiến.",
+      "feature": "feat-course-catalog",
+      "requirements": [
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M02.01",
+      "module": "M02",
+      "source": "Đăng ký, đăng nhập, đăng xuất.",
+      "feature": "feat-auth-rbac",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M02.02",
+      "module": "M02",
+      "source": "Quên/đặt lại mật khẩu, đổi mật khẩu, cập nhật hồ sơ.",
+      "feature": "feat-auth-rbac",
+      "requirements": [
+        "FR-004",
+        "FR-005"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M02.03",
+      "module": "M02",
+      "source": "Quản lý vai trò, trạng thái khóa/mở tài khoản.",
+      "feature": "feat-auth-rbac",
+      "requirements": [
+        "FR-006",
+        "FR-007",
+        "FR-009"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M02.04",
+      "module": "M02",
+      "source": "Một phụ huynh có thể liên kết nhiều học viên; một học viên có thể có nhiều người giám hộ.",
+      "feature": "feat-student-guardian",
+      "requirements": [
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M02.05",
+      "module": "M02",
+      "source": "Mật khẩu lưu dạng hash an toàn, kiểm tra phân quyền ở server.",
+      "feature": "feat-auth-rbac",
+      "requirements": [
+        "FR-001",
+        "FR-003",
+        "FR-008",
+        "FR-010"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M03.01",
+      "module": "M03",
+      "source": "Tiếp nhận khách hàng tiềm năng (Lead) từ website/nhân viên.",
+      "feature": "feat-admission-crm",
+      "requirements": [
+        "FR-001",
+        "FR-002"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M03.02",
+      "module": "M03",
+      "source": "Phân công tư vấn viên, nguồn tuyển sinh, lịch sử liên hệ.",
+      "feature": "feat-admission-crm",
+      "requirements": [
+        "FR-003",
+        "FR-004"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M03.03",
+      "module": "M03",
+      "source": "Đặt lịch học thử hoặc kiểm tra đầu vào; ghi nhận kết quả.",
+      "feature": "feat-admission-crm",
+      "requirements": [
+        "FR-006",
+        "FR-007"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M03.04",
+      "module": "M03",
+      "source": "Quản lý trạng thái `NEW → CONTACTED → ASSESSED → CONSULTING → ENROLLED`, nhánh `LOST`.",
+      "feature": "feat-admission-crm",
+      "requirements": [
+        "FR-005"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M03.05",
+      "module": "M03",
+      "source": "Chuyển Lead thành hồ sơ học viên và ghi danh.",
+      "feature": "feat-admission-crm",
+      "requirements": [
+        "FR-008"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M04.01",
+      "module": "M04",
+      "source": "CRUD môn học, chương trình, khóa học.",
+      "feature": "feat-academic-programs",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-005",
+        "FR-006"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M04.02",
+      "module": "M04",
+      "source": "Khối lớp, mục tiêu thi, trình độ, thời lượng, số buổi, học phí, mô tả, trạng thái tuyển sinh.",
+      "feature": "feat-academic-programs",
+      "requirements": [
+        "FR-002",
+        "FR-004",
+        "FR-007",
+        "FR-008"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M04.03",
+      "module": "M04",
+      "source": "Ví dụ: Toán 12 – Ôn thi tốt nghiệp THPT; 24 buổi; 90 phút/buổi; tối đa 15 học viên.",
+      "feature": "feat-academic-programs",
+      "requirements": [
+        "FR-002"
+      ],
+      "kind": "illustration"
+    },
+    {
+      "id": "M05.01",
+      "module": "M05",
+      "source": "Tạo lớp, chọn khóa học, phân giáo viên chính, phòng, sĩ số tối đa.",
+      "feature": "feat-class-timetable",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M05.02",
+      "module": "M05",
+      "source": "Tạo lịch định kỳ và sinh các buổi học cụ thể.",
+      "feature": "feat-class-timetable",
+      "requirements": [
+        "FR-004"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M05.03",
+      "module": "M05",
+      "source": "Kiểm tra trùng giáo viên, phòng, lịch học viên.",
+      "feature": "feat-class-timetable",
+      "requirements": [
+        "FR-005",
+        "FR-006",
+        "FR-011"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M05.04",
+      "module": "M05",
+      "source": "Đổi lịch, học bù, giáo viên dạy thay, chuyển lớp, bảo lưu, kết thúc lớp.",
+      "feature": "feat-class-timetable",
+      "requirements": [
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-012"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M05.05",
+      "module": "M05",
+      "source": "Hỗ trợ lớp nhóm và lớp 1-1.",
+      "feature": "feat-class-timetable",
+      "requirements": [
+        "FR-001"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M06.01",
+      "module": "M06",
+      "source": "Hồ sơ học viên, trường học, khối lớp, mục tiêu điểm số, thông tin liên hệ.",
+      "feature": "feat-student-guardian",
+      "requirements": [
+        "FR-001",
+        "FR-003"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M06.02",
+      "module": "M06",
+      "source": "Hồ sơ phụ huynh và xác thực quan hệ giám hộ.",
+      "feature": "feat-student-guardian",
+      "requirements": [
+        "FR-002",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M06.03",
+      "module": "M06",
+      "source": "Lịch sử đăng ký, trạng thái học, bảo lưu, nghỉ học, chuyển lớp.",
+      "feature": "feat-enrollment",
+      "requirements": [
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "FR-011"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M06.04",
+      "module": "M06",
+      "source": "Tra cứu tiến độ và thông tin học viên theo quyền.",
+      "feature": "feat-student-parent-portal",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M07.01",
+      "module": "M07",
+      "source": "Giáo viên mở buổi học được phân công và điểm danh.",
+      "feature": "feat-attendance-journal",
+      "requirements": [
+        "FR-001",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-009"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M07.02",
+      "module": "M07",
+      "source": "Trạng thái: `PRESENT`, `ABSENT_EXCUSED`, `ABSENT_UNEXCUSED`, `LATE`.",
+      "feature": "feat-attendance-journal",
+      "requirements": [
+        "FR-002"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M07.03",
+      "module": "M07",
+      "source": "Ghi nội dung giảng dạy, bài tập về nhà, nhận xét.",
+      "feature": "feat-attendance-journal",
+      "requirements": [
+        "FR-006"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M07.04",
+      "module": "M07",
+      "source": "Tỷ lệ chuyên cần theo học viên, lớp, giai đoạn.",
+      "feature": "feat-attendance-journal",
+      "requirements": [
+        "FR-007",
+        "FR-008"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M08.01",
+      "module": "M08",
+      "source": "Kiểm tra đầu vào, giữa khóa, cuối khóa và bài kiểm tra định kỳ.",
+      "feature": "feat-assessment-progress",
+      "requirements": [
+        "FR-001"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M08.02",
+      "module": "M08",
+      "source": "Tạo bài kiểm tra, thang điểm, nhập điểm, nhận xét, công bố kết quả.",
+      "feature": "feat-assessment-progress",
+      "requirements": [
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-010"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M08.03",
+      "module": "M08",
+      "source": "So sánh điểm đầu vào và điểm theo thời gian; biểu đồ tiến bộ.",
+      "feature": "feat-assessment-progress",
+      "requirements": [
+        "FR-008",
+        "FR-009"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M08.04",
+      "module": "M08",
+      "source": "Ví dụ: 5,5 → 7,0 → 8,0; tăng 2,5 điểm so với đầu vào.",
+      "feature": "feat-assessment-progress",
+      "requirements": [
+        "FR-008"
+      ],
+      "kind": "illustration"
+    },
+    {
+      "id": "M09.01",
+      "module": "M09",
+      "source": "Học phí niêm yết, ưu đãi, hóa đơn, các khoản thu.",
+      "feature": "feat-tuition-payment",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-003"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M09.02",
+      "module": "M09",
+      "source": "Ghi nhận thanh toán từng đợt, phương thức và chứng từ tham chiếu.",
+      "feature": "feat-tuition-payment",
+      "requirements": [
+        "FR-005",
+        "FR-006",
+        "FR-007"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M09.03",
+      "module": "M09",
+      "source": "Theo dõi số đã thu, còn nợ, lịch sử thanh toán, biên lai nội bộ.",
+      "feature": "feat-tuition-payment",
+      "requirements": [
+        "FR-004",
+        "FR-008",
+        "FR-013",
+        "FR-014",
+        "FR-015"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M09.04",
+      "module": "M09",
+      "source": "Không tích hợp cổng ngân hàng thật trong MVP.",
+      "feature": "feat-tuition-payment",
+      "requirements": [
+        "FR-005"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M09.05",
+      "module": "M09",
+      "source": "Không xóa lịch sử giao dịch; điều chỉnh có nhật ký.",
+      "feature": "feat-tuition-payment",
+      "requirements": [
+        "FR-009",
+        "FR-010",
+        "FR-011",
+        "FR-012"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M10.01",
+      "module": "M10",
+      "source": "Thông báo đổi lịch, nghỉ học, học phí đến hạn, kết quả học tập.",
+      "feature": "feat-notifications-qa",
+      "requirements": [
+        "FR-009",
+        "FR-010",
+        "FR-011",
+        "FR-012"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M10.02",
+      "module": "M10",
+      "source": "Học viên/phụ huynh đặt câu hỏi về khóa học hoặc lịch học.",
+      "feature": "feat-notifications-qa",
+      "requirements": [
+        "FR-001",
+        "FR-002"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M10.03",
+      "module": "M10",
+      "source": "Nhân viên/giáo viên/admin trả lời theo quyền.",
+      "feature": "feat-notifications-qa",
+      "requirements": [
+        "FR-003"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M10.04",
+      "module": "M10",
+      "source": "Kiểm duyệt nội dung trước khi hiển thị công khai; duyệt, từ chối, ẩn.",
+      "feature": "feat-notifications-qa",
+      "requirements": [
+        "FR-004",
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M11.01",
+      "module": "M11",
+      "source": "Tổng học viên, học viên mới, lớp hoạt động, số buổi học.",
+      "feature": "feat-dashboard-reporting",
+      "requirements": [
+        "FR-002"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M11.02",
+      "module": "M11",
+      "source": "Tỷ lệ chuyển đổi tuyển sinh, tỷ lệ chuyên cần.",
+      "feature": "feat-dashboard-reporting",
+      "requirements": [
+        "FR-003",
+        "FR-006"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M11.03",
+      "module": "M11",
+      "source": "Doanh thu đã thu, số phải thu, công nợ.",
+      "feature": "feat-dashboard-reporting",
+      "requirements": [
+        "FR-004"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M11.04",
+      "module": "M11",
+      "source": "Điểm trung bình, lớp đông/ít nhất, khóa học có nhiều lượt đăng ký.",
+      "feature": "feat-dashboard-reporting",
+      "requirements": [
+        "FR-006",
+        "FR-007"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M11.05",
+      "module": "M11",
+      "source": "Báo cáo dùng đủ `MAX`, `MIN`, `AVG`, `SUM`, `COUNT`.",
+      "feature": "feat-dashboard-reporting",
+      "requirements": [
+        "FR-005",
+        "FR-008",
+        "FR-009",
+        "FR-010"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M12.01",
+      "module": "M12",
+      "source": "Quản lý người dùng, vai trò, danh mục, phòng học.",
+      "feature": "feat-system-administration",
+      "requirements": [
+        "FR-009"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M12.02",
+      "module": "M12",
+      "source": "Cấu hình thông số học phí, giới hạn nghiệp vụ.",
+      "feature": "feat-system-administration",
+      "requirements": [
+        "FR-001",
+        "FR-002",
+        "FR-004"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M12.03",
+      "module": "M12",
+      "source": "Audit Logs: ai thao tác, lúc nào, thay đổi gì.",
+      "feature": "feat-system-administration",
+      "requirements": [
+        "FR-005",
+        "FR-006",
+        "FR-007",
+        "FR-008"
+      ],
+      "kind": "requirement"
+    },
+    {
+      "id": "M12.04",
+      "module": "M12",
+      "source": "Khóa/mở tài khoản, quản lý trạng thái hệ thống.",
+      "feature": "feat-system-administration",
+      "requirements": [
+        "FR-003",
+        "FR-010"
+      ],
+      "kind": "requirement"
+    }
+  ],
+  "business_rules": [
+    {
+      "id": "BR01",
+      "features": [
+        "feat-student-guardian",
+        "feat-auth-rbac"
+      ]
+    },
+    {
+      "id": "BR02",
+      "features": [
+        "feat-academic-programs",
+        "feat-teacher-management",
+        "feat-class-timetable",
+        "feat-attendance-journal",
+        "feat-assessment-progress",
+        "feat-admission-crm",
+        "feat-student-guardian",
+        "feat-student-parent-portal",
+        "feat-enrollment",
+        "feat-tuition-payment",
+        "feat-dashboard-reporting",
+        "feat-system-administration",
+        "feat-notifications-qa",
+        "feat-auth-rbac",
+        "feat-course-catalog"
+      ]
+    },
+    {
+      "id": "BR03",
+      "features": [
+        "feat-admission-crm",
+        "feat-enrollment"
+      ]
+    },
+    {
+      "id": "BR04",
+      "features": [
+        "feat-class-timetable",
+        "feat-admission-crm",
+        "feat-enrollment"
+      ]
+    },
+    {
+      "id": "BR05",
+      "features": [
+        "feat-teacher-management",
+        "feat-class-timetable"
+      ]
+    },
+    {
+      "id": "BR06",
+      "features": [
+        "feat-class-timetable"
+      ]
+    },
+    {
+      "id": "BR07",
+      "features": [
+        "feat-class-timetable",
+        "feat-enrollment"
+      ]
+    },
+    {
+      "id": "BR08",
+      "features": [
+        "feat-attendance-journal"
+      ]
+    },
+    {
+      "id": "BR09",
+      "features": [
+        "feat-teacher-management",
+        "feat-assessment-progress"
+      ]
+    },
+    {
+      "id": "BR10",
+      "features": [
+        "feat-assessment-progress",
+        "feat-admission-crm"
+      ]
+    },
+    {
+      "id": "BR11",
+      "features": [
+        "feat-assessment-progress",
+        "feat-student-parent-portal",
+        "feat-dashboard-reporting",
+        "feat-notifications-qa"
+      ]
+    },
+    {
+      "id": "BR12",
+      "features": [
+        "feat-student-parent-portal",
+        "feat-enrollment",
+        "feat-tuition-payment",
+        "feat-dashboard-reporting"
+      ]
+    },
+    {
+      "id": "BR13",
+      "features": [
+        "feat-tuition-payment"
+      ]
+    },
+    {
+      "id": "BR14",
+      "features": [
+        "feat-tuition-payment"
+      ]
+    },
+    {
+      "id": "BR15",
+      "features": [
+        "feat-attendance-journal",
+        "feat-assessment-progress",
+        "feat-student-guardian",
+        "feat-student-parent-portal",
+        "feat-enrollment",
+        "feat-tuition-payment",
+        "feat-dashboard-reporting",
+        "feat-notifications-qa",
+        "feat-auth-rbac"
+      ]
+    },
+    {
+      "id": "BR16",
+      "features": [
+        "feat-academic-programs",
+        "feat-teacher-management",
+        "feat-class-timetable",
+        "feat-attendance-journal",
+        "feat-admission-crm",
+        "feat-student-guardian",
+        "feat-enrollment",
+        "feat-tuition-payment",
+        "feat-system-administration",
+        "feat-notifications-qa",
+        "feat-course-catalog"
+      ]
+    },
+    {
+      "id": "BR17",
+      "features": [
+        "feat-notifications-qa"
+      ]
+    },
+    {
+      "id": "BR18",
+      "features": [
+        "feat-academic-programs",
+        "feat-teacher-management",
+        "feat-class-timetable",
+        "feat-attendance-journal",
+        "feat-assessment-progress",
+        "feat-admission-crm",
+        "feat-student-guardian",
+        "feat-enrollment",
+        "feat-tuition-payment",
+        "feat-system-administration",
+        "feat-notifications-qa",
+        "feat-auth-rbac"
+      ]
+    },
+    {
+      "id": "BR19",
+      "features": [
+        "feat-class-timetable",
+        "feat-enrollment"
+      ]
+    },
+    {
+      "id": "BR20",
+      "features": [
+        "feat-student-parent-portal",
+        "feat-tuition-payment",
+        "feat-dashboard-reporting"
+      ]
+    }
+  ],
+  "screens": [
+    {
+      "id": "PUB-01",
+      "name": "Trang chủ",
+      "get": "/",
+      "role": "Guest/All",
+      "post": "—",
+      "view": "/WEB-INF/views/public/home.jsp",
+      "contract": "Thông tin trung tâm/khóa/giáo viên từ DB; CTA tới catalog/tư vấn",
+      "feature": "feat-course-catalog"
+    },
+    {
+      "id": "PUB-02",
+      "name": "Danh sách khóa học",
+      "get": "/courses",
+      "role": "Guest/All",
+      "post": "—",
+      "view": "/WEB-INF/views/public/course-list.jsp",
+      "contract": "keyword, subjectId, gradeLevel, targetExam, minFee, maxFee, sort, page; pageSize9",
+      "feature": "feat-course-catalog"
+    },
+    {
+      "id": "PUB-03",
+      "name": "Chi tiết khóa học",
+      "get": "/courses/detail?id={id}",
+      "role": "Guest/All",
+      "post": "/registration-cart/add",
+      "view": "/WEB-INF/views/public/course-detail.jsp",
+      "contract": "id; detail thật, lớp/lịch, tối đa3 liên quan, Course OPEN mới thêm",
+      "feature": "feat-course-catalog"
+    },
+    {
+      "id": "PUB-04",
+      "name": "Danh sách đăng ký",
+      "get": "/registration-cart",
+      "role": "Guest/Student/Parent",
+      "post": "/registration-cart/add; /registration-cart/update; /registration-cart/remove; /registration-cart/clear",
+      "view": "/WEB-INF/views/public/registration-cart.jsp",
+      "contract": "courseId/notes; quantity1, tổng current fee, không giữ chỗ",
+      "feature": "feat-course-catalog"
+    },
+    {
+      "id": "PUB-05",
+      "name": "Xác nhận nhu cầu đăng ký",
+      "get": "/registration/confirm",
+      "role": "Guest/Student/Parent",
+      "post": "/registration/confirm",
+      "view": "/WEB-INF/views/public/registration-confirm.jsp",
+      "contract": "liên hệ/grade/notes/nonce; revalidate phí/trạng thái, Lead chưa Enrollment",
+      "feature": "feat-course-catalog"
+    },
+    {
+      "id": "PUB-06",
+      "name": "Đăng ký tư vấn",
+      "get": "/consultation",
+      "role": "Guest/All",
+      "post": "/consultation",
+      "view": "/WEB-INF/views/public/consultation.jsp",
+      "contract": "name/phone/email/grade/courseIds/requestType/preferredTime/notes/nonce",
+      "feature": "feat-course-catalog"
+    },
+    {
+      "id": "PUB-07",
+      "name": "Kết quả gửi yêu cầu",
+      "get": "/consultation/success",
+      "role": "Session đã gửi",
+      "post": "—",
+      "view": "/WEB-INF/views/public/consultation-success.jsp",
+      "contract": "receipt persisted và session; code URL không cấp quyền",
+      "feature": "feat-course-catalog"
+    },
+    {
+      "id": "AUTH-01",
+      "name": "Đăng nhập",
+      "get": "/login",
+      "role": "Guest/All",
+      "post": "/login",
+      "view": "/WEB-INF/views/auth/login.jsp",
+      "contract": "email/password/redirect_url local; renew session",
+      "feature": "feat-auth-rbac"
+    },
+    {
+      "id": "AUTH-02",
+      "name": "Đăng ký tài khoản",
+      "get": "/register",
+      "role": "Guest",
+      "post": "/register",
+      "view": "/WEB-INF/views/auth/register.jsp",
+      "contract": "name/email/phone/password/confirm/STUDENT hoặc PARENT",
+      "feature": "feat-auth-rbac"
+    },
+    {
+      "id": "AUTH-03",
+      "name": "Quên mật khẩu",
+      "get": "/forgot-password",
+      "role": "Guest",
+      "post": "/forgot-password",
+      "view": "/WEB-INF/views/auth/forgot-password.jsp",
+      "contract": "email; phản hồi chung; không show link; SMTP thật",
+      "feature": "feat-auth-rbac"
+    },
+    {
+      "id": "AUTH-04",
+      "name": "Đặt lại mật khẩu",
+      "get": "/reset-password",
+      "role": "Guest có token",
+      "post": "/reset-password",
+      "view": "/WEB-INF/views/auth/reset-password.jsp",
+      "contract": "token/password/confirm; validity/expiry thật, single-use30phút",
+      "feature": "feat-auth-rbac"
+    },
+    {
+      "id": "AUTH-05",
+      "name": "Hồ sơ cá nhân",
+      "get": "/profile",
+      "role": "Đã login",
+      "post": "/profile",
+      "view": "/WEB-INF/views/auth/profile.jsp",
+      "contract": "action profile/password; dữ liệu actor, không sửa role/email",
+      "feature": "feat-auth-rbac"
+    },
+    {
+      "id": "ADM-01",
+      "name": "Dashboard điều hành",
+      "get": "/admin/dashboard",
+      "role": "ADMIN",
+      "post": "—",
+      "view": "/WEB-INF/views/admin/dashboard.jsp",
+      "contract": "KPI/alerts/thời điểm/phạm vi thật",
+      "feature": "feat-dashboard-reporting"
+    },
+    {
+      "id": "ADM-02",
+      "name": "Quản lý Lead",
+      "get": "/staff/leads",
+      "role": "ADMIN/STAFF được giao",
+      "post": "/staff/leads/save; /staff/leads/assign; /staff/leads/status",
+      "view": "/WEB-INF/views/staff/lead-list.jsp",
+      "contract": "search/status/source/assignedTo/dates; phân công ADMIN",
+      "feature": "feat-admission-crm"
+    },
+    {
+      "id": "ADM-03",
+      "name": "Chi tiết tư vấn",
+      "get": "/staff/leads/detail?id={id}",
+      "role": "ADMIN/STAFF được giao",
+      "post": "/staff/leads/consultations/save; /staff/leads/trials/save; /staff/leads/convert",
+      "view": "/WEB-INF/views/staff/lead-detail.jsp",
+      "contract": "leadId, liên hệ/lịch thử/kết quả; convert đi qua enrollment chung",
+      "feature": "feat-admission-crm"
+    },
+    {
+      "id": "ADM-04",
+      "name": "Quản lý khóa học",
+      "get": "/staff/courses",
+      "role": "ADMIN/STAFF",
+      "post": "/staff/subjects/save; /staff/subjects/delete; /staff/courses/delete",
+      "view": "/WEB-INF/views/staff/course-list.jsp",
+      "contract": "CRUD môn; tìm/lọc khóa; delete là ngừng/archive khi liên quan",
+      "feature": "feat-academic-programs"
+    },
+    {
+      "id": "ADM-05",
+      "name": "Form khóa học",
+      "get": "/staff/courses/form",
+      "role": "ADMIN/STAFF",
+      "post": "/staff/courses/save",
+      "view": "/WEB-INF/views/staff/course-form.jsp",
+      "contract": "code/name/subject/grade/target/level/fee/sessionMinutes/totalSessions/status/version",
+      "feature": "feat-academic-programs"
+    },
+    {
+      "id": "ADM-06",
+      "name": "Danh sách học viên",
+      "get": "/staff/students",
+      "role": "ADMIN/STAFF",
+      "post": "/staff/students/save; /staff/students/delete",
+      "view": "/WEB-INF/views/staff/student-list.jsp",
+      "contract": "Student CRUD; id/name/dob/school/grade/goal/status; ngừng có kiểm tra",
+      "feature": "feat-student-guardian"
+    },
+    {
+      "id": "ADM-07",
+      "name": "Hồ sơ học viên",
+      "get": "/staff/students/detail?id={id}",
+      "role": "ADMIN/STAFF",
+      "post": "/staff/students/user-link",
+      "view": "/WEB-INF/views/staff/student-detail.jsp",
+      "contract": "thông tin/lịch sử/quan hệ; link ghi danh ADM-12",
+      "feature": "feat-student-guardian"
+    },
+    {
+      "id": "ADM-08",
+      "name": "Phụ huynh/người giám hộ",
+      "get": "/staff/guardians",
+      "role": "ADMIN/STAFF",
+      "post": "/staff/guardians/save; /staff/guardians/delete; /staff/guardians/link; /staff/guardians/verify; /staff/guardians/revoke",
+      "view": "/WEB-INF/views/staff/guardian-list.jsp",
+      "contract": "guardian/student/relation/verification/reason; Parent không tự verify",
+      "feature": "feat-student-guardian"
+    },
+    {
+      "id": "ADM-09",
+      "name": "Giáo viên",
+      "get": "/staff/teachers",
+      "role": "ADMIN/STAFF",
+      "post": "/staff/teachers/save; /staff/teachers/delete",
+      "view": "/WEB-INF/views/staff/teacher-list.jsp",
+      "contract": "User TEACHER, chuyên môn/subjectIds/publicFields/status/version",
+      "feature": "feat-teacher-management"
+    },
+    {
+      "id": "ADM-10",
+      "name": "Danh sách lớp",
+      "get": "/staff/classes",
+      "role": "ADMIN/STAFF",
+      "post": "/staff/classes/save; /staff/classes/close; /staff/classes/delete",
+      "view": "/WEB-INF/views/staff/class-list.jsp",
+      "contract": "code/course/teacher/room/capacity/type/dates/status/version",
+      "feature": "feat-class-timetable"
+    },
+    {
+      "id": "ADM-11",
+      "name": "Chi tiết lớp",
+      "get": "/staff/classes/detail?id={id}",
+      "role": "ADMIN/STAFF",
+      "post": "—",
+      "view": "/WEB-INF/views/staff/class-detail.jsp",
+      "contract": "id; roster/buổi/điểm/chuyên cần đúng nguồn; mutation qua route chuyên trách",
+      "feature": "feat-class-timetable"
+    },
+    {
+      "id": "ADM-12",
+      "name": "Ghi danh / chuyển lớp",
+      "get": "/staff/enrollments",
+      "role": "ADMIN/STAFF",
+      "post": "/staff/enrollments/save; /staff/enrollments/transfer; /staff/enrollments/reserve; /staff/enrollments/resume; /staff/enrollments/status",
+      "view": "/WEB-INF/views/staff/enrollment-form.jsp",
+      "contract": "Student/Class/start/Lead/Discount/requestKey; P1 transfer/reserve có duyệt phí",
+      "feature": "feat-enrollment"
+    },
+    {
+      "id": "ADM-13",
+      "name": "Lịch học / phòng",
+      "get": "/staff/timetable",
+      "role": "ADMIN/STAFF",
+      "post": "/staff/timetable/generate; /staff/timetable/reschedule; /staff/timetable/substitute; /staff/timetable/cancel; /staff/timetable/exceptions; /staff/rooms/save; /staff/rooms/delete",
+      "view": "/WEB-INF/views/staff/timetable.jsp",
+      "contract": "week/class/room/teacher; preview/nonce; exception chỉ ADMIN; Room CRUD",
+      "feature": "feat-class-timetable"
+    },
+    {
+      "id": "ADM-14",
+      "name": "Hóa đơn học phí",
+      "get": "/staff/invoices",
+      "role": "ADMIN/STAFF",
+      "post": "/staff/invoices/create",
+      "view": "/WEB-INF/views/staff/invoice-list.jsp",
+      "contract": "Student/Class/status/due; create idempotent chỉ initial Invoice còn thiếu hợp lệ",
+      "feature": "feat-tuition-payment"
+    },
+    {
+      "id": "ADM-15",
+      "name": "Chi tiết hóa đơn / thu tiền",
+      "get": "/staff/invoices/detail?id={id}",
+      "role": "ADMIN/STAFF",
+      "post": "/staff/invoices/payment; /staff/invoices/adjust; /staff/invoices/refund; /staff/invoices/cancel",
+      "view": "/WEB-INF/views/staff/invoice-detail.jsp",
+      "contract": "Invoice/amount/method/ref/requestKey; adjust/refund/cancel ADMIN; print GET chỉ đọc",
+      "feature": "feat-tuition-payment"
+    },
+    {
+      "id": "ADM-16",
+      "name": "Báo cáo thống kê",
+      "get": "/admin/reports",
+      "role": "ADMIN",
+      "post": "—",
+      "view": "/WEB-INF/views/admin/reports.jsp",
+      "contract": "from/to/subject/course/class/asOf; đúng định nghĩa cohort/ledger",
+      "feature": "feat-dashboard-reporting"
+    },
+    {
+      "id": "ADM-17",
+      "name": "Duyệt Q&A",
+      "get": "/staff/questions",
+      "role": "ADMIN/STAFF",
+      "post": "/staff/questions/moderate; /staff/questions/answers/save",
+      "view": "/WEB-INF/views/staff/question-moderation.jsp",
+      "contract": "Question/Answer/version/status/reason; khác tác giả",
+      "feature": "feat-notifications-qa"
+    },
+    {
+      "id": "ADM-18",
+      "name": "Quản lý tài khoản và quyền",
+      "get": "/admin/users",
+      "role": "ADMIN",
+      "post": "/admin/users; /admin/users/status; /admin/users/roles",
+      "view": "/WEB-INF/views/admin/user-list.jsp",
+      "contract": "action create/status/roles; targetId/roleCodes/actionStatus; filter status tách biệt",
+      "feature": "feat-auth-rbac"
+    },
+    {
+      "id": "ADM-19",
+      "name": "Cấu hình và nhật ký",
+      "get": "/admin/settings",
+      "role": "ADMIN",
+      "post": "/admin/settings/save",
+      "view": "/WEB-INF/views/admin/settings.jsp",
+      "contract": "allowlist typed settings/version; tab audit P1 chỉ đọc",
+      "feature": "feat-system-administration"
+    },
+    {
+      "id": "TCH-01",
+      "name": "Dashboard giáo viên",
+      "get": "/teacher/dashboard",
+      "role": "TEACHER/ADMIN theo phạm vi",
+      "post": "—",
+      "view": "/WEB-INF/views/teacher/dashboard.jsp",
+      "contract": "lịch/lớp/tác vụ thật; có lịch thử được giao",
+      "feature": "feat-class-timetable"
+    },
+    {
+      "id": "TCH-02",
+      "name": "Lớp và lịch dạy",
+      "get": "/teacher/classes",
+      "role": "TEACHER/ADMIN theo phạm vi",
+      "post": "—",
+      "view": "/WEB-INF/views/teacher/class-list.jsp",
+      "contract": "lớp/người thực dạy; link session; không lộ toàn trung tâm",
+      "feature": "feat-class-timetable"
+    },
+    {
+      "id": "TCH-03",
+      "name": "Điểm danh buổi học",
+      "get": "/teacher/attendance?sessionId={id}",
+      "role": "Người thực dạy/ADMIN correction",
+      "post": "/teacher/attendance/save; /teacher/attendance/start; /teacher/attendance/complete; /teacher/attendance/correct",
+      "view": "/WEB-INF/views/teacher/attendance.jsp",
+      "contract": "sessionId, roster/status/notes/version; COMPLETED sửa ADMIN có lý do",
+      "feature": "feat-attendance-journal"
+    },
+    {
+      "id": "TCH-04",
+      "name": "Nhật ký giảng dạy",
+      "get": "/teacher/journal?sessionId={id}",
+      "role": "Người thực dạy/ADMIN correction",
+      "post": "/teacher/journal/save; /teacher/journal/correct",
+      "view": "/WEB-INF/views/teacher/journal.jsp",
+      "contract": "session/content/homework/comments/version; UC21 P1",
+      "feature": "feat-attendance-journal"
+    },
+    {
+      "id": "TCH-05",
+      "name": "Bài kiểm tra",
+      "get": "/teacher/assessments",
+      "role": "Teacher chính lớp/ADMIN",
+      "post": "/teacher/assessments/save; /teacher/assessments/delete",
+      "view": "/WEB-INF/views/teacher/assessment-list.jsp",
+      "contract": "class/type/date/maxScore/weight; report học vụ lớp được giao",
+      "feature": "feat-assessment-progress"
+    },
+    {
+      "id": "TCH-06",
+      "name": "Nhập và công bố điểm",
+      "get": "/teacher/scores?assessmentId={id}",
+      "role": "Teacher chính lớp/ADMIN",
+      "post": "/teacher/scores/save; /teacher/scores/publish; /teacher/scores/reopen",
+      "view": "/WEB-INF/views/teacher/scores.jsp",
+      "contract": "assessmentId/score/remark/version; reopen ADMIN có lý do",
+      "feature": "feat-assessment-progress"
+    },
+    {
+      "id": "STD-01",
+      "name": "Dashboard học viên",
+      "get": "/student/dashboard",
+      "role": "STUDENT của mình",
+      "post": "—",
+      "view": "/WEB-INF/views/student/dashboard.jsp",
+      "contract": "hồ sơ User liên kết, lịch/tiến bộ tóm tắt thật",
+      "feature": "feat-student-parent-portal"
+    },
+    {
+      "id": "STD-02",
+      "name": "Lịch học và lớp của tôi",
+      "get": "/student/schedule",
+      "role": "STUDENT của mình",
+      "post": "—",
+      "view": "/WEB-INF/views/student/schedule.jsp",
+      "contract": "lớp/giai đoạn; thay đổi lịch thật",
+      "feature": "feat-student-parent-portal"
+    },
+    {
+      "id": "STD-03",
+      "name": "Kết quả học tập",
+      "get": "/student/progress",
+      "role": "STUDENT của mình",
+      "post": "—",
+      "view": "/WEB-INF/views/student/progress.jsp",
+      "contract": "PUBLISHED/chuyên cần COMPLETED/journal có thật",
+      "feature": "feat-student-parent-portal"
+    },
+    {
+      "id": "STD-04",
+      "name": "Học phí của tôi",
+      "get": "/student/tuition",
+      "role": "STUDENT của mình",
+      "post": "—",
+      "view": "/WEB-INF/views/student/tuition.jsp",
+      "contract": "Invoice/balance/receipt của mình; không nút trả tiền online",
+      "feature": "feat-tuition-payment"
+    },
+    {
+      "id": "PAR-01",
+      "name": "Dashboard phụ huynh",
+      "get": "/parent/dashboard",
+      "role": "PARENT verified",
+      "post": "—",
+      "view": "/WEB-INF/views/parent/dashboard.jsp",
+      "contract": "bộ chọn con từ StudentGuardians verified chưa revoked",
+      "feature": "feat-student-parent-portal"
+    },
+    {
+      "id": "PAR-02",
+      "name": "Hồ sơ theo dõi con",
+      "get": "/parent/children/detail?id={id}",
+      "role": "PARENT verified con chọn",
+      "post": "—",
+      "view": "/WEB-INF/views/parent/child-detail.jsp",
+      "contract": "id Student; lịch/chuyên cần/điểm PUBLISHED/phí riêng",
+      "feature": "feat-student-parent-portal"
+    },
+    {
+      "id": "PAR-03",
+      "name": "Học phí và thông báo",
+      "get": "/parent/tuition",
+      "role": "PARENT verified con chọn",
+      "post": "—",
+      "view": "/WEB-INF/views/parent/tuition.jsp",
+      "contract": "studentId; học phí/notification đúng con, link COM-03",
+      "feature": "feat-tuition-payment"
+    },
+    {
+      "id": "COM-01",
+      "name": "Danh sách câu hỏi",
+      "get": "/questions",
+      "role": "Guest/All theo visibility",
+      "post": "—",
+      "view": "/WEB-INF/views/common/question-list.jsp",
+      "contract": "keyword/course/page; chỉ PUBLIC APPROVED với Guest",
+      "feature": "feat-notifications-qa"
+    },
+    {
+      "id": "COM-02",
+      "name": "Chi tiết/đặt câu hỏi",
+      "get": "/questions/detail?id={id}",
+      "role": "Guest đọc approved; login thao tác",
+      "post": "/questions/save; /questions/answers/save; /questions/update",
+      "view": "/WEB-INF/views/common/question-detail.jsp",
+      "contract": "id; tạo ở /questions/new; tác giả thấy trạng thái; Teacher đúng khóa",
+      "feature": "feat-notifications-qa"
+    },
+    {
+      "id": "COM-03",
+      "name": "Thông báo cá nhân",
+      "get": "/notifications",
+      "role": "Đã login, của mình",
+      "post": "/notifications/read; /notifications/send",
+      "view": "/WEB-INF/views/common/notifications.jsp",
+      "contract": "read chỉ recipient; send STAFF/ADMIN đúng phạm vi; UC28 P1",
+      "feature": "feat-notifications-qa"
+    },
+    {
+      "id": "SYS-01",
+      "name": "Không có quyền",
+      "get": "/errors/403",
+      "role": "All",
+      "post": "—",
+      "view": "/WEB-INF/views/common/403.jsp",
+      "contract": "HTTP403, không lộ dữ liệu; link về trang được phép",
+      "feature": "feat-auth-rbac"
+    },
+    {
+      "id": "SYS-02",
+      "name": "Không tìm thấy",
+      "get": "/errors/404",
+      "role": "All",
+      "post": "—",
+      "view": "/WEB-INF/views/common/404.jsp",
+      "contract": "HTTP404, không lộ stacktrace; link home/search",
+      "feature": "feat-auth-rbac"
+    }
+  ],
+  "supporting": [
+    {
+      "id": "feat-landing-showcase",
+      "spec": "modules/admission/feat-landing-showcase/spec.md"
+    },
+    {
+      "id": "feat-auth-footer-redesign",
+      "spec": "modules/admission/feat-auth-footer-redesign/spec.md"
+    }
+  ],
+  "cross_feature_coverage": [
+    {
+      "source": "UC19",
+      "feature": "feat-class-timetable",
+      "requirements": [
+        "FR-010"
+      ]
+    },
+    {
+      "source": "UC24",
+      "feature": "feat-assessment-progress",
+      "requirements": [
+        "FR-006",
+        "FR-008"
+      ]
+    },
+    {
+      "source": "UC33",
+      "feature": "feat-assessment-progress",
+      "requirements": [
+        "FR-009"
+      ]
+    },
+    {
+      "source": "M05.04",
+      "feature": "feat-enrollment",
+      "requirements": [
+        "FR-007",
+        "FR-008",
+        "FR-009",
+        "FR-010",
+        "FR-011"
+      ]
+    },
+    {
+      "source": "M12.01",
+      "feature": "feat-auth-rbac",
+      "requirements": [
+        "FR-006",
+        "FR-007",
+        "FR-009"
+      ]
+    },
+    {
+      "source": "M12.01",
+      "feature": "feat-class-timetable",
+      "requirements": [
+        "FR-002",
+        "FR-003"
+      ]
+    }
+  ]
+}

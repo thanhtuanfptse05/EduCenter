@@ -1,4 +1,6 @@
 # PLAN.MD — EDUCENTER 10-WEEK SPRINT & TASK TRACKING
+
+> Bảng mốc/checkbox bên dưới là kế hoạch lịch sử, không xác nhận tiến độ baseline đặc tả ngày2026-10-23. Bộ [spec đầy đủ](.sdd/specs/README.md) đã được bổ sung; dùng [thứ tự code](.sdd/specs/implementation-order.md) và lập plan/tasks từng feature hiện hành trước triển khai. Không coi spec locked hoặc task cũ là bằng chứng ERP hoàn tất.
 **Methodology:** Spec-Driven & Agent-Driven Development (SDD/ADD Hybrid)  
 **Timeline:** 10 Weeks | **Team:** 3 Members  
 

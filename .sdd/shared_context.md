@@ -4,6 +4,8 @@
 
 ## Trạng thái triển khai — 2026-10-23
 
+**Baseline đặc tả mới:** [15 feature lõi và2 UI supporting specs](specs/README.md) đã phủ12 module/35UC/20BR/30bảng/49screens. Xem [thứ tự code](specs/implementation-order.md); cần plan/tasks mới theo phiên bản spec trước implement. Đây là hoàn tất đặc tả, không hoàn tất ERP. [D01–D17](specs/decisions.md) và [hợp đồng tích hợp](specs/integration.md) thống nhất role/status/phí/lịch/publish; ngoại lệ demo/reset đợt repair cũ chỉ là lịch sử theo D04.
+
 Phạm vi đang chạy: auth/RBAC 5 vai trò (ADMIN gộp quản trị và quản lý trung tâm), quản trị tài khoản, trang chủ/catalog/chi tiết khóa, tư vấn và giỏ đăng ký. Dashboard vai trò hiện là trang điều hướng; `/staff/leads` chưa phải màn hình CRM đầy đủ.
 
 Bản sửa hiện tại: [portal/cart repair](specs/modules/admission/feat-portal-cart-repair/spec.md), [kiểm thử](specs/modules/admission/feat-portal-cart-repair/verification.md). Không còn tính năng giảm giá/coupon/combo trong luồng đã triển khai. Ba nội dung được chủ dự án giữ nguyên được liệt kê trong spec; không đánh dấu chúng là production.

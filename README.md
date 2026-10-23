@@ -2,7 +2,11 @@
 
 Ứng dụng Java Web quản lý trung tâm gia sư và luyện thi lớp 6–12. Stack: Java 17, Jakarta Servlet/JSP/JSTL, JPA 3.1/Hibernate, SQL Server, Ant và Tomcat 10.1.
 
-## Hiện trạng đã triển khai
+## Bộ đặc tả đầy đủ và thứ tự triển khai
+
+[Mục lục specs](.sdd/specs/README.md) bao phủ 12 module, 35 use case (31 P0 + 4 P1), 20 business rules, 30 bảng nghiệp vụ và 49 màn hình theo SRS v1.1. Xem [thứ tự code từng tính năng](.sdd/specs/implementation-order.md), [truy vết yêu cầu](.sdd/specs/traceability.md) và [hợp đồng tích hợp](.sdd/specs/integration.md). Đây là baseline đặc tả mới; code và kiểm thử các module còn lại chưa được xác nhận hoàn tất.
+
+## Hiện trạng đã triển khai (trước baseline đặc tả mới)
 
 - Trang chủ công khai, danh mục/tìm kiếm/bộ lọc khóa học, chi tiết khóa/lớp và biểu mẫu tư vấn.
 - Giỏ đăng ký khách/tài khoản: khóa học duy nhất, ghi chú, cập nhật học phí, gộp khi đăng nhập, xóa/xóa hết, xác nhận tạo Lead và biên nhận theo phiên. Không có mã giảm giá hay combo giảm giá; đây là yêu cầu tư vấn, chưa phải giao dịch ghi danh/thanh toán.
@@ -12,9 +16,9 @@
 
 Bản sửa theo yêu cầu ngày 2026-10-23 có [spec đã khóa](.sdd/specs/modules/admission/feat-portal-cart-repair/spec.md), [kế hoạch](.sdd/specs/modules/admission/feat-portal-cart-repair/plan.md) và [bằng chứng kiểm thử](.sdd/specs/modules/admission/feat-portal-cart-repair/verification.md). [design.md](design.md) là tài liệu thiết kế chuẩn duy nhất.
 
-## Ba ngoại lệ được chủ dự án giữ nguyên
+## Ba ngoại lệ lịch sử của đợt sửa portal/cart
 
-Link reset vẫn hiển thị trực tiếp; phần 2FA/thiết bị/lịch sử trong hồ sơ vẫn là nội dung minh họa; thẻ tiến độ/học viên/phụ huynh ở trang chủ vẫn dùng số liệu minh họa. Những phần này được loại khỏi tiêu chí sửa và không được xem là chức năng production đã hoàn tất.
+Link reset vẫn hiển thị trực tiếp; phần 2FA/thiết bị/lịch sử trong hồ sơ vẫn là nội dung minh họa; thẻ tiến độ/học viên/phụ huynh ở trang chủ vẫn dùng số liệu minh họa. Đây là hiện trạng của đợt sửa cũ, không được xem là production đã hoàn tất. Baseline mới yêu cầu thay bằng luồng bảo mật/dữ liệu thật hoặc ẩn phần chưa có theo [D04](.sdd/specs/decisions.md); đợt viết spec chưa thay đổi code này.
 
 Các module ERP còn lại được ghi rõ trong [future-work.md](.sdd/future-work.md). Không dùng trạng thái Completed của tài liệu cũ để kết luận toàn bộ ERP đã hoàn thành.
 
