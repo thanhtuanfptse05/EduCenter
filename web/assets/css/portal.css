@@ -1313,3 +1313,437 @@ html[data-theme="dark"] .teacher-exp-tag {
 .portal-submit-btn:hover {
   background-color: var(--primary-hover);
 }
+
+/* ==========================================================================
+   12. FEAT-LANDING-SHOWCASE: CAROUSEL, MILESTONES & ASCENDING ROADMAP
+   ========================================================================== */
+
+/* --- 12.1 Interactive Carousel Component (Drag & Touch Swipe) --- */
+.portal-carousel {
+  position: relative;
+  width: 100%;
+}
+
+.carousel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.carousel-nav-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.carousel-nav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  background-color: var(--surface);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.carousel-nav-btn:hover:not(:disabled) {
+  background-color: var(--surface-hover);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.carousel-nav-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  border-color: var(--border);
+}
+
+.carousel-viewport {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+  padding: 8px 4px 16px;
+  margin: -8px -4px -16px;
+}
+
+.carousel-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-viewport.is-dragging {
+  cursor: grabbing;
+  user-select: none;
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.carousel-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.carousel-dot {
+  width: 24px;
+  height: 6px;
+  border-radius: 3px;
+  background-color: var(--border);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.carousel-dot.active {
+  width: 36px;
+  background-color: var(--primary);
+}
+
+/* --- 12.2 Awards & Honors Cards (.award-card) --- */
+.award-card {
+  flex: 0 0 280px;
+  max-width: 320px;
+  scroll-snap-align: start;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+@media (min-width: 768px) {
+  .award-card {
+    flex: 0 0 310px;
+    max-width: 330px;
+  }
+}
+
+.award-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary-border);
+  box-shadow: var(--shadow-md);
+}
+
+.award-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.award-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(234, 88, 12, 0.12));
+  color: #D97706;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+html[data-theme="dark"] .award-icon-box {
+  background: rgba(245, 158, 11, 0.15);
+  color: #FBBF24;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.award-year-tag {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background-color: var(--surface-muted);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.award-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text);
+  margin: 0 0 8px;
+  min-height: 44px;
+}
+
+.award-card-org {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 10px;
+  display: block;
+}
+
+.award-card-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 0 0 16px;
+}
+
+.award-card-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.award-pill {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+}
+
+/* --- 12.3 High-Contrast Academic Milestones Banner (.milestones-wrapper) --- */
+.milestones-wrapper {
+  margin-top: 40px;
+}
+
+.milestones-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .milestones-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .milestones-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.milestone-dark-card {
+  background-color: #0F172A;
+  color: #FFFFFF;
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+  transition: transform var(--transition-fast), border-color var(--transition-fast);
+}
+
+html[data-theme="dark"] .milestone-dark-card {
+  background-color: #111827;
+  border-color: var(--border);
+}
+
+.milestone-dark-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.milestone-icon-top {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #38BDF8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.milestone-num-val {
+  font-size: 32px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+  font-family: inherit;
+  letter-spacing: -0.02em;
+}
+
+.milestone-label-main {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #CBD5E1;
+  margin: 0;
+}
+
+/* --- 12.4 Ascending Trajectory Roadmap Pathway (.roadmap-container) --- */
+.roadmap-section {
+  padding: 56px 0;
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.roadmap-banner-wrapper {
+  position: relative;
+  margin-top: 36px;
+  padding: 32px 24px 28px;
+  background-color: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* Ascending Arrow Graphic Track */
+.roadmap-arrow-track {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 20px;
+  z-index: 1;
+}
+
+@media (min-width: 1024px) {
+  .roadmap-arrow-track {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+}
+
+/* Upward arrow background banner */
+.roadmap-backdrop-arrow {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .roadmap-backdrop-arrow {
+    display: block;
+    position: absolute;
+    bottom: 24px;
+    left: 16px;
+    right: 16px;
+    height: 120px;
+    background: linear-gradient(to right, rgba(226, 232, 240, 0.4) 0%, rgba(203, 213, 225, 0.6) 80%, rgba(37, 99, 235, 0.2) 100%);
+    clip-path: polygon(0% 60%, 82% 10%, 82% 0%, 100% 30%, 82% 60%, 82% 50%, 0% 90%);
+    z-index: 0;
+    pointer-events: none;
+    border-radius: 4px;
+  }
+
+  html[data-theme="dark"] .roadmap-backdrop-arrow {
+    background: linear-gradient(to right, rgba(30, 41, 59, 0.5) 0%, rgba(51, 65, 85, 0.7) 80%, rgba(96, 165, 250, 0.25) 100%);
+  }
+}
+
+/* Stage Cards along the Pathway */
+.roadmap-stage-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.roadmap-stage-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary-border);
+  box-shadow: var(--shadow-md);
+}
+
+.roadmap-stage-card.apex-stage {
+  border-color: var(--primary);
+  background: linear-gradient(to bottom, var(--surface), var(--primary-subtle));
+}
+
+.roadmap-runner-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+.roadmap-stage-range {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 6px;
+}
+
+.roadmap-stage-title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.roadmap-stage-card.apex-stage .roadmap-stage-title {
+  color: var(--primary);
+}
+
+.roadmap-stage-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin: 0 0 16px;
+}
+
+.roadmap-stage-footer {
+  border-top: 1px dashed var(--border);
+  padding-top: 12px;
+}
+
+.roadmap-focus-pill {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background-color: var(--surface-muted);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  line-height: 1.4;
+}
+
+.roadmap-apex-badge {
+  background-color: #059669;
+  color: #FFFFFF;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}

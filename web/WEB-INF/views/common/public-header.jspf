@@ -10,6 +10,8 @@
     <nav class="site-links" aria-label="Điều hướng chính">
       <a class="site-link" href="${pageContext.request.contextPath}/" aria-current="${activeNav == 'home' ? 'page' : 'false'}">Trang chủ</a>
       <a class="site-link" href="${pageContext.request.contextPath}/courses" aria-current="${activeNav == 'courses' ? 'page' : 'false'}">Khóa học</a>
+      <a class="site-link" href="${pageContext.request.contextPath}/#thanh-tuu">Thành tựu</a>
+      <a class="site-link" href="${pageContext.request.contextPath}/#lo-trinh-hoc-tap">Lộ trình</a>
       <a class="site-link" href="${pageContext.request.contextPath}/#chuong-trinh">Chương trình</a>
       <a class="site-link" href="${pageContext.request.contextPath}/#mon-hoc">Môn học</a>
       <a class="site-link" href="${pageContext.request.contextPath}/#doi-ngu">Giáo viên</a>
@@ -36,6 +38,7 @@
   </div>
   <nav id="site-mobile-menu" class="site-mobile-nav" aria-label="Điều hướng di động" hidden>
     <a href="${pageContext.request.contextPath}/">Trang chủ</a><a href="${pageContext.request.contextPath}/courses">Khóa học</a>
+    <a href="${pageContext.request.contextPath}/#thanh-tuu">Thành tựu</a><a href="${pageContext.request.contextPath}/#lo-trinh-hoc-tap">Lộ trình</a>
     <a href="${pageContext.request.contextPath}/#chuong-trinh">Chương trình</a><a href="${pageContext.request.contextPath}/#mon-hoc">Môn học</a>
     <a href="${pageContext.request.contextPath}/#doi-ngu">Giáo viên</a><a href="${pageContext.request.contextPath}/#dang-ky-tu-van">Đăng ký tư vấn</a>
     <c:choose><c:when test="${not empty sessionScope.currentUser}"><a href="${pageContext.request.contextPath}${sessionScope.currentUser.defaultDashboardUrl}">Không gian của tôi</a><a href="${pageContext.request.contextPath}/profile">Hồ sơ cá nhân</a><a href="${pageContext.request.contextPath}/logout">Đăng xuất</a></c:when>

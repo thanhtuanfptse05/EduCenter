@@ -19,6 +19,8 @@ public class LandingDataDTO implements Serializable {
     private List<CourseCardDTO> featuredCourses = new ArrayList<>();
     private List<TeacherCardDTO> facultyTeachers = new ArrayList<>();
     private List<SubjectCardDTO> subjects = new ArrayList<>();
+    private List<AchievementAwardDTO> achievementAwards = new ArrayList<>();
+    private List<LearningStageDTO> learningStages = new ArrayList<>();
 
     public LandingDataDTO() {}
 
@@ -51,4 +53,10 @@ public class LandingDataDTO implements Serializable {
 
     public List<SubjectCardDTO> getSubjects() { return subjects; }
     public void setSubjects(List<SubjectCardDTO> subjects) { this.subjects = subjects; }
+
+    public List<AchievementAwardDTO> getAchievementAwards() { return achievementAwards; }
+    public void setAchievementAwards(List<AchievementAwardDTO> achievementAwards) { this.achievementAwards = achievementAwards; }
+
+    public List<LearningStageDTO> getLearningStages() { return learningStages; }
+    public void setLearningStages(List<LearningStageDTO> learningStages) { this.learningStages = learningStages; }
 }

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -245,6 +246,212 @@
                                     </span>
                                     <span style="font-weight: 600; color: var(--text);">Cập nhật: Hôm nay</span>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 02B: THÀNH TỰU & GIẢI THƯỞNG DANH GIÁ (AWARDS CAROUSEL WITH DRAG/SWIPE) -->
+                <section class="portal-section" id="thanh-tuu" style="padding-top: 48px; padding-bottom: 40px;">
+                    <div class="portal-container">
+                        <div class="portal-carousel" id="awards-carousel">
+                            <div class="carousel-head">
+                                <div>
+                                    <div class="hero-pill-badge" style="margin-bottom: 10px;">
+                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--primary);"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                                        <span>Khẳng Định Uy Tín Giáo Dục</span>
+                                    </div>
+                                    <h2 class="section-heading" style="margin-bottom: 8px;">Thành tựu & Giải thưởng Danh giá</h2>
+                                    <p class="section-desc" style="margin-bottom: 0;">Sự ghi nhận từ các tổ chức giáo dục, hiệp hội học thuật và cộng đồng khảo thí uy tín trong nước và quốc tế.</p>
+                                </div>
+                                <div class="carousel-nav-controls">
+                                    <button type="button" class="carousel-nav-btn carousel-btn-prev" aria-label="Xem giải thưởng trước">
+                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                    </button>
+                                    <button type="button" class="carousel-nav-btn carousel-btn-next" aria-label="Xem giải thưởng tiếp theo">
+                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="carousel-viewport">
+                                <div class="carousel-track">
+                                    <c:forEach var="award" items="${portalData.achievementAwards}">
+                                        <article class="award-card carousel-card">
+                                            <div>
+                                                <div class="award-card-header">
+                                                    <div class="award-icon-box">
+                                                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
+                                                            <c:choose>
+                                                                <c:when test="${award.iconType == 'trophy'}">
+                                                                    <path d="M6 9H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"></path>
+                                                                    <path d="M18 9h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-2"></path>
+                                                                    <path d="M4 3h16v6a8 8 0 0 1-16 0V3z"></path>
+                                                                    <path d="M12 17v4"></path>
+                                                                    <path d="M8 21h8"></path>
+                                                                </c:when>
+                                                                <c:when test="${award.iconType == 'award'}">
+                                                                    <circle cx="12" cy="8" r="7"></circle>
+                                                                    <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                                                                </c:when>
+                                                                <c:when test="${award.iconType == 'shield-check'}">
+                                                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                                                    <polyline points="9 12 11 14 15 10"></polyline>
+                                                                </c:when>
+                                                                <c:when test="${award.iconType == 'star'}">
+                                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <circle cx="12" cy="8" r="6"></circle>
+                                                                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </svg>
+                                                    </div>
+                                                    <span class="award-year-tag"><c:out value="${award.year}" /></span>
+                                                </div>
+
+                                                <h3 class="award-card-title"><c:out value="${award.title}" /></h3>
+                                                <span class="award-card-org"><c:out value="${award.organization}" /></span>
+                                                <p class="award-card-desc"><c:out value="${award.description}" /></p>
+                                            </div>
+
+                                            <div class="award-card-footer">
+                                                <span class="award-pill"><c:out value="${award.badgeType}" /></span>
+                                                <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">EduCenter Honor</span>
+                                            </div>
+                                        </article>
+                                    </c:forEach>
+                                </div>
+                            </div>
+
+                            <div class="carousel-dots" aria-hidden="true"></div>
+                        </div>
+
+                        <!-- SECTION 02C: CON SỐ ẤN TƯỢNG (HIGH-CONTRAST ACADEMIC METRICS BANNER) -->
+                        <div class="milestones-wrapper">
+                            <div class="milestones-grid">
+                                <!-- Card 1 -->
+                                <div class="milestone-dark-card">
+                                    <div class="milestone-icon-top">
+                                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="milestone-num-val">10+</div>
+                                        <p class="milestone-label-main">Năm kinh nghiệm bồi dưỡng học thuật & luyện thi chuyên sâu.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2 -->
+                                <div class="milestone-dark-card">
+                                    <div class="milestone-icon-top">
+                                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                    </div>
+                                    <div>
+                                        <div class="milestone-num-val">
+                                            <c:out value="${portalData.openClassesCount > 0 ? portalData.openClassesCount : 32}" />+
+                                        </div>
+                                        <p class="milestone-label-main">Giảng đường & phòng học đạt chuẩn học thuật chất lượng cao.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Card 3 -->
+                                <div class="milestone-dark-card">
+                                    <div class="milestone-icon-top">
+                                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="milestone-num-val">
+                                            <c:choose>
+                                                <c:when test="${portalData.totalStudents > 0}">
+                                                    <fmt:formatNumber value="${portalData.totalStudents}" pattern="#,##0" />+
+                                                </c:when>
+                                                <c:otherwise>50.000+</c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                        <p class="milestone-label-main">Học sinh học tập, cải thiện điểm số và bứt phá năng lực.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Card 4 -->
+                                <div class="milestone-dark-card">
+                                    <div class="milestone-icon-top">
+                                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="milestone-num-val">
+                                            <c:out value="${portalData.universityPassingRate != null ? portalData.universityPassingRate : '98.6%'}" />
+                                        </div>
+                                        <p class="milestone-label-main">Học viên trúng tuyển Nguyện vọng 1 các trường Đại học Tốp đầu.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Card 5 -->
+                                <div class="milestone-dark-card">
+                                    <div class="milestone-icon-top">
+                                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                    </div>
+                                    <div>
+                                        <div class="milestone-num-val">1.200+</div>
+                                        <p class="milestone-label-main">Học sinh đạt điểm 9-10 và thủ khoa các kỳ thi THPT & ĐGNL.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 03A: HÀNH TRÌNH BỨT PHÁ NĂNG LỰC & CHINH PHỤC ĐẠI HỌC (ASCENDING ROADMAP PATHWAY) -->
+                <section class="roadmap-section" id="lo-trinh-hoc-tap">
+                    <div class="portal-container">
+                        <div class="section-head text-center">
+                            <span class="section-tagline">Lộ Trình Đào Tạo Dài Hạn</span>
+                            <h2 class="section-heading">Hành trình Bứt phá Năng lực của con bạn</h2>
+                            <p class="section-desc">Thành công tương lai với nền tảng học thuật vững vàng, học bạ điểm cao, lộ trình ôn thi khoa học và cơ hội bước vào cánh cổng đại học mơ ước.</p>
+                        </div>
+
+                        <div class="roadmap-banner-wrapper">
+                            <!-- Ascending Background Graphic Chevron/Arrow -->
+                            <div class="roadmap-backdrop-arrow"></div>
+
+                            <div class="roadmap-arrow-track">
+                                <c:forEach var="stage" items="${portalData.learningStages}">
+                                    <div class="roadmap-stage-card ${stage.apexGoal ? 'apex-stage' : ''}">
+                                        <div>
+                                            <div class="roadmap-runner-indicator">
+                                                <c:choose>
+                                                    <c:when test="${stage.stageNumber == 1}">
+                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="3"></circle><path d="m9 20 3-6 3 6"></path><path d="m6 8 6 2 6-2"></path><path d="M12 10v4"></path></svg>
+                                                    </c:when>
+                                                    <c:when test="${stage.stageNumber == 2}">
+                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                                                    </c:when>
+                                                    <c:when test="${stage.stageNumber == 3}">
+                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                <span><c:out value="${stage.badgeText}" /></span>
+                                            </div>
+
+                                            <div class="roadmap-stage-range"><c:out value="${stage.gradeRange}" /></div>
+                                            <h3 class="roadmap-stage-title"><c:out value="${stage.title}" /></h3>
+                                            <p class="roadmap-stage-desc"><c:out value="${stage.description}" /></p>
+                                        </div>
+
+                                        <div class="roadmap-stage-footer">
+                                            <span class="roadmap-focus-pill"><c:out value="${stage.focusSubjects}" /></span>
+                                            <c:if test="${stage.apexGoal}">
+                                                <div class="roadmap-apex-badge">
+                                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
+                                                    <span>CƠ HỘI ĐẠI HỌC • 240+ NGÀNH HỌC TỐP ĐẦU</span>
+                                                </div>
+                                            </c:if>
+                                        </div>
+                                    </div>
+                                </c:forEach>
                             </div>
                         </div>
                     </div>
@@ -1039,6 +1246,7 @@
             <!-- FOOTER -->
             <%@ include file="/WEB-INF/views/common/public-footer.jspf" %>
 
+            <script src="${pageContext.request.contextPath}/assets/js/portal-carousel.js"></script>
             <script>
                 function toggleFaq(btn) {
                     const item = btn.closest('.faq-item');

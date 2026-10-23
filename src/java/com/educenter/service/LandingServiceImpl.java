@@ -143,6 +143,95 @@ public class LandingServiceImpl implements LandingService {
             }
             data.setSubjects(subjectDTOs);
 
+            // 5. Academic Honors & Awards Showcase (feat-landing-showcase)
+            List<AchievementAwardDTO> awards = new ArrayList<>();
+            awards.add(new AchievementAwardDTO(
+                "AW-01",
+                "Top 10 Đơn vị Bồi dưỡng & Luyện thi Xuất sắc",
+                "Hiệp hội Phát triển Giáo dục & Tri thức Trẻ Việt Nam",
+                "2025",
+                "Vinh danh đơn vị đào tạo tiêu biểu có phương pháp sư phạm cá nhân hóa và quản trị học vụ số hóa minh bạch.",
+                "Học Thuật Xuất Sắc",
+                "trophy"
+            ));
+            awards.add(new AchievementAwardDTO(
+                "AW-02",
+                "Đối tác Luyện thi ĐGNL & Khảo thí Chuẩn mực",
+                "Mạng lưới Khảo thí & Hợp tác Giáo dục Đại học",
+                "2024 - 2025",
+                "Chứng nhận ngân hàng đề thi chuẩn hóa và tỷ lệ học viên đạt điểm cao xét tuyển sớm vào các trường ĐH tốp đầu.",
+                "Khảo Thí Chuẩn Mực",
+                "award"
+            ));
+            awards.add(new AchievementAwardDTO(
+                "AW-03",
+                "Sáng kiến EdTech Quản trị Cổng Phụ Huynh Minh Bạch",
+                "Vietnam EdTech Awards 2024",
+                "2024",
+                "Giải pháp Cổng Phụ Huynh kết nối điểm số, nhật ký từng buổi và biên lai điện tử minh bạch theo thời gian thực.",
+                "Chuyển Đổi Số",
+                "shield-check"
+            ));
+            awards.add(new AchievementAwardDTO(
+                "AW-04",
+                "Top 50 Trung tâm Bồi dưỡng Kiến thức Uy tín Toàn quốc",
+                "Diễn đàn Giáo dục Đổi mới Sáng tạo Quốc gia",
+                "2023 - 2024",
+                "Ghi nhận đóng góp xuất sắc giúp hơn 50.000 lượt học sinh THPT bứt phá học lực và đỗ nguyện vọng 1.",
+                "Uy Tín Toàn Quốc",
+                "star"
+            ));
+            awards.add(new AchievementAwardDTO(
+                "AW-05",
+                "Biểu tượng Vàng Vì Sự nghiệp Ươm mầm Tài năng Trẻ",
+                "Quỹ Hỗ trợ Phát triển Giáo dục Phổ thông",
+                "2025",
+                "Đóng góp bền bỉ trong công tác khuyến học, bồi dưỡng học sinh giỏi môn Toán, KHTN và Tiếng Anh các khối 6-12.",
+                "Khuyến Học",
+                "medal"
+            ));
+            data.setAchievementAwards(awards);
+
+            // 6. Ascending Learning Roadmap Pathway Stages (feat-landing-showcase)
+            List<LearningStageDTO> stages = new ArrayList<>();
+            stages.add(new LearningStageDTO(
+                1,
+                "Lớp 6–9 & Lớp 10",
+                "Xây dựng nền tảng học thuật vững chắc",
+                "Củng cố kiến thức chuyển cấp, hình thành phương pháp tư duy logic và làm quen chương trình GDPT mới hiệu quả.",
+                "Toán nền tảng • Ngữ văn tư duy • Tiếng Anh giao tiếp & ngữ pháp",
+                "Chặng 1: Nền tảng",
+                false
+            ));
+            stages.add(new LearningStageDTO(
+                2,
+                "Lớp 11",
+                "Bứt phá năng lực & Nâng cao điểm số học bạ",
+                "Chuyên sâu các dạng bài tập phân hóa cao, lấp đầy mọi lỗ hổng kiến thức và tối ưu hóa điểm số trung bình học kỳ.",
+                "Toán 11 nâng cao • Lý / Hóa / Sinh chuyên sâu • Bứt phá học bạ",
+                "Chặng 2: Tăng tốc",
+                false
+            ));
+            stages.add(new LearningStageDTO(
+                3,
+                "Lớp 12 & Ôn thi ĐGNL",
+                "Luyện đề thực chiến & Tối ưu kỹ năng phòng thi",
+                "Tổng ôn toàn diện trọng tâm kiến thức thi tốt nghiệp, rèn phản xạ làm bài trắc nghiệm nhanh và chiến thuật tránh bẫy đề thi.",
+                "Tổng ôn THPT Quốc Gia • ĐGNL ĐHQG / ĐGTD Bách Khoa • Phản xạ phòng thi",
+                "Chặng 3: Về đích",
+                false
+            ));
+            stages.add(new LearningStageDTO(
+                4,
+                "Cột mốc Đích đến",
+                "Cánh cửa Đại học Tốp đầu & Cơ hội học bổng",
+                "Đỗ Nguyện vọng 1 các trường Đại học trọng điểm (ĐHQG, Ngoại thương, Bách Khoa, Y Hà Nội...), sở hữu chứng chỉ quốc tế và học bổng giá trị cao.",
+                "Đại học Trọng điểm • Cơ hội Du học & Học bổng • Chứng chỉ IELTS / SAT",
+                "Đích Đến Thành Công",
+                true
+            ));
+            data.setLearningStages(stages);
+
             return data;
         } finally {
             em.close();
