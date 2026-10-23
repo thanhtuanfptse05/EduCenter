@@ -61,6 +61,7 @@ public class PublicCourseServlet extends HttpServlet {
 
     private void handleCourseList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         CourseFilterDTO filter = new CourseFilterDTO();
+        filter.setStatus("OPEN");
 
         String keyword = req.getParameter("keyword");
         if (keyword == null) keyword = req.getParameter("q");

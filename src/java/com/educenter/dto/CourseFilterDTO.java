@@ -13,7 +13,7 @@ public class CourseFilterDTO implements Serializable {
     private BigDecimal minFee;
     private BigDecimal maxFee;
     private String sort = "newest"; // "newest", "fee_asc", "fee_desc", "name_asc"
-    private String status = "open"; // "all", "open", "soon"
+    private String status = "all"; // "all", "OPEN", "CLOSED", "ARCHIVED"
     private int page = 1;
     private int pageSize = 9;
 
@@ -60,7 +60,13 @@ public class CourseFilterDTO implements Serializable {
     }
 
     public String getStatus() { return status; }
-    public void setStatus(String status) { this.status = status; }
+    public void setStatus(String status) {
+        if (status == null || status.trim().isEmpty()) {
+            this.status = "all";
+        } else {
+            this.status = status.trim();
+        }
+    }
 
     public int getPage() { return page; }
     public void setPage(int page) {

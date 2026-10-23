@@ -112,8 +112,10 @@ public class CourseManagementServlet extends HttpServlet {
         if (gradeStr != null && !gradeStr.trim().isEmpty()) {
             try { filter.setGradeLevel(Integer.parseInt(gradeStr.trim())); } catch (NumberFormatException ignored) {}
         }
-        if (status != null && !status.trim().isEmpty()) {
+        if (status != null && !status.trim().isEmpty() && !"all".equalsIgnoreCase(status.trim())) {
             filter.setStatus(status.trim());
+        } else {
+            filter.setStatus("all");
         }
         if (sort != null && !sort.trim().isEmpty()) {
             filter.setSort(sort.trim());
@@ -123,7 +125,7 @@ public class CourseManagementServlet extends HttpServlet {
         if (pageStr != null && !pageStr.trim().isEmpty()) {
             try { page = Math.max(1, Integer.parseInt(pageStr.trim())); } catch (NumberFormatException ignored) {}
         }
-        int pageSize = 10;
+        int pageSize = 15;
         filter.setPage(page);
         filter.setPageSize(pageSize);
 
@@ -146,7 +148,7 @@ public class CourseManagementServlet extends HttpServlet {
         req.setAttribute("filterQ", q);
         req.setAttribute("filterSubjectId", subjectIdStr);
         req.setAttribute("filterGrade", gradeStr);
-        req.setAttribute("filterStatus", status);
+        req.setAttribute("filterStatus", filter.getStatus());
         req.setAttribute("filterSort", sort);
 
         req.setAttribute("pageTitle", "Quản lý khóa học & Chương trình — EduCenter ERP");

@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -167,6 +167,64 @@
             opacity: 0.4;
             pointer-events: none;
         }
+        .tab-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-decoration: none;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            transition: all var(--transition-fast);
+        }
+        .tab-pill:hover {
+            color: var(--text);
+            border-color: var(--primary);
+            background: var(--surface);
+        }
+        .tab-pill.active {
+            color: var(--primary);
+            background: var(--primary-subtle);
+            border-color: var(--primary);
+            font-weight: 700;
+        }
+        .tab-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: var(--radius-full);
+            background: rgba(0, 0, 0, 0.06);
+            color: inherit;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-success { background: var(--success); }
+        .dot-warning { background: var(--warning); }
+        .dot-archived { background: var(--text-muted); }
+        .kpi-card-link {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        .kpi-card-link:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .kpi-card-link.active .kpi-card {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-subtle);
+        }
     </style>
 </head>
 <body>
@@ -235,76 +293,113 @@
 
                 <!-- KPI Cards Row -->
                 <div class="kpi-row">
-                    <div class="kpi-card">
-                        <div class="kpi-icon-wrap info">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
-                                <path d="M6 6h10"/>
-                                <path d="M6 10h10"/>
-                            </svg>
+                    <a href="${pageContext.request.contextPath}/admin/courses?status=all" class="kpi-card-link ${empty filterStatus || filterStatus == 'all' ? 'active' : ''}">
+                        <div class="kpi-card" style="width: 100%;">
+                            <div class="kpi-icon-wrap info">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                                    <path d="M6 6h10"/>
+                                    <path d="M6 10h10"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kpi-val">${stats.totalCourses}</div>
+                                <div class="kpi-lbl">Tổng khóa học</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="kpi-val">${stats.totalCourses}</div>
-                            <div class="kpi-lbl">Tổng khóa học</div>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/admin/courses?status=OPEN" class="kpi-card-link ${filterStatus == 'OPEN' ? 'active' : ''}">
+                        <div class="kpi-card" style="width: 100%;">
+                            <div class="kpi-icon-wrap success">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kpi-val">${stats.openCourses}</div>
+                                <div class="kpi-lbl">Đang mở tuyển sinh</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon-wrap success">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/admin/courses?status=CLOSED" class="kpi-card-link ${filterStatus == 'CLOSED' ? 'active' : ''}">
+                        <div class="kpi-card" style="width: 100%;">
+                            <div class="kpi-icon-wrap warning">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kpi-val">${stats.closedCourses}</div>
+                                <div class="kpi-lbl">Tạm đóng</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="kpi-val">${stats.openCourses}</div>
-                            <div class="kpi-lbl">Đang mở tuyển sinh</div>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/admin/courses?status=ARCHIVED" class="kpi-card-link ${filterStatus == 'ARCHIVED' ? 'active' : ''}">
+                        <div class="kpi-card" style="width: 100%;">
+                            <div class="kpi-icon-wrap neutral">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kpi-val">${stats.archivedCourses}</div>
+                                <div class="kpi-lbl">Đã lưu trữ</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon-wrap warning">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="12" y1="8" x2="12" y2="12"></line>
-                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                            </svg>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/admin/subjects" class="kpi-card-link">
+                        <div class="kpi-card" style="width: 100%;">
+                            <div class="kpi-icon-wrap neutral">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m16 6 4 14"/>
+                                    <path d="M12 6v14"/>
+                                    <path d="M8 8v12"/>
+                                    <path d="M4 4v16"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="kpi-val">${stats.totalSubjects}</div>
+                                <div class="kpi-lbl">Số bộ môn</div>
+                            </div>
                         </div>
-                        <div>
-                            <div class="kpi-val">${stats.closedCourses}</div>
-                            <div class="kpi-lbl">Tạm đóng</div>
-                        </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon-wrap neutral">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect width="20" height="14" x="2" y="5" rx="2"></rect>
-                                <line x1="2" y1="10" x2="22" y2="10"></line>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="kpi-val">${stats.archivedCourses}</div>
-                            <div class="kpi-lbl">Đã lưu trữ</div>
-                        </div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-icon-wrap neutral">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="m16 6 4 14"/>
-                                <path d="M12 6v14"/>
-                                <path d="M8 8v12"/>
-                                <path d="M4 4v16"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <div class="kpi-val">${stats.totalSubjects}</div>
-                            <div class="kpi-lbl">Số bộ môn</div>
-                        </div>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- Main Content & Filter Card -->
                 <div class="content-card">
                     <!-- Filter Toolbar -->
                     <div class="filter-panel">
+                        <!-- Quick Status Tabs -->
+                        <div class="status-tab-bar" style="display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--border);">
+                            <a href="${pageContext.request.contextPath}/admin/courses?status=all<c:if test='${not empty filterQ}'>&q=<c:out value="${filterQ}"/></c:if><c:if test='${not empty filterSubjectId}'>&subjectId=${filterSubjectId}</c:if><c:if test='${not empty filterGrade}'>&grade=${filterGrade}</c:if><c:if test='${not empty filterSort}'>&sort=${filterSort}</c:if>"
+                               class="tab-pill ${empty filterStatus || filterStatus == 'all' ? 'active' : ''}">
+                                <span>Tất cả trạng thái</span>
+                                <span class="tab-badge">${stats.totalCourses}</span>
+                            </a>
+                            <a href="${pageContext.request.contextPath}/admin/courses?status=OPEN<c:if test='${not empty filterQ}'>&q=<c:out value="${filterQ}"/></c:if><c:if test='${not empty filterSubjectId}'>&subjectId=${filterSubjectId}</c:if><c:if test='${not empty filterGrade}'>&grade=${filterGrade}</c:if><c:if test='${not empty filterSort}'>&sort=${filterSort}</c:if>"
+                               class="tab-pill ${filterStatus == 'OPEN' ? 'active' : ''}">
+                                <span class="status-dot dot-success"></span>
+                                <span>Đang mở</span>
+                                <span class="tab-badge">${stats.openCourses}</span>
+                            </a>
+                            <a href="${pageContext.request.contextPath}/admin/courses?status=CLOSED<c:if test='${not empty filterQ}'>&q=<c:out value="${filterQ}"/></c:if><c:if test='${not empty filterSubjectId}'>&subjectId=${filterSubjectId}</c:if><c:if test='${not empty filterGrade}'>&grade=${filterGrade}</c:if><c:if test='${not empty filterSort}'>&sort=${filterSort}</c:if>"
+                               class="tab-pill ${filterStatus == 'CLOSED' ? 'active' : ''}">
+                                <span class="status-dot dot-warning"></span>
+                                <span>Tạm đóng</span>
+                                <span class="tab-badge">${stats.closedCourses}</span>
+                            </a>
+                            <a href="${pageContext.request.contextPath}/admin/courses?status=ARCHIVED<c:if test='${not empty filterQ}'>&q=<c:out value="${filterQ}"/></c:if><c:if test='${not empty filterSubjectId}'>&subjectId=${filterSubjectId}</c:if><c:if test='${not empty filterGrade}'>&grade=${filterGrade}</c:if><c:if test='${not empty filterSort}'>&sort=${filterSort}</c:if>"
+                               class="tab-pill ${filterStatus == 'ARCHIVED' ? 'active' : ''}">
+                                <span class="status-dot dot-archived"></span>
+                                <span>Đã lưu trữ</span>
+                                <span class="tab-badge">${stats.archivedCourses}</span>
+                            </a>
+                        </div>
+
                         <form method="GET" action="${pageContext.request.contextPath}/admin/courses" class="filter-grid">
                             <!-- Keyword Input -->
                             <div class="form-group" style="margin: 0;">
@@ -357,10 +452,10 @@
                                     Trạng thái
                                 </label>
                                 <select name="status" class="form-control" style="width: 100%;">
-                                    <option value="" ${empty filterStatus || filterStatus == 'all' ? 'selected' : ''}>Tất cả trạng thái</option>
-                                    <option value="OPEN" ${filterStatus == 'OPEN' ? 'selected' : ''}>Đang mở (OPEN)</option>
-                                    <option value="CLOSED" ${filterStatus == 'CLOSED' ? 'selected' : ''}>Tạm đóng (CLOSED)</option>
-                                    <option value="ARCHIVED" ${filterStatus == 'ARCHIVED' ? 'selected' : ''}>Lưu trữ (ARCHIVED)</option>
+                                    <option value="all" ${empty filterStatus || filterStatus == 'all' ? 'selected' : ''}>Tất cả trạng thái (${stats.totalCourses})</option>
+                                    <option value="OPEN" ${filterStatus == 'OPEN' ? 'selected' : ''}>Đang mở tuyển sinh (${stats.openCourses})</option>
+                                    <option value="CLOSED" ${filterStatus == 'CLOSED' ? 'selected' : ''}>Tạm đóng (${stats.closedCourses})</option>
+                                    <option value="ARCHIVED" ${filterStatus == 'ARCHIVED' ? 'selected' : ''}>Đã lưu trữ (${stats.archivedCourses})</option>
                                 </select>
                             </div>
 
