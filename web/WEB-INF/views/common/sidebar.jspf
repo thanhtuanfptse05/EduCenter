@@ -24,6 +24,16 @@
             </svg>
             <span>Bảng điều khiển</span>
         </a>
+        <c:if test="${sessionScope.currentUser != null and sessionScope.currentUser.admin}">
+            <a href="${pageContext.request.contextPath}/admin/reports" class="nav-link ${activeNav == 'reports' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <span>Báo cáo & Thống kê</span>
+            </a>
+        </c:if>
 
         <!-- 2. Quản trị Đào tạo & Hệ thống (Chỉ Admin & Quản lý trung tâm) -->
         <c:if test="${sessionScope.currentUser != null and sessionScope.currentUser.admin}">

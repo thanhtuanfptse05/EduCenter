@@ -24,7 +24,6 @@ import java.io.IOException;
         "",
         "/index",
         "/dang-ky-tu-van",
-        "/admin/dashboard",
         "/teacher/dashboard"
 })
 public class LandingServlet extends HttpServlet {
