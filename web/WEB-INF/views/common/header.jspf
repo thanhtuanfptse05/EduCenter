@@ -1,7 +1,11 @@
-<c:choose><c:when test="${internalShell}">
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
+<c:set var="_reqUri" value="${pageContext.request.requestURI}" />
+<c:set var="_reqServlet" value="${pageContext.request.servletPath}" />
+<c:set var="_isInternalRoleArea" value="${internalShell or _reqUri.contains('/admin/') or _reqUri.contains('/teacher/') or _reqUri.contains('/staff/') or _reqUri.contains('/student/') or _reqUri.contains('/profile') or _reqServlet.contains('/admin/') or _reqServlet.contains('/teacher/') or _reqServlet.contains('/staff/') or _reqServlet.contains('/student/') or _reqServlet.contains('/profile') or (not empty activeNav and activeNav != 'home')}" />
+
+<c:choose><c:when test="${_isInternalRoleArea}">
 <button type="button" class="app-drawer-backdrop" data-drawer-backdrop aria-label="Đóng menu" hidden></button>
 <header class="admin-topbar app-header">
 <button type="button" class="site-icon app-menu-button" data-app-menu aria-controls="app-sidebar" aria-expanded="false" aria-label="Mở menu nội bộ"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>

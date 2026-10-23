@@ -53,6 +53,9 @@ public class StaffClassInquiryServlet extends HttpServlet {
 
         FlashMessageUtil.transferFlashMessagesToRequest(req);
 
+        req.setAttribute("activeNav", "staff-classes");
+        req.setAttribute("internalShell", true);
+
         String path = req.getServletPath();
         if ("/staff/classes".equals(path)) {
             handleList(req, resp);

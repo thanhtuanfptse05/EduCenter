@@ -54,6 +54,9 @@ public class TeacherManagementServlet extends HttpServlet {
         FlashMessageUtil.transferFlashMessagesToRequest(req);
         CsrfUtil.getOrCreateToken(session);
 
+        req.setAttribute("activeNav", "teachers");
+        req.setAttribute("internalShell", true);
+
         if ("/admin/teachers".equals(path)) {
             handleList(req, resp);
         } else if ("/admin/teachers/form".equals(path)) {

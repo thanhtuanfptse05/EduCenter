@@ -71,6 +71,8 @@ public class SystemSettingServlet extends HttpServlet {
         req.setAttribute("recentAuditLogs", recentLogs);
         req.setAttribute("activeTab", activeTab);
         req.setAttribute("pageTitle", "Cấu hình hệ thống & Quản trị — EduCenter ERP");
+        req.setAttribute("activeNav", "settings");
+        req.setAttribute("internalShell", true);
 
         req.getRequestDispatcher("/WEB-INF/views/admin/settings.jsp").forward(req, resp);
     }

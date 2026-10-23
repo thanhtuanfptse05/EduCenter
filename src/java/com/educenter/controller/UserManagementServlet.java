@@ -58,6 +58,8 @@ public class UserManagementServlet extends HttpServlet {
         UserPageDTO pageData = userService.getUserList(keyword, roleCode, status, page, 10);
         req.setAttribute("pageData", pageData);
         req.setAttribute("pageTitle", "Quản lý người dùng & Phân quyền — EduCenter ERP");
+        req.setAttribute("activeNav", "users");
+        req.setAttribute("internalShell", true);
         req.getRequestDispatcher("/WEB-INF/views/admin/user-list.jsp").forward(req, resp);
     }
 

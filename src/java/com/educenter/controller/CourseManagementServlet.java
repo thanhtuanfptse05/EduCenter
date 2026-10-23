@@ -55,6 +55,9 @@ public class CourseManagementServlet extends HttpServlet {
         FlashMessageUtil.transferFlashMessagesToRequest(req);
         CsrfUtil.getOrCreateToken(session);
 
+        req.setAttribute("activeNav", "courses");
+        req.setAttribute("internalShell", true);
+
         if ("/admin/courses".equals(path)) {
             handleList(req, resp);
         } else if ("/admin/courses/form".equals(path)) {

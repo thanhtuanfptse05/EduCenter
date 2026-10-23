@@ -61,6 +61,8 @@
   border-radius: var(--radius-md);
   text-decoration: none !important;
   transition: all var(--transition-fast);
+  position: relative;
+  border-left: 3px solid transparent;
 }
 
 .nav-link:hover {
@@ -69,9 +71,12 @@
 }
 
 .nav-link.active {
-  background-color: var(--primary-subtle);
-  color: var(--primary);
-  font-weight: 600;
+  background-color: var(--primary-subtle) !important;
+  color: var(--primary) !important;
+  font-weight: 600 !important;
+  border-left: 3px solid var(--primary) !important;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
 }
 
 .admin-main {

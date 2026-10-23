@@ -57,6 +57,9 @@ public class SubjectManagementServlet extends HttpServlet {
         FlashMessageUtil.transferFlashMessagesToRequest(req);
         CsrfUtil.getOrCreateToken(session);
 
+        req.setAttribute("activeNav", "subjects");
+        req.setAttribute("internalShell", true);
+
         List<SubjectAdminViewDTO> subjects = academicProgramService.getSubjectAdminList();
 
         long activeCount = subjects.stream().filter(s -> "ACTIVE".equalsIgnoreCase(s.getStatus())).count();

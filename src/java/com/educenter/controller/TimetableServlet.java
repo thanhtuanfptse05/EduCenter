@@ -84,6 +84,8 @@ public class TimetableServlet extends HttpServlet {
         req.setAttribute("weekRangeLabel", weekRangeLabel);
         req.setAttribute("isAdmin", isAdmin);
         req.setAttribute("pageTitle", "Thời khóa biểu giảng dạy & học tập");
+        req.setAttribute("activeNav", path.startsWith("/staff") ? "staff-timetable" : "timetable");
+        req.setAttribute("internalShell", true);
 
         req.getRequestDispatcher("/WEB-INF/views/admin/timetable.jsp").forward(req, resp);
     }

@@ -146,6 +146,8 @@ public class AuthServlet extends HttpServlet {
         }
         req.setAttribute("userProfile", userOpt.get());
         req.setAttribute("pageTitle", "Hồ sơ cá nhân & Bảo mật — EduCenter ERP");
+        req.setAttribute("activeNav", "profile");
+        req.setAttribute("internalShell", true);
         req.getRequestDispatcher("/WEB-INF/views/auth/profile.jsp").forward(req, resp);
     }
 

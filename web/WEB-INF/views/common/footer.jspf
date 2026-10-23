@@ -1,7 +1,11 @@
-<c:choose><c:when test="${internalShell}">
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
+<c:set var="_reqUri" value="${pageContext.request.requestURI}" />
+<c:set var="_reqServlet" value="${pageContext.request.servletPath}" />
+<c:set var="_isInternalRoleArea" value="${internalShell or _reqUri.contains('/admin/') or _reqUri.contains('/teacher/') or _reqUri.contains('/staff/') or _reqUri.contains('/student/') or _reqUri.contains('/profile') or _reqServlet.contains('/admin/') or _reqServlet.contains('/teacher/') or _reqServlet.contains('/staff/') or _reqServlet.contains('/student/') or _reqServlet.contains('/profile') or (not empty activeNav and activeNav != 'home')}" />
+
+<c:choose><c:when test="${_isInternalRoleArea}">
 <c:if test="${empty hideStandardFooter}">
     <footer class="app-footer">
         <div class="app-footer-container">

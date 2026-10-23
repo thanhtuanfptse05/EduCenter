@@ -153,10 +153,16 @@
                                                     <div class="user-avatar">
                                                         <c:choose>
                                                             <c:when test="${not empty user.avatarUrl}">
-                                                                <img src="<c:out value='${user.avatarUrl}' />" alt="Avatar">
+                                                                <c:url var="uAvatar" value="${user.avatarUrl}" />
+                                                                <img src="${uAvatar}" alt="" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
+                                                                <span class="avatar-fallback" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center; font-weight: 700; color: var(--primary);">
+                                                                    <c:out value="${user.fullName != null && !user.fullName.isEmpty() ? user.fullName.substring(0, 1).toUpperCase() : 'U'}" />
+                                                                </span>
                                                             </c:when>
                                                             <c:otherwise>
-                                                                <c:out value="${user.fullName.substring(0, 1)}" />
+                                                                <span class="avatar-fallback" style="display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; font-weight: 700; color: var(--primary);">
+                                                                    <c:out value="${user.fullName != null && !user.fullName.isEmpty() ? user.fullName.substring(0, 1).toUpperCase() : 'U'}" />
+                                                                </span>
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </div>

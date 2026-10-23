@@ -62,6 +62,8 @@ public class RoomManagementServlet extends HttpServlet {
         req.setAttribute("availableCount", availableCount);
         req.setAttribute("maintenanceCount", maintenanceCount);
         req.setAttribute("pageTitle", "Quản lý Phòng học");
+        req.setAttribute("activeNav", "rooms");
+        req.setAttribute("internalShell", true);
 
         req.getRequestDispatcher("/WEB-INF/views/admin/room-list.jsp").forward(req, resp);
     }

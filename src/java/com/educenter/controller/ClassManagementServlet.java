@@ -63,6 +63,9 @@ public class ClassManagementServlet extends HttpServlet {
         FlashMessageUtil.transferFlashMessagesToRequest(req);
         CsrfUtil.getOrCreateToken(session);
 
+        req.setAttribute("activeNav", "classes");
+        req.setAttribute("internalShell", true);
+
         String path = req.getServletPath();
         if ("/admin/classes".equals(path)) {
             handleList(req, resp);
