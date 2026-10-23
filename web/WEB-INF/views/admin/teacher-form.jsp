@@ -75,7 +75,7 @@
                     <div style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
                         <div>
                             <div style="font-size: var(--font-size-xs); color: var(--text-muted); margin-bottom: 4px;">
-                                <a href="${pageContext.request.contextPath}/staff/teachers" style="color: var(--text-muted); text-decoration: none;">Đội ngũ Giáo viên</a> / 
+                                <a href="${pageContext.request.contextPath}/admin/teachers" style="color: var(--text-muted); text-decoration: none;">Đội ngũ Giáo viên</a> / 
                                 <span>${isEdit ? 'Chỉnh sửa hồ sơ' : 'Thêm mới Giáo viên'}</span>
                             </div>
                             <h1 style="font-size: var(--font-size-2xl); font-weight: 800; color: var(--text); margin: 0;">
@@ -87,7 +87,7 @@
                             </p>
                         </div>
                         <div>
-                            <a href="${pageContext.request.contextPath}/staff/teachers" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none;">
+                            <a href="${pageContext.request.contextPath}/admin/teachers" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none;">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="19" y1="12" x2="5" y2="12"></line>
                                     <polyline points="12 19 5 12 12 5"></polyline>
@@ -110,7 +110,7 @@
                     </c:if>
 
                     <!-- Form -->
-                    <form method="post" action="${pageContext.request.contextPath}/staff/teachers/save">
+                    <form method="post" action="${pageContext.request.contextPath}/admin/teachers/save">
                         <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                         <input type="hidden" name="id" value="${teacherForm.id}">
 
@@ -247,7 +247,7 @@
 
                         <!-- Button Footer -->
                         <div class="btn-group-footer">
-                            <a href="${pageContext.request.contextPath}/staff/teachers" class="btn btn-secondary" style="text-decoration: none;">
+                            <a href="${pageContext.request.contextPath}/admin/teachers" class="btn btn-secondary" style="text-decoration: none;">
                                 Hủy bỏ
                             </a>
                             <button type="submit" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">

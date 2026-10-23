@@ -226,17 +226,17 @@
                 <div class="page-header" style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
                     <div>
                         <div style="font-size: var(--font-size-xs); color: var(--text-muted); margin-bottom: 4px;">
-                            <a href="${pageContext.request.contextPath}/staff/teachers" style="color: var(--text-muted); text-decoration: none;">Đào tạo & Học vụ</a> / <span>Đội ngũ Giáo viên</span>
+                            <a href="${pageContext.request.contextPath}/admin/users" style="color: var(--text-muted); text-decoration: none;">Quản trị trung tâm</a> / <span>Đội ngũ Giáo viên</span>
                         </div>
                         <h1 style="font-size: var(--font-size-2xl); font-weight: 800; color: var(--text); margin: 0;">
                             Hồ sơ Giáo viên & Phân công chuyên môn
                         </h1>
                         <p style="font-size: var(--font-size-sm); color: var(--text-muted); margin: 4px 0 0 0;">
-                            Quản lý hồ sơ giảng viên, phân công chuyên môn môn học, định mức thù lao và theo dõi trạng thái công tác (ADM-09, UC12).
+                            Quản lý hồ sơ giảng viên, định mức thù lao tham khảo và phân công chuyên môn môn học (ADM-09, Dành riêng cho Quản lý & Admin).
                         </p>
                     </div>
                     <div style="display: flex; gap: 10px; align-items: center;">
-                        <a href="${pageContext.request.contextPath}/staff/teachers/form" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+                        <a href="${pageContext.request.contextPath}/admin/teachers/form" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="12" y1="5" x2="12" y2="19"></line>
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -339,7 +339,7 @@
                 <div class="content-card">
                     <!-- Filter Panel -->
                     <div class="filter-panel">
-                        <form method="get" action="${pageContext.request.contextPath}/staff/teachers" class="filter-grid">
+                        <form method="get" action="${pageContext.request.contextPath}/admin/teachers" class="filter-grid">
                             <div class="form-group" style="margin: 0;">
                                 <label class="form-label" style="font-size: 12px; margin-bottom: 4px;">Tìm kiếm</label>
                                 <input type="text" name="q" value="${filterQ}" class="form-control" placeholder="Họ tên, SĐT, email, môn giảng dạy...">
@@ -371,7 +371,7 @@
                                     </svg>
                                     Lọc
                                 </button>
-                                <a href="${pageContext.request.contextPath}/staff/teachers" class="btn btn-secondary" style="height: 38px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
+                                <a href="${pageContext.request.contextPath}/admin/teachers" class="btn btn-secondary" style="height: 38px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none;">
                                     Xóa lọc
                                 </a>
                             </div>
@@ -462,7 +462,7 @@
                                                 <!-- Thao tác -->
                                                 <td style="padding: 14px 16px; text-align: right;">
                                                     <div class="action-btns" style="justify-content: flex-end;">
-                                                        <a href="${pageContext.request.contextPath}/staff/teachers/form?id=${item.id}" class="btn-icon" title="Chỉnh sửa hồ sơ">
+                                                        <a href="${pageContext.request.contextPath}/admin/teachers/form?id=${item.id}" class="btn-icon" title="Chỉnh sửa hồ sơ">
                                                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                                 <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
                                                                 <path d="m15 5 4 4"/>
@@ -490,7 +490,7 @@
                                                     </div>
                                                     <div style="font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px;">Không tìm thấy giáo viên nào</div>
                                                     <p style="font-size: 13px; color: var(--text-muted); margin: 0 0 16px 0;">Không có hồ sơ giáo viên nào khớp với bộ lọc tìm kiếm hiện tại.</p>
-                                                    <a href="${pageContext.request.contextPath}/staff/teachers/form" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 6px;">
+                                                    <a href="${pageContext.request.contextPath}/admin/teachers/form" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 6px;">
                                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                             <line x1="12" y1="5" x2="12" y2="19"></line>
                                                             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -513,17 +513,17 @@
                                 Hiển thị trang <strong>${currentPage}</strong> / <strong>${totalPages}</strong> (Tổng <strong>${totalItems}</strong> giáo viên)
                             </div>
                             <div style="display: flex; gap: 6px;">
-                                <a href="${pageContext.request.contextPath}/staff/teachers?q=${filterQ}&status=${filterStatus}&sort=${filterSort}&page=${currentPage - 1}"
+                                <a href="${pageContext.request.contextPath}/admin/teachers?q=${filterQ}&status=${filterStatus}&sort=${filterSort}&page=${currentPage - 1}"
                                    class="page-link-btn ${currentPage <= 1 ? 'disabled' : ''}">
                                     ‹
                                 </a>
                                 <c:forEach begin="1" end="${totalPages}" var="p">
-                                    <a href="${pageContext.request.contextPath}/staff/teachers?q=${filterQ}&status=${filterStatus}&sort=${filterSort}&page=${p}"
+                                    <a href="${pageContext.request.contextPath}/admin/teachers?q=${filterQ}&status=${filterStatus}&sort=${filterSort}&page=${p}"
                                        class="page-link-btn ${currentPage == p ? 'active' : ''}">
                                         ${p}
                                     </a>
                                 </c:forEach>
-                                <a href="${pageContext.request.contextPath}/staff/teachers?q=${filterQ}&status=${filterStatus}&sort=${filterSort}&page=${currentPage + 1}"
+                                <a href="${pageContext.request.contextPath}/admin/teachers?q=${filterQ}&status=${filterStatus}&sort=${filterSort}&page=${currentPage + 1}"
                                    class="page-link-btn ${currentPage >= totalPages ? 'disabled' : ''}">
                                     ›
                                 </a>
@@ -543,7 +543,7 @@
             <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 700; color: var(--text);">Cập nhật trạng thái công tác</h3>
             <p id="modalTeacherName" style="margin: 0 0 16px 0; font-size: 13px; color: var(--text-muted);"></p>
             
-            <form method="post" action="${pageContext.request.contextPath}/staff/teachers/status">
+            <form method="post" action="${pageContext.request.contextPath}/admin/teachers/status">
                 <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                 <input type="hidden" name="id" id="modalTeacherId">
 

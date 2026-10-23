@@ -17,7 +17,7 @@ Triển khai phân hệ quản lý hồ sơ giáo viên nội bộ (ADM-09) dàn
 - **JDK/Servlet Container:** OpenJDK 17 + Apache Tomcat 10.1 (`jakarta.servlet.*`).
 - **Persistence:** JPA 3.1 + Hibernate ORM trên Microsoft SQL Server.
 - **Architecture:** Phân tầng MVC chuẩn: Controller (`TeacherManagementServlet`) -> Service (`TeacherManagementService`) -> Repository (`TeacherRepository`, `UserRepository`, `AuditLogRepository`) -> Entity (`Teacher`, `User`, `AuditLog`).
-- **Security:** CSRF Protection, RoleFilter (`STAFF`, `ADMIN`), PRG pattern.
+- **Security:** CSRF Protection, RoleFilter (`ADMIN` strictly), PRG pattern.
 - **Testing:** JUnit 5 Unit Tests cho `TeacherManagementService`.
 
 ---
@@ -38,14 +38,14 @@ src/java/com/educenter/
 │   ├── TeacherManagementService.java   # Service interface quản lý hồ sơ giáo viên
 │   └── TeacherManagementServiceImpl.java# Nghiệp vụ BR02, BR05, BR16, BR18, Transaction, AuditLog
 └── controller/
-    └── TeacherManagementServlet.java   # Controller cho /staff/teachers, /staff/teachers/form, /staff/teachers/status
+    └── TeacherManagementServlet.java   # Controller cho /admin/teachers, /admin/teachers/form, /admin/teachers/status
 
 web/WEB-INF/views/
-├── staff/
+├── admin/
 │   ├── teacher-list.jsp                # Màn hình ADM-09: Danh sách giáo viên & bộ lọc
 │   └── teacher-form.jsp                # Màn hình ADM-09: Form thêm/sửa giáo viên
 └── common/
-    └── sidebar.jspf                    # Cập nhật menu Đội ngũ giáo viên cho STAFF/ADMIN
+    └── sidebar.jspf                    # Cập nhật menu Đội ngũ giáo viên trong nhóm Quản trị (Chỉ Admin)
 
 test/com/educenter/service/
 └── TeacherManagementServiceTest.java   # Unit test các ca thành công và biên/lỗi nghiệp vụ

@@ -21,10 +21,10 @@
 ---
 
 ## Phase 4: Controller & UI Views (ADM-09)
-- [x] T005 Xây dựng `TeacherManagementServlet.java` quản lý routes `/staff/teachers`, `/staff/teachers/form`, `/staff/teachers/save`, `/staff/teachers/status` (PRG pattern, CSRF token, quyền STAFF/ADMIN, flash toast).
-- [x] T006 Xây dựng view danh sách giáo viên `web/WEB-INF/views/staff/teacher-list.jsp` đạt chuẩn `design.md` (Default Light mode, outline Lucide SVG, KPI cards, avatar, badge chuyên môn/bằng cấp, bộ lọc đa năng, phân trang, đổi trạng thái nhanh, empty state).
-- [x] T007 Xây dựng view form giáo viên `web/WEB-INF/views/staff/teacher-form.jsp` (layout card 2 cột, dropdown chọn User TEACHER khả dụng, chuyên môn, bằng cấp, thù lao, bio).
-- [x] T008 Cập nhật `web/WEB-INF/views/common/sidebar.jspf` bổ sung menu "Đội ngũ Giáo viên" (`/staff/teachers`).
+- [x] T005 Xây dựng `TeacherManagementServlet.java` quản lý routes `/admin/teachers`, `/admin/teachers/form`, `/admin/teachers/save`, `/admin/teachers/status` (PRG pattern, CSRF token, quyền ADMIN strictly, flash toast).
+- [x] T006 Xây dựng view danh sách giáo viên `web/WEB-INF/views/admin/teacher-list.jsp` đạt chuẩn `design.md` (Default Light mode, outline Lucide SVG, KPI cards, avatar, badge chuyên môn/bằng cấp, bộ lọc đa năng, phân trang, đổi trạng thái nhanh, empty state).
+- [x] T007 Xây dựng view form giáo viên `web/WEB-INF/views/admin/teacher-form.jsp` (layout card 2 cột, dropdown chọn User TEACHER khả dụng, chuyên môn, bằng cấp, thù lao, bio).
+- [x] T008 Cập nhật `web/WEB-INF/views/common/sidebar.jspf` bổ sung menu "Đội ngũ Giáo viên" (`/admin/teachers`) trong nhóm Quản trị (Chỉ Admin).
 
 ---
 

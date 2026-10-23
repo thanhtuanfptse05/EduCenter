@@ -16,11 +16,15 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Controller for Teacher Profile & Assignment Management (ADM-09, UC12).
+ * Strictly restricted to ADMIN / Center Managers.
+ */
 @WebServlet(name = "TeacherManagementServlet", urlPatterns = {
-        "/staff/teachers",
-        "/staff/teachers/form",
-        "/staff/teachers/save",
-        "/staff/teachers/status"
+        "/admin/teachers",
+        "/admin/teachers/form",
+        "/admin/teachers/save",
+        "/admin/teachers/status"
 })
 public class TeacherManagementServlet extends HttpServlet {
 
@@ -41,7 +45,8 @@ public class TeacherManagementServlet extends HttpServlet {
         HttpSession session = req.getSession(false);
         UserPrincipalDTO user = (session != null) ? (UserPrincipalDTO) session.getAttribute("currentUser") : null;
 
-        if (user == null || (!user.isStaff() && !user.isAdmin())) {
+        // Strictly ADMIN only
+        if (user == null || !user.isAdmin()) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
@@ -49,9 +54,9 @@ public class TeacherManagementServlet extends HttpServlet {
         FlashMessageUtil.transferFlashMessagesToRequest(req);
         CsrfUtil.getOrCreateToken(session);
 
-        if ("/staff/teachers".equals(path)) {
+        if ("/admin/teachers".equals(path)) {
             handleList(req, resp);
-        } else if ("/staff/teachers/form".equals(path)) {
+        } else if ("/admin/teachers/form".equals(path)) {
             handleForm(req, resp);
         } else {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -64,22 +69,23 @@ public class TeacherManagementServlet extends HttpServlet {
         HttpSession session = req.getSession(false);
         UserPrincipalDTO user = (session != null) ? (UserPrincipalDTO) session.getAttribute("currentUser") : null;
 
-        if (user == null || (!user.isStaff() && !user.isAdmin())) {
+        // Strictly ADMIN only
+        if (user == null || !user.isAdmin()) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
         if (!CsrfUtil.isValidToken(req)) {
             FlashMessageUtil.setError(req, "Phiên thao tác đã hết hạn hoặc mã bảo mật không hợp lệ (CSRF). Vui lòng thử lại.");
-            resp.sendRedirect(req.getContextPath() + "/staff/teachers");
+            resp.sendRedirect(req.getContextPath() + "/admin/teachers");
             return;
         }
 
         String ipAddress = req.getRemoteAddr();
 
         switch (path) {
-            case "/staff/teachers/save" -> handleSave(req, resp, user, ipAddress);
-            case "/staff/teachers/status" -> handleStatus(req, resp, user, ipAddress);
+            case "/admin/teachers/save" -> handleSave(req, resp, user, ipAddress);
+            case "/admin/teachers/status" -> handleStatus(req, resp, user, ipAddress);
             default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
@@ -129,7 +135,7 @@ public class TeacherManagementServlet extends HttpServlet {
         req.setAttribute("filterSort", sort);
 
         req.setAttribute("pageTitle", "Đội ngũ Giáo viên & Phân công chuyên môn — EduCenter ERP");
-        req.getRequestDispatcher("/WEB-INF/views/staff/teacher-list.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/admin/teacher-list.jsp").forward(req, resp);
     }
 
     private void handleForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -147,7 +153,7 @@ public class TeacherManagementServlet extends HttpServlet {
                 form = teacherService.getTeacherForEdit(id);
             } catch (ValidationException e) {
                 FlashMessageUtil.setError(req, e.getMessage());
-                resp.sendRedirect(req.getContextPath() + "/staff/teachers");
+                resp.sendRedirect(req.getContextPath() + "/admin/teachers");
                 return;
             }
         } else {
@@ -160,7 +166,7 @@ public class TeacherManagementServlet extends HttpServlet {
         req.setAttribute("isEdit", id != null);
         req.setAttribute("pageTitle", (id != null ? "Chỉnh sửa hồ sơ: " + form.getFullName() : "Thêm mới Giáo viên") + " — EduCenter ERP");
 
-        req.getRequestDispatcher("/WEB-INF/views/staff/teacher-form.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/admin/teacher-form.jsp").forward(req, resp);
     }
 
     private void handleSave(HttpServletRequest req, HttpServletResponse resp,
@@ -195,7 +201,7 @@ public class TeacherManagementServlet extends HttpServlet {
                 }
             } catch (Exception ignored) {
                 FlashMessageUtil.setError(req, "Đơn giá thù lao không hợp lệ");
-                resp.sendRedirect(req.getContextPath() + (id != null ? "/staff/teachers/form?id=" + id : "/staff/teachers/form"));
+                resp.sendRedirect(req.getContextPath() + (id != null ? "/admin/teachers/form?id=" + id : "/admin/teachers/form"));
                 return;
             }
         }
@@ -215,13 +221,13 @@ public class TeacherManagementServlet extends HttpServlet {
         try {
             teacherService.saveTeacher(form, user.getUserId(), ipAddress);
             FlashMessageUtil.setSuccess(req, (id == null ? "Thêm mới" : "Cập nhật") + " hồ sơ giáo viên thành công!");
-            resp.sendRedirect(req.getContextPath() + "/staff/teachers");
+            resp.sendRedirect(req.getContextPath() + "/admin/teachers");
         } catch (ValidationException e) {
             FlashMessageUtil.setError(req, e.getMessage());
             if (id != null) {
-                resp.sendRedirect(req.getContextPath() + "/staff/teachers/form?id=" + id);
+                resp.sendRedirect(req.getContextPath() + "/admin/teachers/form?id=" + id);
             } else {
-                resp.sendRedirect(req.getContextPath() + "/staff/teachers/form");
+                resp.sendRedirect(req.getContextPath() + "/admin/teachers/form");
             }
         }
     }
@@ -233,7 +239,7 @@ public class TeacherManagementServlet extends HttpServlet {
 
         if (idStr == null || idStr.trim().isEmpty() || status == null || status.trim().isEmpty()) {
             FlashMessageUtil.setError(req, "Dữ liệu cập nhật trạng thái không hợp lệ");
-            resp.sendRedirect(req.getContextPath() + "/staff/teachers");
+            resp.sendRedirect(req.getContextPath() + "/admin/teachers");
             return;
         }
 
@@ -247,6 +253,6 @@ public class TeacherManagementServlet extends HttpServlet {
             FlashMessageUtil.setError(req, "Lỗi khi cập nhật trạng thái: " + e.getMessage());
         }
 
-        resp.sendRedirect(req.getContextPath() + "/staff/teachers");
+        resp.sendRedirect(req.getContextPath() + "/admin/teachers");
     }
 }
