@@ -25,7 +25,8 @@ import java.util.Set;
 @WebServlet(name = "UserManagementServlet", urlPatterns = {
         "/admin/users",
         "/admin/users/status",
-        "/admin/users/roles"
+        "/admin/users/roles",
+        "/admin/users/create"
 })
 public class UserManagementServlet extends HttpServlet {
 
@@ -80,8 +81,32 @@ public class UserManagementServlet extends HttpServlet {
         switch (path) {
             case "/admin/users/status" -> handleToggleStatus(req, resp, admin, ipAddress, returnQuery);
             case "/admin/users/roles" -> handleAssignRoles(req, resp, admin, ipAddress, returnQuery);
+            case "/admin/users/create" -> handleCreateUser(req, resp, admin, ipAddress, returnQuery);
             default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
+    }
+
+    private void handleCreateUser(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO admin,
+                                  String ipAddress, String returnQuery) throws IOException {
+        String email = req.getParameter("email");
+        String password = req.getParameter("password");
+        String fullName = req.getParameter("fullName");
+        String phone = req.getParameter("phone");
+        String status = req.getParameter("status");
+        String[] rolesParam = req.getParameterValues("roles");
+
+        Set<String> roleCodes = (rolesParam != null) ? new HashSet<>(Arrays.asList(rolesParam)) : new HashSet<>();
+        com.educenter.dto.UserCreateDTO dto = new com.educenter.dto.UserCreateDTO(email, password, fullName, phone, status, roleCodes);
+
+        try {
+            userService.createUser(admin.getUserId(), dto, ipAddress);
+            FlashMessageUtil.setSuccess(req, "Tạo mới tài khoản người dùng " + dto.getEmail() + " thành công!");
+        } catch (ValidationException | com.educenter.service.AuthorizationException e) {
+            FlashMessageUtil.setError(req, e.getMessage());
+        } catch (Exception e) {
+            FlashMessageUtil.setError(req, "Không thể tạo tài khoản: " + e.getMessage());
+        }
+        resp.sendRedirect(req.getContextPath() + "/admin/users" + returnQuery);
     }
 
     private void handleToggleStatus(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO admin,

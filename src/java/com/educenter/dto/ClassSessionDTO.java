@@ -102,4 +102,9 @@ public class ClassSessionDTO implements Serializable {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm");
         return startAt.format(dtf) + " - " + endAt.format(dtf);
     }
+
+    public String getFormattedSessionDate() {
+        if (sessionDate == null) return "";
+        return sessionDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
 }

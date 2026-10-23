@@ -38,4 +38,9 @@ public interface UserService {
      * Retrieves user view details by ID.
      */
     Optional<UserViewDTO> getUserById(Long id);
+
+    /**
+     * Admin creates a new user account with initial roles and password.
+     */
+    User createUser(Long adminId, com.educenter.dto.UserCreateDTO dto, String ipAddress);
 }

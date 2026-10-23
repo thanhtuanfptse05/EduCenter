@@ -412,8 +412,7 @@
                                         </c:if>
                                     </div>
                                     <div class="day-date">
-                                        <fmt:parseDate value="${dayDate}" pattern="yyyy-MM-dd" var="fDay" type="date"/>
-                                        <fmt:formatDate value="${fDay}" pattern="dd/MM/yyyy"/>
+                                        ${grid.formatDay(dayDate)}
                                     </div>
                                 </div>
                                 <span class="session-count-badge" title="Số lượng buổi học trong ngày">

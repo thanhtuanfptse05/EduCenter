@@ -1,6 +1,7 @@
 package com.educenter.service;
 
 import com.educenter.dto.ProfileUpdateDTO;
+import com.educenter.dto.UserCreateDTO;
 import com.educenter.dto.UserPageDTO;
 import com.educenter.dto.UserViewDTO;
 import com.educenter.entity.AuditLog;
@@ -10,6 +11,7 @@ import com.educenter.repository.AuditLogRepository;
 import com.educenter.repository.RoleRepository;
 import com.educenter.repository.UserRepository;
 import com.educenter.util.JPAUtil;
+import com.educenter.util.PasswordUtil;
 import com.educenter.util.ValidationUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -332,6 +334,105 @@ public class UserServiceImpl implements UserService {
                         u.getCreatedAt()
                 );
             });
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public User createUser(Long adminId, UserCreateDTO dto, String ipAddress) {
+        if (adminId == null) {
+            throw new AuthorizationException("Yêu cầu mã quản trị viên thực hiện.");
+        }
+        if (dto == null) {
+            throw new ValidationException("Dữ liệu tạo người dùng không hợp lệ.");
+        }
+
+        String email = (dto.getEmail() != null) ? dto.getEmail().trim().toLowerCase() : "";
+        if (email.isEmpty() || !ValidationUtil.isValidEmail(email)) {
+            throw new ValidationException("Địa chỉ email không đúng định dạng.");
+        }
+
+        String password = dto.getPassword();
+        if (password == null || password.length() < 6) {
+            throw new ValidationException("Mật khẩu ban đầu phải có tối thiểu 6 ký tự.");
+        }
+
+        String fullName = (dto.getFullName() != null) ? dto.getFullName().trim() : "";
+        if (fullName.isEmpty()) {
+            throw new ValidationException("Họ và tên không được để trống.");
+        }
+
+        String phone = (dto.getPhone() != null && !dto.getPhone().trim().isEmpty()) ? dto.getPhone().trim() : null;
+        if (phone != null && !ValidationUtil.isValidPhone(phone, false)) {
+            throw new ValidationException("Số điện thoại không hợp lệ (yêu cầu định dạng 10 chữ số).");
+        }
+
+        Set<String> roles = dto.getRoles();
+        if (roles == null || roles.isEmpty()) {
+            throw new ValidationException("Người dùng phải được phân công ít nhất một vai trò.");
+        }
+
+        EntityManager em = entityManagerSupplier.get();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+
+            // Verify admin rights
+            User admin = userRepository.findById(em, adminId)
+                    .orElseThrow(() -> new AuthorizationException("Tài khoản quản trị viên không tồn tại."));
+            if (!admin.hasRole("ADMIN") || !admin.isActive()) {
+                throw new AuthorizationException("Bạn không có quyền thực hiện thao tác tạo tài khoản này.");
+            }
+
+            // Check email uniqueness (BR01)
+            if (userRepository.findByEmail(em, email).isPresent()) {
+                throw new ValidationException("Email '" + email + "' đã tồn tại trên hệ thống (BR01).");
+            }
+
+            User user = new User();
+            user.setEmail(email);
+            user.setPasswordHash(PasswordUtil.hashPassword(password));
+            user.setFullName(fullName);
+            user.setPhone(phone);
+            user.setStatus(dto.getStatus() != null ? dto.getStatus() : User.STATUS_ACTIVE);
+            user.setCreatedAt(java.time.LocalDateTime.now());
+            user.setUpdatedAt(java.time.LocalDateTime.now());
+
+            for (String rCode : roles) {
+                if (rCode != null && !rCode.trim().isEmpty()) {
+                    roleRepository.findByCode(em, rCode.trim().toUpperCase())
+                            .ifPresent(r -> user.getRoles().add(r));
+                }
+            }
+
+            userRepository.save(em, user);
+
+            // AuditLog
+            String roleListStr = user.getRoles().stream().map(Role::getCode).sorted().collect(Collectors.joining(", "));
+            AuditLog auditLog = new AuditLog(
+                    adminId,
+                    "CREATE_USER",
+                    "Users",
+                    user.getId(),
+                    null,
+                    "{\"email\":\"" + email + "\",\"roles\":[\"" + roleListStr + "\"],\"status\":\"" + user.getStatus() + "\"}",
+                    ipAddress
+            );
+            auditLogRepository.save(em, auditLog);
+
+            tx.commit();
+            LOGGER.info("Admin " + adminId + " đã tạo thành công user mới ID " + user.getId() + " (" + email + ")");
+            return user;
+        } catch (Exception e) {
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            if (e instanceof ValidationException || e instanceof AuthorizationException) {
+                throw e;
+            }
+            LOGGER.log(Level.SEVERE, "Lỗi khi tạo mới người dùng: " + e.getMessage(), e);
+            throw new ValidationException("Không thể tạo mới tài khoản lúc này: " + e.getMessage());
         } finally {
             em.close();
         }

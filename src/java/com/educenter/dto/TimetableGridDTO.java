@@ -48,4 +48,9 @@ public class TimetableGridDTO implements Serializable {
         }
         return result;
     }
+
+    public String formatDay(LocalDate date) {
+        if (date == null) return "";
+        return date.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
 }

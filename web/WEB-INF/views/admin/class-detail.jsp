@@ -231,11 +231,7 @@
                             <div>
                                 <div class="info-block-lbl">Thời gian khai giảng & bế giảng</div>
                                 <div class="info-block-val">
-                                    <fmt:parseDate value="${classDetail.startDate}" pattern="yyyy-MM-dd" var="stDate" type="date"/>
-                                    <fmt:formatDate value="${stDate}" pattern="dd/MM/yyyy"/>
-                                    &rarr;
-                                    <fmt:parseDate value="${classDetail.endDate}" pattern="yyyy-MM-dd" var="enDate" type="date"/>
-                                    <fmt:formatDate value="${enDate}" pattern="dd/MM/yyyy"/>
+                                    ${classDetail.formattedStartDate} &rarr; ${classDetail.formattedEndDate}
                                 </div>
                                 <div style="font-size: 12px; color: var(--text-muted);">Số buổi quy định: ${classDetail.totalCourseSessions} buổi</div>
                             </div>
@@ -302,8 +298,7 @@
                                                 <td style="font-weight: 600; color: var(--text-muted);">${loop.index + 1}</td>
                                                 <td>
                                                     <div style="font-weight: 600; color: var(--text);">
-                                                        <fmt:parseDate value="${sess.sessionDate}" pattern="yyyy-MM-dd" var="sDate" type="date"/>
-                                                        <fmt:formatDate value="${sDate}" pattern="dd/MM/yyyy"/>
+                                                        ${sess.formattedSessionDate}
                                                     </div>
                                                 </td>
                                                 <td>

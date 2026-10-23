@@ -19,10 +19,19 @@
 
             <main class="admin-content">
                 <!-- Page Title -->
-                <div class="page-header">
+                <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
                     <div>
                         <h1 class="page-title">Quản lý người dùng & Phân quyền</h1>
                         <p class="page-subtitle">Quản lý tài khoản, phân quyền 5 vai trò hệ thống và kiểm soát trạng thái hoạt động</p>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-primary" onclick="openCreateUserModal()" style="display: inline-flex; align-items: center; gap: 8px;">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.5;">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                            <span>Thêm mới người dùng</span>
+                        </button>
                     </div>
                 </div>
 
@@ -340,6 +349,78 @@
         </div>
     </div>
 
+    <!-- Create User Modal (ADM-18) -->
+    <div id="createUserModal" class="modal-backdrop">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">Thêm người dùng mới</h3>
+                <button type="button" class="modal-close" data-modal-close="createUserModal" aria-label="Đóng">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <form action="${pageContext.request.contextPath}/admin/users/create" method="post">
+                <input type="hidden" name="csrfToken" value="<c:out value='${csrfToken}' />">
+                <input type="hidden" name="q" value="<c:out value='${pageData.keyword}' />">
+                <input type="hidden" name="role" value="<c:out value='${pageData.roleCode}' />">
+                <input type="hidden" name="status" value="<c:out value='${pageData.status}' />">
+                <input type="hidden" name="page" value="${pageData.currentPage}">
+
+                <div class="modal-body">
+                    <div class="form-group" style="margin-bottom: 14px;">
+                        <label class="form-label required" style="font-size: 13px; font-weight: 600; margin-bottom: 4px;">Họ và tên</label>
+                        <input type="text" name="fullName" class="form-control" placeholder="VD: Nguyễn Văn An" required>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label required" style="font-size: 13px; font-weight: 600; margin-bottom: 4px;">Email đăng nhập</label>
+                            <input type="email" name="email" class="form-control" placeholder="VD: user@educenter.vn" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label required" style="font-size: 13px; font-weight: 600; margin-bottom: 4px;">Mật khẩu ban đầu</label>
+                            <input type="password" name="password" class="form-control" placeholder="Tối thiểu 6 ký tự" minlength="6" required>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 13px; font-weight: 600; margin-bottom: 4px;">Số điện thoại</label>
+                            <input type="tel" name="phone" class="form-control" placeholder="VD: 0912345678">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label required" style="font-size: 13px; font-weight: 600; margin-bottom: 4px;">Trạng thái tài khoản</label>
+                            <select name="status" class="form-control" required>
+                                <option value="ACTIVE" selected>Hoạt động (ACTIVE)</option>
+                                <option value="LOCKED">Tạm khóa (LOCKED)</option>
+                                <option value="INACTIVE">Ngừng hoạt động (INACTIVE)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="form-label required" style="font-size: 13px; font-weight: 600; margin-bottom: 8px;">Phân quyền vai trò (Chọn ít nhất 1)</label>
+                        <div style="display: flex; flex-direction: column; gap: 8px; background: var(--bg); padding: 12px; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                            <c:forEach var="role" items="${pageData.availableRoles}">
+                                <label class="auth-checkbox-label" style="padding: 2px 0;">
+                                    <input type="checkbox" name="roles" value="<c:out value='${role.code}'/>" ${role.code == 'STUDENT' ? 'checked' : ''}>
+                                    <span><strong><c:out value="${role.code}"/></strong> — <c:out value="${role.name}"/></span>
+                                </label>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal-close="createUserModal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-primary">Tạo người dùng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <%@ include file="/WEB-INF/views/common/footer.jspf" %>
 
     <script>
@@ -363,6 +444,10 @@
         }
 
         window.EduCenterModal.open('roleModal');
+    }
+
+    function openCreateUserModal() {
+        window.EduCenterModal.open('createUserModal');
     }
     </script>
 </body>

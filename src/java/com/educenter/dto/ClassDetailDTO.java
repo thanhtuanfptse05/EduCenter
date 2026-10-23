@@ -98,8 +98,18 @@ public class ClassDetailDTO implements Serializable {
     public LocalDate getStartDate() { return startDate; }
     public void setStartDate(LocalDate startDate) { this.startDate = startDate; }
 
+    public String getFormattedStartDate() {
+        if (startDate == null) return "Chưa xác định";
+        return startDate.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
     public LocalDate getEndDate() { return endDate; }
     public void setEndDate(LocalDate endDate) { this.endDate = endDate; }
+
+    public String getFormattedEndDate() {
+        if (endDate == null) return "Chưa xác định";
+        return endDate.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

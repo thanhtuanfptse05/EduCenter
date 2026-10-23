@@ -60,11 +60,7 @@
                         <div>
                             <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Khai giảng & Bế giảng</div>
                             <div style="font-size: 14px; font-weight: 600; color: var(--text); margin-top: 2px;">
-                                <fmt:parseDate value="${classDetail.startDate}" pattern="yyyy-MM-dd" var="sD" type="date"/>
-                                <fmt:formatDate value="${sD}" pattern="dd/MM/yyyy"/>
-                                &rarr;
-                                <fmt:parseDate value="${classDetail.endDate}" pattern="yyyy-MM-dd" var="eD" type="date"/>
-                                <fmt:formatDate value="${eD}" pattern="dd/MM/yyyy"/>
+                                ${classDetail.formattedStartDate} &rarr; ${classDetail.formattedEndDate}
                             </div>
                         </div>
                     </div>
@@ -95,8 +91,7 @@
                                             <tr>
                                                 <td style="font-weight: 600; color: var(--text-muted);">${loop.index + 1}</td>
                                                 <td>
-                                                    <fmt:parseDate value="${sess.sessionDate}" pattern="yyyy-MM-dd" var="sDt" type="date"/>
-                                                    <fmt:formatDate value="${sDt}" pattern="dd/MM/yyyy"/>
+                                                    ${sess.formattedSessionDate}
                                                 </td>
                                                 <td>
                                                     <span style="font-weight: 600; color: var(--primary);">${sess.formattedTime}</span>
