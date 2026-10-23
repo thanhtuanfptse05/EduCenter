@@ -23,6 +23,7 @@
         <class>com.educenter.entity.StudentGuardian</class>
         <class>com.educenter.entity.Enrollment</class>
         <class>com.educenter.entity.Attendance</class>
+        <class>com.educenter.entity.TeachingJournal</class>
         <class>com.educenter.entity.Assessment</class>
         <class>com.educenter.entity.AssessmentScore</class>
         <class>com.educenter.entity.Invoice</class>

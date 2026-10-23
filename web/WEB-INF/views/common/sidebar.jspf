@@ -149,6 +149,18 @@
             </a>
         </c:if>
 
+        <!-- 3a. Giảng dạy (Teacher) -->
+        <c:if test="${sessionScope.currentUser != null and (sessionScope.currentUser.teacher or sessionScope.currentUser.admin)}">
+            <div class="nav-group-title">Giảng dạy & Học vụ</div>
+            <a href="${pageContext.request.contextPath}/teacher/attendance" class="nav-link ${activeNav == 'attendance' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <polyline points="9 11 12 14 22 4"></polyline>
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                </svg>
+                <span>Điểm danh & Sổ đầu bài</span>
+            </a>
+        </c:if>
+
         <!-- 3b. Cổng học tập dành cho Học viên (Student) -->
         <c:if test="${sessionScope.currentUser != null and sessionScope.currentUser.student}">
             <div class="nav-group-title">Học tập của tôi</div>
