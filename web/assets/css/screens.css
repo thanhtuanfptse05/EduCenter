@@ -1179,8 +1179,299 @@ html[data-theme="dark"] .course-badge-grade {
   }
 }
 
+/* ==========================================================================
+   CONSULTATION SUCCESS & REGISTRATION RECEIPT (EXECUTIVE VOUCHER)
+   ========================================================================== */
+.receipt-hero-banner {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.receipt-success-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: var(--success-subtle);
+  color: var(--success);
+  border: 2px solid var(--success-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 4px 14px rgba(21, 128, 61, 0.15);
+}
+
+.receipt-hero-banner h1 {
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 10px;
+}
+
+.receipt-hero-banner p {
+  color: var(--text-muted);
+  font-size: 15px;
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.receipt-voucher-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 5px solid var(--primary);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+  max-width: 860px;
+  margin: 0 auto 32px;
+}
+
+.receipt-voucher-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  border-bottom: 2px dashed var(--border);
+  margin-bottom: 24px;
+  gap: 20px;
+}
+
+.receipt-branding {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.receipt-brand-badge {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+}
+
+.receipt-voucher-header h2 {
+  font-size: 20px;
+  font-weight: 750;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.receipt-code-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.receipt-code-box {
+  background: var(--primary-subtle);
+  border: 1px solid var(--primary-border);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  text-align: right;
+}
+
+.receipt-code-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--primary);
+}
+
+.screen-receipt-code {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--primary);
+  letter-spacing: 0.04em;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.receipt-status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--success);
+  background: var(--success-subtle);
+  border: 1px solid var(--success-border);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+}
+
+.receipt-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.receipt-detail-item {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detail-item-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.detail-item-label svg {
+  color: var(--primary);
+}
+
+.detail-item-val {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.receipt-next-steps-section {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.receipt-next-steps-section h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.receipt-next-steps-section h3 svg {
+  color: var(--primary);
+}
+
+.next-steps-timeline {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+
+.timeline-step-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-step-title {
+  font-size: 13.5px;
+  font-weight: 650;
+  color: var(--text);
+}
+
+.timeline-step-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.receipt-legal-note {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  padding: 12px 14px;
+  background: var(--warning-subtle);
+  border: 1px solid var(--warning-border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 24px;
+}
+
+.receipt-footer-stamp {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.receipt-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 767px) {
+  .receipt-voucher-card {
+    padding: 20px;
+  }
+  .receipt-voucher-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .receipt-code-panel {
+    align-items: flex-start;
+  }
+  .receipt-details-grid {
+    grid-template-columns: 1fr;
+  }
+  .next-steps-timeline {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .receipt-footer-stamp {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
 @media print {
+  body.public-site {
+    background: #ffffff !important;
+  }
+  header.site-header,
+  footer.site-footer,
+  .screen-eyebrow,
+  .screen-heading,
+  .receipt-hero-banner,
   .screen-actions,
+  .receipt-actions-bar,
   .screen-steps,
   .screen-stepper-wrap,
   .cart-remove-form,
@@ -1189,10 +1480,18 @@ html[data-theme="dark"] .course-badge-grade {
     display: none !important;
   }
   .screen-wrap {
-    max-width: none;
-    padding: 0;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
   .screen-columns {
-    display: block;
+    display: block !important;
+  }
+  .receipt-voucher-card {
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: none !important;
+    max-width: 100% !important;
+    padding: 24px !important;
+    page-break-inside: avoid !important;
   }
 }
