@@ -15,10 +15,11 @@
             transition: all 0.15s ease;
         }
         .att-label input { margin: 0; }
-        .att-present:has(input:checked) { background: #dcfce7; color: #15803d; border-color: #86efac; font-weight: 600; }
-        .att-late:has(input:checked) { background: #fef9c3; color: #854d0e; border-color: #fde047; font-weight: 600; }
-        .att-excused:has(input:checked) { background: #e0f2fe; color: #0369a1; border-color: #7dd3fc; font-weight: 600; }
-        .att-unexcused:has(input:checked) { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; font-weight: 600; }
+        .att-label:hover { border-color: var(--primary, #0284c7); }
+        .att-present.is-checked { background: #dcfce7; color: #15803d; border-color: #86efac; font-weight: 600; }
+        .att-late.is-checked { background: #fef9c3; color: #854d0e; border-color: #fde047; font-weight: 600; }
+        .att-excused.is-checked { background: #e0f2fe; color: #0369a1; border-color: #7dd3fc; font-weight: 600; }
+        .att-unexcused.is-checked { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; font-weight: 600; }
 
         .session-info-card {
             background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
@@ -149,25 +150,25 @@
                                             </td>
                                             <td>
                                                 <div class="att-radio-group">
-                                                    <label class="att-label att-present">
+                                                    <label class="att-label att-present ${item.attendanceStatus == 'PRESENT' ? 'is-checked' : ''}">
                                                         <input type="radio" name="status_${item.studentId}" value="PRESENT"
                                                                ${item.attendanceStatus == 'PRESENT' ? 'checked' : ''}
                                                                ${sessionData.sessionStatus == 'COMPLETED' and not sessionScope.currentUser.admin ? 'disabled' : ''}>
                                                         <span>Có mặt</span>
                                                     </label>
-                                                    <label class="att-label att-late">
+                                                    <label class="att-label att-late ${item.attendanceStatus == 'LATE' ? 'is-checked' : ''}">
                                                         <input type="radio" name="status_${item.studentId}" value="LATE"
                                                                ${item.attendanceStatus == 'LATE' ? 'checked' : ''}
                                                                ${sessionData.sessionStatus == 'COMPLETED' and not sessionScope.currentUser.admin ? 'disabled' : ''}>
                                                         <span>Đi muộn</span>
                                                     </label>
-                                                    <label class="att-label att-excused">
+                                                    <label class="att-label att-excused ${item.attendanceStatus == 'ABSENT_EXCUSED' ? 'is-checked' : ''}">
                                                         <input type="radio" name="status_${item.studentId}" value="ABSENT_EXCUSED"
                                                                ${item.attendanceStatus == 'ABSENT_EXCUSED' ? 'checked' : ''}
                                                                ${sessionData.sessionStatus == 'COMPLETED' and not sessionScope.currentUser.admin ? 'disabled' : ''}>
                                                         <span>Có phép</span>
                                                     </label>
-                                                    <label class="att-label att-unexcused">
+                                                    <label class="att-label att-unexcused ${item.attendanceStatus == 'ABSENT_UNEXCUSED' ? 'is-checked' : ''}">
                                                         <input type="radio" name="status_${item.studentId}" value="ABSENT_UNEXCUSED"
                                                                ${item.attendanceStatus == 'ABSENT_UNEXCUSED' ? 'checked' : ''}
                                                                ${sessionData.sessionStatus == 'COMPLETED' and not sessionScope.currentUser.admin ? 'disabled' : ''}>
@@ -225,11 +226,37 @@
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.att-radio-group input[type="radio"]:checked').forEach(function(r) {
+            var label = r.closest('.att-label');
+            if (label) label.classList.add('is-checked');
+        });
+    });
+
+    document.addEventListener('change', function(e) {
+        if (e.target && e.target.matches && e.target.matches('.att-radio-group input[type="radio"]')) {
+            var group = e.target.closest('.att-radio-group');
+            if (group) {
+                group.querySelectorAll('.att-label').forEach(function(l) { l.classList.remove('is-checked'); });
+                var label = e.target.closest('.att-label');
+                if (label && e.target.checked) {
+                    label.classList.add('is-checked');
+                }
+            }
+        }
+    });
+
     function setAllAttendance(status) {
         var radios = document.querySelectorAll('input[type="radio"][value="' + status + '"]');
         radios.forEach(function(r) {
             if (!r.disabled) {
                 r.checked = true;
+                var group = r.closest('.att-radio-group');
+                if (group) {
+                    group.querySelectorAll('.att-label').forEach(function(l) { l.classList.remove('is-checked'); });
+                    var label = r.closest('.att-label');
+                    if (label) label.classList.add('is-checked');
+                }
             }
         });
     }
