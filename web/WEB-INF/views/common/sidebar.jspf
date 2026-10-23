@@ -36,6 +36,15 @@
                 </svg>
                 <span>Chương trình & Khóa học</span>
             </a>
+            <a href="${pageContext.request.contextPath}/staff/teachers" class="nav-link ${activeNav == 'teachers' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>Đội ngũ Giáo viên</span>
+            </a>
             <a href="${pageContext.request.contextPath}/staff/subjects" class="nav-link ${activeNav == 'subjects' ? 'active' : ''}">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="m16 6 4 14"></path>
