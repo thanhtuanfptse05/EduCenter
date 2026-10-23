@@ -111,21 +111,39 @@
                   </div>
                 </div>
 
-                <!-- Grade / Role-Specific Field -->
-                <div class="form-group" id="grade-selection-wrapper">
-                  <label class="form-label" for="grade" id="grade-label">
+                <!-- Grade / Role-Specific Field for Student -->
+                <div class="form-group" id="grade-student-wrapper" style="${sessionScope.preserved_roleCode == 'PARENT' ? 'display: none;' : ''}">
+                  <label class="form-label" for="grade-student">
                     Khối lớp quan tâm <span style="color: var(--danger);">*</span>
                   </label>
                   <div class="input-wrapper">
                     <span class="input-icon">
                       <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
                     </span>
-                    <select class="form-control" id="grade" name="grade">
+                    <select class="form-control" id="grade-student" name="grade" ${sessionScope.preserved_roleCode == 'PARENT' ? 'disabled' : ''}>
                       <option value="" disabled selected>Chọn khối lớp đào tạo</option>
                       <option value="k10">Khối 10 (Chương trình GDPT 2018)</option>
                       <option value="k11">Khối 11 (Chuyên đề nâng cao &amp; ĐGNL sớm)</option>
                       <option value="k12">Khối 12 (Tổng ôn tốt nghiệp &amp; Tuyển sinh ĐH)</option>
                       <option value="dgnl">Luyện thi Đánh Giá Năng Lực (ĐHQG / ĐHBK)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Grade / Role-Specific Field for Parent -->
+                <div class="form-group" id="grade-parent-wrapper" style="${sessionScope.preserved_roleCode == 'PARENT' ? '' : 'display: none;'}">
+                  <label class="form-label" for="grade-parent">
+                    Khối lớp hiện tại của con <span style="color: var(--danger);">*</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <span class="input-icon">
+                      <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                    </span>
+                    <select class="form-control" id="grade-parent" name="grade" ${sessionScope.preserved_roleCode == 'PARENT' ? '' : 'disabled'}>
+                      <option value="" disabled selected>Chọn khối lớp của con</option>
+                      <option value="k10">Con đang học Khối 10 THPT</option>
+                      <option value="k11">Con đang học Khối 11 THPT</option>
+                      <option value="k12">Con đang học Khối 12 THPT (Thi TN &amp; ĐH)</option>
                     </select>
                   </div>
                 </div>
@@ -136,7 +154,12 @@
                     <label class="form-label" for="password" style="margin: 0;">
                       Mật khẩu <span style="color: var(--danger);">*</span>
                     </label>
-                    <span class="font-code-num text-muted" id="pwd-strength-label" style="font-size: 11px;">Chưa nhập</span>
+                    <span class="font-code-num text-muted" id="pwd-strength-label" style="font-size: 11px;"
+                          data-empty="Chưa nhập"
+                          data-weak="Yếu"
+                          data-medium="Trung bình"
+                          data-good="Khá"
+                          data-strong="Rất mạnh">Chưa nhập</span>
                   </div>
                   <div class="auth-password-wrapper">
                     <span class="input-icon">

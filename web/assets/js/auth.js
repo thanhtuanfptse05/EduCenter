@@ -44,25 +44,16 @@
             roleInput.value = role;
           }
 
-          var gradeLabel = document.getElementById('grade-label');
-          var gradeSelect = document.getElementById('grade');
-          if (role === 'PARENT') {
-            if (gradeLabel) gradeLabel.innerHTML = 'Khối lớp của con <span style="color:var(--danger)">*</span>';
-            if (gradeSelect) {
-              gradeSelect.innerHTML = '<option value="" disabled selected>Chọn khối lớp của con</option>' +
-                '<option value="k10">Con đang học Khối 10 THPT</option>' +
-                '<option value="k11">Con đang học Khối 11 THPT</option>' +
-                '<option value="k12">Con đang học Khối 12 THPT (Thi TN & ĐH)</option>';
-            }
-          } else {
-            if (gradeLabel) gradeLabel.innerHTML = 'Khối lớp quan tâm <span style="color:var(--danger)">*</span>';
-            if (gradeSelect) {
-              gradeSelect.innerHTML = '<option value="" disabled selected>Chọn khối lớp đào tạo</option>' +
-                '<option value="k10">Khối 10 (Chương trình GDPT 2018)</option>' +
-                '<option value="k11">Khối 11 (Chuyên đề nâng cao & ĐGNL sớm)</option>' +
-                '<option value="k12">Khối 12 (Tổng ôn tốt nghiệp & Tuyển sinh ĐH)</option>' +
-                '<option value="dgnl">Luyện thi Đánh Giá Năng Lực (ĐHQG / ĐHBK)</option>';
-            }
+          var studentWrapper = document.getElementById('grade-student-wrapper');
+          var parentWrapper = document.getElementById('grade-parent-wrapper');
+          if (studentWrapper && parentWrapper) {
+            var isParent = (role === 'PARENT');
+            studentWrapper.style.display = isParent ? 'none' : 'block';
+            parentWrapper.style.display = isParent ? 'block' : 'none';
+            var studentSelect = document.getElementById('grade-student');
+            var parentSelect = document.getElementById('grade-parent');
+            if (studentSelect) studentSelect.disabled = isParent;
+            if (parentSelect) parentSelect.disabled = !isParent;
           }
         });
       });
@@ -119,26 +110,32 @@
         });
 
         if (strengthLabel) {
+          var lblEmpty = strengthLabel.getAttribute('data-empty') || 'Ch\u01B0a nh\u1EADp';
+          var lblWeak = strengthLabel.getAttribute('data-weak') || 'Y\u1EBFu';
+          var lblMed = strengthLabel.getAttribute('data-medium') || 'Trung b\u00ECnh';
+          var lblGood = strengthLabel.getAttribute('data-good') || 'Kh\u00E1';
+          var lblStrong = strengthLabel.getAttribute('data-strong') || 'R\u1EA5t m\u1EA1nh';
+
           if (val.length === 0) {
-            strengthLabel.textContent = 'Chưa nhập';
+            strengthLabel.textContent = lblEmpty;
             strengthLabel.style.color = 'var(--text-muted)';
           } else if (score <= 1) {
-            strengthLabel.textContent = 'Yếu';
+            strengthLabel.textContent = lblWeak;
             strengthLabel.style.color = 'var(--danger)';
             if (bars[0]) bars[0].style.backgroundColor = 'var(--danger)';
           } else if (score === 2) {
-            strengthLabel.textContent = 'Trung bình';
+            strengthLabel.textContent = lblMed;
             strengthLabel.style.color = 'var(--warning)';
             if (bars[0]) bars[0].style.backgroundColor = 'var(--warning)';
             if (bars[1]) bars[1].style.backgroundColor = 'var(--warning)';
           } else if (score === 3) {
-            strengthLabel.textContent = 'Khá';
+            strengthLabel.textContent = lblGood;
             strengthLabel.style.color = 'var(--primary)';
             if (bars[0]) bars[0].style.backgroundColor = 'var(--primary)';
             if (bars[1]) bars[1].style.backgroundColor = 'var(--primary)';
             if (bars[2]) bars[2].style.backgroundColor = 'var(--primary)';
           } else {
-            strengthLabel.textContent = 'Rất mạnh';
+            strengthLabel.textContent = lblStrong;
             strengthLabel.style.color = 'var(--success)';
             bars.forEach(function (b) {
               if (b) b.style.backgroundColor = 'var(--success)';
@@ -154,7 +151,8 @@
           var color = score <= 1 ? '#ef4444' : score === 2 ? '#f59e0b' : score === 3 ? '#3b82f6' : '#10b981';
           strengthBar.style.width = (val.length === 0 ? '0%' : percent + '%');
           strengthBar.style.backgroundColor = color;
-          strengthText.textContent = (val.length === 0 ? '' : 'Độ bảo mật: ' + (score <= 1 ? 'Yếu' : score === 2 ? 'Trung bình' : score === 3 ? 'Khá' : 'Rất mạnh'));
+          var curLabel = (val.length === 0 ? '' : (score <= 1 ? 'Y\u1EBFu' : score === 2 ? 'Trung b\u00ECnh' : score === 3 ? 'Kh\u00E1' : 'R\u1EA5t m\u1EA1nh'));
+          strengthText.textContent = (val.length === 0 ? '' : '\u0110\u1ED9 b\u1EA3o m\u1EADt: ' + curLabel);
           strengthText.style.color = color;
         }
 
@@ -239,7 +237,7 @@
           countdownEl.textContent = '00:00';
           var tokenBadge = document.getElementById('token-valid-badge');
           if (tokenBadge) {
-            tokenBadge.innerHTML = '<span style="color: var(--danger); font-weight: 700;">TOKEN HẾT HẠN</span>';
+            tokenBadge.innerHTML = '<span style="color: var(--danger); font-weight: 700;">TOKEN H\\u1EBE\\u0054 H\\u1EA0\\u004E</span>';
           }
           var expiredCard = document.getElementById('token-expired-card');
           var resetForm = document.getElementById('reset-password-form') || document.querySelector('[data-reset-form]');

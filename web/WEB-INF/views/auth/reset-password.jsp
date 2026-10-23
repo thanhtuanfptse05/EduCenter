@@ -67,7 +67,12 @@
                 <div class="form-group">
                   <div class="pwd-strength-header">
                     <label class="form-label" for="newPassword" style="margin: 0;">Mật khẩu mới</label>
-                    <span class="font-code-num text-muted" id="pwd-strength-label" style="font-size: 11px;">Chưa đánh giá</span>
+                    <span class="font-code-num text-muted" id="pwd-strength-label" style="font-size: 11px;"
+                          data-empty="Chưa đánh giá"
+                          data-weak="Yếu"
+                          data-medium="Trung bình"
+                          data-good="Khá"
+                          data-strong="Rất mạnh">Chưa đánh giá</span>
                   </div>
                   <div class="auth-password-wrapper">
                     <span class="input-icon">
