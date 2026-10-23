@@ -725,6 +725,10 @@ public class ClassTimetableServiceImpl implements ClassTimetableService {
             dto.setClassId(s.getEduClass().getId());
             dto.setClassName(s.getEduClass().getName());
             dto.setClassCode(s.getEduClass().getCode());
+            if (s.getEduClass().getCourse() != null && s.getEduClass().getCourse().getSubject() != null) {
+                dto.setSubjectCode(s.getEduClass().getCourse().getSubject().getCode());
+                dto.setSubjectName(s.getEduClass().getCourse().getSubject().getName());
+            }
         }
         if (s.getRoom() != null) {
             dto.setRoomId(s.getRoom().getId());

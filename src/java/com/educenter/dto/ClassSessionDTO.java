@@ -23,6 +23,35 @@ public class ClassSessionDTO implements Serializable {
     private LocalTime endAt;
     private String title;
     private String status;
+    private String subjectCode;
+    private String subjectName;
+
+    public String getColorCategory() {
+        if (classCode != null && classCode.toUpperCase().contains("VIP")) return "vip";
+        if (subjectCode != null) {
+            String sc = subjectCode.toUpperCase();
+            if (sc.contains("MATH") || sc.contains("TOAN")) return "math";
+            if (sc.contains("ENG") || sc.contains("ANH")) return "eng";
+            if (sc.contains("PHYS") || sc.contains("LY")) return "phys";
+            if (sc.contains("LIT") || sc.contains("VAN")) return "lit";
+            if (sc.contains("CHEM") || sc.contains("HOA")) return "chem";
+            if (sc.contains("BIO") || sc.contains("SINH")) return "bio";
+        }
+        if (classCode != null) {
+            String cc = classCode.toUpperCase();
+            if (cc.contains("MAT") || cc.contains("TOAN")) return "math";
+            if (cc.contains("ENG") || cc.contains("ANH")) return "eng";
+            if (cc.contains("PHYS") || cc.contains("LY")) return "phys";
+            if (cc.contains("LIT") || cc.contains("VAN")) return "lit";
+        }
+        return "default";
+    }
+
+    public String getSubjectCode() { return subjectCode; }
+    public void setSubjectCode(String subjectCode) { this.subjectCode = subjectCode; }
+
+    public String getSubjectName() { return subjectName; }
+    public void setSubjectName(String subjectName) { this.subjectName = subjectName; }
 
     public ClassSessionDTO() {}
 
