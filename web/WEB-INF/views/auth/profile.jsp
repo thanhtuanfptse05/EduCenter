@@ -30,7 +30,7 @@
                             <div class="profile-avatar-wrapper">
                                 <c:choose>
                                     <c:when test="${not empty userProfile.avatarUrl}">
-                                        <img id="headerOverviewAvatarImg" src="<c:out value='${userProfile.avatarUrl}' />" alt="<c:out value='${userProfile.fullName}' />"
+                                        <img id="headerOverviewAvatarImg" src="<c:url value='${userProfile.avatarUrl}' />" alt="<c:out value='${userProfile.fullName}' />"
                                              onerror="this.style.display='none'; document.getElementById('headerOverviewAvatarInitial').style.display='inline-flex';">
                                         <span id="headerOverviewAvatarInitial" style="display: none;"><c:out value="${userProfile.fullName != null && !userProfile.fullName.isEmpty() ? userProfile.fullName.substring(0, 1).toUpperCase() : 'U'}" /></span>
                                     </c:when>
@@ -167,7 +167,7 @@
                                     <div class="avatar-live-preview-box" id="avatarLivePreview">
                                         <c:choose>
                                             <c:when test="${not empty userProfile.avatarUrl}">
-                                                <img id="avatarPreviewImg" src="<c:out value='${userProfile.avatarUrl}' />" alt="Preview"
+                                                <img id="avatarPreviewImg" src="<c:url value='${userProfile.avatarUrl}' />" alt="Preview"
                                                      onerror="this.style.display='none'; document.getElementById('avatarPreviewInitials').style.display='flex';">
                                                 <span id="avatarPreviewInitials" class="avatar-initials-preview" style="display: none;"><c:out value="${userProfile.fullName != null && !userProfile.fullName.isEmpty() ? userProfile.fullName.substring(0, 1).toUpperCase() : 'U'}" /></span>
                                             </c:when>

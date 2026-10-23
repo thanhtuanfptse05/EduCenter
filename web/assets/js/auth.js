@@ -347,8 +347,25 @@
         return t;
       }
 
+      function resolveBrowserUrl(url) {
+        if (!url) return '';
+        var t = normalizeUrl(url);
+        if (t.startsWith('http://') || t.startsWith('https://') || t.startsWith('data:') || t.startsWith('blob:')) {
+          return t;
+        }
+        var ctx = window.location.pathname.split('/')[1];
+        if (ctx && ctx !== 'profile' && ctx !== 'login' && ctx !== 'courses' && ctx !== 'assets') {
+          var prefix = '/' + ctx;
+          if (t.startsWith('/') && !t.startsWith(prefix + '/')) {
+            return prefix + t;
+          }
+        }
+        return t;
+      }
+
       function updateAvatarPreview(url) {
         var norm = normalizeUrl(url);
+        var browserUrl = resolveBrowserUrl(norm);
         var previewImg = document.getElementById('avatarPreviewImg');
         var previewInitials = document.getElementById('avatarPreviewInitials');
 
@@ -369,7 +386,7 @@
           if (headerAvatarInitial) headerAvatarInitial.style.display = 'inline-flex';
           if (statusBadge) {
             statusBadge.className = 'avatar-status-pill neutral';
-            statusBadge.textContent = 'Dùng chữ cái mặc định';
+            statusBadge.textContent = 'D\u00F9ng ch\u1EEF c\u00E1i m\u1EB7c \u0111\u1ECBnh';
           }
           return;
         }
@@ -378,18 +395,18 @@
         var testImg = new Image();
         testImg.onload = function () {
           if (previewImg) {
-            previewImg.src = norm;
+            previewImg.src = browserUrl;
             previewImg.style.display = 'block';
           }
           if (previewInitials) previewInitials.style.display = 'none';
           if (headerAvatarImg) {
-            headerAvatarImg.src = norm;
+            headerAvatarImg.src = browserUrl;
             headerAvatarImg.style.display = 'block';
           }
           if (headerAvatarInitial) headerAvatarInitial.style.display = 'none';
           if (statusBadge) {
             statusBadge.className = 'avatar-status-pill valid';
-            statusBadge.innerHTML = '<svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true" style="width:12px;height:12px;"><polyline points="20 6 9 17 4 12"></polyline></svg> Ảnh hợp lệ';
+            statusBadge.innerHTML = '<svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true" style="width:12px;height:12px;"><polyline points="20 6 9 17 4 12"></polyline></svg> \u1EA3nh h\u1EE3p l\u1EC7';
           }
         };
         testImg.onerror = function () {
@@ -399,10 +416,10 @@
           if (headerAvatarInitial) headerAvatarInitial.style.display = 'inline-flex';
           if (statusBadge) {
             statusBadge.className = 'avatar-status-pill error';
-            statusBadge.textContent = 'Không tải được ảnh, dùng chữ cái';
+            statusBadge.textContent = 'Kh\u00F4ng t\u1EA3i \u0111\u01B0\u1EE3c \u1EA3nh, d\u00F9ng ch\u1EEF c\u00E1i';
           }
         };
-        testImg.src = norm;
+        testImg.src = browserUrl;
       }
 
       // Input event listener

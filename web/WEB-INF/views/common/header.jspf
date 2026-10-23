@@ -46,7 +46,7 @@
                         <span class="header-user-avatar" style="width: 28px; height: 28px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: var(--primary-subtle); border: 1px solid var(--border);">
                             <c:choose>
                                 <c:when test="${not empty sessionScope.currentUser.avatarUrl}">
-                                    <img src="<c:out value='${sessionScope.currentUser.avatarUrl}' />" alt="" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                    <img src="<c:url value='${sessionScope.currentUser.avatarUrl}' />" alt="" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
                                     <span style="display: none; font-size: 12px; font-weight: 700; color: var(--primary);"><c:out value="${sessionScope.currentUser.fullName != null && !sessionScope.currentUser.fullName.isEmpty() ? sessionScope.currentUser.fullName.substring(0, 1).toUpperCase() : 'U'}" /></span>
                                 </c:when>
                                 <c:otherwise>

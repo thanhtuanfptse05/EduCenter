@@ -37,7 +37,7 @@
               <span class="site-user-avatar-wrap">
                 <c:choose>
                   <c:when test="${not empty sessionScope.currentUser.avatarUrl}">
-                    <img src="<c:out value='${sessionScope.currentUser.avatarUrl}'/>" alt="" class="site-user-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <img src="<c:url value='${sessionScope.currentUser.avatarUrl}'/>" alt="" class="site-user-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <span class="site-user-avatar-initials" style="display:none;"><c:out value="${sessionScope.currentUser.fullName != null && !sessionScope.currentUser.fullName.isEmpty() ? sessionScope.currentUser.fullName.substring(0, 1).toUpperCase() : 'U'}"/></span>
                   </c:when>
                   <c:otherwise>
