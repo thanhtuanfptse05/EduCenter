@@ -54,6 +54,29 @@
                 </svg>
                 <span>Đội ngũ Giáo viên</span>
             </a>
+            <a href="${pageContext.request.contextPath}/admin/classes" class="nav-link ${activeNav == 'classes' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>Lớp học & Lịch giảng dạy</span>
+            </a>
+            <a href="${pageContext.request.contextPath}/admin/timetable" class="nav-link ${activeNav == 'timetable' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Thời khóa biểu tuần</span>
+            </a>
+            <a href="${pageContext.request.contextPath}/admin/rooms" class="nav-link ${activeNav == 'rooms' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>Quản lý Phòng học</span>
+            </a>
 
             <div class="nav-group-title">Quản trị Hệ thống</div>
             <a href="${pageContext.request.contextPath}/admin/users" class="nav-link ${activeNav == 'users' ? 'active' : ''}">
@@ -81,6 +104,22 @@
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                 </svg>
                 <span>Tư vấn Tuyển sinh (CRM)</span>
+            </a>
+            <a href="${pageContext.request.contextPath}/staff/classes" class="nav-link ${activeNav == 'staff-classes' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>Tra cứu Lớp & Sĩ số</span>
+            </a>
+            <a href="${pageContext.request.contextPath}/staff/timetable" class="nav-link ${activeNav == 'staff-timetable' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Thời khóa biểu Tuyển sinh</span>
             </a>
             <a href="${pageContext.request.contextPath}/staff/students" class="nav-link ${activeNav == 'students' ? 'active' : ''}">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">

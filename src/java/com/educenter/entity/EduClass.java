@@ -23,6 +23,10 @@ public class EduClass implements Serializable {
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", nullable = true)
+    private Room room;
+
     @Column(name = "code", length = 50, nullable = false, unique = true)
     private String code;
 
@@ -61,6 +65,9 @@ public class EduClass implements Serializable {
 
     public Teacher getTeacher() { return teacher; }
     public void setTeacher(Teacher teacher) { this.teacher = teacher; }
+
+    public Room getRoom() { return room; }
+    public void setRoom(Room room) { this.room = room; }
 
     public String getCode() { return code; }
     public void setCode(String code) { this.code = code; }

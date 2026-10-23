@@ -15,37 +15,40 @@ Một lịch nguồn cho giáo viên, phòng và học viên giúp tránh trùng
 
 **Ngoài phạm vi:** Nhiều cơ sở, online, tự tối ưu lịch, chuyển/bảo lưu (enrollment sở hữu), ngoại lệ trùng giáo viên/phòng.
 
-**Actors & Permissions:** STAFF/ADMIN quản lý; TEACHER đọc lớp/buổi được giao; STUDENT/PARENT đọc lịch trong phạm vi qua portal.
+**Actors & Permissions:** 
+- ADMIN: Toàn quyền quản trị danh mục Phòng học, tạo và quản lý Lớp học, xếp lịch học, tự động sinh các buổi học, đổi lịch/hủy lịch/đóng lớp.
+- STAFF (Tư vấn tuyển sinh): Chỉ có quyền xem/tra cứu danh sách lớp học, chi tiết lớp học, sĩ số còn trống và thời khóa biểu để tư vấn tuyển sinh và xếp lớp cho học viên.
+- TEACHER: Đọc lịch dạy, danh sách lớp và buổi học được phân công.
+- STUDENT / PARENT: Đọc lịch học các lớp đã ghi danh qua Portal.
 
 ## User Scenarios & Testing
 
-### User Story 1 — Tạo lớp và sinh lịch (Priority: P0)
+### User Story 1 — Quản lý lớp học và tự động sinh lịch học (Priority: P0)
 
-Là STAFF, tôi muốn chọn khóa, giáo viên, phòng và lịch định kỳ để tổ chức học.
+Là ADMIN, tôi muốn tạo lớp học từ khóa học đã mở, phân công giáo viên giảng dạy, chọn phòng học và cấu hình lịch học định kỳ theo thứ trong tuần để hệ thống tự động sinh ra các buổi học cụ thể.
 
-**Giá trị/ưu tiên:** Tiền đề ghi danh và điểm danh.
+**Giá trị/ưu tiên:** Tiền đề bắt buộc để tuyển sinh (Enrollments) và điểm danh (Attendance).
 
-**Independent Test:** Tạo lớp và lịch hai buổi/tuần rồi đọc ở Teacher.
-
-**Acceptance Scenarios:**
-1. Given tài nguyên hợp lệ, When lưu lịch, Then số buổi/ngày/giờ/phòng/người dạy đúng xem trước.
-2. Given phòng/giáo viên trùng, When sinh lịch, Then từ chối cả đợt và liệt kê xung đột.
-
-### User Story 2 — Đổi lịch và dạy thay (Priority: P0)
-
-Là STAFF, tôi muốn dời buổi hoặc thay giáo viên để portal hiển thị đúng.
-
-**Giá trị/ưu tiên:** Giữ lịch sử thay đổi.
-
-**Independent Test:** Dời một buổi và gửi hai thay đổi tranh cùng phòng.
+**Independent Test:** Tạo lớp và sinh lịch hai buổi/tuần, kiểm tra giáo viên và phòng học hiển thị đúng.
 
 **Acceptance Scenarios:**
-1. Given buổi tương lai SCHEDULED, When dời hợp lệ, Then buổi cũ RESCHEDULED có một buổi thay thế liên kết.
-2. Given hai nhân viên tranh cùng phòng, When cùng lưu, Then tối đa một lịch được chấp nhận.
+1. Given thông tin lớp và khóa học OPEN hợp lệ, When cấu hình lịch tuần (VD: T2, T4, T6 từ 18:00 - 20:00), Then hệ thống sinh danh sách buổi học (ClassSessions) đúng ngày/giờ/phòng/người dạy.
+2. Given phòng hoặc giáo viên bị trùng giờ với buổi học khác đã tồn tại, When sinh lịch, Then từ chối lưu cả đợt và cảnh báo chi tiết xung đột (BR05, BR06).
 
-### User Story 3 — Quản lý phòng và đóng lớp (Priority: P0)
+### User Story 2 — Tra cứu lớp học & Thời khóa biểu tuyển sinh (Priority: P0)
 
-Là STAFF, tôi muốn quản lý sức chứa và đóng lớp an toàn.
+Là STAFF (Tư vấn tuyển sinh), tôi muốn tra cứu danh sách các lớp học đang mở tuyển sinh, xem sĩ số hiện tại/tối đa, lịch học định kỳ và thời khóa biểu tuần để tư vấn chính xác cho phụ huynh và học sinh.
+
+**Giá trị/ưu tiên:** Giúp nhân viên tuyển sinh có dữ liệu thời gian thực để tư vấn và chốt ghi danh.
+
+**Independent Test:** Đăng nhập tài khoản STAFF, truy cập danh sách lớp và lịch học, kiểm tra không có nút Thêm/Sửa/Xóa lớp học hoặc phòng học.
+
+**Acceptance Scenarios:**
+1. Given nhân viên STAFF đăng nhập, When vào danh sách lớp học hoặc thời khóa biểu, Then xem được thông tin lớp, sĩ số còn trống, giáo viên, phòng và lịch học mà không có quyền chỉnh sửa.
+
+### User Story 3 — Quản lý phòng học & Đóng lớp học an toàn (Priority: P0)
+
+Là ADMIN, tôi muốn quản lý danh mục phòng học (thêm, sửa, trạng thái phòng) và đóng lớp an toàn khi khóa học kết thúc.
 
 **Giá trị/ưu tiên:** Bao phủ vòng đời và UC34.
 
