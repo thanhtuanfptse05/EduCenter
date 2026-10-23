@@ -26,44 +26,53 @@
         .kpi-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-lg);
             padding: 16px 18px;
             box-shadow: var(--shadow-sm);
             display: flex;
             align-items: center;
             gap: 14px;
             transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+            position: relative;
+            overflow: hidden;
         }
         .kpi-card:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-md);
         }
+        .kpi-card.accent-total { border-left: 4px solid var(--primary); }
+        .kpi-card.accent-studying { border-left: 4px solid var(--success); }
+        .kpi-card.accent-reserved { border-left: 4px solid var(--warning); }
+        .kpi-card.accent-graduated { border-left: 4px solid #6366F1; }
+        .kpi-card.accent-dropped { border-left: 4px solid var(--text-muted); }
+
         .kpi-icon-wrap {
             width: 44px;
             height: 44px;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--primary-subtle);
-            color: var(--primary);
             flex-shrink: 0;
         }
+        .kpi-icon-wrap.primary { background: var(--primary-subtle); color: var(--primary); }
         .kpi-icon-wrap.success { background: var(--success-subtle); color: var(--success); }
         .kpi-icon-wrap.warning { background: var(--warning-subtle); color: var(--warning); }
-        .kpi-icon-wrap.info { background: var(--primary-subtle); color: var(--primary); }
-        .kpi-icon-wrap.neutral { background: var(--bg); color: var(--text-muted); }
+        .kpi-icon-wrap.indigo { background: rgba(99, 102, 241, 0.12); color: #6366F1; }
+        .kpi-icon-wrap.neutral { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
+
         .kpi-val {
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 800;
             color: var(--text);
             line-height: 1.2;
+            font-variant-numeric: tabular-nums;
         }
         .kpi-lbl {
             font-size: 11px;
             color: var(--text-muted);
-            font-weight: 500;
-            margin-top: 2px;
+            font-weight: 600;
+            margin-top: 3px;
             text-transform: uppercase;
             letter-spacing: 0.04em;
         }
@@ -71,7 +80,7 @@
         .content-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-lg);
             box-shadow: var(--shadow-sm);
             overflow: hidden;
             margin-bottom: 24px;
@@ -84,7 +93,7 @@
         .filter-grid {
             display: grid;
             grid-template-columns: 2fr 1fr 1.2fr auto;
-            gap: 12px;
+            gap: 14px;
             align-items: flex-end;
         }
         @media (max-width: 992px) {
@@ -100,97 +109,104 @@
             gap: 12px;
         }
         .student-avatar {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: var(--primary-subtle);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(37, 99, 235, 0.05) 100%);
             color: var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 15px;
             flex-shrink: 0;
-            border: 1px solid rgba(37, 99, 235, 0.2);
+            border: 1px solid rgba(37, 99, 235, 0.25);
         }
-        .student-code {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-weight: 700;
-            font-size: 13px;
+        .student-name-link {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+        .student-name-link:hover {
             color: var(--primary);
-            letter-spacing: 0.02em;
         }
-
-        .status-pill {
-            display: inline-flex;
+        .student-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 3px 10px;
-            border-radius: 9999px;
-            letter-spacing: 0.02em;
         }
-        .status-pill.studying { background: var(--success-subtle); color: var(--success); }
-        .status-pill.reserved { background: var(--warning-subtle); color: var(--warning); }
-        .status-pill.dropped { background: rgba(220, 38, 38, 0.1); color: var(--danger); }
-        .status-pill.graduated { background: var(--primary-subtle); color: var(--primary); }
 
         .grade-badge {
             display: inline-block;
-            padding: 2px 8px;
             font-size: 11px;
-            font-weight: 600;
-            background: var(--bg);
-            border: 1px solid var(--border);
+            font-weight: 700;
+            color: var(--primary);
+            background: var(--primary-subtle);
+            padding: 2px 8px;
             border-radius: var(--radius-xs);
-            color: var(--text);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            white-space: nowrap;
         }
 
         .guardians-badge {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
             font-size: 12px;
             font-weight: 600;
             color: var(--text);
-            padding: 2px 8px;
+            padding: 3px 8px;
             background: var(--bg);
-            border-radius: var(--radius-xs);
+            border-radius: var(--radius-sm);
             border: 1px solid var(--border);
+            text-decoration: none;
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+        }
+        .guardians-badge:hover {
+            border-color: var(--primary);
+            color: var(--primary);
         }
 
         .portal-badge {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
             font-size: 11px;
-            font-weight: 500;
-            padding: 2px 8px;
+            font-weight: 600;
+            padding: 3px 8px;
             border-radius: var(--radius-xs);
+            white-space: nowrap;
         }
         .portal-badge.linked {
             background: var(--primary-subtle);
             color: var(--primary);
+            border: 1px solid rgba(37, 99, 235, 0.2);
         }
         .portal-badge.unlinked {
             background: var(--bg);
             color: var(--text-muted);
-            border: 1px dashed var(--border);
+            border: 1px solid var(--border);
         }
 
         .action-btns {
             display: flex;
             align-items: center;
             gap: 6px;
+            justify-content: flex-end;
         }
         .btn-icon {
             width: 32px;
             height: 32px;
+            border-radius: var(--radius-sm);
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            border-radius: var(--radius-xs);
             border: 1px solid var(--border);
             background: var(--surface);
             color: var(--text);
@@ -231,6 +247,7 @@
             align-items: center;
             justify-content: space-between;
             background: var(--surface);
+            font-size: 13px;
         }
         .page-link-btn {
             display: inline-flex;
@@ -240,7 +257,7 @@
             height: 34px;
             padding: 0 8px;
             border: 1px solid var(--border);
-            border-radius: var(--radius-xs);
+            border-radius: var(--radius-sm);
             background: var(--surface);
             color: var(--text);
             text-decoration: none;
@@ -269,8 +286,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(4px);
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(6px);
             display: none;
             align-items: center;
             justify-content: center;
@@ -281,10 +298,10 @@
         .modal-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-lg);
             box-shadow: var(--shadow-lg);
             width: 100%;
-            max-width: 640px;
+            max-width: 660px;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -335,22 +352,22 @@
                         Quản lý Hồ sơ & Trạng thái Học viên
                     </h1>
                     <p style="font-size: var(--font-size-sm); color: var(--text-muted); margin: 4px 0 0 0;">
-                        Quản lý danh sách học sinh theo khối 6–12, mục tiêu kỳ thi, theo dõi trạng thái học tập và liên kết người giám hộ.
+                        Quản lý danh sách học sinh theo khối 6–12, mục tiêu kỳ thi, theo dõi trạng thái học tập và liên kết người giám hộ theo BR15.
                     </p>
                 </div>
                 <div style="display: flex; gap: 10px; align-items: center;">
-                    <a href="${pageContext.request.contextPath}/staff/guardians" class="btn btn-outline" style="display: inline-flex; align-items: center; gap: 8px;">
+                    <a href="${pageContext.request.contextPath}/staff/guardians" class="btn btn-outline" style="height: 40px; display: inline-flex; align-items: center; gap: 8px;">
                         <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                         </svg>
-                        Phụ huynh & Giám hộ
+                        <span>Phụ huynh & Giám hộ</span>
                     </a>
-                    <button type="button" class="btn btn-primary" onclick="openStudentModal()" style="display: inline-flex; align-items: center; gap: 8px;">
+                    <button type="button" class="btn btn-primary" onclick="openStudentModal()" style="height: 40px; display: inline-flex; align-items: center; gap: 8px;">
                         <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
-                        Thêm mới Học viên
+                        <span>Thêm mới Học viên</span>
                     </button>
                 </div>
             </div>
@@ -378,8 +395,8 @@
 
             <!-- KPI Row -->
             <div class="kpi-row">
-                <div class="kpi-card">
-                    <div class="kpi-icon-wrap info">
+                <div class="kpi-card accent-total">
+                    <div class="kpi-icon-wrap primary">
                         <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                             <circle cx="9" cy="7" r="4"></circle>
@@ -393,7 +410,7 @@
                     </div>
                 </div>
 
-                <div class="kpi-card">
+                <div class="kpi-card accent-studying">
                     <div class="kpi-icon-wrap success">
                         <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
                             <circle cx="12" cy="12" r="10"></circle>
@@ -406,7 +423,7 @@
                     </div>
                 </div>
 
-                <div class="kpi-card">
+                <div class="kpi-card accent-reserved">
                     <div class="kpi-icon-wrap warning">
                         <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
                             <rect x="6" y="4" width="4" height="16"></rect>
@@ -419,8 +436,8 @@
                     </div>
                 </div>
 
-                <div class="kpi-card">
-                    <div class="kpi-icon-wrap info">
+                <div class="kpi-card accent-graduated">
+                    <div class="kpi-icon-wrap indigo">
                         <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
                             <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
@@ -432,7 +449,7 @@
                     </div>
                 </div>
 
-                <div class="kpi-card">
+                <div class="kpi-card accent-dropped">
                     <div class="kpi-icon-wrap neutral">
                         <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
                             <circle cx="12" cy="12" r="10"></circle>
@@ -452,16 +469,20 @@
                 <div class="filter-panel">
                     <form method="GET" action="${pageContext.request.contextPath}/staff/students" class="filter-grid">
                         <div class="form-group" style="margin: 0;">
-                            <label class="form-label" style="font-size: 12px; margin-bottom: 6px;">Tìm kiếm từ khóa</label>
-                            <div class="input-with-icon" style="position: relative;">
-                                <input type="text" name="q" value="${filter.keyword}" class="form-control" placeholder="Họ tên, mã HV, SĐT, trường học, mục tiêu..." style="width: 100%;">
+                            <label class="form-label" style="font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block;">Tìm kiếm học viên</label>
+                            <div class="search-input-wrap">
+                                <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input type="text" name="q" value="${filter.keyword}" class="form-control" placeholder="Họ tên, mã HV, SĐT, trường học, mục tiêu...">
                             </div>
                         </div>
 
                         <div class="form-group" style="margin: 0;">
-                            <label class="form-label" style="font-size: 12px; margin-bottom: 6px;">Khối lớp</label>
-                            <select name="grade" class="form-select">
-                                <option value="">Tất cả khối lớp</option>
+                            <label class="form-label" style="font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block;">Khối lớp</label>
+                            <select name="grade" class="form-select" style="width: 100%;">
+                                <option value="">Tất cả khối lớp (6-12)</option>
                                 <c:forEach var="g" begin="6" end="12">
                                     <option value="${g}" ${filter.gradeLevel == g ? 'selected' : ''}>Khối ${g}</option>
                                 </c:forEach>
@@ -469,26 +490,30 @@
                         </div>
 
                         <div class="form-group" style="margin: 0;">
-                            <label class="form-label" style="font-size: 12px; margin-bottom: 6px;">Trạng thái học tập</label>
-                            <select name="status" class="form-select">
-                                <option value="ALL" ${filter.status == 'ALL' ? 'selected' : ''}>Tất cả trạng thái</option>
-                                <option value="STUDYING" ${filter.status == 'STUDYING' ? 'selected' : ''}>Đang học (STUDYING)</option>
-                                <option value="RESERVED" ${filter.status == 'RESERVED' ? 'selected' : ''}>Bảo lưu (RESERVED)</option>
-                                <option value="GRADUATED" ${filter.status == 'GRADUATED' ? 'selected' : ''}>Tốt nghiệp (GRADUATED)</option>
-                                <option value="DROPPED" ${filter.status == 'DROPPED' ? 'selected' : ''}>Thôi học (DROPPED)</option>
+                            <label class="form-label" style="font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block;">Trạng thái học tập</label>
+                            <select name="status" class="form-select" style="width: 100%;">
+                                <option value="ALL" ${empty filter.status or filter.status == 'ALL' ? 'selected' : ''}>Tất cả trạng thái</option>
+                                <option value="STUDYING" ${filter.status == 'STUDYING' ? 'selected' : ''}>Đang theo học (STUDYING)</option>
+                                <option value="RESERVED" ${filter.status == 'RESERVED' ? 'selected' : ''}>Đang bảo lưu (RESERVED)</option>
+                                <option value="GRADUATED" ${filter.status == 'GRADUATED' ? 'selected' : ''}>Đã tốt nghiệp (GRADUATED)</option>
+                                <option value="DROPPED" ${filter.status == 'DROPPED' ? 'selected' : ''}>Đã thôi học (DROPPED)</option>
                             </select>
                         </div>
 
                         <div style="display: flex; gap: 8px;">
-                            <button type="submit" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 6px;">
+                            <button type="submit" class="btn btn-primary" style="height: 40px; display: inline-flex; align-items: center; gap: 6px; padding: 0 16px;">
                                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                     <circle cx="11" cy="11" r="8"></circle>
                                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                                 </svg>
-                                Lọc
+                                <span>Lọc</span>
                             </button>
-                            <a href="${pageContext.request.contextPath}/staff/students" class="btn btn-outline" title="Đặt lại bộ lọc">
-                                Xóa lọc
+                            <a href="${pageContext.request.contextPath}/staff/students" class="btn btn-outline" style="height: 40px; display: inline-flex; align-items: center; gap: 6px; padding: 0 14px;" title="Đặt lại bộ lọc">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                                    <path d="M3 3v5h5"></path>
+                                </svg>
+                                <span>Xóa lọc</span>
                             </a>
                         </div>
                     </form>
@@ -499,15 +524,15 @@
                     <table class="data-table" style="width: 100%; border-collapse: collapse;">
                         <thead>
                             <tr>
-                                <th style="width: 90px;">Mã HV</th>
+                                <th style="width: 95px;">Mã HV</th>
                                 <th>Học viên</th>
                                 <th>Khối / Trường học</th>
                                 <th>Liên hệ</th>
                                 <th>Mục tiêu thi cử</th>
-                                <th>Giám hộ</th>
+                                <th>Giám hộ (BR15)</th>
                                 <th>Tài khoản Portal</th>
-                                <th style="text-align: center;">Trạng thái</th>
-                                <th style="width: 110px; text-align: right;">Thao tác</th>
+                                <th style="width: 110px; text-align: center;">Trạng thái</th>
+                                <th style="width: 95px; text-align: right;">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -516,7 +541,7 @@
                                     <c:forEach var="s" items="${students}">
                                         <tr>
                                             <td>
-                                                <a href="${pageContext.request.contextPath}/staff/students/detail?id=${s.id}" class="student-code">
+                                                <a href="${pageContext.request.contextPath}/staff/students/detail?id=${s.id}" class="code-badge" style="text-decoration: none;" title="Xem chi tiết hồ sơ">
                                                     ${s.code}
                                                 </a>
                                             </td>
@@ -526,17 +551,18 @@
                                                         ${s.fullName.substring(0, 1).toUpperCase()}
                                                     </div>
                                                     <div>
-                                                        <a href="${pageContext.request.contextPath}/staff/students/detail?id=${s.id}" style="font-weight: 600; color: var(--text); text-decoration: none;">
+                                                        <a href="${pageContext.request.contextPath}/staff/students/detail?id=${s.id}" class="student-name-link">
                                                             ${s.fullName}
                                                         </a>
-                                                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                                                        <div class="student-meta">
                                                             <c:choose>
                                                                 <c:when test="${s.gender == 'NAM'}">Nam</c:when>
                                                                 <c:when test="${s.gender == 'NU'}">Nữ</c:when>
                                                                 <c:otherwise>Khác</c:otherwise>
                                                             </c:choose>
                                                             <c:if test="${not empty s.formattedDob}">
-                                                                &bull; ${s.formattedDob}
+                                                                <span>&bull;</span>
+                                                                <span>${s.formattedDob}</span>
                                                             </c:if>
                                                         </div>
                                                     </div>
@@ -545,20 +571,20 @@
                                             <td>
                                                 <span class="grade-badge">Khối ${s.gradeLevel}</span>
                                                 <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">
-                                                    <c:out value="${s.school != null ? s.school : 'Chưa cập nhật'}" />
+                                                    <c:out value="${not empty s.school ? s.school : 'Chưa cập nhật'}" />
                                                 </div>
                                             </td>
                                             <td>
-                                                <div style="font-size: 12px; font-weight: 500; color: var(--text);">
-                                                    <c:out value="${s.phone != null ? s.phone : '-'}" />
+                                                <div style="font-size: 13px; font-weight: 600; color: var(--text);">
+                                                    <c:out value="${not empty s.phone ? s.phone : '-'}" />
                                                 </div>
-                                                <div style="font-size: 11px; color: var(--text-muted);">
-                                                    <c:out value="${s.email != null ? s.email : '-'}" />
+                                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                                                    <c:out value="${not empty s.email ? s.email : '-'}" />
                                                 </div>
                                             </td>
                                             <td>
-                                                <div style="font-size: 12px; color: var(--text); max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${s.targetGoal}">
-                                                    <c:out value="${s.targetGoal != null && !s.targetGoal.isEmpty() ? s.targetGoal : 'Chưa thiết lập'}" />
+                                                <div style="font-size: 12px; color: var(--text); max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${s.targetGoal}">
+                                                    <c:out value="${not empty s.targetGoal ? s.targetGoal : 'Chưa thiết lập'}" />
                                                 </div>
                                             </td>
                                             <td>
@@ -572,12 +598,12 @@
                                             <td>
                                                 <c:choose>
                                                     <c:when test="${not empty s.userId}">
-                                                        <span class="portal-badge linked" title="User ID: ${s.userId}">
+                                                        <span class="portal-badge linked" title="User ID: #${s.userId}">
                                                             <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true">
                                                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                                                 <circle cx="12" cy="7" r="4"></circle>
                                                             </svg>
-                                                            ${s.userEmail}
+                                                            <span>${s.userEmail}</span>
                                                         </span>
                                                     </c:when>
                                                     <c:otherwise>
@@ -602,7 +628,7 @@
                                                 </c:choose>
                                             </td>
                                             <td style="text-align: right;">
-                                                <div class="action-btns" style="justify-content: flex-end;">
+                                                <div class="action-btns">
                                                     <a href="${pageContext.request.contextPath}/staff/students/detail?id=${s.id}" class="btn-icon" title="Xem chi tiết hồ sơ">
                                                         <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                                             <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
@@ -642,7 +668,7 @@
                                                     <button type="button" class="btn btn-primary" onclick="openStudentModal()">
                                                         Thêm học viên mới
                                                     </button>
-                                                    <c:if test="${not empty filter.keyword or (not empty filter.gradeLevel) or (filter.status != 'ALL')}">
+                                                    <c:if test="${not empty filter.keyword or not empty filter.gradeLevel or filter.status != 'ALL'}">
                                                         <a href="${pageContext.request.contextPath}/staff/students" class="btn btn-outline">
                                                             Xóa bộ lọc
                                                         </a>
@@ -660,7 +686,7 @@
                 <!-- Pagination Bar -->
                 <c:if test="${totalPages > 1}">
                     <div class="pagination-bar">
-                        <div style="font-size: 13px; color: var(--text-muted);">
+                        <div style="color: var(--text-muted);">
                             Hiển thị <strong>${students.size()}</strong> / <strong>${totalItems}</strong> học viên (Trang ${currentPage} / ${totalPages})
                         </div>
                         <div style="display: flex; gap: 4px;">
@@ -705,24 +731,30 @@
             <input type="hidden" name="id" id="formStudentId" value="">
 
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label" style="font-size: 13px; font-weight: 600;">Họ và tên học viên <span style="color: var(--danger);">*</span></label>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label class="form-label" style="font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block;">
+                        Họ và tên học viên <span style="color: var(--danger);">*</span>
+                    </label>
                     <input type="text" name="fullName" id="formFullName" required maxlength="150" class="form-control" placeholder="Ví dụ: Nguyễn Văn An">
                 </div>
 
-                <div class="form-row-2">
-                    <div class="form-group">
-                        <label class="form-label" style="font-size: 13px; font-weight: 600;">Khối lớp <span style="color: var(--danger);">*</span></label>
-                        <select name="gradeLevel" id="formGradeLevel" required class="form-select">
+                <div class="form-row-2" style="margin-bottom: 16px;">
+                    <div class="form-group" style="margin: 0;">
+                        <label class="form-label" style="font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block;">
+                            Khối lớp <span style="color: var(--danger);">*</span>
+                        </label>
+                        <select name="gradeLevel" id="formGradeLevel" required class="form-select" style="width: 100%;">
                             <c:forEach var="g" begin="6" end="12">
                                 <option value="${g}" ${g == 10 ? 'selected' : ''}>Khối ${g}</option>
                             </c:forEach>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" style="font-size: 13px; font-weight: 600;">Giới tính</label>
-                        <select name="gender" id="formGender" class="form-select">
+                    <div class="form-group" style="margin: 0;">
+                        <label class="form-label" style="font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block;">
+                            Giới tính
+                        </label>
+                        <select name="gender" id="formGender" class="form-select" style="width: 100%;">
                             <option value="NAM">Nam</option>
                             <option value="NU">Nữ</option>
                             <option value="KHAC">Khác</option>
@@ -730,39 +762,51 @@
                     </div>
                 </div>
 
-                <div class="form-row-2">
-                    <div class="form-group">
-                        <label class="form-label" style="font-size: 13px; font-weight: 600;">Ngày sinh</label>
+                <div class="form-row-2" style="margin-bottom: 16px;">
+                    <div class="form-group" style="margin: 0;">
+                        <label class="form-label" style="font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block;">
+                            Ngày sinh
+                        </label>
                         <input type="date" name="dob" id="formDob" class="form-control">
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" style="font-size: 13px; font-weight: 600;">Trường học đang học</label>
+                    <div class="form-group" style="margin: 0;">
+                        <label class="form-label" style="font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block;">
+                            Trường học đang theo học
+                        </label>
                         <input type="text" name="school" id="formSchool" maxlength="255" class="form-control" placeholder="Ví dụ: THPT Chu Văn An">
                     </div>
                 </div>
 
-                <div class="form-row-2">
-                    <div class="form-group">
-                        <label class="form-label" style="font-size: 13px; font-weight: 600;">Số điện thoại</label>
-                        <input type="tel" name="phone" id="formPhone" maxlength="20" class="form-control" placeholder="09xxxxxxxx">
+                <div class="form-row-2" style="margin-bottom: 16px;">
+                    <div class="form-group" style="margin: 0;">
+                        <label class="form-label" style="font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block;">
+                            Số điện thoại
+                        </label>
+                        <input type="tel" name="phone" id="formPhone" maxlength="20" class="form-control" placeholder="Ví dụ: 0912345678">
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" style="font-size: 13px; font-weight: 600;">Email học viên</label>
+                    <div class="form-group" style="margin: 0;">
+                        <label class="form-label" style="font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block;">
+                            Email học viên
+                        </label>
                         <input type="email" name="email" id="formEmail" maxlength="255" class="form-control" placeholder="hocvien@gmail.com">
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" style="font-size: 13px; font-weight: 600;">Mục tiêu học tập & thi cử</label>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label class="form-label" style="font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block;">
+                        Mục tiêu học tập & thi cử
+                    </label>
                     <textarea name="targetGoal" id="formTargetGoal" rows="2" maxlength="500" class="form-control" placeholder="Ví dụ: Luyện thi THPTQG Khối A00 đạt 27+ điểm, Đánh giá năng lực ĐHQG"></textarea>
                 </div>
 
                 <div class="form-row-2">
-                    <div class="form-group">
-                        <label class="form-label" style="font-size: 13px; font-weight: 600;">Trạng thái học tập</label>
-                        <select name="status" id="formStatus" class="form-select">
+                    <div class="form-group" style="margin: 0;">
+                        <label class="form-label" style="font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block;">
+                            Trạng thái học tập
+                        </label>
+                        <select name="status" id="formStatus" class="form-select" style="width: 100%;">
                             <option value="STUDYING">Đang theo học (STUDYING)</option>
                             <option value="RESERVED">Đang bảo lưu (RESERVED)</option>
                             <option value="GRADUATED">Đã tốt nghiệp (GRADUATED)</option>
@@ -770,9 +814,11 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label class="form-label" style="font-size: 13px; font-weight: 600;">Gắn tài khoản Portal</label>
-                        <select name="userId" id="formUserId" class="form-select">
+                    <div class="form-group" style="margin: 0;">
+                        <label class="form-label" style="font-size: 13px; font-weight: 600; margin-bottom: 6px; display: block;">
+                            Tài khoản Portal (Tùy chọn)
+                        </label>
+                        <select name="userId" id="formUserId" class="form-select" style="width: 100%;">
                             <option value="">-- Chưa liên kết tài khoản --</option>
                             <c:forEach var="u" items="${availableUsers}">
                                 <option value="${u.id}">${u.fullName} (${u.email})</option>
@@ -829,7 +875,6 @@ function closeStudentModal() {
     document.getElementById('studentModal').classList.remove('active');
 }
 
-// Close on escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         closeStudentModal();

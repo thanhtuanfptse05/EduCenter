@@ -198,10 +198,33 @@ public class StudentServiceTest {
 
     static class MockUserRepository extends UserRepository {
         Map<Long, User> users = new HashMap<>();
+        long nextUserId = 100L;
 
         @Override
         public Optional<User> findById(EntityManager em, Long id) {
             return Optional.ofNullable(users.get(id));
+        }
+
+        @Override
+        public Optional<User> findByEmail(EntityManager em, String email) {
+            if (email == null) return Optional.empty();
+            return users.values().stream()
+                    .filter(u -> email.equalsIgnoreCase(u.getEmail()))
+                    .findFirst();
+        }
+
+        @Override
+        public void save(EntityManager em, User user) {
+            if (user.getId() == null) {
+                user.setId(nextUserId++);
+            }
+            users.put(user.getId(), user);
+        }
+
+        @Override
+        public User update(EntityManager em, User user) {
+            users.put(user.getId(), user);
+            return user;
         }
     }
 
@@ -230,6 +253,19 @@ public class StudentServiceTest {
                     if ("getTransaction".equals(method.getName())) return mockTx;
                     if ("isOpen".equals(method.getName())) return true;
                     if ("close".equals(method.getName())) return null;
+                    if ("persist".equals(method.getName())) return null;
+                    if ("createQuery".equals(method.getName())) {
+                        return Proxy.newProxyInstance(
+                                jakarta.persistence.TypedQuery.class.getClassLoader(),
+                                new Class<?>[]{jakarta.persistence.TypedQuery.class},
+                                (qProxy, qMethod, qArgs) -> {
+                                    if ("getSingleResult".equals(qMethod.getName())) {
+                                        return new Role("PARENT", "Phụ huynh", "Vai trò phụ huynh");
+                                    }
+                                    return null;
+                                }
+                        );
+                    }
                     return null;
                 }
         );
@@ -399,6 +435,26 @@ public class StudentServiceTest {
         assertEquals("Trần Văn Nam", saved.getFullName());
         assertEquals(1, mockAuditLogRepo.logs.size());
         assertEquals("GUARDIAN_CREATE", mockAuditLogRepo.logs.get(0).getAction());
+    }
+
+    @Test
+    @DisplayName("Lưu phụ huynh mới không chọn User -> tự động tạo tài khoản Portal role PARENT")
+    void testSaveGuardian_AutoProvisionUser_Success() {
+        GuardianFormDTO form = new GuardianFormDTO();
+        form.setFullName("Lê Thị Hương");
+        form.setPhone("0912999888");
+        form.setEmail("huong.le@gmail.com");
+        form.setStatus("ACTIVE");
+
+        Guardian saved = studentService.saveGuardian(form, 1L, "127.0.0.1");
+
+        assertNotNull(saved);
+        assertNotNull(saved.getId());
+        assertNotNull(saved.getUser());
+        assertEquals("Lê Thị Hương", saved.getUser().getFullName());
+        assertEquals("huong.le@gmail.com", saved.getUser().getEmail());
+        assertTrue(saved.getUser().getRoles().stream().anyMatch(r -> "PARENT".equalsIgnoreCase(r.getCode())));
+        assertEquals(1, mockAuditLogRepo.logs.size());
     }
 
     @Test

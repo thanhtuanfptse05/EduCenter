@@ -36,4 +36,10 @@ public class StudentStatsDTO implements Serializable {
 
     public long getDroppedStudents() { return droppedStudents; }
     public void setDroppedStudents(long droppedStudents) { this.droppedStudents = droppedStudents; }
+
+    public long getStudyingCount() { return studyingStudents; }
+    public long getReservedCount() { return reservedStudents; }
+    public long getGraduatedCount() { return graduatedStudents; }
+    public long getDroppedCount() { return droppedStudents; }
+    public long getTotalCount() { return totalStudents; }
 }

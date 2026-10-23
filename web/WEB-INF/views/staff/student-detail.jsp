@@ -59,14 +59,25 @@
         .detail-value { color: var(--text); font-weight: 600; text-align: right; }
 
         .status-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            letter-spacing: 0.02em;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 6px !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            padding: 4px 12px !important;
+            border-radius: 9999px !important;
+            letter-spacing: 0.02em !important;
+            white-space: nowrap !important;
+        }
+        .status-pill::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: currentColor;
+            flex-shrink: 0;
         }
         .status-pill.studying { background: var(--success-subtle); color: var(--success); }
         .status-pill.reserved { background: var(--warning-subtle); color: var(--warning); }
@@ -98,6 +109,7 @@
             padding: 3px 10px;
             border-radius: var(--radius-xs);
             letter-spacing: 0.02em;
+            white-space: nowrap !important;
         }
         .verify-badge.verified {
             background: var(--success-subtle);

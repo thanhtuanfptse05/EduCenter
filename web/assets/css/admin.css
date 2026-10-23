@@ -196,21 +196,151 @@
   flex: 1;
 }
 
-.filter-select {
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-input-wrap .search-icon {
+  position: absolute;
+  left: 14px;
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.search-input-wrap input.form-control,
+.search-input-wrap input.filter-input {
+  padding-left: 40px !important;
+}
+
+.form-control,
+.form-input,
+.filter-input {
   height: 40px;
-  padding: 0 12px;
+  padding: 0 14px;
   font-family: inherit;
   font-size: var(--font-size-sm);
   color: var(--text);
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  min-width: 150px;
+  width: 100%;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
+.form-control:focus,
+.form-input:focus,
+.filter-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.form-select,
+.filter-select {
+  height: 40px;
+  padding: 0 38px 0 14px;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text);
+  background-color: var(--surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  min-width: 160px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-select:focus,
 .filter-select:focus {
   outline: none;
-  border-color: var(--focus);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* Status Badges & Pills - No wrapping allowed */
+.status-pill,
+.status-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 4px 10px !important;
+  border-radius: 9999px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.02em !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.status-pill::before,
+.status-badge.with-dot::before {
+  content: '' !important;
+  display: inline-block !important;
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50% !important;
+  background-color: currentColor !important;
+  flex-shrink: 0 !important;
+}
+
+.status-pill.active,
+.status-badge.active,
+.status-pill.studying {
+  background-color: var(--success-subtle) !important;
+  color: var(--success) !important;
+  border: 1px solid rgba(22, 163, 74, 0.2) !important;
+}
+
+.status-pill.inactive,
+.status-badge.inactive,
+.status-pill.dropped {
+  background-color: var(--surface-muted) !important;
+  color: var(--text-muted) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.status-pill.reserved,
+.status-badge.on_leave,
+.status-badge.pending {
+  background-color: var(--warning-subtle) !important;
+  color: var(--warning) !important;
+  border: 1px solid rgba(217, 119, 6, 0.2) !important;
+}
+
+.status-pill.graduated {
+  background-color: var(--primary-subtle) !important;
+  color: var(--primary) !important;
+  border: 1px solid rgba(37, 99, 235, 0.2) !important;
+}
+
+/* Monospace Code Badges */
+.code-badge {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: var(--primary) !important;
+  background-color: var(--primary-subtle) !important;
+  padding: 3px 8px !important;
+  border-radius: var(--radius-xs) !important;
+  border: 1px solid rgba(37, 99, 235, 0.2) !important;
+  display: inline-block !important;
+  letter-spacing: 0.03em !important;
+  white-space: nowrap !important;
 }
 
 /* Data Table */

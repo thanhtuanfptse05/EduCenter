@@ -7,6 +7,7 @@ import com.educenter.repository.GuardianRepository;
 import com.educenter.repository.StudentRepository;
 import com.educenter.repository.UserRepository;
 import com.educenter.util.JPAUtil;
+import com.educenter.util.PasswordUtil;
 import com.educenter.util.ValidationUtil;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -472,17 +473,47 @@ public class StudentServiceImpl implements StudentService {
         try {
             tx.begin();
 
-            User boundUser = userRepository.findById(em, form.getUserId())
-                    .orElseThrow(() -> new ValidationException("Tài khoản người dùng liên kết không tồn tại."));
+            User boundUser;
+            if (form.getUserId() != null && form.getUserId() > 0) {
+                boundUser = userRepository.findById(em, form.getUserId())
+                        .orElseThrow(() -> new ValidationException("Tài khoản người dùng liên kết không tồn tại."));
 
-            boolean isParentRole = boundUser.getRoles().stream()
-                    .anyMatch(r -> "PARENT".equalsIgnoreCase(r.getCode()));
-            if (!isParentRole) {
-                throw new ValidationException("Tài khoản người dùng được chọn không có vai trò Phụ huynh (PARENT).");
-            }
+                boolean isParentRole = boundUser.getRoles().stream()
+                        .anyMatch(r -> "PARENT".equalsIgnoreCase(r.getCode()));
+                if (!isParentRole) {
+                    throw new ValidationException("Tài khoản người dùng được chọn không có vai trò Phụ huynh (PARENT).");
+                }
 
-            if (guardianRepository.existsByUserId(em, form.getUserId(), form.getId())) {
-                throw new ValidationException("Tài khoản người dùng này đã được gắn với một hồ sơ phụ huynh khác.");
+                if (guardianRepository.existsByUserId(em, form.getUserId(), form.getId())) {
+                    throw new ValidationException("Tài khoản người dùng này đã được gắn với một hồ sơ phụ huynh khác.");
+                }
+            } else {
+                // Auto-provision or link parent user by email/phone
+                String cleanPhone = form.getPhone().trim();
+                String targetEmail = (form.getEmail() != null && !form.getEmail().trim().isEmpty())
+                        ? ValidationUtil.normalizeEmail(form.getEmail())
+                        : ("parent." + cleanPhone + "@educenter.vn");
+
+                Optional<User> existingUserOpt = userRepository.findByEmail(em, targetEmail);
+                if (existingUserOpt.isPresent()) {
+                    User existingUser = existingUserOpt.get();
+                    if (guardianRepository.existsByUserId(em, existingUser.getId(), form.getId())) {
+                        String altEmail = "parent." + cleanPhone + "." + (System.currentTimeMillis() % 100000) + "@educenter.vn";
+                        boundUser = createParentUser(em, form.getFullName().trim(), altEmail, cleanPhone);
+                    } else {
+                        boolean hasParentRole = existingUser.getRoles().stream()
+                                .anyMatch(r -> "PARENT".equalsIgnoreCase(r.getCode()));
+                        if (!hasParentRole) {
+                            Role parentRole = getOrCreateParentRole(em);
+                            existingUser.getRoles().add(parentRole);
+                            existingUser.setUpdatedAt(LocalDateTime.now());
+                            userRepository.update(em, existingUser);
+                        }
+                        boundUser = existingUser;
+                    }
+                } else {
+                    boundUser = createParentUser(em, form.getFullName().trim(), targetEmail, cleanPhone);
+                }
             }
 
             Guardian guardian;
@@ -901,12 +932,37 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    private User createParentUser(EntityManager em, String fullName, String email, String phone) {
+        User user = new User();
+        user.setFullName(fullName);
+        user.setEmail(email);
+        user.setPhone(phone);
+        user.setPasswordHash(PasswordUtil.hashPassword(phone));
+        user.setStatus("ACTIVE");
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+
+        Role parentRole = getOrCreateParentRole(em);
+        user.setRoles(new HashSet<>(Collections.singletonList(parentRole)));
+
+        userRepository.save(em, user);
+        return user;
+    }
+
+    private Role getOrCreateParentRole(EntityManager em) {
+        try {
+            return em.createQuery("SELECT r FROM Role r WHERE UPPER(r.code) = 'PARENT'", Role.class)
+                    .getSingleResult();
+        } catch (Exception e) {
+            Role r = new Role("PARENT", "Phụ huynh", "Vai trò phụ huynh học sinh");
+            em.persist(r);
+            return r;
+        }
+    }
+
     private void validateGuardianForm(GuardianFormDTO form) {
         if (form == null) {
             throw new ValidationException("Dữ liệu phụ huynh không được để trống.");
-        }
-        if (form.getUserId() == null) {
-            throw new ValidationException("Bắt buộc phải chọn tài khoản người dùng (vai trò Phụ huynh - PARENT) cho hồ sơ này.");
         }
         if (!ValidationUtil.isValidFullName(form.getFullName())) {
             throw new ValidationException("Họ và tên phụ huynh phải từ 2 đến 150 ký tự.");
