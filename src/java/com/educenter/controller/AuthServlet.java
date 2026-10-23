@@ -205,14 +205,19 @@ public class AuthServlet extends HttpServlet {
         String email = req.getParameter("email");
         String phone = req.getParameter("phone");
         String roleCode = req.getParameter("roleCode");
+        String studentEmail = req.getParameter("studentEmail");
         String password = req.getParameter("password");
         String confirmPassword = req.getParameter("confirmPassword");
 
-        RegisterRequestDTO dto = new RegisterRequestDTO(fullName, email, phone, roleCode, password, confirmPassword);
+        RegisterRequestDTO dto = new RegisterRequestDTO(fullName, email, phone, roleCode, studentEmail, password, confirmPassword);
 
         try {
             authService.register(dto);
-            FlashMessageUtil.setSuccess(req, "Đăng ký tài khoản thành công! Bạn có thể đăng nhập ngay bây giờ.");
+            if ("PARENT".equalsIgnoreCase(roleCode) && studentEmail != null && !studentEmail.trim().isEmpty()) {
+                FlashMessageUtil.setSuccess(req, "Đăng ký thành công! Hệ thống đã tự động liên kết và xác minh quan hệ phụ huynh với học sinh (" + studentEmail.trim() + ").");
+            } else {
+                FlashMessageUtil.setSuccess(req, "Đăng ký tài khoản thành công! Bạn có thể đăng nhập ngay bây giờ.");
+            }
             resp.sendRedirect(req.getContextPath() + "/login");
         } catch (ValidationException e) {
             FlashMessageUtil.setError(req, e.getMessage());
@@ -221,6 +226,7 @@ public class AuthServlet extends HttpServlet {
             session.setAttribute("preserved_email", email);
             session.setAttribute("preserved_phone", phone);
             session.setAttribute("preserved_roleCode", roleCode);
+            session.setAttribute("preserved_studentEmail", studentEmail);
             resp.sendRedirect(req.getContextPath() + "/register");
         }
     }

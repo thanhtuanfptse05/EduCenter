@@ -13,6 +13,7 @@ public class RegisterRequestDTO implements Serializable {
     private String email;
     private String phone;
     private String roleCode; // STUDENT or PARENT
+    private String studentEmail; // Email của học sinh (con) khi phụ huynh đăng ký
     private String password;
     private String confirmPassword;
 
@@ -22,10 +23,16 @@ public class RegisterRequestDTO implements Serializable {
 
     public RegisterRequestDTO(String fullName, String email, String phone, String roleCode,
                               String password, String confirmPassword) {
+        this(fullName, email, phone, roleCode, null, password, confirmPassword);
+    }
+
+    public RegisterRequestDTO(String fullName, String email, String phone, String roleCode,
+                              String studentEmail, String password, String confirmPassword) {
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
         this.roleCode = roleCode;
+        this.studentEmail = studentEmail;
         this.password = password;
         this.confirmPassword = confirmPassword;
     }
@@ -60,6 +67,14 @@ public class RegisterRequestDTO implements Serializable {
 
     public void setRoleCode(String roleCode) {
         this.roleCode = roleCode;
+    }
+
+    public String getStudentEmail() {
+        return studentEmail;
+    }
+
+    public void setStudentEmail(String studentEmail) {
+        this.studentEmail = studentEmail;
     }
 
     public String getPassword() {

@@ -106,9 +106,28 @@
                       <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                     </span>
                     <input class="form-control" id="email" name="email" type="email"
-                           placeholder="hocsinh@thpt.edu.vn" required maxlength="255" autocomplete="username"
+                           placeholder="phuhuynh@gmail.com" required maxlength="255" autocomplete="username"
                            value="<c:out value='${sessionScope.preserved_email}'/>"/>
                   </div>
+                </div>
+
+                <!-- Student Email for Parent (Auto-link Guardian FR-001 / D18) -->
+                <div class="form-group" id="student-email-wrapper" style="${sessionScope.preserved_roleCode == 'PARENT' ? '' : 'display: none;'}">
+                  <label class="form-label" for="studentEmail">
+                    Email học sinh (con) <span style="color: var(--danger);">*</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <span class="input-icon">
+                      <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    </span>
+                    <input class="form-control" id="studentEmail" name="studentEmail" type="email"
+                           placeholder="con.hocsinh@thpt.edu.vn" maxlength="255"
+                           ${sessionScope.preserved_roleCode == 'PARENT' ? 'required' : 'disabled'}
+                           value="<c:out value='${sessionScope.preserved_studentEmail}'/>"/>
+                  </div>
+                  <span class="text-muted" style="font-size: 11px; margin-top: 4px; display: block; line-height: 1.4;">
+                    Nhập đúng email con đã đăng ký tại EduCenter để tự động liên kết và xác minh quyền phụ huynh.
+                  </span>
                 </div>
 
                 <!-- Grade / Role-Specific Field for Student -->
@@ -363,6 +382,7 @@
   <c:remove var="preserved_phone" scope="session"/>
   <c:remove var="preserved_email" scope="session"/>
   <c:remove var="preserved_roleCode" scope="session"/>
+  <c:remove var="preserved_studentEmail" scope="session"/>
 
   <%@ include file="/WEB-INF/views/common/public-footer.jspf" %>
 </body>

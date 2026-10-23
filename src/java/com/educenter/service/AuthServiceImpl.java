@@ -2,11 +2,18 @@ package com.educenter.service;
 
 import com.educenter.dto.RegisterRequestDTO;
 import com.educenter.dto.UserPrincipalDTO;
+import com.educenter.entity.AuditLog;
+import com.educenter.entity.Guardian;
 import com.educenter.entity.PasswordResetToken;
 import com.educenter.entity.Role;
+import com.educenter.entity.Student;
+import com.educenter.entity.StudentGuardian;
 import com.educenter.entity.User;
+import com.educenter.repository.AuditLogRepository;
+import com.educenter.repository.GuardianRepository;
 import com.educenter.repository.PasswordResetRepository;
 import com.educenter.repository.RoleRepository;
+import com.educenter.repository.StudentRepository;
 import com.educenter.repository.UserRepository;
 import com.educenter.util.JPAUtil;
 import com.educenter.util.PasswordUtil;
@@ -36,23 +43,44 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordResetRepository passwordResetRepository;
+    private final StudentRepository studentRepository;
+    private final GuardianRepository guardianRepository;
+    private final AuditLogRepository auditLogRepository;
     private final java.util.function.Supplier<EntityManager> entityManagerSupplier;
 
     public AuthServiceImpl() {
-        this(new UserRepository(), new RoleRepository(), new PasswordResetRepository(), JPAUtil::getEntityManager);
+        this(new UserRepository(), new RoleRepository(), new PasswordResetRepository(),
+             new StudentRepository(), new GuardianRepository(), new AuditLogRepository(),
+             JPAUtil::getEntityManager);
     }
 
     public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
                            PasswordResetRepository passwordResetRepository) {
-        this(userRepository, roleRepository, passwordResetRepository, JPAUtil::getEntityManager);
+        this(userRepository, roleRepository, passwordResetRepository,
+             new StudentRepository(), new GuardianRepository(), new AuditLogRepository(),
+             JPAUtil::getEntityManager);
     }
 
     public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
                            PasswordResetRepository passwordResetRepository,
                            java.util.function.Supplier<EntityManager> entityManagerSupplier) {
+        this(userRepository, roleRepository, passwordResetRepository,
+             new StudentRepository(), new GuardianRepository(), new AuditLogRepository(),
+             entityManagerSupplier);
+    }
+
+    public AuthServiceImpl(UserRepository userRepository, RoleRepository roleRepository,
+                           PasswordResetRepository passwordResetRepository,
+                           StudentRepository studentRepository,
+                           GuardianRepository guardianRepository,
+                           AuditLogRepository auditLogRepository,
+                           java.util.function.Supplier<EntityManager> entityManagerSupplier) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordResetRepository = passwordResetRepository;
+        this.studentRepository = (studentRepository != null) ? studentRepository : new StudentRepository();
+        this.guardianRepository = (guardianRepository != null) ? guardianRepository : new GuardianRepository();
+        this.auditLogRepository = (auditLogRepository != null) ? auditLogRepository : new AuditLogRepository();
         this.entityManagerSupplier = (entityManagerSupplier != null) ? entityManagerSupplier : JPAUtil::getEntityManager;
     }
 
@@ -117,6 +145,20 @@ public class AuthServiceImpl implements AuthService {
             throw new ValidationException("Chỉ cho phép đăng ký tài khoản Học viên (STUDENT) hoặc Phụ huynh (PARENT).");
         }
 
+        // 4b. Validate Student Email for PARENT registration (FR-001 / D18)
+        String studentEmail = ValidationUtil.normalizeEmail(dto.getStudentEmail());
+        if ("PARENT".equals(roleCode)) {
+            if (studentEmail == null || studentEmail.isEmpty()) {
+                throw new ValidationException("Phụ huynh vui lòng cung cấp địa chỉ email của học sinh (con) để hệ thống tự động liên kết.");
+            }
+            if (!ValidationUtil.isValidEmail(studentEmail)) {
+                throw new ValidationException("Địa chỉ email của học sinh (con) không đúng định dạng.");
+            }
+            if (normalizedEmail.equalsIgnoreCase(studentEmail)) {
+                throw new ValidationException("Email của phụ huynh không được trùng với email của học sinh (con).");
+            }
+        }
+
         // 5. Validate Password & Confirmation
         if (!ValidationUtil.isValidPassword(dto.getPassword())) {
             throw new ValidationException("Mật khẩu phải có độ dài từ 6 ký tự trở lên (tối đa 72 bytes).");
@@ -139,6 +181,16 @@ public class AuthServiceImpl implements AuthService {
             Role role = roleRepository.findByCode(em, roleCode)
                     .orElseThrow(() -> new ValidationException("Không tìm thấy vai trò hệ thống: " + roleCode));
 
+            // Verify student exists when parent registers
+            Student studentTarget = null;
+            if ("PARENT".equals(roleCode)) {
+                Optional<Student> studentOpt = studentRepository.findByEmail(em, studentEmail);
+                if (studentOpt.isEmpty()) {
+                    throw new ValidationException("Không tìm thấy học sinh với email: " + studentEmail + " trong hệ thống. Vui lòng kiểm tra lại email của con hoặc liên hệ trung tâm.");
+                }
+                studentTarget = studentOpt.get();
+            }
+
             // Hash password with BCrypt (SEC-01)
             String hashedPassword = PasswordUtil.hashPassword(dto.getPassword());
 
@@ -149,6 +201,54 @@ public class AuthServiceImpl implements AuthService {
             user.addRole(role);
 
             userRepository.save(em, user);
+
+            // If PARENT: create or ensure Guardian profile and auto-link StudentGuardian (D18)
+            if ("PARENT".equals(roleCode) && studentTarget != null) {
+                Guardian guardian = guardianRepository.findByUserId(em, user.getId()).orElseGet(Guardian::new);
+                guardian.setUser(user);
+                guardian.setFullName(user.getFullName());
+                guardian.setPhone(user.getPhone() != null ? user.getPhone() : "");
+                guardian.setEmail(user.getEmail());
+                guardian.setStatus("ACTIVE");
+                guardianRepository.save(em, guardian);
+
+                Optional<StudentGuardian> existingLinkOpt = guardianRepository.findLinkByStudentAndGuardian(em, studentTarget.getId(), guardian.getId());
+                if (existingLinkOpt.isEmpty()) {
+                    StudentGuardian link = new StudentGuardian();
+                    link.setStudent(studentTarget);
+                    link.setGuardian(guardian);
+                    link.setRelationship("Phụ huynh");
+                    boolean hasPrimary = studentRepository.countGuardiansByStudentId(em, studentTarget.getId()) > 0;
+                    link.setIsPrimary(!hasPrimary);
+                    link.setVerifiedAt(LocalDateTime.now());
+                    link.setVerifiedBy(user.getId());
+                    guardianRepository.saveLink(em, link);
+                } else {
+                    StudentGuardian link = existingLinkOpt.get();
+                    if (link.getVerifiedAt() == null) {
+                        link.setVerifiedAt(LocalDateTime.now());
+                        link.setVerifiedBy(user.getId());
+                        guardianRepository.saveLink(em, link);
+                    }
+                }
+
+                AuditLog auditLog = new AuditLog(user.getId(), "AUTO_LINK_GUARDIAN", "StudentGuardians", studentTarget.getId(),
+                        null, "Tự động liên kết và xác minh phụ huynh " + user.getEmail() + " với học sinh " + studentTarget.getFullName() + " (" + studentEmail + ")", null);
+                auditLogRepository.save(em, auditLog);
+            } else if ("STUDENT".equals(roleCode)) {
+                // Auto link user to existing Student profile with matching email and null user
+                Optional<Student> studentOpt = studentRepository.findByEmail(em, normalizedEmail);
+                if (studentOpt.isPresent() && studentOpt.get().getUser() == null) {
+                    Student student = studentOpt.get();
+                    student.setUser(user);
+                    studentRepository.update(em, student);
+
+                    AuditLog auditLog = new AuditLog(user.getId(), "AUTO_LINK_STUDENT_USER", "Students", student.getId(),
+                            null, "Tự động gắn tài khoản User (" + user.getEmail() + ") vào hồ sơ học sinh " + student.getFullName(), null);
+                    auditLogRepository.save(em, auditLog);
+                }
+            }
+
             tx.commit();
             LOGGER.info("Đăng ký thành công tài khoản mới: " + normalizedEmail + " với vai trò " + roleCode);
             return user;

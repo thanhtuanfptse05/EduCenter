@@ -39,6 +39,24 @@ public class StudentRepository {
         }
     }
 
+    public Optional<Student> findByEmail(EntityManager em, String email) {
+        if (email == null || email.trim().isEmpty()) return Optional.empty();
+        try {
+            TypedQuery<Student> query = em.createQuery(
+                    "SELECT s FROM Student s LEFT JOIN FETCH s.user u WHERE LOWER(TRIM(s.email)) = :email OR (s.user IS NOT NULL AND LOWER(TRIM(s.user.email)) = :email)",
+                    Student.class
+            );
+            query.setParameter("email", email.trim().toLowerCase());
+            List<Student> results = query.getResultList();
+            if (results.isEmpty()) {
+                return Optional.empty();
+            }
+            return Optional.of(results.get(0));
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+    }
+
     public boolean existsByUserId(EntityManager em, Long userId, Long excludeStudentId) {
         if (userId == null) return false;
         StringBuilder jpql = new StringBuilder("SELECT COUNT(s) FROM Student s WHERE s.user.id = :userId");

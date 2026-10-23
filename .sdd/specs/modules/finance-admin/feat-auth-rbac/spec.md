@@ -28,7 +28,7 @@ Là Guest, tôi muốn đăng ký đúng vai trò và đăng nhập để sử d
 **Independent Test:** Đăng ký Student/Parent, login/logout rồi kiểm tra tài khoản bị khóa.
 
 **Acceptance Scenarios:**
-1. Given email mới và mật khẩu hợp lệ, When đăng ký, Then một User ACTIVE chỉ có STUDENT/PARENT đã chọn.
+1. Given email mới và mật khẩu hợp lệ, When đăng ký, Then một User ACTIVE chỉ có STUDENT/PARENT đã chọn; nếu vai trò là PARENT kèm email học sinh khớp với hồ sơ học viên, hệ thống tự động liên kết thành công với học sinh đó.
 2. Given login hợp lệ, When xác thực xong, Then đổi session ID, vào dashboard đúng role; POST logout hủy phiên.
 
 ### User Story 2 — Khôi phục và hồ sơ (Priority: P0)
@@ -70,7 +70,7 @@ Các yêu cầu áp dụng đồng thời QG01–QG12. Cột nghiệm thu là k�
 
 | ID | Yêu cầu kiểm chứng được | Truy vết nguồn | Nghiệm thu / kết quả quan sát |
 |---|---|---|---|
-| FR-001 | THE SYSTEM SHALL chỉ cho tự đăng ký STUDENT/PARENT, chuẩn hóa email trim/lowercase theo Locale.ROOT duy nhất; mật khẩu≥6 ký tự,≤72 UTF-8 bytes, xác nhận trùng, BCrypt cost≥10. | UC01; BR01; SEC-01 | Email trùng đồng thời chỉ một User; gửi role ADMIN/STAFF/TEACHER bị từ chối; không lưu/log mật khẩu thô. |
+| FR-001 | THE SYSTEM SHALL chỉ cho tự đăng ký STUDENT/PARENT, chuẩn hóa email trim/lowercase theo Locale.ROOT duy nhất; mật khẩu≥6 ký tự,≤72 UTF-8 bytes, xác nhận trùng, BCrypt cost≥10; hỗ trợ nhập email học sinh (con) khi đăng ký PARENT để tự động tạo hồ sơ Guardian và liên kết xác thực (StudentGuardians) nếu email học sinh tồn tại trong hệ thống. | UC01; BR01; SEC-01 | Email trùng đồng thời chỉ một User; gửi role ADMIN/STAFF/TEACHER bị từ chối; PARENT nhập email con khớp được tự động liên kết; nhập email con không tồn tại báo lỗi rõ ràng. |
 | FR-002 | WHEN login thành công, THE SYSTEM SHALL đổi session ID, timeout 30 phút, cookie HttpOnly/cookie-only, CSRF cho mọi POST; chỉ POST /logout hủy phiên và chuyển hướng về trang chủ landing page (`/?loggedOut=true`) kèm thông báo đăng xuất thành công (không chuyển hướng về /login hoặc /register); các trang động phải gắn Cache-Control ngăn rò rỉ phiên qua nút Back (bfcache); sai mật khẩu phải hiển thị thông báo lỗi trên form và xóa thông tin phiên cũ, không chuyển hướng 403. | UC02; QG02 | GET /logout chỉ form xác nhận; POST /logout chuyển hướng về trang chủ (/); Session cookie Secure khi HTTPS; nhấn Back sau logout không hiển thị trạng thái đăng nhập; CSRF token lệch/hết hạn trên /login, /register, /forgot-password được làm mới và chuyển hướng về form kèm thông báo thay vì trả lỗi 403. |
 | FR-003 | THE SYSTEM SHALL đọc lại status/roles/credential version trên mỗi request bảo vệ; đổi/reset mật khẩu làm vô hiệu các phiên cũ; redirect_url chỉ local và được phép. | UC02; BR02 | Khóa/thu quyền có hiệu lực request kế tiếp; external/path ngoài quyền không được redirect. |
 | FR-004 | WHEN khôi phục, THE SYSTEM SHALL trả cùng thông báo cho email tồn tại/không/khóa; token random 32 bytes dùng một lần/30 phút, chỉ lưu SHA-256 hash, gửi SMTP cấu hình, yêu cầu mới vô hiệu token cũ và rate-limit. | UC03; SEC-01; D04 | Không hiển thị/log token/link; thiếu SMTP fail safely với mã sự cố; hết hạn/replay không đổi password. |

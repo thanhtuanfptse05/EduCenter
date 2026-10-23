@@ -107,7 +107,7 @@ Ví dụ nghiệm thu: hóa đơn1.000.000, thu400.000→debt600.000; thu600.000
 
 ## 6. Dữ liệu và quyền giám hộ
 
-parent.user_id phải trùng actor, Guardian ACTIVE, liên kết verified chưa revoked, Student đúng ID; liên kết được kiểm lại ở mỗi request, bao gồm tuition/receipt/chart/notification. Student tự đọc yêu cầu Student.user_id=actor; không match theo tên/email/phone. Số điện thoại chung không là bằng chứng giám hộ. ADMIN quản trị phải có ngữ cảnh nghiệp vụ, không tạo phiên mạo danh.
+parent.user_id phải trùng actor, Guardian ACTIVE, liên kết verified chưa revoked, Student đúng ID; liên kết được kiểm lại ở mỗi request, bao gồm tuition/receipt/chart/notification. Student tự đọc yêu cầu Student.user_id=actor; không match theo tên/email/phone. Số điện thoại chung không là bằng chứng giám hộ. ADMIN quản trị phải có ngữ cảnh nghiệp vụ, không tạo phiên mạo danh. Khi Phụ huynh đăng ký tài khoản có cung cấp email học sinh trùng khớp với hồ sơ học viên đã có trong hệ thống, hệ thống hỗ trợ cơ chế tự động liên kết và xác thực (auto-verify) để phụ huynh có thể truy cập cổng thông tin của con ngay lập tức.
 
 ## 7. Dữ liệu nhạy cảm, lưu giữ và bàn giao
 

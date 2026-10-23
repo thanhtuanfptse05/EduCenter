@@ -733,6 +733,10 @@ INSERT INTO dbo.Students (user_id, full_name, dob, gender, phone, email, school,
 SELECT id, full_name, '2008-05-15', 'MALE', phone, email, N'THPT Chu Văn An', 12, N'Đạt 8.5+ môn Toán thi Tốt nghiệp THPT'
 FROM dbo.Users WHERE email = 'student.nam@educenter.vn';
 
+-- Hồ sơ học sinh độc lập chưa có tài khoản User và chưa có phụ huynh (dùng để kiểm thử đăng ký tự động liên kết FR-001/D18)
+INSERT INTO dbo.Students (user_id, full_name, dob, gender, phone, email, school, grade_level, target_goal)
+VALUES (NULL, N'Lê Thị Hoàng Mai', '2009-10-20', 'FEMALE', '0988776655', 'mai.student@educenter.vn', N'THPT Yên Hòa', 11, N'Ôn thi ĐGNL ĐHQG Hà Nội');
+
 -- Hồ sơ phụ huynh mẫu (liên kết với parent.tuan)
 INSERT INTO dbo.Guardians (user_id, full_name, phone, email, occupation, address)
 SELECT id, full_name, phone, email, N'Kỹ sư CNTT', N'Số 45 Hoàng Quốc Việt, Cầu Giấy, Hà Nội'

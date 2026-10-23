@@ -46,10 +46,19 @@
 
           var studentWrapper = document.getElementById('grade-student-wrapper');
           var parentWrapper = document.getElementById('grade-parent-wrapper');
+          var studentEmailWrapper = document.getElementById('student-email-wrapper');
           if (studentWrapper && parentWrapper) {
             var isParent = (role === 'PARENT');
             studentWrapper.style.display = isParent ? 'none' : 'block';
             parentWrapper.style.display = isParent ? 'block' : 'none';
+            if (studentEmailWrapper) {
+              studentEmailWrapper.style.display = isParent ? 'block' : 'none';
+              var studentEmailInput = document.getElementById('studentEmail');
+              if (studentEmailInput) {
+                studentEmailInput.disabled = !isParent;
+                studentEmailInput.required = isParent;
+              }
+            }
             var studentSelect = document.getElementById('grade-student');
             var parentSelect = document.getElementById('grade-parent');
             if (studentSelect) studentSelect.disabled = isParent;
