@@ -87,10 +87,10 @@
         <c:set var="breadcrumb" value="${isEdit ? 'Chỉnh sửa khóa học' : 'Tạo khóa học mới'}" scope="request" />
         <%@ include file="/WEB-INF/views/common/sidebar.jspf" %>
 
-        <main class="admin-main">
-            <%@ include file="/WEB-INF/views/common/navbar.jspf" %>
+        <div class="admin-main">
+            <%@ include file="/WEB-INF/views/common/header.jspf" %>
 
-            <div class="admin-content">
+            <main class="admin-content">
                 <!-- Page Header -->
                 <div class="page-header" style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
                     <div>
@@ -347,10 +347,10 @@
                         </div>
                     </div>
                 </form>
-            </div>
+            </main>
 
             <%@ include file="/WEB-INF/views/common/footer.jspf" %>
-        </main>
+        </div>
     </div>
 </body>
 </html>

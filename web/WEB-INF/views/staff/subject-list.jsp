@@ -185,15 +185,15 @@
         <c:set var="breadcrumb" value="Danh mục môn học" scope="request" />
         <%@ include file="/WEB-INF/views/common/sidebar.jspf" %>
 
-        <main class="admin-main">
-            <%@ include file="/WEB-INF/views/common/navbar.jspf" %>
+        <div class="admin-main">
+            <%@ include file="/WEB-INF/views/common/header.jspf" %>
 
-            <div class="admin-content">
+            <main class="admin-content">
                 <!-- Page Header -->
                 <div class="page-header" style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
                     <div>
                         <div style="font-size: var(--font-size-xs); color: var(--text-muted); margin-bottom: 4px;">
-                            <a href="${pageContext.request.contextPath}/staff/dashboard" style="color: var(--text-muted); text-decoration: none;">Học vụ</a> / <span>Danh mục môn học</span>
+                            <a href="${pageContext.request.contextPath}/staff/courses" style="color: var(--text-muted); text-decoration: none;">Đào tạo & Học vụ</a> / <span>Danh mục môn học</span>
                         </div>
                         <h1 style="font-size: var(--font-size-2xl); font-weight: 800; color: var(--text); margin: 0;">
                             Quản lý Môn học
@@ -503,10 +503,10 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            </main>
 
             <%@ include file="/WEB-INF/views/common/footer.jspf" %>
-        </main>
+        </div>
     </div>
 
     <script>
