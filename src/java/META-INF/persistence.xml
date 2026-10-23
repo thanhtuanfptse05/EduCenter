@@ -28,6 +28,7 @@
         <class>com.educenter.entity.AssessmentScore</class>
         <class>com.educenter.entity.Invoice</class>
         <class>com.educenter.entity.InvoiceItem</class>
+        <class>com.educenter.entity.Payment</class>
 
         <!-- Cấu hình kết nối Microsoft SQL Server -->
         <properties>

@@ -60,6 +60,10 @@ public class Invoice implements Serializable {
     @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<InvoiceItem> items = new ArrayList<>();
 
+    @OneToMany(mappedBy = "invoice", fetch = FetchType.LAZY)
+    @OrderBy("paidAt DESC")
+    private List<Payment> payments = new ArrayList<>();
+
     public Invoice() {}
 
     public Long getId() { return id; }
@@ -103,6 +107,9 @@ public class Invoice implements Serializable {
 
     public List<InvoiceItem> getItems() { return items; }
     public void setItems(List<InvoiceItem> items) { this.items = items; }
+
+    public List<Payment> getPayments() { return payments; }
+    public void setPayments(List<Payment> payments) { this.payments = payments; }
 
     public void addItem(InvoiceItem item) {
         items.add(item);
