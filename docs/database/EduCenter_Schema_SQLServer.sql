@@ -692,13 +692,13 @@ INSERT INTO dbo.Roles (code, name, description) VALUES
 GO
 
 -- 2. Tài khoản Demo cho 5 vai trò hệ thống (Mật khẩu chung cho tất cả: 123456)
--- Hash BCrypt cho '123456': $2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO
+-- Hash BCrypt cho '123456': $2a$10$xk08hfrg1KAofW7P60rvSe6NAuaWWU0yuwRDsoLMyZGjqyIZVk9Qe
 INSERT INTO dbo.Users (email, password_hash, full_name, phone, avatar_url, status) VALUES
-('admin@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Nguyễn Quản Trị (Admin & Manager)', '0901234567', NULL, 'ACTIVE'),
-('staff@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Trần Thu Hà (Tư Vấn & Tuyển Sinh)', '0912345678', NULL, 'ACTIVE'),
-('teacher.hung@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'ThS. Lê Mạnh Hùng (Giáo Viên Toán)', '0987654321', '/assets/images/teachers/teacher-hung.jpg', 'ACTIVE'),
-('student.nam@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Trần Hoàng Nam (Học Viên Lớp 12)', '0933112233', NULL, 'ACTIVE'),
-('parent.tuan@educenter.vn', '$2a$10$qR6QdEaFmZtC3UvBnX9TLeh7I.3.i9nKbPwqh4oF2wZtVvS4rN9rO', N'Trần Quốc Tuấn (Phụ Huynh)', '0944556677', NULL, 'ACTIVE');
+('admin@educenter.vn', '$2a$10$xk08hfrg1KAofW7P60rvSe6NAuaWWU0yuwRDsoLMyZGjqyIZVk9Qe', N'Nguyễn Quản Trị (Admin & Manager)', '0901234567', NULL, 'ACTIVE'),
+('staff@educenter.vn', '$2a$10$xk08hfrg1KAofW7P60rvSe6NAuaWWU0yuwRDsoLMyZGjqyIZVk9Qe', N'Trần Thu Hà (Tư Vấn & Tuyển Sinh)', '0912345678', NULL, 'ACTIVE'),
+('teacher.hung@educenter.vn', '$2a$10$xk08hfrg1KAofW7P60rvSe6NAuaWWU0yuwRDsoLMyZGjqyIZVk9Qe', N'ThS. Lê Mạnh Hùng (Giáo Viên Toán)', '0987654321', '/assets/images/teachers/teacher-hung.jpg', 'ACTIVE'),
+('student.nam@educenter.vn', '$2a$10$xk08hfrg1KAofW7P60rvSe6NAuaWWU0yuwRDsoLMyZGjqyIZVk9Qe', N'Trần Hoàng Nam (Học Viên Lớp 12)', '0933112233', NULL, 'ACTIVE'),
+('parent.tuan@educenter.vn', '$2a$10$xk08hfrg1KAofW7P60rvSe6NAuaWWU0yuwRDsoLMyZGjqyIZVk9Qe', N'Trần Quốc Tuấn (Phụ Huynh)', '0944556677', NULL, 'ACTIVE');
 GO
 
 -- Gán vai trò tương ứng cho từng tài khoản demo
