@@ -39,8 +39,12 @@ Goal: no invented facts outside exclusions, safe account/admin/error controls. I
 - [x] T021 Verify compilation, unit/HTTP/JSP/SQL Server checks using scripts/verify.ps1; record evidence in verification.md.
 - [x] T022 Verify browser hero/navbar/cart/responsive/themes and preserve excluded snippets; record evidence in verification.md.
 - [x] T023 Consolidate duplicate assets/references and align old progress/future modules in README.md and .sdd/shared_context.md.
-- [ ] T024 Run speckit-converge against spec.md/plan.md/tasks.md and implement remaining scoped tasks.
-- [ ] T025 Commit and push validated changes to main; record revision in verification.md.
+- [x] T024 Run speckit-converge against spec.md/plan.md/tasks.md and implement remaining scoped tasks.
+- [x] T025 Commit and push validated changes to main; record revision in verification.md.
 
 ## Dependencies and implementation strategy
 Setup → foundations → US1 → US2 → US3 → validation/convergence/delivery. Test cart regressions before cart edits. US1 CSS and US2 service tests can be prepared independently; use sequential implementation here to avoid shared-file conflicts. Deliver all three stories, not only the navigation MVP.
+
+## Phase 7: Convergence
+
+- [x] T026 Clarify unavailable-course summary/fee exclusion on registration-confirm.jsp and cover closed-course HTTP rejection with retained cart/draft per SC-002, FR-005 and US2/AC3 (partial, MEDIUM).

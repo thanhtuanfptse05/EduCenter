@@ -7,7 +7,7 @@ Date: 2026-10-23. Scope: [locked spec](spec.md); [tasks](tasks.md).
 | Check | Result | Evidence |
 |---|---|---|
 | Java 17 compilation + JUnit services/utilities | 50/50 passed | `scripts/verify.ps1`, generated `build/repair/unit.log` |
-| SQL Server connection + HTTP/JSP/transactions | 9/9 passed | `scripts/verify.ps1 -Integration`, generated `build/repair/integration.log` |
+| SQL Server connection + HTTP/JSP/transactions | 11/11 passed | `scripts/verify.ps1 -Integration`, generated `build/repair/integration.log` |
 | Browser public routes | 9 routes × 4 widths passed | `scripts/browser-check.py`, generated `build/repair/screenshots/browser-results.json` |
 | Browser account workspace | Student dashboard/profile and admin dashboard/profile/user list at all 4 widths passed | isolated fixture browser run, same JSON |
 | Themes/mobile/navigation | default light even with system dark, explicit dark persisted, public menu/internal drawer/Escape, hover contrast and home anchor targets passed | Chrome/Playwright |
@@ -15,7 +15,7 @@ Date: 2026-10-23. Scope: [locked spec](spec.md); [tasks](tasks.md).
 | View/static checks | 23 JSP/fragments contain no Java scriptlets; discount/coupon/combo/originalFee scan clear in Java/public views | source scan |
 | Owner exclusions | Profile main markup and both home showcase blocks match captured baseline exactly; direct reset link still returned/displayed by integration test | baseline comparison + HTTP reset test |
 
-HTTP integration exercises all auth/catalog/cart JSPs, all five role dashboards, profile/logout/admin, 403/404/500, guest duplicate/notes/current fee, guest-to-account merge, consent/nonce confirmation replay with exactly one persisted Lead, session-bound receipt, stale password sessions, admin status/filter separation, escaped names and concurrent last-admin changes. The SQL fixture uses Unicode columns to match the real schema. A separate regression changes a previously loaded course in another transaction and verifies the checkout lock refreshes its fee. Error injection exists only in test support, never in the WAR.
+Read-only operational projections were additionally executed against all 5 existing classes in the configured application database. HTTP integration exercises all auth/catalog/cart JSPs, all five role dashboards, profile/logout/admin, 403/404/500, guest duplicate/notes/current fee, guest-to-account merge, consent/nonce confirmation replay with exactly one persisted Lead, session-bound receipt, stale password sessions, admin status/filter separation, escaped names and concurrent last-admin changes. The SQL fixture uses Unicode columns to match the real schema. A separate regression changes a previously loaded course in another transaction and verifies the checkout lock refreshes its fee. Error injection exists only in test support, never in the WAR.
 
 SQL write tests create and dispose only `EduCenterRepairTest_<random>` databases. Configured EduCenterDB receives read-only connection/academic smoke checks; browser account mutations use a disposable fixture database. No financial records/schema are deleted. Existing historical image URLs redirect to one canonical binary.
 
@@ -43,4 +43,6 @@ One canonical design document, shared public shell, current database projections
 
 The three owner exclusions remain intentionally non-production: direct reset delivery, profile security/device demonstrations and home learning/parent demonstrations. No claim is made that all future academic/finance/guardian/reporting workflows are implemented.
 
-Convergence and delivery revision: pending final review/push; updated in delivery record.
+Convergence: 32 functional/success/story criteria and 7 plan decisions assessed against current code, with 10 constitution constraint groups applied to the implemented scope. One MEDIUM partial finding on SC-002/FR-005 was appended as T026, implemented and verified: an unavailable course now shows its status instead of an amount excluded from the confirmation total. Its failed checkout retains the cart/draft and creates no extra Lead. Follow-up assessment found zero remaining missing/partial/contradicting/unrequested work; no empty convergence phase was appended.
+
+Implementation revision `4bb5c0b` was committed and pushed to `origin/main`. The follow-up `feat(portal-cart): close convergence and record verification` commit contains T026, the read-only SQL regression and this completed verification record. Use this file's commit history for the final delivery revision. All 26 tasks are complete.

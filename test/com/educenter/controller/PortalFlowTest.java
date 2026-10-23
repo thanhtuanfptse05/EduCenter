@@ -168,4 +168,25 @@ class PortalFlowTest {
             first.close(); second.close();
         }
     }
+
+    @Test @Order(9) void closedCourseRejectsCheckoutAndPreservesCartAndDraft() throws Exception {
+        HttpClient shopper = client();
+        String csrf = csrf(shopper, "/courses");
+        post(shopper, "/registration-cart/add", Map.of("csrfToken", csrf, "courseId", "" + database.courseTwo));
+        EntityManager em = database.factory.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.createQuery("UPDATE Course c SET c.status='CLOSED' WHERE c.id=:id").setParameter("id", database.courseTwo).executeUpdate();
+            em.getTransaction().commit();
+        } finally { em.close(); }
+        String form = get(shopper, "/registration/confirm").body();
+        assertTrue(form.contains("Không còn nhận đăng ký"));
+        assertFalse(form.contains("2.000.000"));
+        long before = database.count("SELECT COUNT(l) FROM Lead l");
+        post(shopper, "/registration/confirm", Map.of("csrfToken", csrf, "submissionToken", input(form, "submissionToken"),
+                "fullName", "Giữ thông tin tư vấn", "phoneNumber", "0912345678", "gradeLevel", "9", "consentCheck", "true"));
+        assertEquals(before, database.count("SELECT COUNT(l) FROM Lead l"));
+        assertTrue(get(shopper, "/registration/confirm").body().contains("Giữ thông tin tư vấn"));
+        assertTrue(get(shopper, "/registration-cart").body().contains("VERIFY-TWO"));
+    }
 }

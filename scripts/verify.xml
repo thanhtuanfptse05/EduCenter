@@ -36,6 +36,7 @@
             <jvmarg value="-Dfile.encoding=UTF-8"/>
             <arg value="execute"/><arg value="--select-class=com.educenter.util.JPAConnectionTest"/>
             <arg value="--select-class=com.educenter.controller.PortalFlowTest"/>
+            <arg value="--select-class=com.educenter.repository.SqlServerReadTest"/>
             <arg value="--disable-banner"/><arg value="--disable-ansi-colors"/><arg value="--details=summary"/>
         </java>
     </target>
