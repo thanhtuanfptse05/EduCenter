@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -184,7 +184,7 @@
                 <div class="page-header" style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
                     <div>
                         <div style="font-size: var(--font-size-xs); color: var(--text-muted); margin-bottom: 4px;">
-                            <a href="${pageContext.request.contextPath}/staff/courses" style="color: var(--text-muted); text-decoration: none;">Đào tạo & Học vụ</a> / <span>Quản lý khóa học</span>
+                            <a href="${pageContext.request.contextPath}/admin/courses" style="color: var(--text-muted); text-decoration: none;">Đào tạo & Học vụ</a> / <span>Quản lý khóa học</span>
                         </div>
                         <h1 style="font-size: var(--font-size-2xl); font-weight: 800; color: var(--text); margin: 0;">
                             Chương trình & Khóa học
@@ -194,7 +194,7 @@
                         </p>
                     </div>
                     <div style="display: flex; gap: 12px;">
-                        <a href="${pageContext.request.contextPath}/staff/subjects" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px;">
+                        <a href="${pageContext.request.contextPath}/admin/subjects" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px;">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m16 6 4 14"/>
                                 <path d="M12 6v14"/>
@@ -203,7 +203,7 @@
                             </svg>
                             Danh mục môn học
                         </a>
-                        <a href="${pageContext.request.contextPath}/staff/courses/form" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+                        <a href="${pageContext.request.contextPath}/admin/courses/form" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="12" y1="5" x2="12" y2="19"></line>
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -305,7 +305,7 @@
                 <div class="content-card">
                     <!-- Filter Toolbar -->
                     <div class="filter-panel">
-                        <form method="GET" action="${pageContext.request.contextPath}/staff/courses" class="filter-grid">
+                        <form method="GET" action="${pageContext.request.contextPath}/admin/courses" class="filter-grid">
                             <!-- Keyword Input -->
                             <div class="form-group" style="margin: 0;">
                                 <label class="form-label" style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">
@@ -385,7 +385,7 @@
                                     </svg>
                                     Lọc
                                 </button>
-                                <a href="${pageContext.request.contextPath}/staff/courses" class="btn btn-secondary" style="height: 38px; display: inline-flex; align-items: center;" title="Xóa bộ lọc">
+                                <a href="${pageContext.request.contextPath}/admin/courses" class="btn btn-secondary" style="height: 38px; display: inline-flex; align-items: center;" title="Xóa bộ lọc">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
                                         <path d="M3 3v5h5"/>
@@ -413,10 +413,10 @@
                                     Không có bản ghi nào khớp với điều kiện lọc hiện tại. Thử thay đổi từ khóa tìm kiếm hoặc đặt lại bộ lọc.
                                 </p>
                                 <div style="display: inline-flex; gap: 12px;">
-                                    <a href="${pageContext.request.contextPath}/staff/courses" class="btn btn-secondary">
+                                    <a href="${pageContext.request.contextPath}/admin/courses" class="btn btn-secondary">
                                         Đặt lại bộ lọc
                                     </a>
-                                    <a href="${pageContext.request.contextPath}/staff/courses/form" class="btn btn-primary">
+                                    <a href="${pageContext.request.contextPath}/admin/courses/form" class="btn btn-primary">
                                         Thêm khóa học mới
                                     </a>
                                 </div>
@@ -515,7 +515,7 @@
                                                 <td style="padding: 14px 18px; text-align: right;">
                                                     <div style="display: inline-flex; align-items: center; gap: 8px;">
                                                         <!-- Edit Button -->
-                                                        <a href="${pageContext.request.contextPath}/staff/courses/form?id=${c.id}" class="btn btn-sm btn-secondary" style="padding: 6px 10px; display: inline-flex; align-items: center; gap: 4px;" title="Chỉnh sửa thông tin khóa học">
+                                                        <a href="${pageContext.request.contextPath}/admin/courses/form?id=${c.id}" class="btn btn-sm btn-secondary" style="padding: 6px 10px; display: inline-flex; align-items: center; gap: 4px;" title="Chỉnh sửa thông tin khóa học">
                                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                                 <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
                                                             </svg>
@@ -523,7 +523,7 @@
                                                         </a>
 
                                                         <!-- Quick Status Toggle Dropdown / Form -->
-                                                        <form method="POST" action="${pageContext.request.contextPath}/staff/courses/status" style="margin: 0;" onsubmit="return confirmStatusChange('${c.name}', this.status.value);">
+                                                        <form method="POST" action="${pageContext.request.contextPath}/admin/courses/status" style="margin: 0;" onsubmit="return confirmStatusChange('${c.name}', this.status.value);">
                                                             <input type="hidden" name="csrfToken" value="${not empty csrfToken ? csrfToken : sessionScope.csrfToken}">
                                                             <input type="hidden" name="id" value="${c.id}">
                                                             <select name="status" onchange="this.form.submit()" style="font-size: 11px; padding: 5px 8px; border: 1px solid var(--border); border-radius: var(--radius-xs); background: var(--surface); color: var(--text); cursor: pointer;">
@@ -547,21 +547,21 @@
                                 </div>
                                 <div style="display: flex; gap: 6px;">
                                     <c:if test="${currentPage > 1}">
-                                        <a href="${pageContext.request.contextPath}/staff/courses?q=${filterQ}&subjectId=${filterSubjectId}&grade=${filterGrade}&status=${filterStatus}&sort=${filterSort}&page=${currentPage - 1}" class="page-link-btn" title="Trang trước">
+                                        <a href="${pageContext.request.contextPath}/admin/courses?q=${filterQ}&subjectId=${filterSubjectId}&grade=${filterGrade}&status=${filterStatus}&sort=${filterSort}&page=${currentPage - 1}" class="page-link-btn" title="Trang trước">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
                                         </a>
                                     </c:if>
 
                                     <c:forEach var="p" begin="1" end="${totalPages}">
                                         <c:if test="${p == 1 || p == totalPages || (p >= currentPage - 2 && p <= currentPage + 2)}">
-                                            <a href="${pageContext.request.contextPath}/staff/courses?q=${filterQ}&subjectId=${filterSubjectId}&grade=${filterGrade}&status=${filterStatus}&sort=${filterSort}&page=${p}" class="page-link-btn ${p == currentPage ? 'active' : ''}">
+                                            <a href="${pageContext.request.contextPath}/admin/courses?q=${filterQ}&subjectId=${filterSubjectId}&grade=${filterGrade}&status=${filterStatus}&sort=${filterSort}&page=${p}" class="page-link-btn ${p == currentPage ? 'active' : ''}">
                                                 ${p}
                                             </a>
                                         </c:if>
                                     </c:forEach>
 
                                     <c:if test="${currentPage < totalPages}">
-                                        <a href="${pageContext.request.contextPath}/staff/courses?q=${filterQ}&subjectId=${filterSubjectId}&grade=${filterGrade}&status=${filterStatus}&sort=${filterSort}&page=${currentPage + 1}" class="page-link-btn" title="Trang tiếp">
+                                        <a href="${pageContext.request.contextPath}/admin/courses?q=${filterQ}&subjectId=${filterSubjectId}&grade=${filterGrade}&status=${filterStatus}&sort=${filterSort}&page=${currentPage + 1}" class="page-link-btn" title="Trang tiếp">
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                                         </a>
                                     </c:if>

@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -193,7 +193,7 @@
                 <div class="page-header" style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
                     <div>
                         <div style="font-size: var(--font-size-xs); color: var(--text-muted); margin-bottom: 4px;">
-                            <a href="${pageContext.request.contextPath}/staff/courses" style="color: var(--text-muted); text-decoration: none;">Đào tạo & Học vụ</a> / <span>Danh mục môn học</span>
+                            <a href="${pageContext.request.contextPath}/admin/courses" style="color: var(--text-muted); text-decoration: none;">Đào tạo & Học vụ</a> / <span>Danh mục môn học</span>
                         </div>
                         <h1 style="font-size: var(--font-size-2xl); font-weight: 800; color: var(--text); margin: 0;">
                             Quản lý Môn học
@@ -203,7 +203,7 @@
                         </p>
                     </div>
                     <div style="display: flex; gap: 12px;">
-                        <a href="${pageContext.request.contextPath}/staff/courses" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px;">
+                        <a href="${pageContext.request.contextPath}/admin/courses" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 8px;">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
                                 <path d="M6 6h10"/>
@@ -359,7 +359,7 @@
                                                     <c:out value="${empty s.description ? '—' : s.description}" />
                                                 </td>
                                                 <td style="padding: 14px 16px; text-align: center;">
-                                                    <a href="${pageContext.request.contextPath}/staff/courses?subjectId=${s.id}" style="color: var(--primary); text-decoration: none; font-weight: 600;">
+                                                    <a href="${pageContext.request.contextPath}/admin/courses?subjectId=${s.id}" style="color: var(--primary); text-decoration: none; font-weight: 600;">
                                                         ${s.totalCourses} khóa
                                                     </a>
                                                     <c:if test="${s.openCourses > 0}">
@@ -398,7 +398,7 @@
                                                         </button>
 
                                                         <!-- Toggle Status Form -->
-                                                        <form method="POST" action="${pageContext.request.contextPath}/staff/subjects/status" style="margin: 0;" onsubmit="return confirmToggleStatus('${s.name}', '${s.status}', ${s.openCourses});">
+                                                        <form method="POST" action="${pageContext.request.contextPath}/admin/subjects/status" style="margin: 0;" onsubmit="return confirmToggleStatus('${s.name}', '${s.status}', ${s.openCourses});">
                                                             <input type="hidden" name="csrfToken" value="${not empty csrfToken ? csrfToken : sessionScope.csrfToken}">
                                                             <input type="hidden" name="id" value="${s.id}">
                                                             <c:choose>
@@ -450,7 +450,7 @@
                             </svg>
                         </button>
                     </div>
-                    <form method="POST" action="${pageContext.request.contextPath}/staff/subjects/save">
+                    <form method="POST" action="${pageContext.request.contextPath}/admin/subjects/save">
                         <input type="hidden" name="csrfToken" value="${not empty csrfToken ? csrfToken : sessionScope.csrfToken}">
                         <input type="hidden" id="modalSubjectId" name="id" value="">
 

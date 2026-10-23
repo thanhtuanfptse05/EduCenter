@@ -17,10 +17,14 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Controller for Subject Catalog Management (ADM-05, UC10).
+ * Strictly restricted to ADMIN / Center Managers.
+ */
 @WebServlet(name = "SubjectManagementServlet", urlPatterns = {
-        "/staff/subjects",
-        "/staff/subjects/save",
-        "/staff/subjects/status"
+        "/admin/subjects",
+        "/admin/subjects/save",
+        "/admin/subjects/status"
 })
 public class SubjectManagementServlet extends HttpServlet {
 
@@ -38,14 +42,14 @@ public class SubjectManagementServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getServletPath();
-        if (!"/staff/subjects".equals(path)) {
+        if (!"/admin/subjects".equals(path)) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
         HttpSession session = req.getSession(false);
         UserPrincipalDTO user = (session != null) ? (UserPrincipalDTO) session.getAttribute("currentUser") : null;
-        if (user == null || (!user.isStaff() && !user.isAdmin())) {
+        if (user == null || !user.isAdmin()) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
@@ -64,9 +68,9 @@ public class SubjectManagementServlet extends HttpServlet {
         req.setAttribute("activeCount", activeCount);
         req.setAttribute("inactiveCount", inactiveCount);
         req.setAttribute("totalCourses", totalCourses);
-        req.setAttribute("pageTitle", "Quản lý môn học — EduCenter ERP");
+        req.setAttribute("pageTitle", "Quản lý danh mục môn học — EduCenter ERP");
 
-        req.getRequestDispatcher("/WEB-INF/views/staff/subject-list.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/admin/subject-list.jsp").forward(req, resp);
     }
 
     @Override
@@ -75,73 +79,77 @@ public class SubjectManagementServlet extends HttpServlet {
         HttpSession session = req.getSession(false);
         UserPrincipalDTO user = (session != null) ? (UserPrincipalDTO) session.getAttribute("currentUser") : null;
 
-        if (user == null || (!user.isStaff() && !user.isAdmin())) {
+        if (user == null || !user.isAdmin()) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
         if (!CsrfUtil.isValidToken(req)) {
             FlashMessageUtil.setError(req, "Phiên thao tác đã hết hạn hoặc mã bảo mật không hợp lệ (CSRF). Vui lòng thử lại.");
-            resp.sendRedirect(req.getContextPath() + "/staff/subjects");
+            resp.sendRedirect(req.getContextPath() + "/admin/subjects");
             return;
         }
 
         String ipAddress = req.getRemoteAddr();
 
         switch (path) {
-            case "/staff/subjects/save" -> handleSaveSubject(req, resp, user, ipAddress);
-            case "/staff/subjects/status" -> handleToggleStatus(req, resp, user, ipAddress);
+            case "/admin/subjects/save" -> handleSaveSubject(req, resp, user, ipAddress);
+            case "/admin/subjects/status" -> handleToggleStatus(req, resp, user, ipAddress);
             default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
     private void handleSaveSubject(HttpServletRequest req, HttpServletResponse resp,
                                    UserPrincipalDTO user, String ipAddress) throws IOException {
-        String idParam = req.getParameter("id");
+        String idStr = req.getParameter("id");
         String code = req.getParameter("code");
         String name = req.getParameter("name");
         String description = req.getParameter("description");
         String status = req.getParameter("status");
 
         Long id = null;
-        if (idParam != null && !idParam.trim().isEmpty()) {
-            try {
-                id = Long.parseLong(idParam.trim());
-            } catch (NumberFormatException ignored) {}
+        if (idStr != null && !idStr.trim().isEmpty()) {
+            try { id = Long.parseLong(idStr.trim()); } catch (NumberFormatException ignored) {}
         }
 
-        SubjectFormDTO dto = new SubjectFormDTO(id, code, name, description, status);
+        SubjectFormDTO dto = new SubjectFormDTO();
+        dto.setId(id);
+        dto.setCode(code);
+        dto.setName(name);
+        dto.setDescription(description);
+        dto.setStatus(status != null ? status : "ACTIVE");
+
         try {
             academicProgramService.saveSubject(dto, user.getUserId(), user.getEmail(), ipAddress);
-            FlashMessageUtil.setSuccess(req, (id == null ? "Tạo môn học mới thành công!" : "Cập nhật môn học thành công!"));
+            FlashMessageUtil.setSuccess(req, (id == null ? "Thêm mới môn học thành công!" : "Cập nhật môn học thành công!"));
         } catch (ValidationException e) {
             FlashMessageUtil.setError(req, e.getMessage());
         } catch (Exception e) {
             FlashMessageUtil.setError(req, "Lỗi khi lưu môn học: " + e.getMessage());
         }
 
-        resp.sendRedirect(req.getContextPath() + "/staff/subjects");
+        resp.sendRedirect(req.getContextPath() + "/admin/subjects");
     }
 
     private void handleToggleStatus(HttpServletRequest req, HttpServletResponse resp,
                                     UserPrincipalDTO user, String ipAddress) throws IOException {
-        String idParam = req.getParameter("id");
-        if (idParam == null || idParam.trim().isEmpty()) {
+        String idStr = req.getParameter("id");
+        if (idStr == null || idStr.trim().isEmpty()) {
             FlashMessageUtil.setError(req, "Mã môn học không hợp lệ.");
-            resp.sendRedirect(req.getContextPath() + "/staff/subjects");
+            resp.sendRedirect(req.getContextPath() + "/admin/subjects");
             return;
         }
 
         try {
-            Long id = Long.parseLong(idParam.trim());
+            Long id = Long.parseLong(idStr.trim());
             academicProgramService.toggleSubjectStatus(id, user.getUserId(), user.getEmail(), ipAddress);
-            FlashMessageUtil.setSuccess(req, "Cập nhật trạng thái môn học thành công.");
+            FlashMessageUtil.setSuccess(req, "Cập nhật trạng thái môn học thành công!");
         } catch (ValidationException e) {
             FlashMessageUtil.setError(req, e.getMessage());
         } catch (Exception e) {
-            FlashMessageUtil.setError(req, "Lỗi khi cập nhật trạng thái: " + e.getMessage());
+            FlashMessageUtil.setError(req, "Lỗi khi đổi trạng thái: " + e.getMessage());
         }
 
-        resp.sendRedirect(req.getContextPath() + "/staff/subjects");
+        resp.sendRedirect(req.getContextPath() + "/admin/subjects");
     }
 }

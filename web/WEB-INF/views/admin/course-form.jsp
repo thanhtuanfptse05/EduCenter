@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
@@ -95,7 +95,7 @@
                 <div class="page-header" style="margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
                     <div>
                         <div style="font-size: var(--font-size-xs); color: var(--text-muted); margin-bottom: 4px;">
-                            <a href="${pageContext.request.contextPath}/staff/courses" style="color: var(--text-muted); text-decoration: none;">Khóa học</a> / <span>${isEdit ? 'Chỉnh sửa' : 'Thêm mới'}</span>
+                            <a href="${pageContext.request.contextPath}/admin/courses" style="color: var(--text-muted); text-decoration: none;">Khóa học</a> / <span>${isEdit ? 'Chỉnh sửa' : 'Thêm mới'}</span>
                         </div>
                         <h1 style="font-size: var(--font-size-2xl); font-weight: 800; color: var(--text); margin: 0;">
                             ${isEdit ? 'Chỉnh sửa Khóa học' : 'Tạo Khóa học mới'}
@@ -105,7 +105,7 @@
                         </p>
                     </div>
                     <div>
-                        <a href="${pageContext.request.contextPath}/staff/courses" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 6px;">
+                        <a href="${pageContext.request.contextPath}/admin/courses" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 6px;">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                             Quay lại danh sách
                         </a>
@@ -124,7 +124,7 @@
                     </div>
                 </c:if>
 
-                <form method="POST" action="${pageContext.request.contextPath}/staff/courses/save">
+                <form method="POST" action="${pageContext.request.contextPath}/admin/courses/save">
                     <input type="hidden" name="csrfToken" value="${not empty csrfToken ? csrfToken : sessionScope.csrfToken}">
                     <c:if test="${isEdit}">
                         <input type="hidden" name="id" value="${courseForm.id}">
@@ -340,7 +340,7 @@
                                     </svg>
                                     ${isEdit ? 'Lưu cập nhật khóa học' : 'Tạo khóa học'}
                                 </button>
-                                <a href="${pageContext.request.contextPath}/staff/courses" class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: center;">
+                                <a href="${pageContext.request.contextPath}/admin/courses" class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: center;">
                                     Hủy bỏ
                                 </a>
                             </div>

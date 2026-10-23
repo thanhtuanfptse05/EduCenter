@@ -17,11 +17,15 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
+/**
+ * Controller for Course & Curriculum Management (ADM-04, ADM-05, UC11).
+ * Strictly restricted to ADMIN / Center Managers.
+ */
 @WebServlet(name = "CourseManagementServlet", urlPatterns = {
-        "/staff/courses",
-        "/staff/courses/form",
-        "/staff/courses/save",
-        "/staff/courses/status"
+        "/admin/courses",
+        "/admin/courses/form",
+        "/admin/courses/save",
+        "/admin/courses/status"
 })
 public class CourseManagementServlet extends HttpServlet {
 
@@ -42,7 +46,8 @@ public class CourseManagementServlet extends HttpServlet {
         HttpSession session = req.getSession(false);
         UserPrincipalDTO user = (session != null) ? (UserPrincipalDTO) session.getAttribute("currentUser") : null;
 
-        if (user == null || (!user.isStaff() && !user.isAdmin())) {
+        // Strictly ADMIN only
+        if (user == null || !user.isAdmin()) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
@@ -50,9 +55,9 @@ public class CourseManagementServlet extends HttpServlet {
         FlashMessageUtil.transferFlashMessagesToRequest(req);
         CsrfUtil.getOrCreateToken(session);
 
-        if ("/staff/courses".equals(path)) {
+        if ("/admin/courses".equals(path)) {
             handleList(req, resp);
-        } else if ("/staff/courses/form".equals(path)) {
+        } else if ("/admin/courses/form".equals(path)) {
             handleForm(req, resp);
         } else {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -65,22 +70,23 @@ public class CourseManagementServlet extends HttpServlet {
         HttpSession session = req.getSession(false);
         UserPrincipalDTO user = (session != null) ? (UserPrincipalDTO) session.getAttribute("currentUser") : null;
 
-        if (user == null || (!user.isStaff() && !user.isAdmin())) {
+        // Strictly ADMIN only
+        if (user == null || !user.isAdmin()) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
 
         if (!CsrfUtil.isValidToken(req)) {
             FlashMessageUtil.setError(req, "Phiên thao tác đã hết hạn hoặc mã bảo mật không hợp lệ (CSRF). Vui lòng thử lại.");
-            resp.sendRedirect(req.getContextPath() + "/staff/courses");
+            resp.sendRedirect(req.getContextPath() + "/admin/courses");
             return;
         }
 
         String ipAddress = req.getRemoteAddr();
 
         switch (path) {
-            case "/staff/courses/save" -> handleSaveCourse(req, resp, user, ipAddress);
-            case "/staff/courses/status" -> handleUpdateStatus(req, resp, user, ipAddress);
+            case "/admin/courses/save" -> handleSaveCourse(req, resp, user, ipAddress);
+            case "/admin/courses/status" -> handleUpdateStatus(req, resp, user, ipAddress);
             default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
@@ -141,7 +147,7 @@ public class CourseManagementServlet extends HttpServlet {
         req.setAttribute("filterSort", sort);
 
         req.setAttribute("pageTitle", "Quản lý khóa học & Chương trình — EduCenter ERP");
-        req.getRequestDispatcher("/WEB-INF/views/staff/course-list.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/admin/course-list.jsp").forward(req, resp);
     }
 
     private void handleForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -157,7 +163,7 @@ public class CourseManagementServlet extends HttpServlet {
                 form = academicProgramService.getCourseForm(id);
             } catch (ValidationException e) {
                 FlashMessageUtil.setError(req, e.getMessage());
-                resp.sendRedirect(req.getContextPath() + "/staff/courses");
+                resp.sendRedirect(req.getContextPath() + "/admin/courses");
                 return;
             }
         } else {
@@ -171,7 +177,7 @@ public class CourseManagementServlet extends HttpServlet {
         req.setAttribute("isEdit", id != null);
         req.setAttribute("pageTitle", (id != null ? "Chỉnh sửa khóa học: " + form.getName() : "Tạo khóa học mới") + " — EduCenter ERP");
 
-        req.getRequestDispatcher("/WEB-INF/views/staff/course-form.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/admin/course-form.jsp").forward(req, resp);
     }
 
     private void handleSaveCourse(HttpServletRequest req, HttpServletResponse resp,
@@ -209,7 +215,6 @@ public class CourseManagementServlet extends HttpServlet {
         BigDecimal fee = BigDecimal.ZERO;
         if (feeStr != null && !feeStr.trim().isEmpty()) {
             try {
-                // remove commas and whitespace if entered by user
                 String cleanFee = feeStr.replaceAll("[,\\s]", "");
                 fee = new BigDecimal(cleanFee);
             } catch (Exception ignored) {}
@@ -251,17 +256,17 @@ public class CourseManagementServlet extends HttpServlet {
         try {
             academicProgramService.saveCourse(dto, user.getUserId(), user.getEmail(), ipAddress);
             FlashMessageUtil.setSuccess(req, (id == null ? "Tạo khóa học mới thành công!" : "Cập nhật khóa học thành công!"));
-            resp.sendRedirect(req.getContextPath() + "/staff/courses");
+            resp.sendRedirect(req.getContextPath() + "/admin/courses");
         } catch (ValidationException e) {
             FlashMessageUtil.setError(req, e.getMessage());
             if (id != null) {
-                resp.sendRedirect(req.getContextPath() + "/staff/courses/form?id=" + id);
+                resp.sendRedirect(req.getContextPath() + "/admin/courses/form?id=" + id);
             } else {
-                resp.sendRedirect(req.getContextPath() + "/staff/courses/form");
+                resp.sendRedirect(req.getContextPath() + "/admin/courses/form");
             }
         } catch (Exception e) {
             FlashMessageUtil.setError(req, "Lỗi khi lưu khóa học: " + e.getMessage());
-            resp.sendRedirect(req.getContextPath() + "/staff/courses");
+            resp.sendRedirect(req.getContextPath() + "/admin/courses");
         }
     }
 
@@ -272,7 +277,7 @@ public class CourseManagementServlet extends HttpServlet {
 
         if (idStr == null || idStr.trim().isEmpty() || status == null || status.trim().isEmpty()) {
             FlashMessageUtil.setError(req, "Thông tin cập nhật trạng thái không hợp lệ.");
-            resp.sendRedirect(req.getContextPath() + "/staff/courses");
+            resp.sendRedirect(req.getContextPath() + "/admin/courses");
             return;
         }
 
@@ -286,6 +291,6 @@ public class CourseManagementServlet extends HttpServlet {
             FlashMessageUtil.setError(req, "Lỗi khi cập nhật trạng thái: " + e.getMessage());
         }
 
-        resp.sendRedirect(req.getContextPath() + "/staff/courses");
+        resp.sendRedirect(req.getContextPath() + "/admin/courses");
     }
 }

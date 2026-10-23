@@ -8,19 +8,19 @@
 
 | Method | Path | Role Required | Mô tả chức năng | Quy tắc PRG / Forward |
 |---|---|---|---|---|
-| `GET` | `/staff/courses` | `STAFF`, `ADMIN` | Màn hình danh sách khóa học (ADM-04) kèm KPI và bộ lọc | Forward tới `staff/course-list.jsp` |
-| `GET` | `/staff/courses/form` | `STAFF`, `ADMIN` | Form thêm mới hoặc sửa khóa học (ADM-05) | Forward tới `staff/course-form.jsp` |
-| `POST` | `/staff/courses/save` | `STAFF`, `ADMIN` | Lưu khóa học (tạo mới hoặc cập nhật) | Redirect `/staff/courses` hoặc `/staff/courses/form?id={id}` kèm flash message |
-| `POST` | `/staff/courses/status` | `STAFF`, `ADMIN` | Cập nhật nhanh trạng thái (`OPEN`, `CLOSED`, `ARCHIVED`) | Redirect `/staff/courses` kèm flash message |
-| `GET` | `/staff/subjects` | `STAFF`, `ADMIN` | Màn hình quản lý danh mục môn học (ADM-05) | Forward tới `staff/subject-list.jsp` |
-| `POST` | `/staff/subjects/save` | `STAFF`, `ADMIN` | Thêm mới hoặc cập nhật môn học | Redirect `/staff/subjects` kèm flash message |
-| `POST` | `/staff/subjects/status` | `STAFF`, `ADMIN` | Chuyển đổi trạng thái môn học `ACTIVE`/`INACTIVE` | Redirect `/staff/subjects` kèm flash message |
+| `GET` | `/admin/courses` | `ADMIN` | Màn hình danh sách khóa học (ADM-04) kèm KPI và bộ lọc | Forward tới `admin/course-list.jsp` |
+| `GET` | `/admin/courses/form` | `ADMIN` | Form thêm mới hoặc sửa khóa học (ADM-05) | Forward tới `admin/course-form.jsp` |
+| `POST` | `/admin/courses/save` | `ADMIN` | Lưu khóa học (tạo mới hoặc cập nhật) | Redirect `/admin/courses` hoặc `/admin/courses/form?id={id}` kèm flash message |
+| `POST` | `/admin/courses/status` | `ADMIN` | Cập nhật nhanh trạng thái (`OPEN`, `CLOSED`, `ARCHIVED`) | Redirect `/admin/courses` kèm flash message |
+| `GET` | `/admin/subjects` | `ADMIN` | Màn hình quản lý danh mục môn học (ADM-05) | Forward tới `admin/subject-list.jsp` |
+| `POST` | `/admin/subjects/save` | `ADMIN` | Thêm mới hoặc cập nhật môn học | Redirect `/admin/subjects` kèm flash message |
+| `POST` | `/admin/subjects/status` | `ADMIN` | Chuyển đổi trạng thái môn học `ACTIVE`/`INACTIVE` | Redirect `/admin/subjects` kèm flash message |
 
 ---
 
 ## 2. Request / Response Contracts
 
-### 2.1. GET `/staff/courses`
+### 2.1. GET `/admin/courses`
 - **Query Parameters:**
   - `q`: String (từ khóa tìm theo mã hoặc tên khóa học)
   - `subjectId`: Long (lọc theo môn học)
@@ -38,7 +38,7 @@
   - `pageSize`: int
   - `filterQ`, `filterSubjectId`, `filterGrade`, `filterStatus`, `filterSort`: giữ trạng thái bộ lọc
 
-### 2.2. GET `/staff/courses/form`
+### 2.2. GET `/admin/courses/form`
 - **Query Parameters:**
   - `id`: Long (tùy chọn; nếu có thì là chế độ chỉnh sửa; nếu thiếu thì là tạo mới)
 - **Request Attributes:**
@@ -46,7 +46,7 @@
   - `subjects`: `List<Subject>` (danh sách môn học active để chọn)
   - `isEdit`: boolean
 
-### 2.3. POST `/staff/courses/save`
+### 2.3. POST `/admin/courses/save`
 - **Form Data:**
   - `csrfToken`: String (bắt buộc)
   - `id`: Long (tùy chọn)
@@ -64,21 +64,21 @@
   - `isFeatured`: boolean ("on" hoặc "true")
   - `status`: String (`OPEN`, `CLOSED`, `ARCHIVED`)
 - **Validation Failure:** Lưu `courseForm` và `fieldErrors` vào session hoặc forward lại form với HTTP 200, hiển thị lỗi inline.
-- **Success:** Redirect `/staff/courses` với session flash message: `toastMessage = "Lưu khóa học thành công!"`, `toastType = "success"`.
+- **Success:** Redirect `/admin/courses` với session flash message: `toastMessage = "Lưu khóa học thành công!"`, `toastType = "success"`.
 
-### 2.4. POST `/staff/courses/status`
+### 2.4. POST `/admin/courses/status`
 - **Form Data:**
   - `csrfToken`: String (bắt buộc)
   - `id`: Long (bắt buộc)
   - `newStatus`: String (`OPEN`, `CLOSED`, `ARCHIVED`)
-- **Success:** Redirect `/staff/courses` kèm flash toast.
+- **Success:** Redirect `/admin/courses` kèm flash toast.
 
-### 2.5. GET `/staff/subjects`
+### 2.5. GET `/admin/subjects`
 - **Request Attributes:**
   - `subjects`: `List<SubjectAdminViewDTO>`
   - `stats`: Map/DTO thống kê số môn active, inactive, tổng khóa học
 
-### 2.6. POST `/staff/subjects/save`
+### 2.6. POST `/admin/subjects/save`
 - **Form Data:**
   - `csrfToken`: String (bắt buộc)
   - `id`: Long (tùy chọn)
@@ -86,9 +86,9 @@
   - `name`: String (bắt buộc)
   - `description`: String (tùy chọn)
   - `status`: String (`ACTIVE`, `INACTIVE`)
-- **Success:** Redirect `/staff/subjects` với flash toast.
+- **Success:** Redirect `/admin/subjects` với flash toast.
 
-### 2.7. POST `/staff/subjects/status`
+### 2.7. POST `/admin/subjects/status`
 - **Form Data:**
   - `csrfToken`: String (bắt buộc)
   - `id`: Long (bắt buộc)

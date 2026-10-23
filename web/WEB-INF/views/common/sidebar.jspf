@@ -25,10 +25,10 @@
             <span>Bảng điều khiển</span>
         </a>
 
-        <!-- 2. Quản lý Đào tạo & Học thuật (Staff & Admin) -->
-        <c:if test="${sessionScope.currentUser != null and (sessionScope.currentUser.staff or sessionScope.currentUser.admin)}">
-            <div class="nav-group-title">Đào tạo & Học vụ</div>
-            <a href="${pageContext.request.contextPath}/staff/courses" class="nav-link ${activeNav == 'courses' ? 'active' : ''}">
+        <!-- 2. Quản trị Đào tạo & Hệ thống (Chỉ Admin & Quản lý trung tâm) -->
+        <c:if test="${sessionScope.currentUser != null and sessionScope.currentUser.admin}">
+            <div class="nav-group-title">Học vụ & Đào tạo</div>
+            <a href="${pageContext.request.contextPath}/admin/courses" class="nav-link ${activeNav == 'courses' ? 'active' : ''}">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
                     <path d="M6 6h10"></path>
@@ -36,7 +36,7 @@
                 </svg>
                 <span>Chương trình & Khóa học</span>
             </a>
-            <a href="${pageContext.request.contextPath}/staff/subjects" class="nav-link ${activeNav == 'subjects' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/admin/subjects" class="nav-link ${activeNav == 'subjects' ? 'active' : ''}">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="m16 6 4 14"></path>
                     <path d="M12 6v14"></path>
@@ -45,11 +45,6 @@
                 </svg>
                 <span>Danh mục Môn học</span>
             </a>
-        </c:if>
-
-        <!-- 3. Quản trị hệ thống (Chỉ Admin & Quản lý) -->
-        <c:if test="${sessionScope.currentUser != null and sessionScope.currentUser.admin}">
-            <div class="nav-group-title">Hệ thống & Quản trị</div>
             <a href="${pageContext.request.contextPath}/admin/teachers" class="nav-link ${activeNav == 'teachers' ? 'active' : ''}">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
@@ -59,6 +54,8 @@
                 </svg>
                 <span>Đội ngũ Giáo viên</span>
             </a>
+
+            <div class="nav-group-title">Quản trị Hệ thống</div>
             <a href="${pageContext.request.contextPath}/admin/users" class="nav-link ${activeNav == 'users' ? 'active' : ''}">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
@@ -73,6 +70,26 @@
                     <circle cx="12" cy="12" r="3"></circle>
                 </svg>
                 <span>Cấu hình hệ thống & Tham số</span>
+            </a>
+        </c:if>
+
+        <!-- 3. Tuyển sinh & CRM (Dành cho Staff & Admin) -->
+        <c:if test="${sessionScope.currentUser != null and (sessionScope.currentUser.staff or sessionScope.currentUser.admin)}">
+            <div class="nav-group-title">Tuyển sinh & Khách hàng</div>
+            <a href="${pageContext.request.contextPath}/staff/leads" class="nav-link ${activeNav == 'leads' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <span>Tư vấn Tuyển sinh (CRM)</span>
+            </a>
+            <a href="${pageContext.request.contextPath}/staff/students" class="nav-link ${activeNav == 'students' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+                <span>Hồ sơ Học viên & Ghi danh</span>
             </a>
         </c:if>
 
