@@ -183,6 +183,11 @@ public class AuthServlet extends HttpServlet {
                     req.getContextPath() + principal.getDefaultDashboardUrl());
             resp.sendRedirect(target);
         } catch (ValidationException e) {
+            // Clear any stale principal from the existing session so the user stays on /login and sees the error
+            HttpSession currentSession = req.getSession(false);
+            if (currentSession != null) {
+                currentSession.removeAttribute("currentUser");
+            }
             FlashMessageUtil.setError(req, e.getMessage());
             req.getSession(true).setAttribute("preserved_email", email);
             String loginUrl = req.getContextPath() + "/login";

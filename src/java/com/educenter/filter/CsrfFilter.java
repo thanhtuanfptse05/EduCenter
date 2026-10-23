@@ -43,12 +43,33 @@ public class CsrfFilter implements Filter {
 
             if ("POST".equalsIgnoreCase(method)) {
                 if (!CsrfUtil.isValidToken(httpRequest)) {
+                    if (isAuthEndpoint(path)) {
+                        // Refresh CSRF token in session and redirect gracefully
+                        session.removeAttribute(CsrfUtil.CSRF_SESSION_ATTR);
+                        CsrfUtil.getOrCreateToken(session);
+                        FlashMessageUtil.setError(httpRequest, "Phiên làm việc đã hết hạn hoặc mã bảo mật không khớp. Vui lòng thử lại.");
+                        String redirectUrl = contextPath + path;
+                        String query = httpRequest.getQueryString();
+                        if (query != null && !query.isEmpty()) {
+                            redirectUrl += "?" + query;
+                        }
+                        httpResponse.sendRedirect(redirectUrl);
+                        return;
+                    }
                     httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Mã bảo mật không hợp lệ. Vui lòng tải lại trang.");
                     return;
                 }
             }
         }
         chain.doFilter(request, response);
+    }
+
+    private boolean isAuthEndpoint(String path) {
+        if (path == null) return false;
+        return path.equals("/login")
+                || path.equals("/register")
+                || path.equals("/forgot-password")
+                || path.equals("/reset-password");
     }
 
     @Override

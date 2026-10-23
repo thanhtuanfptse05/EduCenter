@@ -14,7 +14,7 @@
         <c:choose>
           <c:when test="${resetState != null and resetState.valid}">
             <!-- Token Security Badge Indicator -->
-            <div class="auth-token-badge-bar">
+            <div class="auth-token-badge-bar" data-reset-seconds="${resetState.remainingSeconds}">
               <div style="display: flex; align-items: center; gap: 8px;">
                 <span class="site-footer-uptime-dot" style="animation: pulse 2s infinite;"></span>
                 <span id="token-valid-badge" class="font-code-num" style="font-weight: 700; color: var(--text);">TOKEN VALID</span>
@@ -24,12 +24,14 @@
               <div style="display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--text);">
                 <svg class="icon icon-sm" style="color: var(--success);" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 <span class="font-code-num" id="countdown-timer">
+                  <strong id="reset-time-left">
                   <c:choose>
                     <c:when test="${resetState.remainingSeconds > 0}">
                       ${resetState.remainingSeconds / 60}:${(resetState.remainingSeconds % 60 < 10 ? '0' : '')}${resetState.remainingSeconds % 60}
                     </c:when>
                     <c:otherwise>14:59</c:otherwise>
                   </c:choose>
+                  </strong>
                 </span>
               </div>
             </div>

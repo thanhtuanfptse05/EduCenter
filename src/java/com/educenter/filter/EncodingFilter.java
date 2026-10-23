@@ -34,6 +34,11 @@ public class EncodingFilter implements Filter {
             String path = uri.substring(contextPath.length());
 
             if (!path.startsWith("/assets/")) {
+                // Prevent browser caching of dynamic responses (eliminate bfcache / back button session leaks)
+                httpResponse.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+                httpResponse.setHeader("Pragma", "no-cache");
+                httpResponse.setDateHeader("Expires", 0);
+
                 // Transfer any flash messages from session to request attributes for JSP rendering
                 FlashMessageUtil.transferFlashMessagesToRequest(httpRequest);
 
