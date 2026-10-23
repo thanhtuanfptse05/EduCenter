@@ -43,5 +43,22 @@
     <a href="${pageContext.request.contextPath}/#doi-ngu">Giáo viên</a><a href="${pageContext.request.contextPath}/#dang-ky-tu-van">Đăng ký tư vấn</a>
     <c:choose><c:when test="${not empty sessionScope.currentUser}"><a href="${pageContext.request.contextPath}${sessionScope.currentUser.defaultDashboardUrl}">Không gian của tôi</a><a href="${pageContext.request.contextPath}/profile">Hồ sơ cá nhân</a><a href="${pageContext.request.contextPath}/logout">Đăng xuất</a></c:when>
     <c:otherwise><a href="${pageContext.request.contextPath}/login">Đăng nhập</a><a href="${pageContext.request.contextPath}/register">Đăng ký tài khoản</a></c:otherwise></c:choose>
-  </nav>
 </header>
+<script>
+(function () {
+  try {
+    var h = window.location.hash;
+    if (h && h.length > 1) {
+      var links = document.querySelectorAll('.site-links .site-link, #site-mobile-menu a');
+      links.forEach(function (a) {
+        var href = a.getAttribute('href') || '';
+        if (href.endsWith(h) || href === h) {
+          a.setAttribute('aria-current', 'page');
+        } else if (a.getAttribute('aria-current') === 'page') {
+          a.setAttribute('aria-current', 'false');
+        }
+      });
+    }
+  } catch (e) {}
+})();
+</script>

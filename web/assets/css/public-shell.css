@@ -25,6 +25,7 @@ html { scroll-padding-top: calc(var(--site-header-height) + 20px); }
 .site-mobile-nav[hidden] { display: none; }
 .site-mobile-nav a { display: block; padding: 12px; color: var(--text); border-radius: var(--radius-sm); }
 .site-mobile-nav a:hover { background: var(--surface-muted); text-decoration: none; }
+.site-mobile-nav a[aria-current=page] { background: var(--primary-subtle); color: var(--primary); font-weight: 600; text-decoration: none; }
 .site-skip { position: fixed; left: 12px; top: -100px; z-index: 200; padding: 12px; background: var(--surface); color: var(--primary); }
 .site-skip:focus { top: 8px; }
 /* ==========================================================================

@@ -53,5 +53,103 @@
         window.openRoleModal(button.dataset.userId, button.dataset.userName, button.dataset.userEmail, button.dataset.userRoles);
       });
     });
+
+    // Active Hash Navigation & ScrollSpy for Landing Page Sections
+    var navLinks = document.querySelectorAll('.site-links .site-link, #site-mobile-menu a');
+    var hashSectionIds = ['thanh-tuu', 'lo-trinh-hoc-tap', 'chuong-trinh', 'mon-hoc', 'doi-ngu', 'dang-ky-tu-van'];
+    var hashSections = [];
+
+    hashSectionIds.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) hashSections.push(el);
+    });
+
+    function setActiveNav(targetHash) {
+      if (!navLinks || navLinks.length === 0) return;
+
+      var clean = (targetHash || '').replace(/^#/, '');
+
+      if (!clean) {
+        navLinks.forEach(function (a) {
+          var href = a.getAttribute('href') || '';
+          var isHome = !href.includes('#') && (href.endsWith('/') || href.endsWith('/EduCenter') || href.endsWith('/EduCenter/') || href === '');
+          a.setAttribute('aria-current', isHome ? 'page' : 'false');
+        });
+        return;
+      }
+
+      var matched = false;
+      navLinks.forEach(function (a) {
+        var href = a.getAttribute('href') || '';
+        if (href.endsWith('#' + clean) || href === '#' + clean) {
+          a.setAttribute('aria-current', 'page');
+          matched = true;
+        } else {
+          a.setAttribute('aria-current', 'false');
+        }
+      });
+
+      if (!matched && (window.location.pathname.endsWith('/') || window.location.pathname.endsWith('/EduCenter') || window.location.pathname.endsWith('/EduCenter/'))) {
+        navLinks.forEach(function (a) {
+          var href = a.getAttribute('href') || '';
+          var isHome = !href.includes('#') && (href.endsWith('/') || href.endsWith('/EduCenter') || href.endsWith('/EduCenter/') || href === '');
+          a.setAttribute('aria-current', isHome ? 'page' : 'false');
+        });
+      }
+    }
+
+    if (window.location.hash) {
+      setActiveNav(window.location.hash);
+    }
+
+    window.addEventListener('hashchange', function () {
+      setActiveNav(window.location.hash);
+    });
+
+    navLinks.forEach(function (link) {
+      link.addEventListener('click', function () {
+        var href = link.getAttribute('href') || '';
+        if (href.includes('#')) {
+          var targetId = href.substring(href.indexOf('#') + 1);
+          setActiveNav(targetId);
+        } else if (!href.includes('#') && (href.endsWith('/') || href.endsWith('/EduCenter') || href.endsWith('/EduCenter/') || href === '')) {
+          setActiveNav('');
+        }
+      });
+    });
+
+    if (hashSections.length > 0) {
+      var ticking = false;
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          window.requestAnimationFrame(function () {
+            var scrollPosition = window.scrollY + 140;
+
+            if (window.scrollY < 200) {
+              setActiveNav('');
+              ticking = false;
+              return;
+            }
+
+            var currentSectionId = '';
+            for (var i = 0; i < hashSections.length; i++) {
+              var sec = hashSections[i];
+              var top = sec.offsetTop;
+              var height = sec.offsetHeight;
+              if (scrollPosition >= top && scrollPosition < top + height) {
+                currentSectionId = sec.id;
+                break;
+              }
+            }
+
+            if (currentSectionId) {
+              setActiveNav(currentSectionId);
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+    }
   });
 })();
