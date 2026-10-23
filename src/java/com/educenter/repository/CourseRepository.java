@@ -2,6 +2,7 @@ package com.educenter.repository;
 
 import com.educenter.dto.CourseFilterDTO;
 import com.educenter.dto.ClassFactsDTO;
+import com.educenter.dto.CourseAdminStatsDTO;
 import com.educenter.entity.Course;
 import com.educenter.entity.EduClass;
 import jakarta.persistence.EntityManager;
@@ -46,6 +47,104 @@ public class CourseRepository {
         return query.getSingleResult();
     }
 
+    public List<Course> findAdminCourses(EntityManager em, CourseFilterDTO filter) {
+        StringBuilder jpql = new StringBuilder("SELECT c FROM Course c JOIN FETCH c.subject s WHERE 1=1 ");
+        appendFilterConditions(jpql, filter);
+
+        if ("fee_asc".equalsIgnoreCase(filter.getSort())) {
+            jpql.append(" ORDER BY c.fee ASC, c.id DESC");
+        } else if ("fee_desc".equalsIgnoreCase(filter.getSort())) {
+            jpql.append(" ORDER BY c.fee DESC, c.id DESC");
+        } else if ("name_asc".equalsIgnoreCase(filter.getSort())) {
+            jpql.append(" ORDER BY c.name ASC, c.id DESC");
+        } else {
+            jpql.append(" ORDER BY c.id DESC");
+        }
+
+        TypedQuery<Course> query = em.createQuery(jpql.toString(), Course.class);
+        setFilterParameters(query, filter);
+
+        query.setFirstResult(filter.getOffset());
+        query.setMaxResults(filter.getPageSize());
+
+        return query.getResultList();
+    }
+
+    public long countAdminCourses(EntityManager em, CourseFilterDTO filter) {
+        StringBuilder jpql = new StringBuilder("SELECT COUNT(c) FROM Course c JOIN c.subject s WHERE 1=1 ");
+        appendFilterConditions(jpql, filter);
+
+        TypedQuery<Long> query = em.createQuery(jpql.toString(), Long.class);
+        setFilterParameters(query, filter);
+
+        return query.getSingleResult();
+    }
+
+    public CourseAdminStatsDTO getAdminStats(EntityManager em) {
+        long totalCourses = em.createQuery("SELECT COUNT(c) FROM Course c", Long.class).getSingleResult();
+        long openCourses = em.createQuery("SELECT COUNT(c) FROM Course c WHERE c.status = 'OPEN'", Long.class).getSingleResult();
+        long closedCourses = em.createQuery("SELECT COUNT(c) FROM Course c WHERE c.status = 'CLOSED'", Long.class).getSingleResult();
+        long archivedCourses = em.createQuery("SELECT COUNT(c) FROM Course c WHERE c.status = 'ARCHIVED'", Long.class).getSingleResult();
+        long totalSubjects = em.createQuery("SELECT COUNT(s) FROM Subject s", Long.class).getSingleResult();
+        long activeSubjects = em.createQuery("SELECT COUNT(s) FROM Subject s WHERE s.status = 'ACTIVE'", Long.class).getSingleResult();
+
+        return new CourseAdminStatsDTO(totalCourses, openCourses, closedCourses, archivedCourses, totalSubjects, activeSubjects);
+    }
+
+    public boolean existsByCode(EntityManager em, String code, Long excludeId) {
+        if (code == null || code.trim().isEmpty()) {
+            return false;
+        }
+        StringBuilder jpql = new StringBuilder(
+                "SELECT COUNT(c) FROM Course c WHERE UPPER(TRIM(c.code)) = UPPER(TRIM(:code))"
+        );
+        if (excludeId != null) {
+            jpql.append(" AND c.id <> :excludeId");
+        }
+        TypedQuery<Long> query = em.createQuery(jpql.toString(), Long.class);
+        query.setParameter("code", code.trim());
+        if (excludeId != null) {
+            query.setParameter("excludeId", excludeId);
+        }
+        Long count = query.getSingleResult();
+        return count != null && count > 0;
+    }
+
+    public Course save(EntityManager em, Course course) {
+        if (course.getId() == null) {
+            em.persist(course);
+            return course;
+        } else {
+            return em.merge(course);
+        }
+    }
+
+    public Course update(EntityManager em, Course course) {
+        return em.merge(course);
+    }
+
+    public long countClassesByCourse(EntityManager em, Long courseId) {
+        if (courseId == null) return 0L;
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(cl) FROM EduClass cl WHERE cl.course.id = :courseId",
+                Long.class
+        );
+        query.setParameter("courseId", courseId);
+        Long res = query.getSingleResult();
+        return res != null ? res : 0L;
+    }
+
+    public long countOpenClassesByCourse(EntityManager em, Long courseId) {
+        if (courseId == null) return 0L;
+        TypedQuery<Long> query = em.createQuery(
+                "SELECT COUNT(cl) FROM EduClass cl WHERE cl.course.id = :courseId AND cl.status = 'OPEN'",
+                Long.class
+        );
+        query.setParameter("courseId", courseId);
+        Long res = query.getSingleResult();
+        return res != null ? res : 0L;
+    }
+
     public Optional<Course> findById(EntityManager em, Long id) {
         if (id == null) {
             return Optional.empty();
@@ -64,7 +163,6 @@ public class CourseRepository {
 
     public Optional<Course> findByIdForUpdate(EntityManager em, Long id) {
         Course course = em.find(Course.class, id, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
-        // Cart queries may already have loaded this entity before another transaction changed its fee.
         if (course != null) em.refresh(course, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
         return Optional.ofNullable(course);
     }

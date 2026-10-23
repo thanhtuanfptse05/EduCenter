@@ -25,6 +25,28 @@
             <span>Bảng điều khiển</span>
         </a>
 
+        <!-- 2. Quản lý Đào tạo & Học thuật (Staff & Admin) -->
+        <c:if test="${sessionScope.currentUser != null and (sessionScope.currentUser.staff or sessionScope.currentUser.admin)}">
+            <div class="nav-group-title">Đào tạo & Học vụ</div>
+            <a href="${pageContext.request.contextPath}/staff/courses" class="nav-link ${activeNav == 'courses' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+                    <path d="M6 6h10"></path>
+                    <path d="M6 10h10"></path>
+                </svg>
+                <span>Chương trình & Khóa học</span>
+            </a>
+            <a href="${pageContext.request.contextPath}/staff/subjects" class="nav-link ${activeNav == 'subjects' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m16 6 4 14"></path>
+                    <path d="M12 6v14"></path>
+                    <path d="M8 8v12"></path>
+                    <path d="M4 4v16"></path>
+                </svg>
+                <span>Danh mục Môn học</span>
+            </a>
+        </c:if>
+
         <!-- 3. Quản trị hệ thống (Chỉ Admin) -->
         <c:if test="${sessionScope.currentUser != null and sessionScope.currentUser.admin}">
             <div class="nav-group-title">Hệ thống & Tài khoản</div>
