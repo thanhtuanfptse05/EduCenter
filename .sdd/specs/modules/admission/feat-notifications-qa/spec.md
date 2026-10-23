@@ -1,17 +1,16 @@
 # Feature Specification: Hỏi đáp kiểm duyệt và thông báo trong ứng dụng
 
 **Feature:** `feat-notifications-qa` | **Module SRS:** M10 | **Owner:** Member 02
-**Created/Updated:** 2026-10-23 | **Version:** 2.0.0 | **Status:** Locked — baseline đặc tả nội bộ theo yêu cầu chủ dự án.
-**Implementation:** Chưa nghiệm thu; tài liệu này không xác nhận đã có code.
-**Nguồn:** SRS v1.1 III M10, V UC28/29/30, VI BR17, VIII COM-01/02/03, ADM-17, XVII 3.8; **Use cases:** UC28, UC29, UC30.
+**Created/Updated:** 2026-10-24 | **Version:** 2.1.0 | **Status:** PHẦN Q&A ĐÃ HỦY TRIỂN KHAI (D19)
+**Implementation:** Theo quyết định D19 (2026-10-24), toàn bộ phần Diễn đàn Hỏi đáp Q&A (UC29, UC30; COM-01, COM-02, ADM-17) đã chính thức bị LOẠI KHỎI PHẠM VI DỰ ÁN theo yêu cầu của Product Owner để tinh giản hệ thống.
 
-Kế thừa [quyết định chung](../../../decisions.md), [quality gates](../../../quality-gates.md), [hợp đồng dữ liệu](../../../data-contract.md), [tích hợp](../../../integration.md), [màn hình](../../../screen-map.md) và [module](../module.md). FR/SC là mã cục bộ của feature này. Locked không thay thế phê duyệt khách hàng/giảng viên.
+Kế thừa [quyết định chung](../../../decisions.md), [quality gates](../../../quality-gates.md), [hợp đồng dữ liệu](../../../data-contract.md), [tích hợp](../../../integration.md), [màn hình](../../../screen-map.md) và [module](../module.md).
 
 ## Business Context & Scope
 
-Cộng đồng hỏi đáp cần nội dung được duyệt và kênh thông báo cá nhân đúng người để liên hệ trung tâm mà không công khai dữ liệu riêng.
-
-**Trong phạm vi:** Đặt câu hỏi, trả lời, tìm/đọc công khai, duyệt/từ chối/ẩn P0; tạo/nhận/đánh dấu đọc thông báo trong app UC28 P1.
+**Trạng thái hiện tại:** ĐÃ LOẠI BỎ KHỎI PHẠM VI (OUT OF SCOPE theo D19).
+- Bảng CSDL `Questions` và `Answers` được giữ nguyên trong schema hiện tại để tránh can thiệp CSDL, nhưng không triển khai giao diện hoặc mã nguồn xử lý.
+- Không đưa vào danh mục nghiệm thu hay kế hoạch kiểm thử P0.
 
 **Ngoài phạm vi:** Chat realtime, email/SMS/Zalo tự động, public thông tin học phí/điểm/hồ sơ riêng, nội dung rich HTML không kiểm soát.
 

@@ -34,7 +34,7 @@ ID chuẩn lấy từ SRS VIII, không lấy ID trùng nghĩa trong prototype. U
 | ADM-14 | Hóa đơn học phí: `/staff/invoices` | ADMIN/STAFF | `/staff/invoices/create` | `/WEB-INF/views/staff/invoice-list.jsp` | feat-tuition-payment | Student/Class/status/due; create idempotent chỉ initial Invoice còn thiếu hợp lệ |
 | ADM-15 | Chi tiết hóa đơn / thu tiền: `/staff/invoices/detail?id={id}` | ADMIN/STAFF | `/staff/invoices/payment`; `/staff/invoices/adjust`; `/staff/invoices/refund`; `/staff/invoices/cancel` | `/WEB-INF/views/staff/invoice-detail.jsp` | feat-tuition-payment | Invoice/amount/method/ref/requestKey; adjust/refund/cancel ADMIN; print GET chỉ đọc |
 | ADM-16 | Báo cáo thống kê: `/admin/reports` | ADMIN | — | `/WEB-INF/views/admin/reports.jsp` | feat-dashboard-reporting | from/to/subject/course/class/asOf; đúng định nghĩa cohort/ledger |
-| ADM-17 | Duyệt Q&A: `/staff/questions` | ADMIN/STAFF | `/staff/questions/moderate`; `/staff/questions/answers/save` | `/WEB-INF/views/staff/question-moderation.jsp` | feat-notifications-qa | Question/Answer/version/status/reason; khác tác giả |
+| ~~ADM-17~~ | *Duyệt Q&A: `/staff/questions`* | *Đã loại bỏ khỏi phạm vi theo D19* | — | — | feat-notifications-qa | *HỦY TRIỂN KHAI / OUT OF SCOPE* |
 | ADM-18 | Quản lý tài khoản và quyền: `/admin/users` | ADMIN | `/admin/users`; `/admin/users/status`; `/admin/users/roles` | `/WEB-INF/views/admin/user-list.jsp` | feat-auth-rbac | action create/status/roles; targetId/roleCodes/actionStatus; filter status tách biệt |
 | ADM-19 | Cấu hình và nhật ký: `/admin/settings` | ADMIN | `/admin/settings/save` | `/WEB-INF/views/admin/settings.jsp` | feat-system-administration | allowlist typed settings/version; tab audit P1 chỉ đọc |
 | TCH-01 | Dashboard giáo viên: `/teacher/dashboard` | TEACHER/ADMIN theo phạm vi | — | `/WEB-INF/views/teacher/dashboard.jsp` | feat-class-timetable | lịch/lớp/tác vụ thật; có lịch thử được giao |
@@ -50,8 +50,8 @@ ID chuẩn lấy từ SRS VIII, không lấy ID trùng nghĩa trong prototype. U
 | PAR-01 | Dashboard phụ huynh: `/parent/dashboard` | PARENT verified | — | `/WEB-INF/views/parent/dashboard.jsp` | feat-student-parent-portal | bộ chọn con từ StudentGuardians verified chưa revoked |
 | PAR-02 | Hồ sơ theo dõi con: `/parent/children/detail?id={id}` | PARENT verified con chọn | — | `/WEB-INF/views/parent/child-detail.jsp` | feat-student-parent-portal | id Student; lịch/chuyên cần/điểm PUBLISHED/phí riêng |
 | PAR-03 | Học phí và thông báo: `/parent/tuition` | PARENT verified con chọn | — | `/WEB-INF/views/parent/tuition.jsp` | feat-tuition-payment | studentId; học phí/notification đúng con, link COM-03 |
-| COM-01 | Danh sách câu hỏi: `/questions` | Guest/All theo visibility | — | `/WEB-INF/views/common/question-list.jsp` | feat-notifications-qa | keyword/course/page; chỉ PUBLIC APPROVED với Guest |
-| COM-02 | Chi tiết/đặt câu hỏi: `/questions/detail?id={id}` | Guest đọc approved; login thao tác | `/questions/save`; `/questions/answers/save`; `/questions/update` | `/WEB-INF/views/common/question-detail.jsp` | feat-notifications-qa | id; tạo ở /questions/new; tác giả thấy trạng thái; Teacher đúng khóa |
+| ~~COM-01~~ | *Danh sách câu hỏi: `/questions`* | *Đã loại bỏ khỏi phạm vi theo D19* | — | — | feat-notifications-qa | *HỦY TRIỂN KHAI / OUT OF SCOPE* |
+| ~~COM-02~~ | *Chi tiết/đặt câu hỏi: `/questions/detail?id={id}`* | *Đã loại bỏ khỏi phạm vi theo D19* | — | — | feat-notifications-qa | *HỦY TRIỂN KHAI / OUT OF SCOPE* |
 | COM-03 | Thông báo cá nhân: `/notifications` | Đã login, của mình | `/notifications/read`; `/notifications/send` | `/WEB-INF/views/common/notifications.jsp` | feat-notifications-qa | read chỉ recipient; send STAFF/ADMIN đúng phạm vi; UC28 P1 |
 | SYS-01 | Không có quyền: `/errors/403` | All | — | `/WEB-INF/views/common/403.jsp` | feat-auth-rbac | HTTP403, không lộ dữ liệu; link về trang được phép |
 | SYS-02 | Không tìm thấy: `/errors/404` | All | — | `/WEB-INF/views/common/404.jsp` | feat-auth-rbac | HTTP404, không lộ stacktrace; link home/search |
@@ -91,6 +91,6 @@ ID chuẩn lấy từ SRS VIII, không lấy ID trùng nghĩa trong prototype. U
 4. FLOW-04: AUTH-01→TCH-01→TCH-02→TCH-03→TCH-04(P1)→TCH-05→TCH-06; P0 bỏ bước journal vẫn hoàn tất attendance được.
 5. FLOW-05: AUTH-01→PAR-01→PAR-02→PAR-03→COM-02, luôn kiểm liên kết hiện hành.
 6. FLOW-06: AUTH-01→ADM-14→ADM-15→ADM-14→ADM-16; payment thành công chỉ sau commit, lỗi không ghi dở.
-7. FLOW-07: COM-01→COM-02→ADM-17 duyệt Question→COM-01/02→ADM-17 duyệt Answer; cần moderator khác tác giả.
+7. ~~FLOW-07~~: *(Đã loại bỏ khỏi phạm vi triển khai theo Quyết định D19)*.
 
 Không tự thêm chức năng export CSV/PDF hoặc link chính sách chết vì prototype có nút. Nếu cần export trong giai đoạn sau phải đặc tả và kiểm quyền riêng; baseline yêu cầu báo cáo trên web và biên lai nội bộ.

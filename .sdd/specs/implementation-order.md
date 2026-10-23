@@ -27,7 +27,7 @@ Plan/tasks hiện có thuộc baseline cũ đã được đánh dấu lịch s�
 | 12 | **Điểm danh P0** — UC20 | Lịch + EnrollmentHistory + Teacher permissions | Roster theo ngày,4 trạng thái, hoàn tất/correction, chuyên cần D11 | UAT-03 điểm danh; unique attendance; thiếu không tự PRESENT; không journal vẫn chạy |
 | 13 | **Kiểm tra/điểm/tiến bộ** — UC22–24 | Lớp/Teacher/roster + Auth/audit | Assessment/Score/thang/trọng số, publish/correction, dữ liệu tiến bộ chuẩn hóa | UAT-04; nháp không lộ; AVG/MIN/MAX đúng nhiều thang |
 | 14 | **Student/Parent Portal hoàn chỉnh** — UC19/24/27 | Quan hệ + lịch + Attendance + PublishedScore + Finance | Dashboard/lịch/tiến bộ/phí thật; chọn con, link receipt an toàn; không phải trang điều hướng đơn thuần | UAT-07 toàn bộ và đối chiếu từng số nguồn; không mock để lấp phân khu |
-| 15 | **Q&A P0** — UC29/30 | Auth + Course/phân công + quan hệ riêng | Ask/answer/moderation/search/public/private đúng trạng thái; không tự duyệt | UAT-08 phần Q&A; đủ ASM3.8; chưa cần notification P1 |
+| 15 | ~~**Q&A P0** — UC29/30~~ | *Đã loại bỏ khỏi phạm vi theo Quyết định D19* | *Đã hủy triển khai theo chỉ đạo của PO (2026-10-24)* | *OUT OF SCOPE* |
 | 16 | **Dashboard và báo cáo** — UC31–33 | CRM/Enrollment/Lịch/Attendance/Score/Finance đủ nguồn | KPI thật, cohort conversion, chuyên cần/điểm, nghĩa vụ/thu/nợ, đủ5 aggregates, drill-down | UAT-10; không JOIN nhân tổng, không trộn tiền thu/phải thu; Teacher chỉ lớp mình |
 | 17 | **Kiểm thử xuyên suốt và bàn giao MVP P0** | Các bước trên đạt gate |31 UC P0 có bằng chứng; WAR/migration/install docs/ERD/URL map/demo luồng, main chạy được | UAT-01–10 phần P0, QG01–12, không lỗi nghiêm trọng quyền/tài chính; báo thật giới hạn môi trường |
 
