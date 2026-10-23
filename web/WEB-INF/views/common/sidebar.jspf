@@ -141,6 +141,45 @@
             </a>
         </c:if>
 
+        <!-- 3b. Cổng học tập dành cho Học viên (Student) -->
+        <c:if test="${sessionScope.currentUser != null and sessionScope.currentUser.student}">
+            <div class="nav-group-title">Học tập của tôi</div>
+            <a href="${pageContext.request.contextPath}/student/dashboard" class="nav-link ${activeNav == 'student-dashboard' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                    <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                    <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                    <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+                </svg>
+                <span>Tổng quan học tập</span>
+            </a>
+            <a href="${pageContext.request.contextPath}/student/schedule" class="nav-link ${activeNav == 'student-schedule' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Thời khóa biểu & Ca học</span>
+            </a>
+            <a href="${pageContext.request.contextPath}/student/progress" class="nav-link ${activeNav == 'student-progress' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+                <span>Điểm số & Chuyên cần</span>
+            </a>
+        </c:if>
+
+        <!-- 3c. Cổng giám sát dành cho Phụ huynh (Parent) -->
+        <c:if test="${sessionScope.currentUser != null and sessionScope.currentUser.parent}">
+            <div class="nav-group-title">Giám sát con học</div>
+            <a href="${pageContext.request.contextPath}/parent/dashboard" class="nav-link ${activeNav == 'parent-dashboard' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <path d="m9 12 2 2 4-4"></path>
+                </svg>
+                <span>Tiến độ & Kết quả của con</span>
+            </a>
+        </c:if>
+
         <!-- 4. Cá nhân -->
         <div class="nav-group-title">Cá nhân</div>
         <a href="${pageContext.request.contextPath}/profile" class="nav-link ${activeNav == 'profile' ? 'active' : ''}">

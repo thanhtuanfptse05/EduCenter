@@ -21,6 +21,10 @@
         <class>com.educenter.entity.Student</class>
         <class>com.educenter.entity.Guardian</class>
         <class>com.educenter.entity.StudentGuardian</class>
+        <class>com.educenter.entity.Enrollment</class>
+        <class>com.educenter.entity.Attendance</class>
+        <class>com.educenter.entity.Assessment</class>
+        <class>com.educenter.entity.AssessmentScore</class>
 
         <!-- Cấu hình kết nối Microsoft SQL Server -->
         <properties>
