@@ -127,6 +127,7 @@ public class AuthServlet extends HttpServlet {
             return;
         }
         req.setAttribute("token", token.trim());
+        req.setAttribute("resetState", authService.inspectPasswordReset(token.trim()));
         req.setAttribute("pageTitle", "Đặt lại mật khẩu — EduCenter ERP");
         req.getRequestDispatcher("/WEB-INF/views/auth/reset-password.jsp").forward(req, resp);
     }
@@ -160,17 +161,25 @@ public class AuthServlet extends HttpServlet {
 
             // FR-002: Renew session on login (prevent session fixation)
             HttpSession oldSession = req.getSession(false);
+            Object guestCart = oldSession == null ? null : oldSession.getAttribute(com.educenter.service.CartServiceImpl.SESSION_CART_KEY);
             if (oldSession != null) {
                 oldSession.invalidate();
             }
             HttpSession newSession = req.getSession(true);
             newSession.setMaxInactiveInterval(30 * 60); // 30 minutes
             newSession.setAttribute("currentUser", principal);
+            if (guestCart != null) newSession.setAttribute(com.educenter.service.CartServiceImpl.SESSION_CART_KEY, guestCart);
             CsrfUtil.getOrCreateToken(newSession);
+
+            try {
+                new com.educenter.service.CartServiceImpl().mergeGuestCart(newSession, principal.getUserId());
+            } catch (RuntimeException ex) {
+                FlashMessageUtil.setWarning(req, "Đã giữ lại lựa chọn từ giỏ khách. Vui lòng kiểm tra danh sách đăng ký trước khi xác nhận.");
+            }
 
             FlashMessageUtil.setSuccess(req, "Đăng nhập thành công! Chào mừng " + principal.getFullName() + ".");
 
-            String target = RouteUtil.resolveSafeRedirect(redirectUrl, req.getContextPath(),
+            String target = RouteUtil.resolveAuthorizedRedirect(redirectUrl, req.getContextPath(), principal,
                     req.getContextPath() + principal.getDefaultDashboardUrl());
             resp.sendRedirect(target);
         } catch (ValidationException e) {
@@ -178,7 +187,7 @@ public class AuthServlet extends HttpServlet {
             req.getSession(true).setAttribute("preserved_email", email);
             String loginUrl = req.getContextPath() + "/login";
             if (redirectUrl != null && !redirectUrl.isEmpty()) {
-                loginUrl += "?redirect_url=" + redirectUrl;
+                loginUrl += "?redirect_url=" + java.net.URLEncoder.encode(redirectUrl, java.nio.charset.StandardCharsets.UTF_8);
             }
             resp.sendRedirect(loginUrl);
         }
@@ -242,6 +251,8 @@ public class AuthServlet extends HttpServlet {
 
         try {
             authService.resetPassword(token, newPassword, confirmNewPassword);
+            HttpSession existingSession = req.getSession(false);
+            if (existingSession != null) existingSession.invalidate();
             FlashMessageUtil.setSuccess(req, "Đặt lại mật khẩu thành công! Vui lòng đăng nhập bằng mật khẩu mới.");
             resp.sendRedirect(req.getContextPath() + "/login");
         } catch (ValidationException e) {
@@ -265,6 +276,7 @@ public class AuthServlet extends HttpServlet {
             String confirmNewPassword = req.getParameter("confirmNewPassword");
             try {
                 authService.changePassword(currentUser.getUserId(), currentPassword, newPassword, confirmNewPassword);
+                session.setAttribute("currentUser", authService.refreshPrincipal(currentUser.getUserId()));
                 FlashMessageUtil.setSuccess(req, "Đổi mật khẩu thành công! Tài khoản của bạn đã được bảo vệ.");
             } catch (ValidationException e) {
                 FlashMessageUtil.setError(req, e.getMessage());

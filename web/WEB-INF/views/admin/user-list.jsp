@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css">
 </head>
 <body>
+<c:set var="internalShell" value="true" scope="request"/>
     <div class="admin-layout">
         <c:set var="activeNav" value="users" scope="request" />
         <c:set var="breadcrumb" value="Quản trị người dùng & Phân quyền" scope="request" />
@@ -86,11 +87,9 @@
                         <!-- Role Filter -->
                         <select name="role" class="filter-select">
                             <option value="">-- Tất cả vai trò --</option>
-                            <option value="ADMIN" ${pageData.roleCode == 'ADMIN' ? 'selected' : ''}>Quản trị viên (ADMIN)</option>
-                            <option value="STAFF" ${pageData.roleCode == 'STAFF' ? 'selected' : ''}>Nhân viên tuyển sinh (STAFF)</option>
-                            <option value="TEACHER" ${pageData.roleCode == 'TEACHER' ? 'selected' : ''}>Giáo viên (TEACHER)</option>
-                            <option value="STUDENT" ${pageData.roleCode == 'STUDENT' ? 'selected' : ''}>Học viên (STUDENT)</option>
-                            <option value="PARENT" ${pageData.roleCode == 'PARENT' ? 'selected' : ''}>Phụ huynh (PARENT)</option>
+                            <c:forEach var="role" items="${pageData.availableRoles}">
+                                <option value="<c:out value='${role.code}'/>" ${pageData.roleCode == role.code ? 'selected' : ''}><c:out value="${role.name}"/> (<c:out value="${role.code}"/>)</option>
+                            </c:forEach>
                         </select>
 
                         <!-- Status Filter -->
@@ -190,7 +189,7 @@
                                             <td style="text-align: right; white-space: nowrap;">
                                                 <!-- Assign Roles Button -->
                                                 <button type="button" class="btn btn-secondary btn-sm"
-                                                        onclick="openRoleModal('${user.id}', '${user.fullName}', '${user.email}', '${String.join(',', user.roleCodes)}')">
+                                                        data-role-editor data-user-id="${user.id}" data-user-name="<c:out value='${user.fullName}'/>" data-user-email="<c:out value='${user.email}'/>" data-user-roles="<c:forEach var='roleCode' items='${user.roleCodes}' varStatus='roleStatus'><c:out value='${roleCode}'/><c:if test='${not roleStatus.last}'>,</c:if></c:forEach>">
                                                     <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                                         <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                                                         <circle cx="9" cy="7" r="4"></circle>
@@ -210,9 +209,9 @@
 
                                                     <c:choose>
                                                         <c:when test="${user.active}">
-                                                            <input type="hidden" name="status" value="LOCKED">
+                                                            <input type="hidden" name="actionStatus" value="LOCKED">
                                                             <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--danger);"
-                                                                    onclick="return confirm('Bạn có chắc chắn muốn TẠM KHÓA tài khoản ${user.email} không?');"
+                                                                    onclick="return confirm('Xác nhận thay đổi trạng thái tài khoản này?');"
                                                                     title="Khóa tài khoản">
                                                                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                                                     <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
@@ -222,9 +221,9 @@
                                                             </button>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <input type="hidden" name="status" value="ACTIVE">
+                                                            <input type="hidden" name="actionStatus" value="ACTIVE">
                                                             <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--success);"
-                                                                    onclick="return confirm('Mở khóa tài khoản ${user.email}?');"
+                                                                    onclick="return confirm('Xác nhận thay đổi trạng thái tài khoản này?');"
                                                                     title="Mở khóa tài khoản">
                                                                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                                                     <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
@@ -318,26 +317,12 @@
                     </p>
 
                     <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 14px;">
-                        <label class="auth-checkbox-label" style="padding: 6px 0;">
-                            <input type="checkbox" name="roles" value="ADMIN" id="role-ADMIN">
-                            <span><strong>ADMIN</strong> — Quản trị viên & Giám đốc trung tâm</span>
-                        </label>
-                        <label class="auth-checkbox-label" style="padding: 6px 0;">
-                            <input type="checkbox" name="roles" value="STAFF" id="role-STAFF">
-                            <span><strong>STAFF</strong> — Nhân viên tuyển sinh & Quản lý học vụ</span>
-                        </label>
-                        <label class="auth-checkbox-label" style="padding: 6px 0;">
-                            <input type="checkbox" name="roles" value="TEACHER" id="role-TEACHER">
-                            <span><strong>TEACHER</strong> — Giáo viên / Gia sư giảng dạy</span>
-                        </label>
-                        <label class="auth-checkbox-label" style="padding: 6px 0;">
-                            <input type="checkbox" name="roles" value="STUDENT" id="role-STUDENT">
-                            <span><strong>STUDENT</strong> — Học viên đăng ký & học tập</span>
-                        </label>
-                        <label class="auth-checkbox-label" style="padding: 6px 0;">
-                            <input type="checkbox" name="roles" value="PARENT" id="role-PARENT">
-                            <span><strong>PARENT</strong> — Phụ huynh giám hộ</span>
-                        </label>
+                        <c:forEach var="role" items="${pageData.availableRoles}">
+                            <label class="auth-checkbox-label" style="padding: 6px 0;">
+                                <input type="checkbox" name="roles" value="<c:out value='${role.code}'/>" id="role-<c:out value='${role.code}'/>">
+                                <span><strong><c:out value="${role.code}"/></strong> — <c:out value="${role.name}"/></span>
+                            </label>
+                        </c:forEach>
                     </div>
                 </div>
 
@@ -358,10 +343,8 @@
         document.getElementById('modal-userEmail').textContent = email;
 
         // Reset checkboxes
-        var allRoles = ['ADMIN', 'STAFF', 'TEACHER', 'STUDENT', 'PARENT'];
-        allRoles.forEach(function (r) {
-            var cb = document.getElementById('role-' + r);
-            if (cb) cb.checked = false;
+        document.querySelectorAll('#roleModal input[name="roles"]').forEach(function (checkbox) {
+            checkbox.checked = false;
         });
 
         // Check user's assigned roles

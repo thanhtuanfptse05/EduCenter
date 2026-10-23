@@ -19,6 +19,7 @@ import java.util.Arrays;
         "/registration-cart",
         "/registration-cart/add",
         "/registration-cart/remove",
+        "/registration-cart/update",
         "/registration-cart/clear",
         "/registration/confirm"
 })
@@ -38,6 +39,9 @@ public class RegistrationCartServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getServletPath();
+        if (!"/registration-cart".equals(path) && !"/registration/confirm".equals(path)) {
+            resp.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED); return;
+        }
         FlashMessageUtil.transferFlashMessagesToRequest(req);
         HttpSession session = req.getSession(true);
         CsrfUtil.getOrCreateToken(session);
@@ -64,10 +68,13 @@ public class RegistrationCartServlet extends HttpServlet {
                     form.setPhoneNumber(currentUser.getPhone());
                     form.setEmail(currentUser.getEmail());
                 }
-                form.setConsentChecked(true);
             } else {
                 session.removeAttribute("CHECKOUT_FORM_DRAFT");
             }
+
+            if (session.getAttribute(CartServiceImpl.CHECKOUT_TOKEN) == null)
+                session.setAttribute(CartServiceImpl.CHECKOUT_TOKEN, java.util.UUID.randomUUID().toString());
+            form.setSubmissionToken((String) session.getAttribute(CartServiceImpl.CHECKOUT_TOKEN));
 
             req.setAttribute("form", form);
             req.setAttribute("pageTitle", "Xác Nhận Nhu Cầu Đăng Ký Khóa Học — EduCenter");
@@ -92,12 +99,24 @@ public class RegistrationCartServlet extends HttpServlet {
         UserPrincipalDTO currentUser = (UserPrincipalDTO) session.getAttribute("currentUser");
         Long userId = (currentUser != null) ? currentUser.getUserId() : null;
 
-        switch (path) {
+        try { switch (path) {
             case "/registration-cart/add" -> handleAddToCart(req, resp, session, userId);
             case "/registration-cart/remove" -> handleRemoveFromCart(req, resp, session, userId);
+            case "/registration-cart/update" -> {
+                cartService.updateNotes(session, userId, Long.valueOf(req.getParameter("courseId")), req.getParameter("notes"));
+                FlashMessageUtil.setSuccess(req, "Đã cập nhật ghi chú đăng ký.");
+                resp.sendRedirect(req.getContextPath() + "/registration-cart");
+            }
             case "/registration-cart/clear" -> handleClearCart(req, resp, session, userId);
             case "/registration/confirm" -> handleConfirmRegistration(req, resp, session, userId);
             default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } } catch (ValidationException | NumberFormatException e) {
+            FlashMessageUtil.setError(req, e instanceof ValidationException ? e.getMessage() : "Mã khóa học không hợp lệ.");
+            resp.sendRedirect(req.getContextPath() + "/registration-cart");
+        } catch (RuntimeException e) {
+            getServletContext().log("Cart operation failed", e);
+            FlashMessageUtil.setError(req, "Chưa thể cập nhật đăng ký. Dữ liệu của bạn được giữ lại, vui lòng thử lại.");
+            resp.sendRedirect(req.getContextPath() + "/registration-cart");
         }
     }
 
@@ -113,8 +132,9 @@ public class RegistrationCartServlet extends HttpServlet {
 
         try {
             Long courseId = Long.parseLong(courseIdParam.trim());
-            cartService.addToCart(session, userId, courseId, notes);
-            FlashMessageUtil.setSuccess(req, "Đã thêm thành công khóa học vào danh sách đăng ký của bạn!");
+            boolean added = cartService.addToCart(session, userId, courseId, notes);
+            if (added) FlashMessageUtil.setSuccess(req, "Đã thêm khóa học vào danh sách đăng ký.");
+            else FlashMessageUtil.setInfo(req, "Khóa học này đã có trong danh sách đăng ký của bạn.");
             resp.sendRedirect(req.getContextPath() + "/registration-cart");
         } catch (ValidationException ve) {
             FlashMessageUtil.setError(req, ve.getMessage());
@@ -163,6 +183,7 @@ public class RegistrationCartServlet extends HttpServlet {
         }
         checkout.setNotes(req.getParameter("notes"));
         checkout.setConsentChecked(req.getParameter("consentCheck") != null);
+        checkout.setSubmissionToken(req.getParameter("submissionToken"));
 
         try {
             // Save lead and clear cart
@@ -173,8 +194,9 @@ public class RegistrationCartServlet extends HttpServlet {
             session.setAttribute("LAST_LEAD_GRADE", checkout.getGradeLevel());
 
             resp.sendRedirect(req.getContextPath() + "/consultation/success?code=" + leadCode);
-        } catch (ValidationException ve) {
-            FlashMessageUtil.setError(req, ve.getMessage());
+        } catch (RuntimeException ve) {
+            if (!(ve instanceof ValidationException)) getServletContext().log("Registration transaction failed", ve);
+            FlashMessageUtil.setError(req, ve instanceof ValidationException ? ve.getMessage() : "Chưa thể lưu hồ sơ. Vui lòng thử lại; danh sách đăng ký đã được giữ nguyên.");
             session.setAttribute("CHECKOUT_FORM_DRAFT", checkout);
             resp.sendRedirect(req.getContextPath() + "/registration/confirm");
         }

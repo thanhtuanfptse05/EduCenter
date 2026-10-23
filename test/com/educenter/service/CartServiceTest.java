@@ -19,7 +19,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("CartService — Course Cart Operations, Combo Discounts & Lead Conversion Tests")
+@DisplayName("CartService — Registration integrity and listed fees")
 public class CartServiceTest {
 
     private CartService cartService;
@@ -35,6 +35,7 @@ public class CartServiceTest {
         public Optional<Course> findById(EntityManager em, Long id) {
             return Optional.ofNullable(store.get(id));
         }
+        @Override public Optional<Course> findByIdForUpdate(EntityManager em, Long id) { return findById(em, id); }
     }
 
     static class MockRegistrationCartRepository extends RegistrationCartRepository {
@@ -79,18 +80,86 @@ public class CartServiceTest {
         public Optional<User> findById(EntityManager em, Long id) {
             return Optional.ofNullable(users.get(id));
         }
+        @Override public Optional<User> findByIdWithLock(EntityManager em, Long id) { return findById(em, id); }
     }
 
     static class MockLeadRepository extends LeadRepository {
+        boolean failSave;
         List<Lead> leads = new ArrayList<>();
         long genId = 89L;
 
         @Override
         public Lead save(EntityManager em, Lead lead) {
+            if (failSave) throw new IllegalStateException("simulated persistence failure");
             lead.setId(genId++);
             leads.add(lead);
             return lead;
         }
+    }
+
+    private RegistrationCheckoutDTO checkout(HttpSession session) {
+        RegistrationCheckoutDTO form = new RegistrationCheckoutDTO();
+        form.setFullName("Nguyễn Văn Tuấn"); form.setPhoneNumber("0912345678"); form.setGradeLevel(12);
+        form.setConsentChecked(true); form.setSubmissionToken("regression-token");
+        session.setAttribute(CartServiceImpl.CHECKOUT_TOKEN, "regression-token");
+        return form;
+    }
+
+    @Test
+    void testMergePreservesUniqueGuestAndAccountSelections() {
+        HttpSession guest = new MockHttpSession();
+        cartService.addToCart(guest, null, 1L, "Ưu tiên buổi tối");
+        cartService.addToCart(guest, 10L, 2L, null);
+        cartService.mergeGuestCart(guest, 10L);
+        assertEquals(2, cartService.getCart(guest, 10L).getTotalCourses());
+        assertNull(guest.getAttribute(CartServiceImpl.SESSION_CART_KEY));
+        assertFalse(cartService.addToCart(guest, 10L, 1L, null));
+        assertEquals(2, mockCartRepo.items.size());
+    }
+
+    @Test
+    void testNotesCanBeEditedAndCleared() {
+        HttpSession session = new MockHttpSession();
+        cartService.addToCart(session, null, 1L, "Ban đầu");
+        cartService.updateNotes(session, null, 1L, "Lịch mới");
+        assertEquals("Lịch mới", cartService.getCart(session, null).getItems().get(0).getNotes());
+        cartService.updateNotes(session, null, 1L, "");
+        assertNull(cartService.getCart(session, null).getItems().get(0).getNotes());
+    }
+
+    @Test
+    void testFailedPersistencePreservesGuestCartAndCheckoutToken() {
+        HttpSession session = new MockHttpSession();
+        cartService.addToCart(session, null, 1L, null);
+        RegistrationCheckoutDTO form = checkout(session); mockLeadRepo.failSave = true;
+        assertThrows(IllegalStateException.class, () -> cartService.confirmRegistration(session, null, form));
+        assertEquals(1, cartService.getCart(session, null).getTotalCourses());
+        assertEquals("regression-token", session.getAttribute(CartServiceImpl.CHECKOUT_TOKEN));
+        assertNull(session.getAttribute(CartServiceImpl.RECEIPT_KEY));
+    }
+
+    @Test
+    void testRepeatedConfirmationReturnsSameReceiptWithoutAnotherLead() {
+        HttpSession session = new MockHttpSession();
+        cartService.addToCart(session, null, 1L, "Lịch ưu tiên");
+        RegistrationCheckoutDTO form = checkout(session);
+        String first = cartService.confirmRegistration(session, null, form);
+        assertEquals(first, cartService.confirmRegistration(session, null, form));
+        assertEquals(1, mockLeadRepo.leads.size());
+        assertTrue(mockLeadRepo.leads.get(0).getNotes().contains("Lịch ưu tiên"));
+        assertFalse(mockLeadRepo.leads.get(0).getNotes().contains("combo"));
+    }
+
+    @Test
+    void testConcurrentDuplicateGuestAddsRemainUnique() throws Exception {
+        HttpSession session = new MockHttpSession();
+        java.util.concurrent.ExecutorService pool = java.util.concurrent.Executors.newFixedThreadPool(2);
+        try {
+            var first = pool.submit(() -> cartService.addToCart(session, null, 1L, null));
+            var second = pool.submit(() -> cartService.addToCart(session, null, 1L, null));
+            assertNotEquals(first.get(), second.get());
+            assertEquals(1, cartService.getCart(session, null).getTotalCourses());
+        } finally { pool.shutdownNow(); }
     }
 
     static class MockHttpSession implements HttpSession {
@@ -188,16 +257,16 @@ public class CartServiceTest {
         assertEquals(1, cart1.getTotalCourses());
         assertEquals(new BigDecimal("3600000"), cart1.getTotalFee());
 
-        // Add the same course again with updated note
+        // Duplicate addition does not silently change the existing note
         cartService.addToCart(session, null, 1L, "Lịch tối thứ 5");
         CartViewDTO cart2 = cartService.getCart(session, null);
         assertEquals(1, cart2.getTotalCourses(), "Should not duplicate course item");
-        assertEquals("Lịch tối thứ 5", cart2.getItems().get(0).getNotes());
+        assertEquals("Lịch tối thứ 2", cart2.getItems().get(0).getNotes());
     }
 
     @Test
-    @DisplayName("Combo discount applies 10% when 2 or more courses are in cart")
-    void testComboDiscountTwoCourses() {
+    @DisplayName("Multiple courses retain their listed fees without discounts")
+    void testListedFeesTwoCourses() {
         HttpSession session = new MockHttpSession();
         cartService.addToCart(session, null, 1L, null);
         cartService.addToCart(session, null, 2L, null);
@@ -205,9 +274,30 @@ public class CartServiceTest {
         CartViewDTO cart = cartService.getCart(session, null);
         assertEquals(2, cart.getTotalCourses());
         assertEquals(new BigDecimal("6800000"), cart.getTotalFee());
-        // 10% discount on 6,800,000 = 680,000
-        assertEquals(new BigDecimal("680000"), cart.getDiscount());
-        assertEquals(new BigDecimal("6120000"), cart.getFinalFee());
+        assertEquals(new BigDecimal("6800000"), cart.getTotalFee());
+    }
+
+    @Test
+    void testGuestViewRefreshesChangedCourseFee() {
+        HttpSession session = new MockHttpSession();
+        cartService.addToCart(session, null, 1L, null);
+        mockCourseRepo.store.get(1L).setFee(new BigDecimal("4100000"));
+        assertEquals(new BigDecimal("4100000"), cartService.getCart(session, null).getTotalFee());
+    }
+
+    @Test
+    void testClosedCourseCannotBeConfirmedAndCartSurvives() {
+        HttpSession session = new MockHttpSession();
+        cartService.addToCart(session, null, 1L, null);
+        mockCourseRepo.store.get(1L).setStatus("CLOSED");
+        RegistrationCheckoutDTO checkout = new RegistrationCheckoutDTO();
+        checkout.setFullName("Nguyễn Văn Tuấn"); checkout.setPhoneNumber("0912345678");
+        checkout.setGradeLevel(12); checkout.setConsentChecked(true);
+        checkout.setSubmissionToken("test-checkout");
+        session.setAttribute(CartServiceImpl.CHECKOUT_TOKEN, "test-checkout");
+        assertThrows(ValidationException.class, () -> cartService.confirmRegistration(session, null, checkout));
+        assertTrue(mockLeadRepo.leads.isEmpty());
+        assertEquals(1, cartService.getCart(session, null).getTotalCourses());
     }
 
     @Test
@@ -223,8 +313,7 @@ public class CartServiceTest {
         assertEquals(1, cart.getTotalCourses());
         assertEquals(2L, cart.getItems().get(0).getCourseId());
         assertEquals(new BigDecimal("3200000"), cart.getTotalFee());
-        assertEquals(BigDecimal.ZERO, cart.getDiscount(), "No combo discount for 1 course");
-        assertEquals(new BigDecimal("3200000"), cart.getFinalFee());
+        assertEquals(new BigDecimal("3200000"), cart.getTotalFee());
     }
 
     @Test
@@ -243,6 +332,8 @@ public class CartServiceTest {
         checkout.setTargetGoals(List.of("Thi tốt nghiệp THPT", "ĐGNL ĐHQG"));
         checkout.setNotes("Muốn thi thử đầu vào sớm");
         checkout.setConsentChecked(true);
+        checkout.setSubmissionToken("test-checkout");
+        session.setAttribute(CartServiceImpl.CHECKOUT_TOKEN, "test-checkout");
 
         String leadCode = cartService.confirmRegistration(session, null, checkout);
 
@@ -266,6 +357,8 @@ public class CartServiceTest {
         checkout.setPhoneNumber("0912345678");
         checkout.setGradeLevel(12);
         checkout.setConsentChecked(true);
+        checkout.setSubmissionToken("test-checkout");
+        session.setAttribute(CartServiceImpl.CHECKOUT_TOKEN, "test-checkout");
 
         assertThrows(ValidationException.class, () -> cartService.confirmRegistration(session, null, checkout));
     }
@@ -281,6 +374,8 @@ public class CartServiceTest {
         checkout.setPhoneNumber("123456");
         checkout.setGradeLevel(12);
         checkout.setConsentChecked(true);
+        checkout.setSubmissionToken("test-checkout");
+        session.setAttribute(CartServiceImpl.CHECKOUT_TOKEN, "test-checkout");
 
         assertThrows(ValidationException.class, () -> cartService.confirmRegistration(session, null, checkout));
     }

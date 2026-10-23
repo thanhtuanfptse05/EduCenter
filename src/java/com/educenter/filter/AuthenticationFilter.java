@@ -35,11 +35,11 @@ public class AuthenticationFilter implements Filter {
             String uri = httpRequest.getRequestURI();
             String path = uri.substring(contextPath.length());
 
-            if (isProtectedPath(path)) {
+            if (!path.startsWith("/assets/")) {
                 HttpSession session = httpRequest.getSession(false);
                 UserPrincipalDTO principal = (session != null) ? (UserPrincipalDTO) session.getAttribute("currentUser") : null;
 
-                if (principal == null) {
+                if (principal == null && isProtectedPath(path)) {
                     // Save local redirect path
                     String queryString = httpRequest.getQueryString();
                     String fullPath = (queryString != null && !queryString.isEmpty()) ? (path + "?" + queryString) : path;
@@ -50,13 +50,16 @@ public class AuthenticationFilter implements Filter {
                     return;
                 }
 
+                if (principal == null) { chain.doFilter(request, response); return; }
+
                 // FR-003: Re-read active status and roles on every protected request
                 UserPrincipalDTO freshPrincipal = authService.refreshPrincipal(principal.getUserId());
-                if (freshPrincipal == null || !"ACTIVE".equalsIgnoreCase(freshPrincipal.getStatus())) {
+                if (freshPrincipal == null || !"ACTIVE".equalsIgnoreCase(freshPrincipal.getStatus())
+                        || !java.util.Objects.equals(principal.getCredentialFingerprint(), freshPrincipal.getCredentialFingerprint())) {
                     if (session != null) {
                         session.invalidate();
                     }
-                    FlashMessageUtil.setError(httpRequest, "Tài khoản của bạn đã bị khóa hoặc không còn hoạt động.");
+                    FlashMessageUtil.setError(httpRequest, "Phiên đăng nhập đã hết hiệu lực. Vui lòng đăng nhập lại.");
                     httpResponse.sendRedirect(contextPath + "/login");
                     return;
                 }

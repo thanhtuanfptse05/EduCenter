@@ -45,4 +45,10 @@ public class PasswordResetRepository {
         .setParameter("userId", userId)
         .executeUpdate();
     }
+
+    public Optional<PasswordResetToken> findByTokenHashForUpdate(EntityManager em, String hash) {
+        Optional<PasswordResetToken> token = findByTokenHash(em, hash);
+        token.ifPresent(value -> { em.lock(value, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE); em.refresh(value); });
+        return token;
+    }
 }

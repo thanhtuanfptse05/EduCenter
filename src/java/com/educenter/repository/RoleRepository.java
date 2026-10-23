@@ -38,4 +38,9 @@ public class RoleRepository {
                 "SELECT r FROM Role r ORDER BY r.id ASC", Role.class);
         return query.getResultList();
     }
+
+    public void lockAdminRole(EntityManager em) {
+        Role admin = findByCode(em, "ADMIN").orElseThrow(() -> new IllegalStateException("ADMIN role is missing"));
+        em.lock(admin, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE);
+    }
 }

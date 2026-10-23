@@ -14,7 +14,7 @@ public class ClassItemDTO implements Serializable {
     private String roomName;
     private String teacherName;
     private String teacherDegree;
-    private Integer capacity = 15;
+    private Integer capacity;
     private int enrolledCount = 0;
     private LocalDate startDate;
     private String status = "OPEN";
@@ -52,12 +52,12 @@ public class ClassItemDTO implements Serializable {
     public void setEnrolledCount(int enrolledCount) { this.enrolledCount = enrolledCount; }
 
     public int getRemainingSlots() {
-        int cap = (capacity != null) ? capacity : 15;
+        int cap = (capacity != null) ? capacity : 0;
         return Math.max(0, cap - enrolledCount);
     }
 
     public int getPercentFilled() {
-        int cap = (capacity != null && capacity > 0) ? capacity : 15;
+        int cap = (capacity != null && capacity > 0) ? capacity : 1;
         return Math.min(100, (int) Math.round(((double) enrolledCount / cap) * 100));
     }
 

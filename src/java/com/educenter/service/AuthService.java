@@ -42,4 +42,6 @@ public interface AuthService {
      * Re-reads fresh status and roles for an authenticated user ID.
      */
     UserPrincipalDTO refreshPrincipal(Long userId);
+
+    com.educenter.dto.PasswordResetStateDTO inspectPasswordReset(String rawToken);
 }

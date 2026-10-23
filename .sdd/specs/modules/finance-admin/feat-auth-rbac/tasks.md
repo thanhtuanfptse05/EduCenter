@@ -1,7 +1,9 @@
 # Implementation Tasks: Authentication & Role-Based Access Control (feat-auth-rbac)
-**Status:** Completed & Verified | **Feature:** `feat-auth-rbac`  
-**Spec Reference:** [spec.md](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/.sdd/specs/modules/finance-admin/feat-auth-rbac/spec.md) | **Plan Reference:** [plan.md](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/.sdd/specs/modules/finance-admin/feat-auth-rbac/plan.md)  
-**Target Module:** `MOD-FINANCE-ADMIN` | **Owner:** Member 03  
+**Status:** Completed & Verified | **Feature:** `feat-auth-rbac`
+> Historical implementation checklist. Completion claims below are superseded by the 2026-10-23 [repair specification](../../admission/feat-portal-cart-repair/spec.md) and [verification](../../admission/feat-portal-cart-repair/verification.md); owner exclusions and unbuilt ERP modules are not production-complete.
+
+**Spec Reference:** [spec.md](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/.sdd/specs/modules/finance-admin/feat-auth-rbac/spec.md) | **Plan Reference:** [plan.md](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/.sdd/specs/modules/finance-admin/feat-auth-rbac/plan.md)
+**Target Module:** `MOD-FINANCE-ADMIN` | **Owner:** Member 03
 
 ---
 

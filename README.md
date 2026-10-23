@@ -1,90 +1,48 @@
-# EduCenter — Tutoring & Exam Preparation Management System
+# EduCenter
 
-[![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://openjdk.org/)
-[![Tomcat](https://img.shields.io/badge/Tomcat-10.1-yellow.svg)](https://tomcat.apache.org/)
-[![Persistence](https://img.shields.io/badge/JPA-3.1-blue.svg)](https://jakarta.ee/specifications/persistence/3.1/)
-[![Database](https://img.shields.io/badge/Database-SQL_Server-red.svg)](https://www.microsoft.com/sql-server)
-[![Methodology](https://img.shields.io/badge/Methodology-SDD%2FADD_Hybrid-green.svg)](#methodology)
+Ứng dụng Java Web quản lý trung tâm gia sư và luyện thi lớp 6–12. Stack: Java 17, Jakarta Servlet/JSP/JSTL, JPA 3.1/Hibernate, SQL Server, Ant và Tomcat 10.1.
 
-Hệ thống quản lý trung tâm gia sư, bổ trợ kiến thức và luyện thi vào lớp 10, tốt nghiệp THPT (Lớp 6–12). Dự án được xây dựng theo mô hình **Spec-Driven Development (SDD)** kết hợp **Agent-Driven Development (ADD)**.
+## Hiện trạng đã triển khai
 
----
+- Trang chủ công khai, danh mục/tìm kiếm/bộ lọc khóa học, chi tiết khóa/lớp và biểu mẫu tư vấn.
+- Giỏ đăng ký khách/tài khoản: khóa học duy nhất, ghi chú, cập nhật học phí, gộp khi đăng nhập, xóa/xóa hết, xác nhận tạo Lead và biên nhận theo phiên. Không có mã giảm giá hay combo giảm giá; đây là yêu cầu tư vấn, chưa phải giao dịch ghi danh/thanh toán.
+- Đăng ký, đăng nhập/đăng xuất, hồ sơ, đổi/reset mật khẩu; CSRF và phân quyền 5 vai trò `ADMIN`, `STAFF`, `TEACHER`, `STUDENT`, `PARENT`.
+- Quản trị tài khoản/trạng thái/vai trò và Audit Log. Các dashboard vai trò hiện là trang điều hướng tài khoản.
+- Một navbar/footer công khai dùng chung; mặc định giao diện sáng; menu mobile và lựa chọn theme được lưu.
 
-## 📌 Tổng Quan Dự Án
-* **Tên dự án:** EduCenter – Education Management ERP
-* **Môn học:** PRJ301 (Java Web Application)
-* **Quy mô:** 3 thành viên | 10 tuần triển khai
-* **Nhóm người dùng (6 vai trò):**
-  1. `System Admin`: Quản trị hệ thống, phân quyền, cấu hình phòng học & tham số, kiểm tra Audit Log.
-  2. `Center Manager`: Giám sát điều hành, xem KPI, thống kê doanh thu và báo cáo chuyên sâu.
-  3. `Academic / Admission Staff`: Tiếp nhận tư vấn (CRM Lead), quản lý học viên/phụ huynh, tạo lớp & xếp lịch, ghi danh học viên, tạo hóa đơn học phí.
-  4. `Tutor / Teacher`: Xem lịch dạy, mở buổi học điểm danh, ghi nhật ký giảng dạy & bài tập, nhập và công bố điểm số.
-  5. `Student`: Xem thời khóa biểu, lịch học, kết quả học tập & chuyên cần, hóa đơn học phí, đặt câu hỏi Q&A.
-  6. `Parent / Guardian`: Theo dõi tiến độ học tập, chuyên cần, điểm số, học phí của con (chỉ học viên được xác thực liên kết).
+Bản sửa theo yêu cầu ngày 2026-10-23 có [spec đã khóa](.sdd/specs/modules/admission/feat-portal-cart-repair/spec.md), [kế hoạch](.sdd/specs/modules/admission/feat-portal-cart-repair/plan.md) và [bằng chứng kiểm thử](.sdd/specs/modules/admission/feat-portal-cart-repair/verification.md). [design.md](design.md) là tài liệu thiết kế chuẩn duy nhất.
 
----
+## Ba ngoại lệ được chủ dự án giữ nguyên
 
-## 🛠️ Công Nghệ & Nền Tảng (Tech Stack)
-* **Ngôn ngữ:** Java 17 (OpenJDK 17 LTS)
-* **Web Server / Servlet Container:** Apache Tomcat 10.1 (Jakarta Servlet 6.0, namespace `jakarta.servlet.*`)
-* **Kiến trúc:** Phân tầng MVC chuẩn:
-  * `Controller`: Jakarta Servlets kế thừa `HttpServlet`
-  * `Filter`: Authentication, Role-based Authorization (RBAC), UTF-8 Encoding, CSRF
-  * `Service`: Xử lý toàn bộ nghiệp vụ (20 Business Rules BR01 - BR20), điều phối `EntityTransaction`
-  * `Repository`: Truy cập CSDL qua JPA `EntityManager` (**TUYỆT ĐỐI KHÔNG DÙNG JDBC THUẦN**)
-  * `Entity`: 30 Jakarta Persistence Entities ánh xạ CSDL
-  * `View`: JSP + JSTL (Jakarta Tags `jakarta.tags.core`, `jakarta.tags.fmt`) + EL `${...}`
-* **Cơ sở dữ liệu:** Microsoft SQL Server
-* **Build Tool:** Ant (NetBeans 17 Web Application)
-* **Testing:** JUnit 5
+Link reset vẫn hiển thị trực tiếp; phần 2FA/thiết bị/lịch sử trong hồ sơ vẫn là nội dung minh họa; thẻ tiến độ/học viên/phụ huynh ở trang chủ vẫn dùng số liệu minh họa. Những phần này được loại khỏi tiêu chí sửa và không được xem là chức năng production đã hoàn tất.
 
----
+Các module ERP còn lại được ghi rõ trong [future-work.md](.sdd/future-work.md). Không dùng trạng thái Completed của tài liệu cũ để kết luận toàn bộ ERP đã hoàn thành.
 
-## 👥 Phân Công Nhóm 3 Thành Viên
-| Thành viên | Phân hệ phụ trách | Modules & Nghiệp vụ chính | Nhánh Git |
-|---|---|---|---|
-| **Member 01** | **Academic & Learning** (~35%) | M04 (Khóa học), M05 (Lớp & Lịch học), M07 (Điểm danh & Nhật ký dạy), M08 (Kiểm tra & Điểm số), Teacher Portal. | `feature/academic` |
-| **Member 02** | **Admission & Student** (~35%) | M01 (Website công khai, Tìm kiếm, Giỏ khóa học), M03 (CRM Lead & Tư vấn), M06 (Học viên & Phụ huynh), Ghi danh (UC17), M10 (Q&A & Thông báo), Student/Parent Portal. | `feature/admission` |
-| **Member 03** | **Finance & Administration** (~30%) | M02 (Auth & RBAC), M09 (Học phí, Hóa đơn, Thanh toán, Công nợ), M11 (Dashboard & Báo cáo), M12 (Cấu hình hệ thống, Audit Logs), Admin Portal. | `feature/finance` |
+## Chạy ứng dụng
 
----
+1. Cài Java 17, NetBeans 17/Ant, Tomcat 10.1 và SQL Server. Tạo dữ liệu theo `docs/database/` và các migration phù hợp với môi trường.
+2. Cấu hình `src/conf/META-INF/persistence.xml`; đồng bộ bản tương thích tại `src/java/META-INF/persistence.xml`. Có thể ghi đè bằng `EDUCENTER_DB_URL`, `EDUCENTER_DB_USER`, `EDUCENTER_DB_PASSWORD`. Ứng dụng không tự thay đổi schema khi khởi động.
+3. Mở dự án NetBeans, chọn Tomcat 10.1, Clean and Build rồi Run. JSP nằm dưới `web/WEB-INF/views/`.
 
-## 📂 Cấu Trúc Dự Án (SDD Hybrid Architecture)
-```text
-EduCenter/
-├── .sdd/                      # Não bộ dự án SDD (Constitution, 20 Business Rules, Specs, Module Contracts)
-│   ├── constitution.md        # Hiến pháp dự án (Hard rules bất biến)
-│   ├── shared_context.md      # Đồng bộ ngữ cảnh giữa 3 thành viên
-│   ├── constraints/           # Ràng buộc toàn cục, an toàn và 20 Business Rules
-│   └── specs/                 # Hệ thống đặc tả tính năng phân cấp (Layer 1 -> 2 -> 3)
-├── .agents/                   # Cấu hình AI Coding Agents & bộ skills GitHub Spec Kit
-├── .specify/                  # Cấu hình Spec Kit CLI
-├── .codegraph/                # Semantic code intelligence graph (CodeGraph)
-├── src/java/com/educenter/    # Mã nguồn Java (Controller, Filter, Service, Repository, Entity, DTO, Util)
-├── src/conf/META-INF/         # persistence.xml (Cấu hình Hibernate + SQL Server)
-├── web/                       # Giao diện web (assets, WEB-INF/views/ theo 6 role portals, web.xml)
-├── allowedlib/                # Thư viện JAR phụ trợ (JSTL, SQL Server JDBC Driver)
-├── docs/                      # Tài liệu kiến trúc, SRS, CSDL
-└── tests/                     # Test suites (Unit, Integration, E2E)
+## Kiểm thử độc lập
+
+Chép các JAR công khai trong `Tomcat 10.1/lib/` và `bin/tomcat-juli.jar` vào `build/tools/tomcat/` (thư mục build được bỏ qua bởi Git). Sau đó chạy từ thư mục dự án:
+
+```powershell
+.\scripts\verify.ps1
+.\scripts\verify.ps1 -Integration
+.\scripts\verify.ps1 -Serve -Port 18080
 ```
 
----
+Lệnh đầu chạy unit test và tạo `dist/EduCenter.war`. Integration test đọc CSDL cấu hình để kiểm tra kết nối, tạo CSDL SQL Server riêng có tiền tố `EduCenterRepairTest_`, chạy HTTP/JSP/transaction tests rồi dọn riêng CSDL đó. Tài khoản kiểm thử cần quyền tạo/xóa CSDL; không có test ghi vào dữ liệu ứng dụng hiện tại.
 
-## 🚀 Hướng Dẫn Cài Đặt & Chạy Dự Án
-1. **Yêu cầu môi trường:**
-   * JDK 17
-   * NetBeans IDE 17
-   * Apache Tomcat 10.1
-   * Microsoft SQL Server (tạo database `EduCenterDB`)
-2. **Cấu hình CSDL:**
-   * Mở file `src/conf/META-INF/persistence.xml`.
-   * Cập nhật thông tin `user` và `password` tài khoản SQL Server của bạn.
-3. **Mở dự án trên NetBeans:**
-   * Chọn `File` -> `Open Project` -> Trỏ tới thư mục `EduCenter`.
-   * Chuột phải vào dự án -> `Clean and Build`.
-   * Chuột phải -> `Run` (chọn server Apache Tomcat 10.1).
+Khi server kiểm thử đang chạy, `python scripts/browser-check.py` dùng Python Playwright và Chrome để kiểm tra 9 route tại 360/768/1024/1440px, menu/theme/overflow/JavaScript và lưu ảnh tại `build/repair/screenshots/`. Dùng `-Serve -Fixture -Port 18081` và các biến môi trường trong verification.md để kiểm tra thêm tài khoản/menu nội bộ trên CSDL riêng. Các công cụ này chỉ phục vụ kiểm thử, không đóng gói vào ứng dụng.
 
----
+## Cấu trúc
 
-## 📜 Giấy Phép & Bản Quyền
-Dự án được phát triển phục vụ học tập môn PRJ301. Mọi quyền được bảo lưu bởi nhóm phát triển EduCenter.
+- `src/java/com/educenter/`: controller, filter, service, repository, entity, DTO, util.
+- `web/WEB-INF/views/`: các view được bảo vệ; `web/assets/`: CSS/JS/ảnh cục bộ.
+- `test/`: JUnit và hỗ trợ Tomcat/SQL Server; `scripts/`: Ant/PowerShell và kiểm thử trình duyệt.
+- `.sdd/`: constitution, spec, tiến độ và công việc tương lai.
+
+Dự án học tập PRJ301, nhóm 3 thành viên: Academic; Admission; Finance & Administration.

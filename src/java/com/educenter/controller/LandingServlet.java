@@ -48,9 +48,13 @@ public class LandingServlet extends HttpServlet {
         UserPrincipalDTO currentUser = (session != null) ? (UserPrincipalDTO) session.getAttribute("currentUser") : null;
 
         if (path.isEmpty() || "/".equals(path) || "/index".equals(path) || "/dang-ky-tu-van".equals(path)) {
-            req.setAttribute("pageTitle", "EduCenter — Hệ Thống Gia Sư & Bổ Trợ THPT Chuyên Biệt Lớp 10, 11, 12");
+            req.setAttribute("pageTitle", "EduCenter — Gia sư, bồi dưỡng kiến thức và luyện thi");
             LandingDataDTO portalData = landingService.getLandingPortalData();
             req.setAttribute("portalData", portalData);
+            if (session != null) {
+                req.setAttribute("leadDraft", session.getAttribute("LEAD_FORM_DRAFT"));
+                session.removeAttribute("LEAD_FORM_DRAFT");
+            }
             req.getRequestDispatcher("/WEB-INF/views/common/landing.jsp").forward(req, resp);
             return;
         }
@@ -104,17 +108,20 @@ public class LandingServlet extends HttpServlet {
 
         try {
             Lead lead = landingService.registerLead(form);
+            session.removeAttribute("LEAD_FORM_DRAFT");
             session.setAttribute("alertType", "success");
-            session.setAttribute("alertMessage", "Đã ghi nhận yêu cầu tư vấn thành công! Mã hồ sơ CRM: #CRM-THPT-00"
-                    + lead.getId() + ". Chuyên viên học vụ EduCenter sẽ liên hệ quý phụ huynh trong 30 phút.");
+            session.setAttribute("alertMessage", "Đã ghi nhận yêu cầu tư vấn. Mã hồ sơ: LEAD-" + lead.getId() + ". Trung tâm sẽ liên hệ theo thông tin bạn cung cấp.");
             resp.sendRedirect(req.getContextPath() + "/#dang-ky-tu-van");
         } catch (ValidationException ve) {
+            session.setAttribute("LEAD_FORM_DRAFT", form);
             session.setAttribute("alertType", "error");
             session.setAttribute("alertMessage", ve.getMessage());
             resp.sendRedirect(req.getContextPath() + "/#dang-ky-tu-van");
         } catch (Exception e) {
+            getServletContext().log("Cannot save consultation request", e);
+            session.setAttribute("LEAD_FORM_DRAFT", form);
             session.setAttribute("alertType", "error");
-            session.setAttribute("alertMessage", "Có lỗi xảy ra khi lưu thông tin. Quý phụ huynh vui lòng liên hệ hotline 1900 6868.");
+            session.setAttribute("alertMessage", "Chưa thể lưu yêu cầu tư vấn. Vui lòng thử lại sau; thông tin đã nhập được giữ lại.");
             resp.sendRedirect(req.getContextPath() + "/#dang-ky-tu-van");
         }
     }

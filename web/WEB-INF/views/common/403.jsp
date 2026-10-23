@@ -6,10 +6,10 @@
 <head>
     <%@ include file="/WEB-INF/views/common/head.jspf" %>
 </head>
-<body class="error-shell">
+<body class="public-site error-shell">
     <%@ include file="/WEB-INF/views/common/header.jspf" %>
 
-    <main class="error-main">
+    <main id="main-content" class="error-main">
         <div class="error-container">
             <div class="error-card">
                 <!-- Subtle Ambient Backdrop Accent -->
@@ -87,7 +87,7 @@
                         <div>
                             <span class="error-hint-title">Gợi ý điều hướng</span>
                             <span class="error-hint-sub">
-                                Nếu bạn là Học sinh / Phụ huynh, hãy trở về Cổng thông tin cá nhân. Nếu bạn là Giáo viên, vui lòng truy cập Lịch dạy & Sổ giảng dạy.
+                                Trở về trang tài khoản để sử dụng các chức năng thuộc quyền được cấp.
                             </span>
                         </div>
                     </div>
@@ -129,7 +129,7 @@
                 <!-- Technical Support Direct Link -->
                 <div class="error-support-footer">
                     <span>Bạn cần nâng cấp quyền hạn? Liên hệ quản trị viên:</span>
-                    <a href="mailto:hotro@educenter.vn">hotro@educenter.vn</a>
+                    <c:if test="${not empty contactEmail}"><span><c:out value="${contactEmail}"/></span></c:if>
                 </div>
             </div>
         </div>

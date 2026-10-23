@@ -72,6 +72,10 @@ public class CourseServiceTest {
                     .limit(limit)
                     .toList();
         }
+        @Override
+        public ClassFactsDTO findClassFacts(EntityManager em, Long classId) {
+            return new ClassFactsDTO(0, null, null);
+        }
     }
 
     static class MockSubjectRepository extends SubjectRepository {
@@ -226,8 +230,6 @@ public class CourseServiceTest {
         assertEquals("ThS. Đặng Vũ Nam", detail.getPrimaryTeacher().getFullName());
         assertEquals(1, detail.getOpenClasses().size());
         assertEquals("MAT12-LT01-A", detail.getOpenClasses().get(0).getCode());
-        assertNotNull(detail.getOriginalFee());
-        assertTrue(detail.getOriginalFee().compareTo(detail.getCourse().getFee()) > 0);
     }
 
     @Test

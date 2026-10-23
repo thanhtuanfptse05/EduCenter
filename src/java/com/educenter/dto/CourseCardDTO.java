@@ -51,7 +51,7 @@ public class CourseCardDTO implements Serializable {
     public BigDecimal getFee() { return fee; }
     public void setFee(BigDecimal fee) {
         this.fee = fee;
-        if (fee != null && fee.compareTo(BigDecimal.ZERO) > 0) {
+        if (fee != null && fee.compareTo(BigDecimal.ZERO) >= 0) {
             DecimalFormatSymbols symbols = new DecimalFormatSymbols(new Locale("vi", "VN"));
             symbols.setGroupingSeparator('.');
             DecimalFormat df = new DecimalFormat("#,###", symbols);
@@ -81,6 +81,8 @@ public class CourseCardDTO implements Serializable {
 
     public Boolean getIsFeatured() { return isFeatured; }
     public void setIsFeatured(Boolean isFeatured) { this.isFeatured = isFeatured; }
+
+    public boolean isOpenForRegistration() { return "OPEN".equalsIgnoreCase(status) && fee != null && fee.signum() >= 0; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

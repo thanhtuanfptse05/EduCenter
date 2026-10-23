@@ -1,7 +1,6 @@
 package com.educenter.dto;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +11,6 @@ public class CourseDetailDTO implements Serializable {
     private TeacherCardDTO primaryTeacher;
     private List<ClassItemDTO> openClasses = new ArrayList<>();
     private List<CourseCardDTO> relatedCourses = new ArrayList<>();
-    private BigDecimal originalFee;
-    private BigDecimal discountAmount;
 
     public CourseDetailDTO() {}
 
@@ -33,9 +30,5 @@ public class CourseDetailDTO implements Serializable {
         this.relatedCourses = (relatedCourses != null) ? relatedCourses : new ArrayList<>();
     }
 
-    public BigDecimal getOriginalFee() { return originalFee; }
-    public void setOriginalFee(BigDecimal originalFee) { this.originalFee = originalFee; }
 
-    public BigDecimal getDiscountAmount() { return discountAmount; }
-    public void setDiscountAmount(BigDecimal discountAmount) { this.discountAmount = discountAmount; }
 }

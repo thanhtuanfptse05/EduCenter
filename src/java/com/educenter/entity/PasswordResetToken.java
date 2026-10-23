@@ -53,7 +53,7 @@ public class PasswordResetToken implements Serializable {
     }
 
     public boolean isExpired() {
-        return LocalDateTime.now().isAfter(expiresAt);
+        return expiresAt == null || !LocalDateTime.now(java.time.ZoneId.of("Asia/Ho_Chi_Minh")).isBefore(expiresAt);
     }
 
     public boolean isConsumed() {

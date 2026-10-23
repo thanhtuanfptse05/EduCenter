@@ -15,8 +15,12 @@ public class RegistrationCheckoutDTO implements Serializable {
     private List<String> targetGoals = new ArrayList<>();
     private String notes;
     private boolean consentChecked = false;
+    private String submissionToken;
 
     public RegistrationCheckoutDTO() {}
+
+    public String getSubmissionToken() { return submissionToken; }
+    public void setSubmissionToken(String submissionToken) { this.submissionToken = submissionToken; }
 
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }

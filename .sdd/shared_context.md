@@ -1,6 +1,14 @@
 # EDUCENTER SHARED CONTEXT & CROSS-AGENT SYNCHRONIZATION
-**Version:** 1.0.0 | **Updated:** 2026-10-22  
-**Team Allocation:** 3 Members | **Timeline:** 10 Weeks  
+**Version:** 1.0.0 | **Updated:** 2026-10-22
+**Team Allocation:** 3 Members | **Timeline:** 10 Weeks
+
+## Trạng thái triển khai — 2026-10-23
+
+Phạm vi đang chạy: auth/RBAC 5 vai trò (ADMIN gộp quản trị và quản lý trung tâm), quản trị tài khoản, trang chủ/catalog/chi tiết khóa, tư vấn và giỏ đăng ký. Dashboard vai trò hiện là trang điều hướng; `/staff/leads` chưa phải màn hình CRM đầy đủ.
+
+Bản sửa hiện tại: [portal/cart repair](specs/modules/admission/feat-portal-cart-repair/spec.md), [kiểm thử](specs/modules/admission/feat-portal-cart-repair/verification.md). Không còn tính năng giảm giá/coupon/combo trong luồng đã triển khai. Ba nội dung được chủ dự án giữ nguyên được liệt kê trong spec; không đánh dấu chúng là production.
+
+Các phân công/touchpoint bên dưới là kiến trúc và kế hoạch, không phải bằng chứng hoàn thành. Xem [các module chưa triển khai](future-work.md).
 
 ---
 

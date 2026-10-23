@@ -1,11 +1,17 @@
 # EduCenter — Design System & UI/UX Specification
 
-> **Document:** `design.md` · **Version:** 1.0 · **Product:** Tutoring & Exam Preparation Management System  
-> **Status:** Implementation-ready design specification · **Language:** Vietnamese UI  
-> **Reference:** Existing EduCenter HTML mockups supplied by project owner (Dashboard, CRM, Classes, Attendance).  
+> **Document:** `design.md` · **Version:** 1.0 · **Product:** Tutoring & Exam Preparation Management System
+> **Status:** Implementation-ready design specification · **Language:** Vietnamese UI
+> **Reference:** Existing EduCenter HTML mockups supplied by project owner (Dashboard, CRM, Classes, Attendance).
 > **Priority:** Consistent, modern, professional, accessible, functional. **Light mode is default.**
 
 ## 0. Purpose and non-negotiable rules
+
+### Approved repair clarification — 2026-10-23
+
+For this repair, `.sdd/specs/modules/admission/feat-portal-cart-repair/spec.md` defines the owner's three explicit exclusions: existing home learning-showcase cards, profile 2FA/device demonstration content and direct reset-link delivery. No other fabricated facts are permitted. Numerical examples in section 7.0 describe only that existing excluded showcase.
+
+Use one public navbar/footer across home, catalog, details, cart, confirmation, auth and errors. Home remains public after login. Reserve header height once; hero padding is 32–48px desktop / 24–32px mobile. Use a strong headline, two clear actions and the existing showcase in a balanced two-column composition; no extra spacer, gradient or animation. Registration displays current listed fees only: no coupon, combo discount, invented original price or discount badge. Internal shells remain role-specific and accessible on mobile.
 
 This file is the **single source of truth for UI implementation** across the EduCenter project. Developers and coding agents must read it before creating or modifying JSP/CSS/JS. Follow the existing SRS for business rules and authorization; this document governs presentation, layout, screen behavior and navigation.
 
@@ -348,7 +354,7 @@ flowchart TD
 
 ### 7.0 PUB-01 — Cổng thông tin gia sư & Bổ trợ THPT (Landing Portal)
 
-**URL:** `/` hoặc `/index` · **Đối tượng:** Khách vãng lai, Học sinh THPT Lớp 10–12, Phụ huynh học sinh.  
+**URL:** `/` hoặc `/index` · **Đối tượng:** Khách vãng lai, Học sinh THPT Lớp 10–12, Phụ huynh học sinh.
 **Nguyên tắc cốt lõi:** 100% dữ liệu hiển thị (Số lớp đang mở, Khóa học nổi bật, Hồ sơ giáo viên, Danh mục môn học) phải được truy vấn động từ CSDL thông qua `LandingService` -> `LandingServlet` -> `request.setAttribute("portalData", ...)`. Tuyệt đối CẤM hardcode dữ liệu giả.
 
 #### Bố cục 11 phân khu chức năng (Layout Architecture):

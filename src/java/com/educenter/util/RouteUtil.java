@@ -46,7 +46,11 @@ public final class RouteUtil {
                 return false;
             }
             // Block forbidden patterns
-            return !path.contains(":") && !path.contains("\\");
+            String raw = uri.getRawPath().toLowerCase(java.util.Locale.ROOT);
+            return !path.contains(":") && !path.contains("\\") && !path.contains("//")
+                    && !path.contains(";") && path.chars().noneMatch(Character::isISOControl)
+                    && !raw.contains("%2f") && !raw.contains("%5c") && !raw.contains("%2e")
+                    && uri.normalize().getPath().equals(path);
         } catch (URISyntaxException e) {
             return false;
         }
@@ -60,5 +64,21 @@ public final class RouteUtil {
             return redirectUrl.trim();
         }
         return fallback;
+    }
+
+    public static String resolveAuthorizedRedirect(String url, String contextPath,
+            com.educenter.dto.UserPrincipalDTO user, String fallback) {
+        if (!isSafeRedirect(url, contextPath)) return fallback;
+        URI parsed = URI.create(url.trim());
+        String path = parsed.getPath();
+        if (!contextPath.isEmpty() && (path.equals(contextPath) || path.startsWith(contextPath + "/")))
+            path = path.substring(contextPath.length());
+        if (path.isEmpty()) path = "/";
+        boolean publicPath = path.equals("/") || path.equals("/index") || path.equals("/courses")
+                || path.equals("/courses/detail") || path.equals("/registration-cart") || path.equals("/registration/confirm") || path.equals("/profile");
+        boolean dashboard = path.equals(user.getDefaultDashboardUrl()) || user.isAdmin() && java.util.Set.of(
+                "/admin/dashboard", "/admin/users", "/staff/leads", "/teacher/dashboard", "/student/dashboard", "/parent/dashboard").contains(path);
+        if (!publicPath && !dashboard) return fallback;
+        return contextPath + path + (parsed.getRawQuery() == null ? "" : "?" + parsed.getRawQuery());
     }
 }

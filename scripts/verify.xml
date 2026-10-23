@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="EduCenter-repair-verification">
+    <property name="repair.root" location="."/>
+    <property name="repair.classes" location="build/repair/classes"/>
+    <property name="repair.tests" location="build/repair/test-classes"/>
+    <property name="repair.port" value="18080"/>
+    <property name="repair.fixture" value="false"/>
+    <path id="repair.compile.path">
+        <fileset dir="web/WEB-INF/lib" includes="*.jar"/>
+        <fileset dir="build/tools/tomcat" includes="*.jar"/>
+    </path>
+    <path id="repair.test.path">
+        <pathelement location="${repair.tests}"/>
+        <pathelement location="${repair.classes}"/>
+        <path refid="repair.compile.path"/>
+    </path>
+    <target name="repair-compile">
+        <mkdir dir="${repair.classes}"/>
+        <mkdir dir="${repair.tests}"/>
+        <javac srcdir="src/java" destdir="${repair.classes}" release="17" encoding="UTF-8" includeantruntime="false" classpathref="repair.compile.path"/>
+        <copy todir="${repair.classes}"><fileset dir="src/conf" excludes="MANIFEST.MF"/></copy>
+        <javac srcdir="test" destdir="${repair.tests}" release="17" encoding="UTF-8" includeantruntime="false" classpathref="repair.test.path"/>
+    </target>
+    <target name="repair-verify" depends="repair-compile">
+        <java classname="org.junit.platform.console.ConsoleLauncher" fork="true" failonerror="true" classpathref="repair.test.path">
+            <jvmarg value="-Dfile.encoding=UTF-8"/>
+            <arg value="execute"/><arg value="--scan-class-path=${repair.tests}"/>
+            <arg value="--exclude-classname=.*(JPAConnectionTest|SqlServerReadTest)"/>
+            <arg value="--exclude-tag=sqlserver"/>
+            <arg value="--disable-banner"/><arg value="--disable-ansi-colors"/><arg value="--details=summary"/>
+        </java>
+        <antcall target="repair-war"/>
+    </target>
+    <target name="repair-integration" depends="repair-compile">
+        <java classname="org.junit.platform.console.ConsoleLauncher" fork="true" failonerror="true" classpathref="repair.test.path">
+            <jvmarg value="-Dfile.encoding=UTF-8"/>
+            <arg value="execute"/><arg value="--select-class=com.educenter.util.JPAConnectionTest"/>
+            <arg value="--select-class=com.educenter.controller.PortalFlowTest"/>
+            <arg value="--disable-banner"/><arg value="--disable-ansi-colors"/><arg value="--details=summary"/>
+        </java>
+    </target>
+    <target name="repair-war" depends="repair-compile">
+        <mkdir dir="dist"/>
+        <war destfile="dist/EduCenter.war" webxml="web/WEB-INF/web.xml">
+            <fileset dir="web" excludes="WEB-INF/web.xml,WEB-INF/lib/**"/>
+            <classes dir="${repair.classes}"/>
+            <lib dir="web/WEB-INF/lib" excludes="junit-*.jar"/>
+        </war>
+    </target>
+    <target name="repair-serve" depends="repair-compile">
+        <java classname="com.educenter.support.LocalServer" fork="true" failonerror="true" classpathref="repair.test.path">
+            <jvmarg value="-Dfile.encoding=UTF-8"/>
+            <jvmarg value="-Deducenter.port=${repair.port}"/>
+            <jvmarg value="-Deducenter.fixture=${repair.fixture}"/>
+        </java>
+    </target>
+</project>

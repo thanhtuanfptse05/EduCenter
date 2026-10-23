@@ -19,6 +19,10 @@ public class UserPrincipalDTO implements Serializable {
     private String avatarUrl;
     private String status;
     private Set<String> roles;
+    private String credentialFingerprint;
+
+    public String getCredentialFingerprint() { return credentialFingerprint; }
+    public void setCredentialFingerprint(String value) { credentialFingerprint = value; }
 
     public UserPrincipalDTO() {
         this.roles = new HashSet<>();

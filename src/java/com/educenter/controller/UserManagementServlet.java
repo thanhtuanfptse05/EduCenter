@@ -86,7 +86,7 @@ public class UserManagementServlet extends HttpServlet {
                                     String ipAddress, String returnQuery) throws IOException {
         try {
             Long targetUserId = Long.parseLong(req.getParameter("userId"));
-            String newStatus = req.getParameter("status");
+            String newStatus = req.getParameter("actionStatus");
             userService.toggleUserStatus(admin.getUserId(), targetUserId, newStatus, ipAddress);
             FlashMessageUtil.setSuccess(req, "Cập nhật trạng thái người dùng thành công.");
         } catch (ValidationException e) {

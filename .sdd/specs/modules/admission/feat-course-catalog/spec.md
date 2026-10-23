@@ -1,16 +1,20 @@
 # Feature: Danh Mục Khóa Học & Giỏ Đăng Ký (feat-course-catalog) — SPECIFICATION
-**Status:** Approved / Locked | **Version:** 1.0.0 | **Date:** 2026-10-22  
-**Module ID:** `MOD-ADMISSION` (M01 – Public Website & Course Catalog)  
-**Author / Owner:** Member 02 (Admission & Public Portal)  
-**Inherits From:**  
-- Layer 1: `.sdd/constitution.md` (Article 1, Article 2 SEC-01..05)  
-- Layer 2: `.sdd/specs/modules/admission/module.md`  
-- Assignment PRJ301 Standard: Mục 3.2 (Home & hiển thị dữ liệu - 2,0 điểm) & Mục 3.6 (Giỏ hàng hoặc tương đương - 1,0 điểm)  
+**Status:** Approved / Locked | **Version:** 1.0.0 | **Date:** 2026-10-22
+**Module ID:** `MOD-ADMISSION` (M01 – Public Website & Course Catalog)
+**Author / Owner:** Member 02 (Admission & Public Portal)
+**Inherits From:**
+- Layer 1: `.sdd/constitution.md` (Article 1, Article 2 SEC-01..05)
+- Layer 2: `.sdd/specs/modules/admission/module.md`
+- Assignment PRJ301 Standard: Mục 3.2 (Home & hiển thị dữ liệu - 2,0 điểm) & Mục 3.6 (Giỏ hàng hoặc tương đương - 1,0 điểm)
 - UI/UX Standard: `design.md` (Default Light mode, Design Tokens, Lucide SVG outline icons, Local CSS)
 
 ---
 
 ## 1. Business Context & Goal
+
+### Approved repair amendment — 2026-10-23
+
+The locked [portal/cart repair](../feat-portal-cart-repair/spec.md) supersedes contradictions: no coupons/combo discounts/invented original prices; guest selections survive login and merge once; editable notes; current fee/status revalidation; atomic/idempotent confirmation and session-bound persisted receipts. Operational filters cover grades 6–12; public navigation remains identical. Initial task checkmarks do not certify these later repairs.
 
 * **Why:** Website của trung tâm gia sư và luyện thi EduCenter cần một cổng giới thiệu chương trình đào tạo trực quan, chuyên nghiệp, hỗ trợ phụ huynh và học sinh dễ dàng tìm kiếm, lọc theo môn học, khối lớp, mức học phí, xem chi tiết lộ trình học và lựa chọn nhiều khóa học vào danh sách dự định đăng ký (Registration Cart) trước khi gửi yêu cầu tuyển sinh.
 * **Mục tiêu Assignment PRJ301 (Tổng 3,0 điểm):**
@@ -34,28 +38,28 @@
 ## 3. User Stories
 
 ### Story 1 (Happy Path - Tìm kiếm & Lọc khóa học):
-> Là một **Học sinh lớp 12 hoặc Phụ huynh**,  
-> Tôi muốn truy cập trang `/courses`, lọc theo môn Toán/Lý/Hóa và khối 12,  
+> Là một **Học sinh lớp 12 hoặc Phụ huynh**,
+> Tôi muốn truy cập trang `/courses`, lọc theo môn Toán/Lý/Hóa và khối 12,
 > Để nhanh chóng tìm được khóa luyện thi THPT Quốc Gia với học phí và thời lượng phù hợp.
 
 ### Story 2 (Happy Path - Xem chi tiết & Khóa học liên quan):
-> Là một **Người dùng đang quan tâm khóa học**,  
-> Tôi muốn bấm vào xem chi tiết một khóa học tại `/courses/detail?id=...`,  
+> Là một **Người dùng đang quan tâm khóa học**,
+> Tôi muốn bấm vào xem chi tiết một khóa học tại `/courses/detail?id=...`,
 > Để xem mục tiêu đào tạo, lộ trình 24 buổi, thông tin giáo viên phụ trách, lịch mở lớp dự kiến và danh sách các khóa học liên quan gợi ý.
 
 ### Story 3 (Happy Path - Quản lý Giỏ đăng ký khóa học):
-> Là một **Học sinh/Phụ huynh muốn đăng ký nhiều môn**,  
-> Tôi muốn bấm "Thêm vào danh sách đăng ký", mở trang `/registration-cart` để xem các khóa đã chọn, xóa môn không cần thiết và xem tổng học phí dự kiến,  
+> Là một **Học sinh/Phụ huynh muốn đăng ký nhiều môn**,
+> Tôi muốn bấm "Thêm vào danh sách đăng ký", mở trang `/registration-cart` để xem các khóa đã chọn, xóa môn không cần thiết và xem tổng học phí dự kiến,
 > Để chuẩn bị ngân sách và chuyển sang bước gửi hồ sơ đăng ký.
 
 ### Story 4 (Happy Path - Xác nhận nhu cầu đăng ký):
-> Là một **Người dùng đã chọn xong khóa học trong giỏ**,  
-> Tôi muốn điền thông tin liên hệ (hoặc tự động điền nếu đã đăng nhập) tại `/registration/confirm`,  
+> Là một **Người dùng đã chọn xong khóa học trong giỏ**,
+> Tôi muốn điền thông tin liên hệ (hoặc tự động điền nếu đã đăng nhập) tại `/registration/confirm`,
 > Để gửi thông tin thành Lead chuyển về bộ phận tuyển sinh tư vấn xếp lớp mà không bị mất giỏ hàng.
 
 ### Story 5 (Edge Path - Giỏ hàng rỗng & Bộ lọc không có kết quả):
-> Là một **Người dùng tìm kiếm khóa học với tiêu chí quá hẹp**,  
-> Tôi muốn nhận được thông báo Empty State rõ ràng kèm nút "Đặt lại bộ lọc" hoặc "Xem tất cả khóa học",  
+> Là một **Người dùng tìm kiếm khóa học với tiêu chí quá hẹp**,
+> Tôi muốn nhận được thông báo Empty State rõ ràng kèm nút "Đặt lại bộ lọc" hoặc "Xem tất cả khóa học",
 > Để không bị gián đoạn trải nghiệm trên trang.
 
 ---

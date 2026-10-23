@@ -232,8 +232,8 @@ public class AuthServiceImpl implements AuthService {
                 return null; // Return null safely so caller handles public response
             }
 
-            User user = userOpt.get();
-            if (user.isLocked()) {
+            User user = userRepository.findByIdWithLock(em, userOpt.get().getId()).orElseThrow();
+            if (!user.isActive()) {
                 tx.commit();
                 return null;
             }
@@ -249,7 +249,7 @@ public class AuthServiceImpl implements AuthService {
             // Compute SHA-256 hash to store in DB
             String tokenHash = hashToken(rawToken);
 
-            LocalDateTime expiresAt = LocalDateTime.now().plusMinutes(15);
+            LocalDateTime expiresAt = LocalDateTime.now(java.time.ZoneId.of("Asia/Ho_Chi_Minh")).plusMinutes(30);
             PasswordResetToken resetToken = new PasswordResetToken(user, tokenHash, expiresAt);
             passwordResetRepository.save(em, resetToken);
 
@@ -290,9 +290,11 @@ public class AuthServiceImpl implements AuthService {
                 throw new ValidationException("Liên kết đặt lại mật khẩu không hợp lệ hoặc không tồn tại.");
             }
 
-            PasswordResetToken resetToken = tokenOpt.get();
+            userRepository.findByIdWithLock(em, tokenOpt.get().getUser().getId()).orElseThrow();
+            PasswordResetToken resetToken = passwordResetRepository.findByTokenHashForUpdate(em, tokenHash)
+                    .orElseThrow(() -> new ValidationException("Liên kết đã hết hiệu lực."));
             if (!resetToken.isValid()) {
-                throw new ValidationException("Liên kết đặt lại mật khẩu đã hết hạn (15 phút) hoặc đã được sử dụng.");
+                throw new ValidationException("Liên kết đặt lại mật khẩu đã hết hạn hoặc đã được sử dụng.");
             }
 
             User user = resetToken.getUser();
@@ -306,7 +308,7 @@ public class AuthServiceImpl implements AuthService {
             userRepository.update(em, user);
 
             // Mark token consumed
-            resetToken.setConsumedAt(LocalDateTime.now());
+            resetToken.setConsumedAt(LocalDateTime.now(java.time.ZoneId.of("Asia/Ho_Chi_Minh")));
 
             tx.commit();
             LOGGER.info("Đặt lại mật khẩu thành công cho user: " + user.getEmail());
@@ -344,7 +346,7 @@ public class AuthServiceImpl implements AuthService {
                 .map(String::toUpperCase)
                 .collect(Collectors.toSet());
 
-        return new UserPrincipalDTO(
+        UserPrincipalDTO principal = new UserPrincipalDTO(
                 user.getId(),
                 user.getEmail(),
                 user.getFullName(),
@@ -353,6 +355,21 @@ public class AuthServiceImpl implements AuthService {
                 user.getStatus(),
                 roleCodes
         );
+        principal.setCredentialFingerprint(hashToken(user.getPasswordHash()));
+        return principal;
+    }
+
+    @Override
+    public com.educenter.dto.PasswordResetStateDTO inspectPasswordReset(String rawToken) {
+        if (rawToken == null || !rawToken.matches("[a-fA-F0-9]{64}")) return new com.educenter.dto.PasswordResetStateDTO(false, 0);
+        EntityManager em = entityManagerSupplier.get();
+        try {
+            Optional<PasswordResetToken> found = passwordResetRepository.findByTokenHash(em, hashToken(rawToken));
+            if (found.isEmpty() || !found.get().isValid() || !found.get().getUser().isActive())
+                return new com.educenter.dto.PasswordResetStateDTO(false, 0);
+            long seconds = java.time.Duration.between(LocalDateTime.now(java.time.ZoneId.of("Asia/Ho_Chi_Minh")), found.get().getExpiresAt()).getSeconds();
+            return new com.educenter.dto.PasswordResetStateDTO(seconds > 0, Math.max(0, seconds));
+        } finally { em.close(); }
     }
 
     private String hashToken(String rawToken) {

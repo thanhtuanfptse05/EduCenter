@@ -25,6 +25,9 @@ public class UserPageDTO implements Serializable {
     // Summary statistics for KPI cards in header
     private long totalActive;
     private long totalLocked;
+    private List<RoleOptionDTO> availableRoles = new ArrayList<>();
+    public List<RoleOptionDTO> getAvailableRoles() { return availableRoles; }
+    public void setAvailableRoles(List<RoleOptionDTO> roles) { availableRoles = roles; }
 
     public UserPageDTO() {
         this.currentPage = 1;

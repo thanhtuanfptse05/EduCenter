@@ -1,8 +1,8 @@
 # Feature: Authentication & Role-Based Access Control (feat-auth-rbac) — SPECIFICATION
-**Status:** Approved / Locked | **Version:** 1.1.0 | **Date:** 2026-10-22  
-**Module ID:** `MOD-FINANCE-ADMIN` (M02 – Authentication & Account Management, M12 – User Administration)  
-**Author / Owner:** Member 03 (Finance & Infrastructure)  
-**Inherits From:**  
+**Status:** Approved / Locked | **Version:** 1.1.0 | **Date:** 2026-10-22
+**Module ID:** `MOD-FINANCE-ADMIN` (M02 – Authentication & Account Management, M12 – User Administration)
+**Author / Owner:** Member 03 (Finance & Infrastructure)
+**Inherits From:**
 - Layer 1: `.sdd/constitution.md` (Article 1, Article 2 SEC-01, SEC-02)
 - Layer 2: `.sdd/specs/modules/finance-admin/module.md`
 - Constraints: `.sdd/constraints/global.md`, `.sdd/constraints/safety.md`, `.sdd/constraints/business.md` (BR01, BR02, BR18)
@@ -11,6 +11,10 @@
 ---
 
 ## 1. Business Context & Goal
+
+### Approved repair amendment — 2026-10-23
+
+The owner-approved [portal/cart repair](../../admission/feat-portal-cart-repair/spec.md) controls current corrections. Preserve direct reset-link display and profile 2FA/device demonstration content as explicitly excluded. Repair credential-session invalidation, token status/time, safe redirects, last-admin serialization, admin forms and contextual escaping. No 30-day remember-me behavior is promised. MVP has five roles, ADMIN combining manager/admin. Initial task checkmarks do not certify all supplemental requirements.
 
 * **Why:** Mọi hoạt động trong EduCenter (tiếp nhận Lead, tư vấn, xếp lớp, điểm danh, nhập điểm, thanh toán học phí) đều gắn liền với danh tính và vai trò của người thực hiện. Tính năng này thiết lập hạ tầng định danh, bảo mật phiên làm việc và phân quyền đa cấp bậc.
 * **Mục tiêu Assignment PRJ301:** Đáp ứng trọn vẹn **Mục 3.1 – Xác thực người dùng (1,0 điểm)** với đầy đủ 5 chức năng bắt buộc:
@@ -52,37 +56,37 @@
 ## 3. User Stories
 
 ### Story 1 (Happy Path - Đăng nhập phân luồng):
-> Là một **Người dùng đã có tài khoản**,  
-> Tôi muốn nhập email và mật khẩu tại trang `/login` để đăng nhập vào hệ thống,  
+> Là một **Người dùng đã có tài khoản**,
+> Tôi muốn nhập email và mật khẩu tại trang `/login` để đăng nhập vào hệ thống,
 > Để hệ thống xác thực, lưu thông tin vào Session và tự động chuyển hướng tôi về Dashboard tương ứng với vai trò của tôi (Admin -> `/admin/dashboard`, Staff -> `/staff/leads`, Teacher -> `/teacher/dashboard`, Student -> `/student/dashboard`, Parent -> `/parent/dashboard`).
 
 ### Story 2 (Happy Path - Đăng ký tài khoản):
-> Là một **Khách ghé thăm (Guest)**,  
-> Tôi muốn điền form đăng ký gồm Họ tên, Email, Số điện thoại và Mật khẩu tại `/register`,  
+> Là một **Khách ghé thăm (Guest)**,
+> Tôi muốn điền form đăng ký gồm Họ tên, Email, Số điện thoại và Mật khẩu tại `/register`,
 > Để tạo tài khoản mới với vai trò mặc định là `STUDENT` (hoặc `PARENT` theo lựa chọn) và được chuyển đến trang đăng nhập với thông báo thành công.
 
 ### Story 3 (Edge/Error Path - Sai mật khẩu hoặc tài khoản bị khóa):
-> Là một **Người dùng đăng nhập không hợp lệ**,  
-> Khi tôi nhập sai mật khẩu hoặc tài khoản của tôi đang ở trạng thái `LOCKED`,  
+> Là một **Người dùng đăng nhập không hợp lệ**,
+> Khi tôi nhập sai mật khẩu hoặc tài khoản của tôi đang ở trạng thái `LOCKED`,
 > Tôi muốn nhận được thông báo lỗi rõ ràng trên giao diện, giữ lại email đã nhập và không bị chuyển trang vô cớ.
 
 ### Story 4 (Happy Path - Cập nhật hồ sơ & Đổi mật khẩu):
-> Là một **Người dùng đã đăng nhập**,  
-> Tôi muốn vào trang `/profile` để cập nhật họ tên, số điện thoại, ảnh đại diện và đổi mật khẩu mới (yêu cầu xác thực mật khẩu cũ),  
+> Là một **Người dùng đã đăng nhập**,
+> Tôi muốn vào trang `/profile` để cập nhật họ tên, số điện thoại, ảnh đại diện và đổi mật khẩu mới (yêu cầu xác thực mật khẩu cũ),
 > Để thông tin cá nhân của tôi luôn chính xác và tài khoản được bảo mật an toàn.
 
 ### Story 5 (Happy Path - Quản trị viên phân quyền & Khóa tài khoản):
-> Là một **System Admin**,  
-> Tôi muốn xem danh sách tài khoản tại `/admin/users`, thực hiện tìm kiếm, lọc theo vai trò/trạng thái, gán/hủy vai trò và chuyển trạng thái `ACTIVE` <-> `LOCKED`,  
+> Là một **System Admin**,
+> Tôi muốn xem danh sách tài khoản tại `/admin/users`, thực hiện tìm kiếm, lọc theo vai trò/trạng thái, gán/hủy vai trò và chuyển trạng thái `ACTIVE` <-> `LOCKED`,
 > Để quản lý nhân sự trung tâm và bảo vệ hệ thống trước các tài khoản vi phạm.
 
 ### Story 6 (Security Path - Truy cập trái phép bị chặn):
-> Là một **Học viên cố tình gõ URL quản trị** (ví dụ `/admin/users` hoặc `/staff/invoices`),  
+> Là một **Học viên cố tình gõ URL quản trị** (ví dụ `/admin/users` hoặc `/staff/invoices`),
 > Tôi muốn hệ thống chặn lại và chuyển hướng về trang `/errors/403` (Forbidden) với thông báo từ chối truy cập rõ ràng.
 
 ### Story 7 (Happy Path - Quên và đặt lại mật khẩu):
-> Là một **Người dùng bị quên mật khẩu**,  
-> Tôi muốn nhập email tại trang `/forgot-password` để nhận liên kết đặt lại mật khẩu, sau đó nhập mật khẩu mới tại trang `/reset-password`,  
+> Là một **Người dùng bị quên mật khẩu**,
+> Tôi muốn nhập email tại trang `/forgot-password` để nhận liên kết đặt lại mật khẩu, sau đó nhập mật khẩu mới tại trang `/reset-password`,
 > Để khôi phục quyền truy cập tài khoản một cách an toàn và thuận tiện.
 
 ---
@@ -194,7 +198,7 @@
 
 ### 7.1 Filter Pipeline (Cấu hình trong `web.xml`)
 ```text
-Client Request 
+Client Request
   ──> [EncodingFilter] (Force UTF-8 Request/Response)
   ──> [AuthenticationFilter] (Kiểm tra session login cho các route nội bộ)
   ──> [RoleFilter] (Kiểm tra vai trò theo tiền tố URL)

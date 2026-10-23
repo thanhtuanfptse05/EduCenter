@@ -19,9 +19,9 @@ public class LandingRepository {
             TypedQuery<Long> query = em.createQuery(
                     "SELECT COUNT(u) FROM User u JOIN u.roles r WHERE r.code = 'STUDENT' AND u.status = 'ACTIVE'", Long.class);
             Long count = query.getSingleResult();
-            return (count != null && count > 0) ? count : 1250L; // Fallback to positive base count
+            return count != null ? count : 0L;
         } catch (Exception e) {
-            return 1250L;
+            throw e;
         }
     }
 
@@ -31,9 +31,7 @@ public class LandingRepository {
                     "SELECT COUNT(c) FROM EduClass c WHERE c.status = 'OPEN'", Long.class);
             Long count = query.getSingleResult();
             return (count != null) ? count : 0L;
-        } catch (Exception e) {
-            return 0L;
-        }
+        } catch (Exception e) { throw e; }
     }
 
     public long countActiveTeachers(EntityManager em) {
@@ -42,9 +40,7 @@ public class LandingRepository {
                     "SELECT COUNT(t) FROM Teacher t WHERE t.status = 'ACTIVE'", Long.class);
             Long count = query.getSingleResult();
             return (count != null) ? count : 0L;
-        } catch (Exception e) {
-            return 0L;
-        }
+        } catch (Exception e) { throw e; }
     }
 
     public long countClassesByGrade(EntityManager em, int gradeLevel) {
@@ -54,9 +50,7 @@ public class LandingRepository {
             query.setParameter("grade", gradeLevel);
             Long count = query.getSingleResult();
             return (count != null) ? count : 0L;
-        } catch (Exception e) {
-            return 0L;
-        }
+        } catch (Exception e) { throw e; }
     }
 
     public List<Course> findFeaturedCourses(EntityManager em) {
@@ -94,9 +88,7 @@ public class LandingRepository {
             query.setParameter("subjectId", subjectId);
             Long count = query.getSingleResult();
             return (count != null) ? count : 0L;
-        } catch (Exception e) {
-            return 0L;
-        }
+        } catch (Exception e) { throw e; }
     }
 
     public String findRepresentativeImageBySubject(EntityManager em, Long subjectId) {
@@ -106,9 +98,7 @@ public class LandingRepository {
             query.setParameter("subjectId", subjectId);
             List<String> list = query.setMaxResults(1).getResultList();
             return list.isEmpty() ? null : list.get(0);
-        } catch (Exception e) {
-            return null;
-        }
+        } catch (Exception e) { throw e; }
     }
 
     public Lead saveLead(EntityManager em, Lead lead) {

@@ -76,14 +76,14 @@ public class LandingServiceImpl implements LandingService {
                         dto.setTeacherName(cl.getTeacher().getFullName());
                         dto.setTeacherTitle(cl.getTeacher().getDegree());
                     }
-                    dto.setScheduleText(cl.getName()); // Includes day/time info if named accordingly
+                    dto.setScheduleText(cl.getStartDate() == null ? null : "Dự kiến khai giảng: " + cl.getStartDate().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                 } else {
-                    dto.setTeacherName("Giáo viên Tổ Chuyên Môn THPT");
-                    dto.setTeacherTitle("Thạc sĩ Sư Phạm");
-                    dto.setScheduleText("Thứ 3 & Thứ 6 (18:00 - 19:30)");
+                    dto.setTeacherName("Chưa phân công giáo viên");
+                    dto.setTeacherTitle(null);
+                    dto.setScheduleText("Lịch học chưa được công bố");
                 }
 
-                if (c.getMaxCapacity() <= 1) {
+                if (c.getMaxCapacity() != null && c.getMaxCapacity() <= 1) {
                     dto.setModelText("Gia sư 1 kèm 1 cá nhân hóa");
                 } else {
                     dto.setModelText("Nhóm nhỏ (Tối đa " + c.getMaxCapacity() + " HV)");
@@ -104,18 +104,11 @@ public class LandingServiceImpl implements LandingService {
                 td.setDegree(t.getDegree());
                 td.setBio(t.getBio());
 
-                // Derive experience and grade tags
-                if (t.getBio() != null && t.getBio().contains("năm kinh nghiệm")) {
-                    int idx = t.getBio().indexOf("năm kinh nghiệm");
-                    String snippet = t.getBio().substring(Math.max(0, idx - 4), idx + 15).trim();
-                    td.setExperienceBadge(snippet);
-                } else if (t.getDegree() != null && t.getDegree().contains("IELTS")) {
-                    td.setExperienceBadge("IELTS 8.5");
-                } else {
-                    td.setExperienceBadge("10 năm KN");
+                if (t.getBio() != null) {
+                    java.util.regex.Matcher experience = java.util.regex.Pattern.compile("[0-9]+[+]?[ ]+năm kinh nghiệm").matcher(t.getBio());
+                    if (experience.find()) td.setExperienceBadge(experience.group());
                 }
 
-                td.setGradesText("Phụ trách: Lớp 10, 11, 12");
                 if (t.getUser() != null) {
                     td.setPhotoUrl(t.getUser().getAvatarUrl());
                 }
@@ -133,7 +126,7 @@ public class LandingServiceImpl implements LandingService {
                 sd.setName(s.getName());
                 sd.setDescription(s.getDescription());
                 long count = landingRepository.countCoursesBySubject(em, s.getId());
-                sd.setCourseCount(count > 0 ? count : 12L);
+                sd.setCourseCount(count);
                 sd.setImageUrl(landingRepository.findRepresentativeImageBySubject(em, s.getId()));
 
                 String icon = switch (s.getCode().toUpperCase()) {
@@ -161,13 +154,15 @@ public class LandingServiceImpl implements LandingService {
         if (form == null) {
             throw new ValidationException("Dữ liệu biểu mẫu tư vấn không hợp lệ.");
         }
-        if (form.getFullName() == null || form.getFullName().trim().isEmpty()) {
+        if (!com.educenter.util.ValidationUtil.isValidFullName(form.getFullName())) {
             throw new ValidationException("Vui lòng nhập họ và tên của phụ huynh hoặc học sinh.");
         }
-        if (form.getPhone() == null || !form.getPhone().trim().matches("^(0[3|5|7|8|9])+([0-9]{8})$")) {
+        if (!com.educenter.util.ValidationUtil.isValidPhone(form.getPhone(), true)) {
             throw new ValidationException("Số điện thoại không đúng định dạng 10 số di động Việt Nam.");
         }
 
+        if (form.getGradeLevel() != null && (form.getGradeLevel() < 6 || form.getGradeLevel() > 12))
+            throw new ValidationException("Khối lớp phải từ 6 đến 12.");
         EntityManager em = emSupplier.get();
         EntityTransaction tx = em.getTransaction();
         try {

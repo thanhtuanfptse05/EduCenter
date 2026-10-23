@@ -8,11 +8,12 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/auth.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/portal.css">
 </head>
-<body>
+<body class="${not empty dashboardPath ? 'internal-site' : 'public-site'}">
     <c:choose>
         <%-- Logged-In User Dashboard Landing (FR-008) --%>
-        <c:when test="${not empty sessionScope.currentUser}">
-            <div class="admin-layout">
+        <c:when test="${not empty dashboardPath}">
+            <c:set var="internalShell" value="true" scope="request"/>
+<div class="admin-layout">
                 <c:set var="activeNav" value="dashboard" scope="request" />
                 <c:set var="breadcrumb" value="${dashboardRoleName != null ? dashboardRoleName : 'Bảng điều khiển'}" scope="request" />
                 <%@ include file="/WEB-INF/views/common/sidebar.jspf" %>
@@ -57,12 +58,10 @@
                                 <h2 style="font-size: var(--font-size-md); font-weight: 650; margin-bottom: 8px;">Trạng thái tài khoản & Phiên làm việc</h2>
                                 <p class="text-muted" style="margin-bottom: 16px;">
                                     Đang đăng nhập với email: <strong><c:out value="${sessionScope.currentUser.email}" /></strong>.
-                                    Phiên làm việc được bảo vệ bằng cơ chế xác thực kép và tự động gia hạn bảo mật.
+                                    Quản lý thông tin tài khoản và các quyền được cấp cho bạn.
                                 </p>
                                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                    <span class="status-pill status-active">Hệ thống CSDL: Trực tuyến</span>
-                                    <span class="status-pill status-active">Mã hóa mật khẩu: BCrypt (SEC-01)</span>
-                                    <span class="status-pill status-active">Kiểm soát truy cập: Phân quyền RBAC</span>
+                                    <a href="${pageContext.request.contextPath}/profile" class="btn btn-secondary btn-sm">Quản lý tài khoản</a>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +72,7 @@
                                 <div class="card-body">
                                     <h3 style="font-size: var(--font-size-md); font-weight: 700; margin-bottom: 8px;">Quản trị người dùng & Phân quyền</h3>
                                     <p class="text-muted" style="font-size: var(--font-size-sm); margin-bottom: 16px;">
-                                        Xem danh sách 6 vai trò, khóa/mở khóa tài khoản và phân quyền quản trị theo đúng Business Rules.
+                                        Xem danh sách 5 vai trò, khóa/mở khóa tài khoản và phân quyền quản trị theo đúng Business Rules.
                                     </p>
                                     <c:choose>
                                         <c:when test="${sessionScope.currentUser.admin}">
@@ -90,7 +89,7 @@
                                 <div class="card-body">
                                     <h3 style="font-size: var(--font-size-md); font-weight: 700; margin-bottom: 8px;">Hồ sơ cá nhân & Đổi mật khẩu</h3>
                                     <p class="text-muted" style="font-size: var(--font-size-sm); margin-bottom: 16px;">
-                                        Cập nhật số điện thoại, thông tin định danh và thực hiện đổi mật khẩu bảo mật BCrypt cost 10.
+                                        Cập nhật số điện thoại, thông tin định danh và đổi mật khẩu tài khoản.
                                     </p>
                                     <a href="${pageContext.request.contextPath}/profile" class="btn btn-secondary btn-sm">Xem hồ sơ &rarr;</a>
                                 </div>
@@ -113,120 +112,10 @@
 
         <%-- Public Landing Page (Unauthenticated Guests & High School Tutoring Portal) --%>
         <c:otherwise>
-            <!-- TOP NAVBAR (REDESIGNED FOR SLEEK, MODERN ERP & EDTECH STANDARD) -->
-            <header class="portal-header">
-                <div class="portal-nav-container">
-                    <!-- Brand Section -->
-                    <a href="${pageContext.request.contextPath}/" class="portal-brand">
-                        <span class="portal-brand-icon">
-                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                            </svg>
-                        </span>
-                        <span class="portal-brand-name">EduCenter</span>
-                        <span class="portal-brand-badge">Lớp 10–12</span>
-                    </a>
+            <c:set var="activeNav" value="home" scope="request"/>
+            <%@ include file="/WEB-INF/views/common/public-header.jspf" %>
 
-                    <!-- Center Navigation Links (Clean, No-Wrap) -->
-                    <nav class="portal-nav-links">
-                        <a href="${pageContext.request.contextPath}/" class="portal-nav-link active">Trang chủ</a>
-                        <a href="${pageContext.request.contextPath}/courses" class="portal-nav-link">Khóa học</a>
-                        <a href="#chuong-trinh" class="portal-nav-link">Chương trình</a>
-                        <a href="#mon-hoc" class="portal-nav-link">Môn học</a>
-                        <a href="#doi-ngu" class="portal-nav-link">Giáo viên</a>
-                        <a href="#quy-trinh" class="portal-nav-link">Quy trình</a>
-                    </nav>
-
-                    <!-- Right Side Utility Actions -->
-                    <div class="portal-nav-actions">
-                        <!-- Course Registration Cart Shortcut -->
-                        <a href="${pageContext.request.contextPath}/registration-cart" class="portal-icon-btn" title="Giỏ đăng ký khóa học">
-                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                                <line x1="3" y1="6" x2="21" y2="6"></line>
-                                <path d="M16 10a4 4 0 0 1-8 0"></path>
-                            </svg>
-                            <c:if test="${not empty sessionScope.registrationCart && sessionScope.registrationCart.itemCount > 0}">
-                                <span class="portal-cart-badge"><c:out value="${sessionScope.registrationCart.itemCount}" /></span>
-                            </c:if>
-                        </a>
-
-                        <!-- Theme Toggle Button (Light / Dark) -->
-                        <button type="button" class="portal-icon-btn" data-theme-toggle aria-label="Chuyển chế độ sáng/tối" title="Chuyển chế độ sáng/tối">
-                            <svg class="icon icon-sm theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true" style="display: none;">
-                                <circle cx="12" cy="12" r="4"></circle>
-                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
-                            </svg>
-                            <svg class="icon icon-sm theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-                            </svg>
-                        </button>
-
-                        <div class="portal-nav-divider"></div>
-
-                        <c:choose>
-                            <c:when test="${not empty sessionScope.currentUser}">
-                                <a href="${pageContext.request.contextPath}/profile" class="portal-btn-ghost">
-                                    <c:out value="${sessionScope.currentUser.fullName}" />
-                                </a>
-                                <a href="${pageContext.request.contextPath}/logout" class="portal-icon-btn" title="Đăng xuất">
-                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                        <polyline points="16 17 21 12 16 7"></polyline>
-                                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                                    </svg>
-                                </a>
-                            </c:when>
-                            <c:otherwise>
-                                <a href="${pageContext.request.contextPath}/login" class="portal-btn-ghost">Đăng nhập</a>
-                                <a href="#dang-ky-tu-van" class="portal-btn-cta">
-                                    <span>Đăng ký tư vấn</span>
-                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                                        <polyline points="12 5 19 12 12 19"></polyline>
-                                    </svg>
-                                </a>
-                            </c:otherwise>
-                        </c:choose>
-
-                        <!-- Mobile Hamburger Button -->
-                        <button type="button" class="portal-hamburger-btn" onclick="toggleMobilePortalMenu()" aria-label="Mở menu điều hướng">
-                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                <line x1="3" y1="12" x2="21" y2="12"></line>
-                                <line x1="3" y1="6" x2="21" y2="6"></line>
-                                <line x1="3" y1="18" x2="21" y2="18"></line>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Mobile Drawer Navigation -->
-                <div class="portal-mobile-drawer" id="portalMobileDrawer">
-                    <nav class="portal-mobile-links">
-                        <a href="${pageContext.request.contextPath}/" class="portal-mobile-link active" onclick="closeMobilePortalMenu()">Trang chủ</a>
-                        <a href="${pageContext.request.contextPath}/courses" class="portal-mobile-link" onclick="closeMobilePortalMenu()">Khóa học THPT</a>
-                        <a href="#chuong-trinh" class="portal-mobile-link" onclick="closeMobilePortalMenu()">Chương trình gia sư</a>
-                        <a href="#mon-hoc" class="portal-mobile-link" onclick="closeMobilePortalMenu()">Môn học chuyên sâu</a>
-                        <a href="#doi-ngu" class="portal-mobile-link" onclick="closeMobilePortalMenu()">Đội ngũ giáo viên</a>
-                        <a href="#quy-trinh" class="portal-mobile-link" onclick="closeMobilePortalMenu()">Quy trình đào tạo</a>
-                    </nav>
-                    <div class="portal-mobile-actions">
-                        <c:choose>
-                            <c:when test="${not empty sessionScope.currentUser}">
-                                <a href="${pageContext.request.contextPath}/profile" class="btn btn-secondary btn-sm" style="width: 100%; justify-content: center;">Hồ sơ cá nhân</a>
-                                <a href="${pageContext.request.contextPath}/logout" class="btn btn-danger btn-sm" style="width: 100%; justify-content: center;">Đăng xuất</a>
-                            </c:when>
-                            <c:otherwise>
-                                <a href="${pageContext.request.contextPath}/login" class="btn btn-secondary btn-sm" style="width: 100%; justify-content: center;">Đăng nhập hệ thống</a>
-                                <a href="#dang-ky-tu-van" class="btn btn-primary btn-sm" style="width: 100%; justify-content: center;" onclick="closeMobilePortalMenu()">Đăng ký tư vấn ngay</a>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                </div>
-            </header>
-
-            <main style="padding-top: 68px;">
+            <main id="main-content" class="public-home">
                 <!-- SECTION 02: HERO SECTION -->
                 <section class="portal-hero">
                     <div class="portal-hero-container">
@@ -238,7 +127,7 @@
                             </div>
 
                             <h1 class="hero-title">
-                                Gia sư chất lượng cho học sinh <span class="hero-highlight">lớp 10, 11 và 12</span>
+                                Vững kiến thức.<br><span class="hero-highlight">Tự tin chinh phục kỳ thi.</span>
                             </h1>
 
                             <p class="hero-desc">
@@ -246,12 +135,12 @@
                             </p>
 
                             <div class="hero-btn-group">
-                                <a href="#chuong-trinh" class="btn btn-primary" style="padding: 12px 24px; font-weight: 600;">
+                                <a href="${pageContext.request.contextPath}/courses" class="btn btn-primary" style="padding: 12px 24px; font-weight: 600;">
                                     <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                         <circle cx="11" cy="11" r="8"></circle>
                                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                                     </svg>
-                                    <span>Tìm gia sư phù hợp</span>
+                                    <span>Khám phá khóa học</span>
                                 </a>
                                 <a href="#dang-ky-tu-van" class="btn btn-secondary" style="padding: 12px 24px; font-weight: 600;">
                                     <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
@@ -269,28 +158,16 @@
                                         <c:out value="${portalData.openClassesCount}" /> lớp học đang mở
                                     </span>
                                 </div>
-                                <div class="hero-chip-row" id="hero-grade-chips">
-                                    <button type="button" class="hero-filter-chip active" onclick="filterHeroGrade('all', this)">
-                                        Tất cả khối (<c:out value="${portalData.openClassesCount}" />)
-                                    </button>
-                                    <button type="button" class="hero-filter-chip" onclick="filterHeroGrade('10', this)">
-                                        Lớp 10 (<c:out value="${portalData.grade10ClassCount}" />)
-                                    </button>
-                                    <button type="button" class="hero-filter-chip" onclick="filterHeroGrade('11', this)">
-                                        Lớp 11 (<c:out value="${portalData.grade11ClassCount}" />)
-                                    </button>
-                                    <button type="button" class="hero-filter-chip" onclick="filterHeroGrade('12', this)">
-                                        Lớp 12 (<c:out value="${portalData.grade12ClassCount}" />)
-                                    </button>
+                                <div class="hero-chip-row">
+                                    <a class="hero-filter-chip" href="${pageContext.request.contextPath}/courses">Tất cả khóa học</a>
+                                    <c:forEach var="grade" items="${availableGrades}">
+                                        <a class="hero-filter-chip" href="${pageContext.request.contextPath}/courses?gradeLevel=${grade}">Lớp <c:out value="${grade}"/></a>
+                                    </c:forEach>
                                 </div>
-                                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 11px; color: var(--text-muted); padding-top: 4px;">
-                                    <span style="font-weight: 600;">Môn trọng điểm:</span>
-                                    <span class="grade-tag">Toán học</span>
-                                    <span class="grade-tag">Ngữ văn</span>
-                                    <span class="grade-tag">Tiếng Anh</span>
-                                    <span class="grade-tag">Vật lý</span>
-                                    <span class="grade-tag">Hóa học</span>
-                                    <span class="grade-tag">Sinh học</span>
+                                <div class="hero-chip-row">
+                                    <c:forEach var="subject" items="${portalSubjects}">
+                                        <a class="grade-tag" href="${pageContext.request.contextPath}/courses?subjectId=${subject.id}"><c:out value="${subject.name}"/></a>
+                                    </c:forEach>
                                 </div>
                             </div>
                         </div>
@@ -803,7 +680,7 @@
                                                             </svg>
                                                         </c:otherwise>
                                                     </c:choose>
-                                                    <span class="teacher-exp-tag"><c:out value="${t.experienceBadge}" /></span>
+                                                    <c:if test="${not empty t.experienceBadge}"><span class="teacher-exp-tag"><c:out value="${t.experienceBadge}" /></span></c:if>
                                                 </div>
                                                 <h3 class="teacher-name"><c:out value="${t.fullName}" /></h3>
                                                 <span class="teacher-role-tag"><c:out value="${t.degree}" /></span>
@@ -1007,7 +884,7 @@
                                     <svg class="icon icon-sm faq-icon-arrow" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
                                 </button>
                                 <div class="faq-answer">
-                                    EduCenter chuyên sâu duy nhất bậc Trung học Phổ thông: Lớp 10, Lớp 11 và Lớp 12. Chúng tôi không đào tạo cấp 1, cấp 2 hoặc các lớp ôn thi vào lớp 10, nhằm tập trung 100% nguồn lực sư phạm vào chương trình GDPT mới và kỳ thi tốt nghiệp THPT/ĐGNL.
+                                    Các chương trình bồi dưỡng và luyện thi được phân theo môn học, khối lớp và mục tiêu. Xem các khối lớp đang mở trong danh mục khóa học để chọn chương trình phù hợp.
                                 </div>
                             </div>
 
@@ -1076,7 +953,7 @@
                             <div class="section-head text-center" style="margin-bottom: 28px;">
                                 <span class="section-tagline">Tư Vấn Học Vụ Chuyên Sâu</span>
                                 <h2 class="section-heading">Xây dựng lộ trình học tập phù hợp ngay hôm nay</h2>
-                                <p class="section-desc">Để lại thông tin để chuyên viên học vụ EduCenter liên hệ tư vấn lộ trình gia sư tối ưu cho học sinh trong vòng 30 phút làm việc.</p>
+                                <p class="section-desc">Để lại thông tin để chuyên viên học vụ EduCenter liên hệ tư vấn lộ trình gia sư tối ưu cho học sinh theo thông tin bạn cung cấp.</p>
                             </div>
 
                             <!-- Flash Toast Alerts -->
@@ -1107,11 +984,11 @@
                                 <div class="form-row-2">
                                     <div class="portal-form-group">
                                         <label for="lead-fullname">Họ tên Phụ huynh / Học sinh <span class="required">*</span></label>
-                                        <input type="text" id="lead-fullname" name="fullName" class="portal-input" placeholder="Ví dụ: Nguyễn Văn Hùng" required>
+                                        <input type="text" id="lead-fullname" name="fullName" value="<c:out value='${leadDraft.fullName}'/>" maxlength="150" class="portal-input" placeholder="Ví dụ: Nguyễn Văn Hùng" required>
                                     </div>
                                     <div class="portal-form-group">
                                         <label for="lead-phone">Số điện thoại liên hệ <span class="required">*</span></label>
-                                        <input type="tel" id="lead-phone" name="phone" class="portal-input" pattern="^(0[3|5|7|8|9])+([0-9]{8})$" placeholder="Ví dụ: 0988123456" required>
+                                        <input type="tel" id="lead-phone" name="phone" value="<c:out value='${leadDraft.phone}'/>" class="portal-input" pattern="0[35789][0-9]{8}" placeholder="Ví dụ: 0988123456" required>
                                     </div>
                                 </div>
 
@@ -1119,31 +996,23 @@
                                     <div class="portal-form-group">
                                         <label for="lead-grade">Khối lớp học <span class="required">*</span></label>
                                         <select id="lead-grade" name="gradeLevel" class="portal-select" required>
-                                            <option value="" disabled selected>Chọn khối lớp THPT</option>
-                                            <option value="10">Lớp 10 (Chương trình mới)</option>
-                                            <option value="11">Lớp 11 (Bứt phá chuyên sâu)</option>
-                                            <option value="12">Lớp 12 (Luyện thi THPTQG & ĐGNL)</option>
+                                            <option value="">Chọn khối lớp</option>
+                                            <c:forEach var="grade" items="${availableGrades}"><option value="${grade}" ${leadDraft.gradeLevel == grade ? 'selected' : ''}>Lớp <c:out value="${grade}"/></option></c:forEach>
                                         </select>
                                     </div>
 
                                     <div class="portal-form-group">
                                         <label for="lead-subject">Môn học trọng tâm <span class="required">*</span></label>
                                         <select id="lead-subject" name="subject" class="portal-select" required>
-                                            <option value="" disabled selected>Chọn môn học</option>
-                                            <option value="Toán học">Toán học</option>
-                                            <option value="Vật lý">Vật lý</option>
-                                            <option value="Hóa học">Hóa học</option>
-                                            <option value="Tiếng Anh">Tiếng Anh</option>
-                                            <option value="Ngữ văn">Ngữ văn</option>
-                                            <option value="Sinh học">Sinh học</option>
-                                            <option value="Tổ hợp môn (KHTN / KHXH)">Tổ hợp môn (KHTN / KHXH)</option>
+                                            <option value="">Chọn môn học</option>
+                                            <c:forEach var="subject" items="${portalSubjects}"><option value="<c:out value='${subject.name}'/>" ${leadDraft.subject == subject.name ? 'selected' : ''}><c:out value="${subject.name}"/></option></c:forEach>
                                         </select>
                                     </div>
 
                                     <div class="portal-form-group">
                                         <label for="lead-model">Hình thức học <span class="required">*</span></label>
                                         <select id="lead-model" name="learningModel" class="portal-select" required>
-                                            <option value="Lớp nhóm nhỏ (10-15 bạn)">Lớp nhóm nhỏ (10-15 bạn)</option>
+                                            <option value="Lớp nhóm">Lớp nhóm</option>
                                             <option value="Gia sư 1 kèm 1 cá nhân hóa">Gia sư 1 kèm 1 cá nhân hóa</option>
                                         </select>
                                     </div>
@@ -1151,7 +1020,7 @@
 
                                 <div class="portal-form-group" style="margin-bottom: 20px;">
                                     <label for="lead-notes">Mục tiêu học tập hoặc tình trạng hiện tại</label>
-                                    <textarea id="lead-notes" name="notes" class="portal-textarea" rows="2" placeholder="Ví dụ: Đang bị hổng kiến thức Hình không gian Lớp 11, cần mục tiêu 8.0 môn Toán thi THPT Quốc gia..."></textarea>
+                                    <textarea id="lead-notes" name="notes" class="portal-textarea" maxlength="3000" rows="2" placeholder="Ví dụ: Đang bị hổng kiến thức Hình không gian Lớp 11, cần mục tiêu 8.0 môn Toán thi THPT Quốc gia..."><c:out value="${leadDraft.notes}"/></textarea>
                                 </div>
 
                                 <button type="submit" class="portal-submit-btn" id="lead-submit-btn">
@@ -1168,82 +1037,8 @@
             </main>
 
             <!-- FOOTER -->
-            <footer class="portal-footer" id="lien-he">
-                <div class="portal-footer-grid">
-                    <div class="footer-col">
-                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
-                            <span class="portal-brand-icon">
-                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                                </svg>
-                            </span>
-                            <span style="font-size: var(--font-size-lg); font-weight: 700; color: var(--text);">EduCenter</span>
-                            <span class="portal-brand-badge">THPT Tutoring</span>
-                        </div>
-                        <p style="font-size: var(--font-size-sm); color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">
-                            Nền tảng gia sư chuyên biệt Toán, Lý, Hóa, Sinh, Anh khối 10, 11 và luyện thi Tốt nghiệp THPT Quốc gia theo lộ trình cá nhân hóa năng lực học sinh.
-                        </p>
-                        <div style="display: flex; flex-direction: column; gap: 8px; font-size: var(--font-size-xs); color: var(--text-muted);">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color: var(--primary);" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                                <span>Tòa EduCenter Tower, Quận Cầu Giấy, Hà Nội</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color: var(--primary);" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                                <span>Hotline tư vấn: 1900 6868 - 0988 123 456</span>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="color: var(--primary);" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                                <span>banquantri@educenter.vn</span>
-                            </div>
-                        </div>
-                    </div>
+            <%@ include file="/WEB-INF/views/common/public-footer.jspf" %>
 
-                    <div class="footer-col">
-                        <h4>Chương trình THPT</h4>
-                        <ul class="footer-links">
-                            <li><a href="#chuong-trinh">Gia sư Lớp 10 (Chương trình mới)</a></li>
-                            <li><a href="#chuong-trinh">Gia sư Lớp 11 (Tạo đà chuyên sâu)</a></li>
-                            <li><a href="#chuong-trinh">Luyện thi THPT Lớp 12 & ĐGNL</a></li>
-                            <li><a href="#chuong-trinh">Ôn thi đội tuyển học sinh giỏi</a></li>
-                            <li><a href="#chuong-trinh">Mô hình kèm 1:1 & Nhóm nhỏ</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-col">
-                        <h4>Hỗ trợ & Quy định</h4>
-                        <ul class="footer-links">
-                            <li><a href="#quy-trinh">Quy trình kiểm tra đầu vào</a></li>
-                            <li><a href="#hoc-phi">Chính sách hoàn phí & Học thử</a></li>
-                            <li><a href="#faq">Điều khoản dịch vụ giáo dục</a></li>
-                            <li><a href="#faq">Chính sách bảo mật phụ huynh</a></li>
-                            <li><a href="#faq">Câu hỏi thường gặp (FAQ)</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer-col">
-                        <h4>Liên kết nhanh</h4>
-                        <ul class="footer-links">
-                            <li><a href="#doi-ngu">Tiêu chuẩn chọn tuyển giáo viên</a></li>
-                            <li><a href="#dang-ky-tu-van">Đăng ký kiểm tra trình độ</a></li>
-                            <li><a href="${pageContext.request.contextPath}/login">Cổng thông tin phụ huynh</a></li>
-                            <li><a href="#lien-he">Văn phòng khảo thí khu vực</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="footer-bottom">
-                    <p>&copy; 2026 EduCenter. Bản quyền thuộc về Hệ thống Đào tạo & Gia sư THPT EduCenter. All rights reserved.</p>
-                    <div style="display: flex; gap: 20px;">
-                        <a href="#faq" style="color: var(--text-muted); text-decoration: none;">Bảo mật</a>
-                        <a href="#faq" style="color: var(--text-muted); text-decoration: none;">Điều khoản</a>
-                        <a href="#lien-he" style="color: var(--text-muted); text-decoration: none;">Liên hệ kỹ thuật</a>
-                    </div>
-                </div>
-            </footer>
-
-            <!-- Interactive JavaScript -->
             <script>
                 function toggleFaq(btn) {
                     const item = btn.closest('.faq-item');
@@ -1258,48 +1053,8 @@
                     }
                 }
 
-                function filterHeroGrade(grade, btn) {
-                    const chips = document.querySelectorAll('#hero-grade-chips .hero-filter-chip');
-                    chips.forEach(c => c.classList.remove('active'));
-                    btn.classList.add('active');
-
-                    const courseCards = document.querySelectorAll('[data-course-grade]');
-                    courseCards.forEach(card => {
-                        const cardGrade = card.getAttribute('data-course-grade');
-                        if (grade === 'all' || cardGrade === grade) {
-                            card.style.display = 'flex';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-
-                    const gradeCards = document.querySelectorAll('[data-grade]');
-                    gradeCards.forEach(card => {
-                        const cGrade = card.getAttribute('data-grade');
-                        if (grade === 'all' || cGrade === grade) {
-                            card.style.display = 'flex';
-                        } else {
-                            card.style.display = 'none';
-                        }
-                    });
-                }
-
-                function toggleMobilePortalMenu() {
-                    const drawer = document.getElementById('portalMobileDrawer');
-                    if (drawer) {
-                        drawer.classList.toggle('open');
-                    }
-                }
-
-                function closeMobilePortalMenu() {
-                    const drawer = document.getElementById('portalMobileDrawer');
-                    if (drawer) {
-                        drawer.classList.remove('open');
-                    }
-                }
             </script>
-            <script src="${pageContext.request.contextPath}/assets/js/theme.js"></script>
-        </c:otherwise>
+</c:otherwise>
     </c:choose>
 </body>
 </html>

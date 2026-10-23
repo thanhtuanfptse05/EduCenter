@@ -1,7 +1,10 @@
+<c:choose><c:when test="${internalShell}">
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
+<button type="button" class="app-drawer-backdrop" data-drawer-backdrop aria-label="Đóng menu" hidden></button>
 <header class="admin-topbar app-header">
+<button type="button" class="site-icon app-menu-button" data-app-menu aria-controls="app-sidebar" aria-expanded="false" aria-label="Mở menu nội bộ"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
     <div class="topbar-left app-header-nav">
         <a href="${pageContext.request.contextPath}/" class="app-brand">
             <span class="app-brand-badge-box">
@@ -38,13 +41,13 @@
 
         <c:choose>
             <c:when test="${not empty sessionScope.currentUser}">
-                <div style="display: flex; align-items: center; gap: 8px;">
+                <div class="app-user-actions" style="display: flex; align-items: center; gap: 8px;">
                     <a href="${pageContext.request.contextPath}/profile" class="btn btn-ghost btn-sm" style="display: flex; align-items: center; gap: 6px;" title="Xem hồ sơ">
                         <span class="header-user-avatar">
                             <c:out value="${sessionScope.currentUser.fullName != null && !sessionScope.currentUser.fullName.isEmpty() ? sessionScope.currentUser.fullName.substring(0, 1).toUpperCase() : 'U'}" />
                         </span>
-                        <span style="font-weight: 600;"><c:out value="${sessionScope.currentUser.fullName}" /></span>
-                        <span class="badge badge-admin" style="font-size: 10px; padding: 2px 6px;">
+                        <span class="app-user-name" style="font-weight: 600;"><c:out value="${sessionScope.currentUser.fullName}" /></span>
+                        <span class="badge badge-admin app-user-role" style="font-size: 10px; padding: 2px 6px;">
                             <c:out value="${sessionScope.currentUser.primaryRole}" />
                         </span>
                     </a>
@@ -54,7 +57,7 @@
                             <polyline points="16 17 21 12 16 7"></polyline>
                             <line x1="21" y1="12" x2="9" y2="12"></line>
                         </svg>
-                        <span>Đăng xuất</span>
+                        <span class="app-logout-label">Đăng xuất</span>
                     </a>
                 </div>
             </c:when>
@@ -65,3 +68,5 @@
         </c:choose>
     </div>
 </header>
+
+</c:when><c:otherwise><%@ include file="/WEB-INF/views/common/public-header.jspf" %></c:otherwise></c:choose>

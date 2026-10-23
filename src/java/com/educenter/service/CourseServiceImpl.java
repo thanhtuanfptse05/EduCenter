@@ -65,12 +65,6 @@ public class CourseServiceImpl implements CourseService {
             CourseCardDTO card = mapToCardDTO(course);
             detail.setCourse(card);
 
-            // Compute promotional anchor price
-            BigDecimal originalFee = course.getFee().multiply(new BigDecimal("1.15")).setScale(-4, java.math.RoundingMode.HALF_UP);
-            BigDecimal discount = originalFee.subtract(course.getFee());
-            detail.setOriginalFee(originalFee);
-            detail.setDiscountAmount(discount);
-
             // Fetch open classes
             List<EduClass> classes = courseRepository.findOpenClassesByCourseId(em, courseId);
             List<ClassItemDTO> classDTOs = new ArrayList<>();
@@ -93,23 +87,11 @@ public class CourseServiceImpl implements CourseService {
                     }
                 }
 
-                // Friendly schedule and shift
-                if (cl.getCode() != null && cl.getCode().endsWith("-A")) {
-                    cDto.setShiftName("Ca Học Tối");
-                    cDto.setScheduleText("Thứ 2 & Thứ 5 (18:00 - 19:30)");
-                    cDto.setRoomName("Phòng 204 (Tòa EduTech, Cầu Giấy)");
-                    cDto.setEnrolledCount(Math.min(cl.getCapacity(), 12));
-                } else if (cl.getCode() != null && cl.getCode().endsWith("-B")) {
-                    cDto.setShiftName("Ca Học Muộn");
-                    cDto.setScheduleText("Thứ 4 & Thứ 7 (19:30 - 21:00)");
-                    cDto.setRoomName("Phòng 205 (Trụ sở 45 Liễu Giai, Ba Đình)");
-                    cDto.setEnrolledCount(Math.min(cl.getCapacity(), 8));
-                } else {
-                    cDto.setShiftName("Ca Học Tiêu Chuẩn");
-                    cDto.setScheduleText("Thứ 3 & Thứ 6 (18:00 - 19:30)");
-                    cDto.setRoomName("Phòng 102 (Cơ sở Cầu Giấy)");
-                    cDto.setEnrolledCount(Math.min(cl.getCapacity(), 10));
-                }
+                ClassFactsDTO facts = courseRepository.findClassFacts(em, cl.getId());
+                cDto.setEnrolledCount(Math.toIntExact(facts.enrolledCount()));
+                cDto.setScheduleText(facts.scheduleText());
+                cDto.setRoomName(facts.roomName());
+                cDto.setShiftName(null);
 
                 classDTOs.add(cDto);
             }
@@ -120,10 +102,9 @@ public class CourseServiceImpl implements CourseService {
                 TeacherCardDTO tDto = new TeacherCardDTO();
                 tDto.setId(primaryTeacherEntity.getId());
                 tDto.setFullName(primaryTeacherEntity.getFullName());
-                tDto.setDegree(primaryTeacherEntity.getDegree() != null ? primaryTeacherEntity.getDegree() : "Chuyên gia học thuật");
+                tDto.setDegree(primaryTeacherEntity.getDegree());
                 tDto.setSpecialization(primaryTeacherEntity.getSpecialization());
-                tDto.setBio(primaryTeacherEntity.getBio() != null ? primaryTeacherEntity.getBio() : "Giảng viên giàu kinh nghiệm luyện thi THPT và ĐGNL tại EduCenter.");
-                tDto.setExperienceBadge("10+ năm kinh nghiệm");
+                tDto.setBio(primaryTeacherEntity.getBio());
                 if (primaryTeacherEntity.getUser() != null) {
                     tDto.setPhotoUrl(primaryTeacherEntity.getUser().getAvatarUrl());
                 }
@@ -160,10 +141,7 @@ public class CourseServiceImpl implements CourseService {
                 dto.setName(s.getName());
                 dto.setDescription(s.getDescription());
 
-                Long count = em.createQuery("SELECT COUNT(c) FROM Course c WHERE c.subject.id = :sid AND c.status = 'OPEN'", Long.class)
-                        .setParameter("sid", s.getId())
-                        .getSingleResult();
-                dto.setCourseCount((count != null) ? count : 0L);
+                dto.setCourseCount(courseRepository.countOpenBySubject(em, s.getId()));
 
                 // Outline icon symbol hint per subject
                 if ("MAT".equalsIgnoreCase(s.getCode())) dto.setIconSymbol("calculate");

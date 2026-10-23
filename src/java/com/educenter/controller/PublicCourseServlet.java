@@ -51,14 +51,6 @@ public class PublicCourseServlet extends HttpServlet {
         UserPrincipalDTO currentUser = (UserPrincipalDTO) session.getAttribute("currentUser");
         Long userId = (currentUser != null) ? currentUser.getUserId() : null;
 
-        // Populate cart item count for badge in header
-        try {
-            CartViewDTO cart = cartService.getCart(session, userId);
-            req.setAttribute("cartCount", cart.getTotalCourses());
-        } catch (Exception e) {
-            req.setAttribute("cartCount", 0);
-        }
-
         switch (path) {
             case "/courses" -> handleCourseList(req, resp);
             case "/courses/detail" -> handleCourseDetail(req, resp);
@@ -71,6 +63,7 @@ public class PublicCourseServlet extends HttpServlet {
         CourseFilterDTO filter = new CourseFilterDTO();
 
         String keyword = req.getParameter("keyword");
+        if (keyword == null) keyword = req.getParameter("q");
         if (keyword != null && !keyword.trim().isEmpty()) {
             filter.setKeyword(keyword.trim());
         }
@@ -91,7 +84,8 @@ public class PublicCourseServlet extends HttpServlet {
         }
         if (gradeParam != null && !gradeParam.trim().isEmpty()) {
             try {
-                filter.setGradeLevel(Integer.parseInt(gradeParam.trim()));
+                int grade = Integer.parseInt(gradeParam.trim());
+                if (grade >= 6 && grade <= 12) filter.setGradeLevel(grade);
             } catch (NumberFormatException ignored) {}
         }
 
@@ -152,16 +146,16 @@ public class PublicCourseServlet extends HttpServlet {
     }
 
     private void handleConsultationSuccess(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String leadCode = req.getParameter("code");
         HttpSession session = req.getSession(false);
-        if ((leadCode == null || leadCode.isEmpty()) && session != null) {
-            leadCode = (String) session.getAttribute("LAST_LEAD_CODE");
-        }
-        if (leadCode == null || leadCode.isEmpty()) {
-            leadCode = "LEAD-2026-001";
+        RegistrationReceiptDTO receipt = session == null ? null : (RegistrationReceiptDTO) session.getAttribute(CartServiceImpl.RECEIPT_KEY);
+        String requestedCode = req.getParameter("code");
+        if (receipt == null || (requestedCode != null && !requestedCode.equals(receipt.getCode()))) {
+            FlashMessageUtil.setInfo(req, "Chưa có phiếu tiếp nhận hợp lệ trong phiên này.");
+            resp.sendRedirect(req.getContextPath() + "/courses"); return;
         }
 
-        req.setAttribute("leadCode", leadCode);
+        req.setAttribute("receipt", receipt);
+        req.setAttribute("leadCode", receipt.getCode());
         req.setAttribute("pageTitle", "Đăng Ký Tư Vấn Thành Công — EduCenter");
         req.getRequestDispatcher("/WEB-INF/views/public/consultation-success.jsp").forward(req, resp);
     }

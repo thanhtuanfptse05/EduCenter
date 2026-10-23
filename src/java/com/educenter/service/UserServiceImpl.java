@@ -113,6 +113,8 @@ public class UserServiceImpl implements UserService {
         try {
             tx.begin();
 
+            roleRepository.lockAdminRole(em);
+
             // Verify admin rights
             User admin = userRepository.findById(em, adminId)
                     .orElseThrow(() -> new AuthorizationException("Tài khoản quản trị viên không tồn tại."));
@@ -199,6 +201,8 @@ public class UserServiceImpl implements UserService {
         EntityTransaction tx = em.getTransaction();
         try {
             tx.begin();
+
+            roleRepository.lockAdminRole(em);
 
             // Verify admin rights
             User admin = userRepository.findById(em, adminId)
@@ -294,6 +298,9 @@ public class UserServiceImpl implements UserService {
             }).collect(Collectors.toList());
 
             UserPageDTO pageDTO = new UserPageDTO(items, totalRecords, validPage, validSize, keyword, roleCode, status);
+            pageDTO.setAvailableRoles(roleRepository.findAll(em).stream()
+                    .filter(role -> CANONICAL_ROLES.contains(role.getCode()))
+                    .map(role -> new com.educenter.dto.RoleOptionDTO(role.getCode(), role.getName())).toList());
             pageDTO.setTotalActive(userRepository.countByStatus(em, User.STATUS_ACTIVE));
             pageDTO.setTotalLocked(userRepository.countByStatus(em, User.STATUS_LOCKED));
             return pageDTO;

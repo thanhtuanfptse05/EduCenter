@@ -43,14 +43,7 @@ public class CsrfFilter implements Filter {
 
             if ("POST".equalsIgnoreCase(method)) {
                 if (!CsrfUtil.isValidToken(httpRequest)) {
-                    httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                    FlashMessageUtil.setError(httpRequest, "Phiên làm việc đã hết hạn hoặc mã bảo mật (CSRF) không hợp lệ. Vui lòng tải lại trang.");
-                    String referer = httpRequest.getHeader("Referer");
-                    if (referer != null && referer.contains(httpRequest.getContextPath())) {
-                        httpResponse.sendRedirect(referer);
-                    } else {
-                        httpResponse.sendRedirect(httpRequest.getContextPath() + "/login");
-                    }
+                    httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "Mã bảo mật không hợp lệ. Vui lòng tải lại trang.");
                     return;
                 }
             }

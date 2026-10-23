@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/auth.css">
 </head>
 <body>
+<c:set var="internalShell" value="true" scope="request"/>
     <div class="admin-layout">
         <c:set var="activeNav" value="profile" scope="request" />
         <c:set var="breadcrumb" value="Cài đặt tài khoản & Bảo mật" scope="request" />

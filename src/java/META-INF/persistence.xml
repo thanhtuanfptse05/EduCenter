@@ -4,7 +4,7 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
     <persistence-unit name="EduCenterPU" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        
+
         <class>com.educenter.entity.Role</class>
         <class>com.educenter.entity.User</class>
         <class>com.educenter.entity.AuditLog</class>
@@ -15,7 +15,7 @@
         <class>com.educenter.entity.EduClass</class>
         <class>com.educenter.entity.Lead</class>
         <class>com.educenter.entity.RegistrationCartItem</class>
-        
+
         <!-- Cấu hình kết nối Microsoft SQL Server -->
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
@@ -27,7 +27,7 @@
             <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="none"/>
         </properties>
     </persistence-unit>
 </persistence>

@@ -1,7 +1,9 @@
 # Implementation Tasks: Course Catalog & Registration Cart (feat-course-catalog)
-**Status:** Completed | **Feature:** `feat-course-catalog`  
-**Spec Reference:** [spec.md](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/.sdd/specs/modules/admission/feat-course-catalog/spec.md) | **Plan Reference:** [plan.md](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/.sdd/specs/modules/admission/feat-course-catalog/plan.md)  
-**Target Module:** `MOD-ADMISSION` | **Owner:** Member 02  
+**Status:** Completed | **Feature:** `feat-course-catalog`
+> Historical implementation checklist. Completion claims below are superseded by the 2026-10-23 [repair specification](../../admission/feat-portal-cart-repair/spec.md) and [verification](../../admission/feat-portal-cart-repair/verification.md); owner exclusions and unbuilt ERP modules are not production-complete.
+
+**Spec Reference:** [spec.md](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/.sdd/specs/modules/admission/feat-course-catalog/spec.md) | **Plan Reference:** [plan.md](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/.sdd/specs/modules/admission/feat-course-catalog/plan.md)
+**Target Module:** `MOD-ADMISSION` | **Owner:** Member 02
 
 ---
 

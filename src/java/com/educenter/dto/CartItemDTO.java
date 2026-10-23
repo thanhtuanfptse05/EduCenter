@@ -17,8 +17,9 @@ public class CartItemDTO implements Serializable {
     private Integer gradeLevel;
     private BigDecimal fee = BigDecimal.ZERO;
     private String formattedFee;
-    private Integer totalSessions = 24;
-    private Integer maxCapacity = 15;
+    private Integer totalSessions;
+    private Integer maxCapacity;
+    private boolean available;
     private String teacherName;
     private String imageUrl;
     private String notes;
@@ -26,6 +27,9 @@ public class CartItemDTO implements Serializable {
     private String selectedClassCode;
 
     public CartItemDTO() {}
+
+    public boolean isAvailable() { return available; }
+    public void setAvailable(boolean available) { this.available = available; }
 
     public Long getCourseId() { return courseId; }
     public void setCourseId(Long courseId) { this.courseId = courseId; }

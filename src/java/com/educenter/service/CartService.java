@@ -14,7 +14,11 @@ public interface CartService {
     /**
      * Add a course to the registration cart.
      */
-    void addToCart(HttpSession session, Long userId, Long courseId, String notes);
+    boolean addToCart(HttpSession session, Long userId, Long courseId, String notes);
+
+    void mergeGuestCart(HttpSession session, Long userId);
+
+    void updateNotes(HttpSession session, Long userId, Long courseId, String notes);
 
     /**
      * Remove a course from the registration cart.
