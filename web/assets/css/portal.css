@@ -399,83 +399,210 @@
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 28px;
+  padding: 30px 24px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  position: relative;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
 }
 
 .grade-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-md);
+  border-color: var(--primary-border);
 }
 
 .grade-card.featured {
   border-color: var(--primary);
-  box-shadow: 0 0 0 1px var(--primary), var(--shadow-md);
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.12);
+  background: linear-gradient(180deg, var(--surface) 0%, rgba(37, 99, 235, 0.02) 100%);
 }
 
-.grade-card-top {
+.grade-card-crown {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 4px 14px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.35);
+  white-space: nowrap;
+}
+
+.grade-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
 }
 
+.grade-num-box {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
 .grade-num {
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 800;
+  line-height: 1;
   color: var(--text);
+  letter-spacing: -0.02em;
 }
 
 .grade-card.featured .grade-num {
   color: var(--primary);
 }
 
-.grade-badge {
-  font-size: var(--font-size-xs);
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: var(--radius-sm);
-  background-color: var(--surface-muted);
-  color: var(--primary);
+.grade-level-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
 }
 
-.grade-card.featured .grade-badge {
-  background-color: var(--primary);
-  color: var(--text-inverse);
+.grade-badge-custom {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 9999px;
+}
+
+.badge-teal {
+  background-color: rgba(14, 165, 233, 0.12);
+  color: #0284c7;
+}
+
+.badge-indigo {
+  background-color: rgba(99, 102, 241, 0.12);
+  color: #4f46e5;
+}
+
+.badge-amber {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+}
+
+.grade-target-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
+}
+
+.banner-teal {
+  background-color: rgba(14, 165, 233, 0.08);
+  color: #0369a1;
+  border-left: 3px solid #0284c7;
+}
+
+.banner-indigo {
+  background-color: rgba(99, 102, 241, 0.08);
+  color: #4338ca;
+  border-left: 3px solid #6366f1;
+}
+
+.banner-amber {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #b45309;
+  border-left: 3px solid #f59e0b;
 }
 
 .grade-card-title {
-  font-size: var(--font-size-lg);
+  font-size: 18px;
   font-weight: 700;
   color: var(--text);
-  margin: 0 0 10px;
+  margin: 0 0 8px;
+  line-height: 1.35;
 }
 
 .grade-card-desc {
-  font-size: var(--font-size-sm);
+  font-size: 13px;
   color: var(--text-muted);
   line-height: 1.6;
   margin: 0 0 18px;
+}
+
+.grade-checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.grade-check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+.text-teal { color: #0284c7; flex-shrink: 0; margin-top: 2px; }
+.text-indigo { color: #4f46e5; flex-shrink: 0; margin-top: 2px; }
+.text-amber { color: #d97706; flex-shrink: 0; margin-top: 2px; }
+
+.grade-subject-block {
+  margin-bottom: 24px;
+}
+
+.grade-subject-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 8px;
 }
 
 .grade-subject-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 10px;
 }
 
 .grade-tag {
-  font-size: var(--font-size-xs);
+  font-size: 11px;
   padding: 4px 10px;
   border-radius: var(--radius-sm);
   background-color: var(--surface-muted);
   color: var(--text);
-  font-weight: 500;
+  font-weight: 600;
+  border: 1px solid var(--border);
+}
+
+.grade-tag.tag-primary {
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+  border-color: rgba(37, 99, 235, 0.2);
+  font-weight: 700;
+}
+
+.grade-card-cta {
+  margin-top: auto;
+}
+
+.grade-card-cta .btn {
+  width: 100%;
+  justify-content: center;
+  font-weight: 600;
 }
 
 /* ==========================================================================
@@ -508,13 +635,27 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all var(--transition-fast);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  position: relative;
+  overflow: hidden;
 }
 
 .subject-card:hover {
+  transform: translateY(-4px);
   border-color: var(--primary-border);
   box-shadow: var(--shadow-md);
 }
+
+/* Thematic Subject Accents */
+.subject-card.subject-theme-math { --sub-color: #2563eb; }
+.subject-card.subject-theme-mat { --sub-color: #2563eb; }
+.subject-card.subject-theme-phys { --sub-color: #d97706; }
+.subject-card.subject-theme-phy { --sub-color: #d97706; }
+.subject-card.subject-theme-chem { --sub-color: #059669; }
+.subject-card.subject-theme-che { --sub-color: #059669; }
+.subject-card.subject-theme-eng { --sub-color: #7c3aed; }
+.subject-card.subject-theme-lit { --sub-color: #e11d48; }
+.subject-card.subject-theme-bio { --sub-color: #0284c7; }
 
 .subject-card-thumb {
   position: relative;
@@ -542,44 +683,60 @@
   position: absolute;
   bottom: 8px;
   left: 8px;
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: var(--radius-sm);
-  background-color: rgba(255, 255, 255, 0.92);
-  color: var(--primary);
+  background-color: rgba(255, 255, 255, 0.95);
+  color: var(--sub-color, var(--primary));
   font-size: 11px;
   font-weight: 700;
   backdrop-filter: blur(4px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-[data-theme="dark"] .subject-card-tag {
-  background-color: rgba(30, 41, 59, 0.88);
-  color: var(--primary);
+html[data-theme="dark"] .subject-card-tag {
+  background-color: rgba(30, 41, 59, 0.9);
+  color: var(--sub-color, var(--primary));
+}
+
+.subject-header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .subject-icon-box {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   border-radius: var(--radius-md);
   background-color: var(--primary-subtle);
-  color: var(--primary);
+  color: var(--sub-color, var(--primary));
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .subject-card-title {
-  font-size: var(--font-size-md);
+  font-size: 17px;
   font-weight: 700;
   color: var(--text);
-  margin: 0 0 8px;
+  margin: 0 0 2px;
+}
+
+.subject-prog-counter-badge {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  display: block;
 }
 
 .subject-card-desc {
-  font-size: var(--font-size-sm);
+  font-size: 13px;
   color: var(--text-muted);
-  line-height: 1.55;
-  margin: 0 0 14px;
+  line-height: 1.6;
+  margin: 0 0 16px;
 }
 
 .subject-grades-badge {
@@ -591,15 +748,17 @@
 .subject-grade-pill {
   font-size: 11px;
   font-weight: 600;
-  padding: 2px 8px;
+  padding: 3px 8px;
   border-radius: var(--radius-sm);
   background-color: var(--surface-muted);
   color: var(--text-muted);
+  border: 1px solid var(--border);
 }
 
 .subject-grade-pill.highlight {
   background-color: var(--primary-subtle);
   color: var(--primary);
+  border-color: rgba(37, 99, 235, 0.2);
   font-weight: 700;
 }
 
@@ -609,25 +768,28 @@
   align-items: center;
   border-top: 1px solid var(--border);
   padding-top: 14px;
-  font-size: var(--font-size-sm);
+  font-size: 12px;
 }
 
-.subject-prog-count {
+.subject-curriculum-label {
   color: var(--text-muted);
+  font-size: 11px;
   font-weight: 500;
 }
 
 .subject-explore-link {
   color: var(--primary);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
   display: inline-flex;
   align-items: center;
   gap: 4px;
+  transition: transform var(--transition-fast), color var(--transition-fast);
 }
 
 .subject-explore-link:hover {
-  text-decoration: underline;
+  transform: translateX(3px);
+  color: var(--primary-hover);
 }
 
 /* ==========================================================================
@@ -863,22 +1025,24 @@
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 20px;
+  padding: 22px;
   box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all var(--transition-fast);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  position: relative;
 }
 
 .teacher-card:hover {
+  transform: translateY(-4px);
   box-shadow: var(--shadow-md);
   border-color: var(--primary-border);
 }
 
 .teacher-avatar-box {
   width: 100%;
-  height: 180px;
+  height: 190px;
   border-radius: var(--radius-md);
   background-color: var(--surface-muted);
   overflow: hidden;
@@ -893,6 +1057,29 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  transition: transform var(--transition-fast);
+}
+
+.teacher-card:hover .teacher-avatar-box img {
+  transform: scale(1.05);
+}
+
+.teacher-verified-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(5, 150, 105, 0.95);
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(4px);
 }
 
 .teacher-exp-tag {
@@ -903,9 +1090,10 @@
   color: var(--primary);
   font-size: 11px;
   font-weight: 700;
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(4px);
 }
 
 html[data-theme="dark"] .teacher-exp-tag {
@@ -914,22 +1102,27 @@ html[data-theme="dark"] .teacher-exp-tag {
 }
 
 .teacher-name {
-  font-size: var(--font-size-md);
+  font-size: 17px;
   font-weight: 700;
   color: var(--text);
-  margin: 0;
+  margin: 0 0 4px;
+}
+
+.teacher-degree-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
 }
 
 .teacher-role-tag {
-  font-size: var(--font-size-xs);
+  font-size: 12px;
   color: var(--primary);
   font-weight: 600;
-  display: block;
-  margin: 4px 0 8px;
 }
 
 .teacher-bio {
-  font-size: var(--font-size-xs);
+  font-size: 12px;
   color: var(--text-muted);
   line-height: 1.6;
   margin: 0;
@@ -940,8 +1133,18 @@ html[data-theme="dark"] .teacher-exp-tag {
   padding-top: 12px;
   margin-top: 14px;
   font-size: 11px;
-  font-weight: 600;
   color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.teacher-spec-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  font-size: 10px;
 }
 
 /* ==========================================================================
@@ -1205,14 +1408,111 @@ html[data-theme="dark"] .teacher-exp-tag {
 /* ==========================================================================
    12. CRM CONSULTATION LEAD FORM (SECTION 11)
    ========================================================================== */
+.lead-split-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .lead-split-wrapper {
+    grid-template-columns: 5fr 7fr;
+    gap: 48px;
+  }
+}
+
+.lead-benefits-sidebar {
+  display: flex;
+  flex-direction: column;
+}
+
+.lead-sidebar-heading {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.3;
+  margin: 0 0 12px;
+  letter-spacing: -0.01em;
+}
+
+.lead-sidebar-sub {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.lead-guarantee-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.lead-guarantee-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.lead-guarantee-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.lead-guarantee-item strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  display: block;
+  margin-bottom: 3px;
+}
+
+.lead-guarantee-item p {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.lead-support-contact {
+  padding: 12px 16px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.support-avatar-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.support-avatar-group strong {
+  color: var(--text);
+}
+
 .lead-form-card {
-  max-width: 820px;
-  margin: 0 auto;
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   padding: 36px 32px;
+  position: relative;
 }
 
 @media (max-width: 640px) {
@@ -1297,7 +1597,7 @@ html[data-theme="dark"] .teacher-exp-tag {
   background-color: var(--primary);
   color: var(--text-inverse);
   font-size: var(--font-size-base);
-  font-weight: 600;
+  font-weight: 700;
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -1306,12 +1606,13 @@ html[data-theme="dark"] .teacher-exp-tag {
   justify-content: center;
   gap: 8px;
   box-shadow: var(--shadow-sm);
-  transition: background-color var(--transition-fast);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
   margin-top: 10px;
 }
 
 .portal-submit-btn:hover {
   background-color: var(--primary-hover);
+  transform: translateY(-1px);
 }
 
 /* ==========================================================================
@@ -1600,66 +1901,181 @@ html[data-theme="dark"] .milestone-dark-card {
   margin: 0;
 }
 
-/* --- 12.4 Ascending Trajectory Roadmap Pathway (.roadmap-container) --- */
+/* --- 12.4 Ascending Trajectory Roadmap Pathway (Teky Reference Modernization) --- */
 .roadmap-section {
-  padding: 56px 0;
+  padding: 64px 0 60px;
   background-color: var(--surface);
   border-bottom: 1px solid var(--border);
 }
 
-.roadmap-banner-wrapper {
+.roadmap-showcase-container {
   position: relative;
-  margin-top: 36px;
-  padding: 32px 24px 28px;
+  margin-top: 40px;
+  padding: 36px 28px 44px;
   background-color: var(--surface-muted);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
-/* Ascending Arrow Graphic Track */
-.roadmap-arrow-track {
+/* Apex Header on Top: Runner figure on left, Flag + Summit badge on right */
+.roadmap-apex-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 36px;
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 20px;
-  z-index: 1;
+  z-index: 2;
 }
 
-@media (min-width: 1024px) {
-  .roadmap-arrow-track {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-  }
+.roadmap-runner-lead {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  padding: 8px 18px;
+  border-radius: 9999px;
+  box-shadow: var(--shadow-sm);
 }
 
-/* Upward arrow background banner */
-.roadmap-backdrop-arrow {
+.roadmap-runner-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.roadmap-runner-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.roadmap-runner-text strong {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.roadmap-runner-text span {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.roadmap-summit-target {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.roadmap-flag-unit {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.roadmap-flag-icon {
+  width: 32px;
+  height: 32px;
+  animation: flagWave 3s ease-in-out infinite alternate;
+}
+
+@keyframes flagWave {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-6deg); }
+}
+
+.roadmap-summit-badge {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  color: #FFFFFF;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.summit-star-pulse {
+  color: #fef08a;
+  font-size: 14px;
+}
+
+/* Background 3D Ascending Ramp Graphic traversing beneath milestone cards */
+.roadmap-ramp-backdrop {
+  position: absolute;
+  top: 90px;
+  bottom: 30px;
+  left: 20px;
+  right: 20px;
+  pointer-events: none;
+  z-index: 0;
   display: none;
 }
 
 @media (min-width: 1024px) {
-  .roadmap-backdrop-arrow {
+  .roadmap-ramp-backdrop {
     display: block;
-    position: absolute;
-    bottom: 24px;
-    left: 16px;
-    right: 16px;
-    height: 120px;
-    background: linear-gradient(to right, rgba(226, 232, 240, 0.4) 0%, rgba(203, 213, 225, 0.6) 80%, rgba(37, 99, 235, 0.2) 100%);
-    clip-path: polygon(0% 60%, 82% 10%, 82% 0%, 100% 30%, 82% 60%, 82% 50%, 0% 90%);
-    z-index: 0;
-    pointer-events: none;
-    border-radius: 4px;
-  }
-
-  html[data-theme="dark"] .roadmap-backdrop-arrow {
-    background: linear-gradient(to right, rgba(30, 41, 59, 0.5) 0%, rgba(51, 65, 85, 0.7) 80%, rgba(96, 165, 250, 0.25) 100%);
   }
 }
 
-/* Stage Cards along the Pathway */
-.roadmap-stage-card {
+.roadmap-ramp-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Stages Grid */
+.roadmap-stages-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 640px) {
+  .roadmap-stages-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .roadmap-stages-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    align-items: end;
+  }
+
+  .roadmap-stage-column.stage-1 {
+    transform: translateY(48px);
+  }
+
+  .roadmap-stage-column.stage-2 {
+    transform: translateY(32px);
+  }
+
+  .roadmap-stage-column.stage-3 {
+    transform: translateY(16px);
+  }
+
+  .roadmap-stage-column.stage-4 {
+    transform: translateY(0px);
+  }
+}
+
+.roadmap-stage-column {
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -1668,82 +2084,117 @@ html[data-theme="dark"] .milestone-dark-card {
   flex-direction: column;
   justify-content: space-between;
   box-shadow: var(--shadow-sm);
-  position: relative;
   transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.roadmap-stage-card:hover {
-  transform: translateY(-4px);
+.roadmap-stage-column:hover {
   border-color: var(--primary-border);
   box-shadow: var(--shadow-md);
 }
 
-.roadmap-stage-card.apex-stage {
-  border-color: var(--primary);
-  background: linear-gradient(to bottom, var(--surface), var(--primary-subtle));
+@media (min-width: 1024px) {
+  .roadmap-stage-column.stage-1:hover { transform: translateY(44px); }
+  .roadmap-stage-column.stage-2:hover { transform: translateY(28px); }
+  .roadmap-stage-column.stage-3:hover { transform: translateY(12px); }
+  .roadmap-stage-column.stage-4:hover { transform: translateY(-4px); }
 }
 
-.roadmap-runner-indicator {
-  display: inline-flex;
+.roadmap-stage-column.is-summit {
+  border-color: #10b981;
+  background: linear-gradient(180deg, var(--surface) 0%, rgba(16, 185, 129, 0.05) 100%);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.12);
+}
+
+html[data-theme="dark"] .roadmap-stage-column.is-summit {
+  background: linear-gradient(180deg, var(--surface) 0%, rgba(16, 185, 129, 0.1) 100%);
+}
+
+.stage-marker-wrap {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
-.roadmap-stage-range {
-  font-size: 15px;
+.stage-milestone-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  color: var(--text-inverse);
+  font-size: 13px;
   font-weight: 800;
-  color: var(--text);
-  margin: 0 0 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
 }
 
-.roadmap-stage-title {
+.stage-milestone-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  background-color: var(--surface-muted);
+  color: var(--primary);
+}
+
+.stage-grade-label {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.stage-title {
   font-size: 16px;
   font-weight: 700;
-  line-height: 1.35;
   color: var(--text);
-  margin: 0 0 8px;
+  line-height: 1.35;
+  margin: 0 0 10px;
 }
 
-.roadmap-stage-card.apex-stage .roadmap-stage-title {
-  color: var(--primary);
-}
-
-.roadmap-stage-desc {
+.stage-desc {
   font-size: 13px;
   color: var(--text-muted);
-  line-height: 1.55;
+  line-height: 1.6;
   margin: 0 0 16px;
 }
 
-.roadmap-stage-footer {
+.stage-footer-tags {
   border-top: 1px dashed var(--border);
   padding-top: 12px;
+  margin-bottom: 14px;
 }
 
-.roadmap-focus-pill {
+.stage-tag-caption {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.stage-focus-tag {
   font-size: 11px;
   font-weight: 600;
-  color: var(--text-muted);
+  color: var(--text);
   background-color: var(--surface-muted);
-  padding: 4px 8px;
+  padding: 3px 8px;
   border-radius: var(--radius-sm);
   display: inline-block;
-  line-height: 1.4;
 }
 
-.roadmap-apex-badge {
-  background-color: #059669;
-  color: #FFFFFF;
-  padding: 6px 12px;
-  border-radius: var(--radius-sm);
+.stage-elevation-badge {
   font-size: 11px;
   font-weight: 700;
-  display: inline-flex;
+  color: var(--primary);
+  display: flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 4px;
+}
+
+.stage-elevation-badge .summit-label {
+  color: #059669;
 }

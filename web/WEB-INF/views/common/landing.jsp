@@ -389,66 +389,100 @@
                                 <!-- Card 5 -->
                                 <div class="milestone-dark-card">
                                     <div class="milestone-icon-top">
-                                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                                    </div>
-                                    <div>
-                                        <div class="milestone-num-val">1.200+</div>
-                                        <p class="milestone-label-main">Học sinh đạt điểm 9-10 và thủ khoa các kỳ thi THPT & ĐGNL.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- SECTION 03A: HÀNH TRÌNH BỨT PHÁ NĂNG LỰC & CHINH PHỤC ĐẠI HỌC (ASCENDING ROADMAP PATHWAY) -->
+                                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.8                <!-- SECTION 03A: HÀNH TRÌNH BỨT PHÁ NĂNG LỰC & CHINH PHỤC ĐẠI HỌC (ASCENDING ROADMAP PATHWAY) -->
                 <section class="roadmap-section" id="lo-trinh-hoc-tap">
                     <div class="portal-container">
                         <div class="section-head text-center">
-                            <span class="section-tagline">Lộ Trình Đào Tạo Dài Hạn</span>
+                            <div class="hero-pill-badge" style="margin-bottom: 12px;">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--primary);">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                </svg>
+                                <span>Lộ Trình Đào Tạo Dài Hạn</span>
+                            </div>
                             <h2 class="section-heading">Hành trình Bứt phá Năng lực của con bạn</h2>
-                            <p class="section-desc">Thành công tương lai với nền tảng học thuật vững vàng, học bạ điểm cao, lộ trình ôn thi khoa học và cơ hội bước vào cánh cổng đại học mơ ước.</p>
+                            <p class="section-desc">Thành công tương lai với nền tảng học thuật vững vàng, học bạ điểm cao, lộ trình bồi dưỡng chuyên sâu và cơ hội bước vào cánh cổng đại học mơ ước.</p>
                         </div>
 
-                        <div class="roadmap-banner-wrapper">
-                            <!-- Ascending Background Graphic Chevron/Arrow -->
-                            <div class="roadmap-backdrop-arrow"></div>
+                        <div class="roadmap-showcase-container">
+                            <!-- Top Header: Runner figure on left, Flag + Summit badge on right -->
+                            <div class="roadmap-apex-header">
+                                <div class="roadmap-runner-lead">
+                                    <span class="roadmap-runner-avatar">
+                                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
+                                            <circle cx="12" cy="5" r="3"></circle>
+                                            <path d="m9 20 3-6 3 6"></path>
+                                            <path d="m6 8 6 2 6-2"></path>
+                                            <path d="M12 10v4"></path>
+                                        </svg>
+                                    </span>
+                                    <div class="roadmap-runner-text">
+                                        <strong>Xuất phát điểm học sinh</strong>
+                                        <span>Khởi đầu lộ trình bài bản</span>
+                                    </div>
+                                </div>
 
-                            <div class="roadmap-arrow-track">
+                                <div class="roadmap-summit-target">
+                                    <div class="roadmap-flag-unit" aria-hidden="true">
+                                        <svg class="roadmap-flag-icon" viewBox="0 0 24 24">
+                                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"></path>
+                                            <line x1="4" y1="22" x2="4" y2="15" stroke="#78716c" stroke-width="2.5" stroke-linecap="round"></line>
+                                        </svg>
+                                    </div>
+                                    <div class="roadmap-summit-badge">
+                                        <span class="summit-star-pulse">★</span>
+                                        <span>CƠ HỘI ĐẠI HỌC • 100+ TRƯỜNG ĐẠI HỌC TỐP ĐẦU</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- The 3D Ascending Ramp SVG Graphic traversing beneath milestone cards -->
+                            <div class="roadmap-ramp-backdrop" aria-hidden="true">
+                                <svg class="roadmap-ramp-svg" viewBox="0 0 1200 160" preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="rampSlopeGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                                            <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/>
+                                            <stop offset="35%" stop-color="#6366f1" stop-opacity="0.35"/>
+                                            <stop offset="70%" stop-color="#8b5cf6" stop-opacity="0.45"/>
+                                            <stop offset="100%" stop-color="#10b981" stop-opacity="0.6"/>
+                                        </linearGradient>
+                                        <linearGradient id="rampCoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" stop-color="#2563eb"/>
+                                            <stop offset="100%" stop-color="#059669"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <polygon points="0,150 1020,40 1020,10 1180,45 1020,80 1020,60 0,160" fill="url(#rampSlopeGrad)"/>
+                                    <line x1="10" y1="152" x2="1010" y2="42" stroke="url(#rampCoreGrad)" stroke-width="4" stroke-dasharray="10 8" opacity="0.85"/>
+                                    <polygon points="1020,15 1170,45 1020,75 1040,45" fill="url(#rampCoreGrad)"/>
+                                </svg>
+                            </div>
+
+                            <!-- 4 Milestone Stage Columns -->
+                            <div class="roadmap-stages-grid">
                                 <c:forEach var="stage" items="${portalData.learningStages}">
-                                    <div class="roadmap-stage-card ${stage.apexGoal ? 'apex-stage' : ''}">
-                                        <div>
-                                            <div class="roadmap-runner-indicator">
-                                                <c:choose>
-                                                    <c:when test="${stage.stageNumber == 1}">
-                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="3"></circle><path d="m9 20 3-6 3 6"></path><path d="m6 8 6 2 6-2"></path><path d="M12 10v4"></path></svg>
-                                                    </c:when>
-                                                    <c:when test="${stage.stageNumber == 2}">
-                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                                                    </c:when>
-                                                    <c:when test="${stage.stageNumber == 3}">
-                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                                <span><c:out value="${stage.badgeText}" /></span>
-                                            </div>
-
-                                            <div class="roadmap-stage-range"><c:out value="${stage.gradeRange}" /></div>
-                                            <h3 class="roadmap-stage-title"><c:out value="${stage.title}" /></h3>
-                                            <p class="roadmap-stage-desc"><c:out value="${stage.description}" /></p>
+                                    <div class="roadmap-stage-column stage-${stage.stageNumber} ${stage.apexGoal ? 'is-summit' : ''}">
+                                        <div class="stage-marker-wrap">
+                                            <span class="stage-milestone-circle">0<c:out value="${stage.stageNumber}" /></span>
+                                            <span class="stage-milestone-pill"><c:out value="${stage.badgeText}" /></span>
                                         </div>
 
-                                        <div class="roadmap-stage-footer">
-                                            <span class="roadmap-focus-pill"><c:out value="${stage.focusSubjects}" /></span>
-                                            <c:if test="${stage.apexGoal}">
-                                                <div class="roadmap-apex-badge">
-                                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>
-                                                    <span>CƠ HỘI ĐẠI HỌC • 240+ NGÀNH HỌC TỐP ĐẦU</span>
-                                                </div>
-                                            </c:if>
+                                        <div class="stage-card-body">
+                                            <div class="stage-grade-label"><c:out value="${stage.gradeRange}" /></div>
+                                            <h3 class="stage-title"><c:out value="${stage.title}" /></h3>
+                                            <p class="stage-desc"><c:out value="${stage.description}" /></p>
+
+                                            <div class="stage-footer-tags">
+                                                <span class="stage-tag-caption">Trọng tâm:</span>
+                                                <span class="stage-focus-tag"><c:out value="${stage.focusSubjects}" /></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="stage-elevation-badge">
+                                            <c:choose>
+                                                <c:when test="${stage.stageNumber == 1}"><span>Chặng 1 • Nền tảng</span></c:when>
+                                                <c:when test="${stage.stageNumber == 2}"><span>Chặng 2 • Thích nghi</span></c:when>
+                                                <c:when test="${stage.stageNumber == 3}"><span>Chặng 3 • Tăng tốc</span></c:when>
+                                                <c:otherwise><span class="summit-label">Chặng 4 • Về đích ★</span></c:otherwise>
+                                            </c:choose>
                                         </div>
                                     </div>
                                 </c:forEach>
@@ -460,25 +494,48 @@
                 <!-- SECTION 03: CHƯƠNG TRÌNH THEO KHỐI LỚP (3 Focused Cards) -->
                 <section class="portal-section bg-alt" id="chuong-trinh">
                     <div class="portal-container">
-                        <div class="section-head">
+                        <div class="section-head text-center">
                             <span class="section-tagline">Định Hướng Đào Tạo Chuyên Biệt</span>
                             <h2 class="section-heading">Chương trình gia sư thiết kế riêng cho từng khối lớp</h2>
                             <p class="section-desc">Không dàn trải. Mỗi năm học THPT đều có mục tiêu sống còn riêng để bứt phá học bạ và xét tuyển đại học.</p>
                         </div>
 
                         <div class="grade-grid">
-                            <!-- Lớp 10 -->
-                            <div class="grade-card" data-grade="10">
-                                <div>
-                                    <div class="grade-card-top">
-                                        <span class="grade-num">Lớp 10</span>
-                                        <span class="grade-badge">Thích nghi & Nền tảng</span>
+                            <!-- Lớp 10 (Cyan / Teal Accent) -->
+                            <div class="grade-card grade-card--10" data-grade="10">
+                                <div class="grade-card-header">
+                                    <div class="grade-num-box">
+                                        <span class="grade-num">10</span>
+                                        <span class="grade-level-text">Lớp 10 THPT</span>
                                     </div>
-                                    <h3 class="grade-card-title">Xây dựng nền tảng vững chắc</h3>
-                                    <p class="grade-card-desc">
-                                        Củng cố kiến thức chuyển cấp, làm quen phương pháp học chương trình GDPT mới, hỗ trợ giải bài tập và cải thiện điểm số bài kiểm tra học kỳ.
-                                    </p>
-                                    <div style="font-size: var(--font-size-xs); font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">Môn bồi dưỡng trọng điểm:</div>
+                                    <span class="grade-badge-custom badge-teal">Thích nghi & Nền tảng</span>
+                                </div>
+
+                                <div class="grade-target-banner banner-teal">
+                                    <svg class="icon icon-xs" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                    <span>Mục tiêu: Đạt học sinh Giỏi & Vững GDPT mới</span>
+                                </div>
+
+                                <h3 class="grade-card-title">Xây dựng nền tảng vững chắc</h3>
+                                <p class="grade-card-desc">Củng cố kiến thức chuyển cấp THCS lên THPT, làm quen phương pháp học chương trình GDPT mới, hỗ trợ giải bài tập và cải thiện điểm số bài kiểm tra học kỳ.</p>
+
+                                <div class="grade-checklist">
+                                    <div class="grade-check-item">
+                                        <svg class="icon icon-xs text-teal" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span>Hệ thống hóa toàn bộ kiến thức chuyển cấp then chốt</span>
+                                    </div>
+                                    <div class="grade-check-item">
+                                        <svg class="icon icon-xs text-teal" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span>Làm quen cấu trúc đề tự luận & trắc nghiệm GDPT mới</span>
+                                    </div>
+                                    <div class="grade-check-item">
+                                        <svg class="icon icon-xs text-teal" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span>Đánh giá định kỳ 2 tuần/lần & phản hồi tiến độ phụ huynh</span>
+                                    </div>
+                                </div>
+
+                                <div class="grade-subject-block">
+                                    <span class="grade-subject-title">Môn bồi dưỡng trọng điểm:</span>
                                     <div class="grade-subject-tags">
                                         <span class="grade-tag">Toán 10</span>
                                         <span class="grade-tag">Ngữ văn 10</span>
@@ -487,28 +544,52 @@
                                         <span class="grade-tag">Hóa học 10</span>
                                     </div>
                                 </div>
-                                <div style="margin-top: 24px;">
-                                    <a href="#dang-ky-tu-van" class="btn btn-secondary" style="width: 100%; justify-content: center;">
+
+                                <div class="grade-card-cta">
+                                    <a href="#dang-ky-tu-van" class="btn btn-secondary w-full">
                                         <span>Xem chương trình Lớp 10</span>
-                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                        <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                                     </a>
                                 </div>
                             </div>
 
-                            <!-- Lớp 11 -->
-                            <div class="grade-card" data-grade="11">
-                                <div>
-                                    <div class="grade-card-top">
-                                        <span class="grade-num">Lớp 11</span>
-                                        <span class="grade-badge">Tăng tốc điểm số</span>
+                            <!-- Lớp 11 (Indigo / Blue Accent) -->
+                            <div class="grade-card grade-card--11" data-grade="11">
+                                <div class="grade-card-header">
+                                    <div class="grade-num-box">
+                                        <span class="grade-num">11</span>
+                                        <span class="grade-level-text">Lớp 11 THPT</span>
                                     </div>
-                                    <h3 class="grade-card-title">Bứt phá năng lực & Nâng cao</h3>
-                                    <p class="grade-card-desc">
-                                        Nâng cao kiến thức và kỹ năng giải bài tập chuyên sâu, lấp đầy mọi lỗ hổng kiến thức phân hóa, tạo tiền đề vững vàng để bước vào năm cuối cấp.
-                                    </p>
-                                    <div style="font-size: var(--font-size-xs); font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">Môn bồi dưỡng trọng điểm:</div>
+                                    <span class="grade-badge-custom badge-indigo">Tăng tốc điểm số</span>
+                                </div>
+
+                                <div class="grade-target-banner banner-indigo">
+                                    <svg class="icon icon-xs" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                    <span>Mục tiêu: Điểm kiểm tra 8.0+ & Chuẩn bị ĐGNL</span>
+                                </div>
+
+                                <h3 class="grade-card-title">Bứt phá năng lực & Nâng cao</h3>
+                                <p class="grade-card-desc">Nâng cao kiến thức và kỹ năng giải bài tập chuyên sâu, lấp đầy mọi lỗ hổng kiến thức phân hóa, tạo tiền đề vững vàng để bước vào năm cuối cấp.</p>
+
+                                <div class="grade-checklist">
+                                    <div class="grade-check-item">
+                                        <svg class="icon icon-xs text-indigo" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span>Làm chủ các chuyên đề phân hóa cao (Lượng giác, Đạo hàm, Hữu cơ)</span>
+                                    </div>
+                                    <div class="grade-check-item">
+                                        <svg class="icon icon-xs text-indigo" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span>Tối ưu hóa điểm số học bạ làm hồ sơ xét tuyển sớm</span>
+                                    </div>
+                                    <div class="grade-check-item">
+                                        <svg class="icon icon-xs text-indigo" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span>Tiếp cận sớm ngân hàng câu hỏi Đánh giá Năng lực ĐHQG</span>
+                                    </div>
+                                </div>
+
+                                <div class="grade-subject-block">
+                                    <span class="grade-subject-title">Môn bồi dưỡng trọng điểm:</span>
                                     <div class="grade-subject-tags">
-                                        <span class="grade-tag">Toán 11 (Lượng giác/Hình)</span>
+                                        <span class="grade-tag">Toán 11 Chuyên đề</span>
                                         <span class="grade-tag">Văn 11</span>
                                         <span class="grade-tag">Anh 11</span>
                                         <span class="grade-tag">Lý 11</span>
@@ -516,38 +597,68 @@
                                         <span class="grade-tag">Sinh 11</span>
                                     </div>
                                 </div>
-                                <div style="margin-top: 24px;">
-                                    <a href="#dang-ky-tu-van" class="btn btn-secondary" style="width: 100%; justify-content: center;">
+
+                                <div class="grade-card-cta">
+                                    <a href="#dang-ky-tu-van" class="btn btn-secondary w-full">
                                         <span>Xem chương trình Lớp 11</span>
-                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                        <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                                     </a>
                                 </div>
                             </div>
 
-                            <!-- Lớp 12 (Featured) -->
-                            <div class="grade-card featured" data-grade="12">
-                                <div>
-                                    <div class="grade-card-top">
-                                        <span class="grade-num">Lớp 12</span>
-                                        <span class="grade-badge">Luyện đề & Về đích</span>
+                            <!-- Lớp 12 (Featured Golden Crown & Primary Accent) -->
+                            <div class="grade-card grade-card--12 featured" data-grade="12">
+                                <div class="grade-card-crown">
+                                    <svg class="icon icon-xs" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                    <span>CHƯƠNG TRÌNH TRỌNG ĐIỂM QUỐC GIA</span>
+                                </div>
+
+                                <div class="grade-card-header">
+                                    <div class="grade-num-box">
+                                        <span class="grade-num">12</span>
+                                        <span class="grade-level-text">Lớp 12 & Luyện thi</span>
                                     </div>
-                                    <h3 class="grade-card-title">Chinh phục Tốt nghiệp & ĐGNL</h3>
-                                    <p class="grade-card-desc">
-                                        Tổng ôn toàn bộ kiến thức trọng tâm, rèn luyện kỹ năng phân bổ thời gian thực chiến phòng thi và tối ưu hóa tổ hợp xét tuyển đại học tốp đầu.
-                                    </p>
-                                    <div style="font-size: var(--font-size-xs); font-weight: 600; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">Tổ hợp môn xét tuyển:</div>
-                                    <div class="grade-subject-tags">
-                                        <span class="grade-tag" style="background-color: var(--primary-subtle); color: var(--primary); font-weight: 700;">Toán 12 Chuyên sâu</span>
-                                        <span class="grade-tag" style="background-color: var(--primary-subtle); color: var(--primary); font-weight: 700;">Vật Lý 12</span>
-                                        <span class="grade-tag" style="background-color: var(--primary-subtle); color: var(--primary); font-weight: 700;">Hóa Học 12</span>
-                                        <span class="grade-tag" style="background-color: var(--primary-subtle); color: var(--primary); font-weight: 700;">Tiếng Anh THPTQG</span>
-                                        <span class="grade-tag" style="background-color: var(--primary-subtle); color: var(--primary); font-weight: 700;">Ngữ Văn 12</span>
+                                    <span class="grade-badge-custom badge-amber">Luyện đề & Về đích</span>
+                                </div>
+
+                                <div class="grade-target-banner banner-amber">
+                                    <svg class="icon icon-xs" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                    <span>Mục tiêu: Đạt 8.5 - 9.5+ & Trúng tuyển Nguyện vọng 1</span>
+                                </div>
+
+                                <h3 class="grade-card-title">Chinh phục Tốt nghiệp & ĐGNL</h3>
+                                <p class="grade-card-desc">Tổng ôn toàn diện kiến thức trọng tâm 3 năm THPT, rèn luyện kỹ năng phân bổ thời gian thực chiến phòng thi và tối ưu hóa tổ hợp xét tuyển đại học tốp đầu.</p>
+
+                                <div class="grade-checklist">
+                                    <div class="grade-check-item">
+                                        <svg class="icon icon-xs text-amber" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span>50+ bộ đề thi thử độc quyền chuẩn ma trận Bộ GD&ĐT</span>
+                                    </div>
+                                    <div class="grade-check-item">
+                                        <svg class="icon icon-xs text-amber" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span>Phân tích lỗi sai và luyện mẹo xử lý câu vận dụng cao</span>
+                                    </div>
+                                    <div class="grade-check-item">
+                                        <svg class="icon icon-xs text-amber" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span>Chiến lược chọn nguyện vọng thông minh theo phổ điểm thi</span>
                                     </div>
                                 </div>
-                                <div style="margin-top: 24px;">
-                                    <a href="#dang-ky-tu-van" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                                        <span>Xem chương trình Lớp 12</span>
-                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+
+                                <div class="grade-subject-block">
+                                    <span class="grade-subject-title">Tổ hợp môn xét tuyển:</span>
+                                    <div class="grade-subject-tags">
+                                        <span class="grade-tag tag-primary">Toán 12 Chuyên sâu</span>
+                                        <span class="grade-tag tag-primary">Vật Lý 12</span>
+                                        <span class="grade-tag tag-primary">Hóa Học 12</span>
+                                        <span class="grade-tag tag-primary">Tiếng Anh THPTQG</span>
+                                        <span class="grade-tag tag-primary">Ngữ Văn 12</span>
+                                    </div>
+                                </div>
+
+                                <div class="grade-card-cta">
+                                    <a href="#dang-ky-tu-van" class="btn btn-primary w-full">
+                                        <span>Đăng ký xếp lớp Lớp 12</span>
+                                        <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                                     </a>
                                 </div>
                             </div>
@@ -558,14 +669,22 @@
                 <!-- SECTION 04: GIA SƯ THEO MÔN HỌC (Interactive Subject Grid - DYNAMIC DATA FROM DB) -->
                 <section class="portal-section" id="mon-hoc">
                     <div class="portal-container">
-                        <div style="display: flex; flex-direction: column; md:flex-row; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; gap: 16px;">
+                        <div style="display: flex; flex-direction: column; md:flex-row; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; gap: 16px;">
                             <div>
-                                <span class="section-tagline">Môn Học Trọng Điểm</span>
+                                <div class="hero-pill-badge" style="margin-bottom: 10px;">
+                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--primary);">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                    </svg>
+                                    <span>Môn Học Trọng Điểm</span>
+                                </div>
                                 <h2 class="section-heading">Gia sư theo bộ môn chuyên ngành</h2>
+                                <p class="section-desc">Tuyển chọn giáo viên tốt nghiệp đúng chuyên ngành sư phạm hoặc cử nhân xuất sắc với tối thiểu 5 năm giảng dạy cấp THPT.</p>
                             </div>
-                            <p class="section-desc" style="max-width: 480px;">
-                                Tuyển chọn giáo viên tốt nghiệp đúng chuyên ngành sư phạm hoặc cử nhân xuất sắc với tối thiểu 5 năm giảng dạy cấp THPT.
-                            </p>
+                            <a href="${pageContext.request.contextPath}/courses" class="btn btn-secondary btn-sm" style="align-self: flex-start;">
+                                <span>Xem tất cả khóa học</span>
+                                <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </a>
                         </div>
 
                         <c:choose>
@@ -577,7 +696,7 @@
                             <c:otherwise>
                                 <div class="subject-grid">
                                     <c:forEach var="sub" items="${portalData.subjects}">
-                                        <div class="subject-card">
+                                        <div class="subject-card subject-theme-${sub.code != null ? sub.code.toLowerCase() : 'gen'}">
                                             <div>
                                                 <c:if test="${not empty sub.imageUrl}">
                                                     <div class="subject-card-thumb">
@@ -586,8 +705,8 @@
                                                     </div>
                                                 </c:if>
 
-                                                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-                                                    <div class="subject-icon-box" style="margin-bottom: 0;">
+                                                <div class="subject-header-row">
+                                                    <div class="subject-icon-box">
                                                         <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
                                                             <c:choose>
                                                                 <c:when test="${sub.code == 'MATH' || sub.code == 'MAT'}">
@@ -619,21 +738,22 @@
                                                         </svg>
                                                     </div>
                                                     <div>
-                                                        <h3 class="subject-card-title" style="margin: 0;"><c:out value="${sub.name}" /></h3>
-                                                        <span style="font-size: 11px; color: var(--text-muted);"><c:out value="${sub.courseCount}" /> chương trình đào tạo</span>
+                                                        <h3 class="subject-card-title"><c:out value="${sub.name}" /></h3>
+                                                        <span class="subject-prog-counter-badge"><c:out value="${sub.courseCount}" /> chương trình đào tạo</span>
                                                     </div>
                                                 </div>
+
                                                 <p class="subject-card-desc"><c:out value="${sub.description}" /></p>
 
                                                 <div class="subject-grades-badge">
                                                     <span class="subject-grade-pill">Lớp 10</span>
                                                     <span class="subject-grade-pill">Lớp 11</span>
-                                                    <span class="subject-grade-pill highlight">Lớp 12</span>
+                                                    <span class="subject-grade-pill highlight">Lớp 12 Ôn thi</span>
                                                 </div>
                                             </div>
 
                                             <div class="subject-card-foot">
-                                                <span class="subject-prog-count"><c:out value="${sub.courseCount}" /> chương trình</span>
+                                                <span class="subject-curriculum-label">Giáo trình chuẩn Bộ GD&ĐT</span>
                                                 <a href="${pageContext.request.contextPath}/courses?keyword=<c:out value='${sub.name}' />" class="subject-explore-link">
                                                     <span>Khám phá môn học</span>
                                                     <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
@@ -646,6 +766,7 @@
                         </c:choose>
                     </div>
                 </section>
+
 
                 <!-- SECTION 05: CHƯƠNG TRÌNH GIA SƯ NỔI BẬT (DYNAMIC DATA FROM DB) -->
                 <section class="portal-section bg-alt" id="khoa-hoc-noi-bat">
@@ -852,14 +973,23 @@
                 <!-- SECTION 07: ĐỘI NGŨ GIA SƯ & GIÁO VIÊN NÒNG CỐT (DYNAMIC DATA FROM DB) -->
                 <section class="portal-section bg-alt" id="doi-ngu">
                     <div class="portal-container">
-                        <div style="display: flex; flex-direction: column; md:flex-row; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; gap: 16px;">
+                        <div style="display: flex; flex-direction: column; md:flex-row; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; gap: 16px;">
                             <div>
-                                <span class="section-tagline">Ban Cố Vấn Học Thuật</span>
+                                <div class="hero-pill-badge" style="margin-bottom: 10px;">
+                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--primary);">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                    </svg>
+                                    <span>Ban Cố Vấn Học Thuật</span>
+                                </div>
                                 <h2 class="section-heading">Đội ngũ giáo viên nòng cốt</h2>
+                                <p class="section-desc">100% giáo viên tốt nghiệp cử nhân, thạc sĩ sư phạm các trường đại học trọng điểm, phân công đúng chuyên môn bồi dưỡng.</p>
                             </div>
-                            <a href="#dang-ky-tu-van" class="subject-explore-link" style="font-size: var(--font-size-base);">
-                                <span>Xem danh sách giáo viên tuyển chọn</span>
-                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            <a href="#dang-ky-tu-van" class="btn btn-secondary btn-sm" style="align-self: flex-start;">
+                                <span>Yêu cầu chọn giáo viên</span>
+                                <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                             </a>
                         </div>
 
@@ -880,21 +1010,33 @@
                                                             <img src="<c:url value='${t.photoUrl}' />" alt="<c:out value='${t.fullName}' />" />
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <!-- Outline avatar graphic icon -->
                                                             <svg class="icon icon-xl" viewBox="0 0 24 24" style="color: var(--primary);" aria-hidden="true">
                                                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                                                 <circle cx="12" cy="7" r="4"></circle>
                                                             </svg>
                                                         </c:otherwise>
                                                     </c:choose>
-                                                    <c:if test="${not empty t.experienceBadge}"><span class="teacher-exp-tag"><c:out value="${t.experienceBadge}" /></span></c:if>
+
+                                                    <span class="teacher-verified-badge" title="Giảng viên đã qua xác thực sư phạm">
+                                                        <svg class="icon icon-xs" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+                                                        <span>Đã kiểm duyệt</span>
+                                                    </span>
+
+                                                    <c:if test="${not empty t.experienceBadge}">
+                                                        <span class="teacher-exp-tag"><c:out value="${t.experienceBadge}" /></span>
+                                                    </c:if>
                                                 </div>
+
                                                 <h3 class="teacher-name"><c:out value="${t.fullName}" /></h3>
-                                                <span class="teacher-role-tag"><c:out value="${t.degree}" /></span>
+                                                <div class="teacher-degree-row">
+                                                    <svg class="icon icon-xs" viewBox="0 0 24 24" style="color: var(--primary);"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                                                    <span class="teacher-role-tag"><c:out value="${t.degree}" /></span>
+                                                </div>
                                                 <p class="teacher-bio"><c:out value="${t.bio}" /></p>
                                             </div>
                                             <div class="teacher-grades-footer">
-                                                <c:out value="${t.specialization}" />
+                                                <span class="teacher-spec-label">Chuyên môn:</span>
+                                                <span><c:out value="${t.specialization}" /></span>
                                             </div>
                                         </div>
                                     </c:forEach>
@@ -1156,88 +1298,139 @@
                 <!-- SECTION 11: FINAL CTA & FORM TƯ VẤN (CRM Lead Generation - REAL SUBMIT) -->
                 <section class="portal-section bg-alt" id="dang-ky-tu-van">
                     <div class="portal-container">
-                        <div class="lead-form-card">
-                            <div class="section-head text-center" style="margin-bottom: 28px;">
-                                <span class="section-tagline">Tư Vấn Học Vụ Chuyên Sâu</span>
-                                <h2 class="section-heading">Xây dựng lộ trình học tập phù hợp ngay hôm nay</h2>
-                                <p class="section-desc">Để lại thông tin để chuyên viên học vụ EduCenter liên hệ tư vấn lộ trình gia sư tối ưu cho học sinh theo thông tin bạn cung cấp.</p>
+                        <div class="lead-split-wrapper">
+                            <!-- Left Side: Trust Assurances & Value Proposition -->
+                            <div class="lead-benefits-sidebar">
+                                <div class="hero-pill-badge" style="margin-bottom: 14px;">
+                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--primary);">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                    </svg>
+                                    <span>Tư Vấn Học Vụ Chuyên Sâu</span>
+                                </div>
+
+                                <h2 class="lead-sidebar-heading">Xây dựng lộ trình học tập tối ưu ngay hôm nay</h2>
+                                <p class="lead-sidebar-sub">Để lại thông tin để chuyên viên học vụ EduCenter liên hệ tư vấn giải pháp củng cố kiến thức và bứt phá điểm số cho học sinh.</p>
+
+                                <div class="lead-guarantee-list">
+                                    <div class="lead-guarantee-item">
+                                        <div class="lead-guarantee-icon">
+                                            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>
+                                        </div>
+                                        <div>
+                                            <strong>100% Miễn phí kiểm tra năng lực</strong>
+                                            <p>Bài test 45 phút chuẩn hóa để xác định chính xác năng lực thực tế trước khi xếp lớp.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="lead-guarantee-item">
+                                        <div class="lead-guarantee-icon">
+                                            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
+                                        </div>
+                                        <div>
+                                            <strong>Lộ trình cá nhân hóa theo năng lực</strong>
+                                            <p>Giáo án thiết kế riêng dựa trên điểm xuất phát và mục tiêu điểm số kỳ thi của học sinh.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="lead-guarantee-item">
+                                        <div class="lead-guarantee-icon">
+                                            <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                                        </div>
+                                        <div>
+                                            <strong>Cam kết bứt phá điểm số sau 12 tuần</strong>
+                                            <p>Cải thiện từ 1.5 - 2.5 điểm số bài kiểm tra học kỳ với phương pháp học tập khoa học.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="lead-support-contact">
+                                    <div class="support-avatar-group">
+                                        <svg class="icon icon-sm" viewBox="0 0 24 24" style="color: var(--primary);"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                        <span>Thời gian phản hồi: <strong>Trong vòng 15 phút</strong> (Giờ hành chính)</span>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- Flash Toast Alerts -->
-                            <c:if test="${not empty sessionScope.alertMessage}">
-                                <div class="alert alert-${sessionScope.alertType != null ? sessionScope.alertType : 'info'}" style="margin-bottom: 20px;">
-                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                        <c:choose>
-                                            <c:when test="${sessionScope.alertType == 'success'}">
-                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <circle cx="12" cy="12" r="10"></circle>
-                                                <line x1="12" y1="8" x2="12" y2="12"></line>
-                                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </svg>
-                                    <span><c:out value="${sessionScope.alertMessage}" /></span>
+                            <!-- Right Side: The Form Card -->
+                            <div class="lead-form-container">
+                                <div class="lead-form-card">
+                                    <!-- Flash Toast Alerts -->
+                                    <c:if test="${not empty sessionScope.alertMessage}">
+                                        <div class="alert alert-${sessionScope.alertType != null ? sessionScope.alertType : 'info'}" style="margin-bottom: 20px;">
+                                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                                <c:choose>
+                                                    <c:when test="${sessionScope.alertType == 'success'}">
+                                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <circle cx="12" cy="12" r="10"></circle>
+                                                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </svg>
+                                            <span><c:out value="${sessionScope.alertMessage}" /></span>
+                                        </div>
+                                        <c:remove var="alertMessage" scope="session" />
+                                        <c:remove var="alertType" scope="session" />
+                                    </c:if>
+
+                                    <form action="${pageContext.request.contextPath}/dang-ky-tu-van" method="POST" id="lead-consultation-form">
+                                        <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+
+                                        <div class="form-row-2">
+                                            <div class="portal-form-group">
+                                                <label for="lead-fullname">Họ tên Phụ huynh / Học sinh <span class="required">*</span></label>
+                                                <input type="text" id="lead-fullname" name="fullName" value="<c:out value='${leadDraft.fullName}'/>" maxlength="150" class="portal-input" placeholder="Ví dụ: Nguyễn Văn Hùng" required>
+                                            </div>
+                                            <div class="portal-form-group">
+                                                <label for="lead-phone">Số điện thoại liên hệ <span class="required">*</span></label>
+                                                <input type="tel" id="lead-phone" name="phone" value="<c:out value='${leadDraft.phone}'/>" class="portal-input" pattern="0[35789][0-9]{8}" placeholder="Ví dụ: 0988123456" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row-3">
+                                            <div class="portal-form-group">
+                                                <label for="lead-grade">Khối lớp học <span class="required">*</span></label>
+                                                <select id="lead-grade" name="gradeLevel" class="portal-select" required>
+                                                    <option value="">Chọn khối lớp</option>
+                                                    <c:forEach var="grade" items="${availableGrades}"><option value="${grade}" ${leadDraft.gradeLevel == grade ? 'selected' : ''}>Lớp <c:out value="${grade}"/></option></c:forEach>
+                                                </select>
+                                            </div>
+
+                                            <div class="portal-form-group">
+                                                <label for="lead-subject">Môn học trọng tâm <span class="required">*</span></label>
+                                                <select id="lead-subject" name="subject" class="portal-select" required>
+                                                    <option value="">Chọn môn học</option>
+                                                    <c:forEach var="subject" items="${portalSubjects}"><option value="<c:out value='${subject.name}'/>" ${leadDraft.subject == subject.name ? 'selected' : ''}><c:out value="${subject.name}"/></option></c:forEach>
+                                                </select>
+                                            </div>
+
+                                            <div class="portal-form-group">
+                                                <label for="lead-model">Hình thức học <span class="required">*</span></label>
+                                                <select id="lead-model" name="learningModel" class="portal-select" required>
+                                                    <option value="Lớp nhóm">Lớp nhóm</option>
+                                                    <option value="Gia sư 1 kèm 1 cá nhân hóa">Gia sư 1 kèm 1 cá nhân hóa</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="portal-form-group" style="margin-bottom: 20px;">
+                                            <label for="lead-notes">Mục tiêu học tập hoặc tình trạng hiện tại</label>
+                                            <textarea id="lead-notes" name="notes" class="portal-textarea" maxlength="3000" rows="2" placeholder="Ví dụ: Đang bị hổng kiến thức Hình không gian Lớp 11, cần mục tiêu 8.0 môn Toán thi THPT Quốc gia..."><c:out value="${leadDraft.notes}"/></textarea>
+                                        </div>
+
+                                        <button type="submit" class="portal-submit-btn" id="lead-submit-btn">
+                                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                            </svg>
+                                            <span>Gửi thông tin đăng ký tư vấn</span>
+                                        </button>
+                                    </form>
                                 </div>
-                                <c:remove var="alertMessage" scope="session" />
-                                <c:remove var="alertType" scope="session" />
-                            </c:if>
-
-                            <form action="${pageContext.request.contextPath}/dang-ky-tu-van" method="POST" id="lead-consultation-form">
-                                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
-
-                                <div class="form-row-2">
-                                    <div class="portal-form-group">
-                                        <label for="lead-fullname">Họ tên Phụ huynh / Học sinh <span class="required">*</span></label>
-                                        <input type="text" id="lead-fullname" name="fullName" value="<c:out value='${leadDraft.fullName}'/>" maxlength="150" class="portal-input" placeholder="Ví dụ: Nguyễn Văn Hùng" required>
-                                    </div>
-                                    <div class="portal-form-group">
-                                        <label for="lead-phone">Số điện thoại liên hệ <span class="required">*</span></label>
-                                        <input type="tel" id="lead-phone" name="phone" value="<c:out value='${leadDraft.phone}'/>" class="portal-input" pattern="0[35789][0-9]{8}" placeholder="Ví dụ: 0988123456" required>
-                                    </div>
-                                </div>
-
-                                <div class="form-row-3">
-                                    <div class="portal-form-group">
-                                        <label for="lead-grade">Khối lớp học <span class="required">*</span></label>
-                                        <select id="lead-grade" name="gradeLevel" class="portal-select" required>
-                                            <option value="">Chọn khối lớp</option>
-                                            <c:forEach var="grade" items="${availableGrades}"><option value="${grade}" ${leadDraft.gradeLevel == grade ? 'selected' : ''}>Lớp <c:out value="${grade}"/></option></c:forEach>
-                                        </select>
-                                    </div>
-
-                                    <div class="portal-form-group">
-                                        <label for="lead-subject">Môn học trọng tâm <span class="required">*</span></label>
-                                        <select id="lead-subject" name="subject" class="portal-select" required>
-                                            <option value="">Chọn môn học</option>
-                                            <c:forEach var="subject" items="${portalSubjects}"><option value="<c:out value='${subject.name}'/>" ${leadDraft.subject == subject.name ? 'selected' : ''}><c:out value="${subject.name}"/></option></c:forEach>
-                                        </select>
-                                    </div>
-
-                                    <div class="portal-form-group">
-                                        <label for="lead-model">Hình thức học <span class="required">*</span></label>
-                                        <select id="lead-model" name="learningModel" class="portal-select" required>
-                                            <option value="Lớp nhóm">Lớp nhóm</option>
-                                            <option value="Gia sư 1 kèm 1 cá nhân hóa">Gia sư 1 kèm 1 cá nhân hóa</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="portal-form-group" style="margin-bottom: 20px;">
-                                    <label for="lead-notes">Mục tiêu học tập hoặc tình trạng hiện tại</label>
-                                    <textarea id="lead-notes" name="notes" class="portal-textarea" maxlength="3000" rows="2" placeholder="Ví dụ: Đang bị hổng kiến thức Hình không gian Lớp 11, cần mục tiêu 8.0 môn Toán thi THPT Quốc gia..."><c:out value="${leadDraft.notes}"/></textarea>
-                                </div>
-
-                                <button type="submit" class="portal-submit-btn" id="lead-submit-btn">
-                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                        <line x1="22" y1="2" x2="11" y2="13"></line>
-                                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                                    </svg>
-                                    <span>Gửi thông tin đăng ký tư vấn</span>
-                                </button>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </section>

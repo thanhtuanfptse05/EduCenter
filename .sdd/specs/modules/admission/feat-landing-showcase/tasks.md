@@ -52,3 +52,17 @@ flowchart TD
 - [x] T011 Verify responsive layout across Mobile (360px), Tablet (768px), and Desktop (1440px), ensuring flawless theme compatibility in both Light (default) and Dark mode.
 - [x] T012 Run Ant build to verify clean compilation with 0 errors.
 - [x] T013 Commit and push code to `main` branch with message `feat(landing): showcase achievements, metrics banner and ascending roadmap`.
+
+---
+
+## Phase 6: Complete Navbar Sections Redesign & Ascending Roadmap Overhaul
+
+- [x] T014 [P] Redesign Section 03A (Ascending Roadmap Pathway `#lo-trinh-hoc-tap`) in `portal.css` and `landing.jsp` according to the Teky reference: prominent 3D-styled uphill vector pathway, runner climbing on the slope, staggered milestone columns, and summit flagpole 🚩 with glowing green badge.
+- [x] T015 [P] Redesign Section 03 (Grade Programs Section `#chuong-trinh`) in `portal.css` and `landing.jsp` with distinct grade accents (Lớp 10, 11, 12), target score badges, and structured benefit checklists.
+- [x] T016 [P] Redesign Section 04 (Subject Grid Section `#mon-hoc`) in `portal.css` and `landing.jsp` with thematic color badge boxes per subject, course count pills, and hover lift effects.
+- [x] T017 [P] Redesign Section 07 (Faculty Teachers Section `#doi-ngu`) in `portal.css` and `landing.jsp` with verified teacher badges, academic qualifications, and experience tags.
+- [x] T018 [P] Redesign Section 11 (Consultation Lead Section `#dang-ky-tu-van`) in `portal.css` and `landing.jsp` with high-converting 2-column split layout and trust guarantees.
+- [x] T019 Execute responsive verification (Light/Dark mode) and run full Ant test suite.
+- [x] T020 Commit and push changes to `main` with `feat(landing): overhaul ascending roadmap and all navbar sections`.
+
+
