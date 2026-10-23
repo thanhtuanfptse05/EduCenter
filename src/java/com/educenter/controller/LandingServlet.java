@@ -7,6 +7,7 @@ import com.educenter.entity.Lead;
 import com.educenter.service.LandingService;
 import com.educenter.service.LandingServiceImpl;
 import com.educenter.service.ValidationException;
+import com.educenter.util.FlashMessageUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -48,6 +49,10 @@ public class LandingServlet extends HttpServlet {
         UserPrincipalDTO currentUser = (session != null) ? (UserPrincipalDTO) session.getAttribute("currentUser") : null;
 
         if (path.isEmpty() || "/".equals(path) || "/index".equals(path) || "/dang-ky-tu-van".equals(path)) {
+            if ("true".equals(req.getParameter("loggedOut"))) {
+                FlashMessageUtil.setInfo(req, "Bạn đã đăng xuất khỏi hệ thống thành công.");
+                FlashMessageUtil.transferFlashMessagesToRequest(req);
+            }
             req.setAttribute("pageTitle", "EduCenter — Gia sư, bồi dưỡng kiến thức và luyện thi");
             LandingDataDTO portalData = landingService.getLandingPortalData();
             req.setAttribute("portalData", portalData);

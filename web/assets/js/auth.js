@@ -323,5 +323,145 @@
         window.EduCenterModal.close(modalId);
       });
     });
+
+    // 8. Avatar Studio: Live preview, auto-normalize, preset selection, clipboard paste, clear
+    var avatarInput = document.getElementById('prof-avatar');
+    var headerAvatarImg = document.getElementById('headerOverviewAvatarImg');
+    var headerAvatarInitial = document.getElementById('headerOverviewAvatarInitial');
+    var statusBadge = document.getElementById('avatarStatusBadge');
+    var btnPaste = document.getElementById('btnPasteAvatar');
+    var btnClear = document.getElementById('btnClearAvatar');
+    var presetBtns = document.querySelectorAll('.avatar-preset-btn');
+
+    if (avatarInput) {
+      function normalizeUrl(url) {
+        if (!url) return '';
+        var t = url.trim();
+        if (!t) return '';
+        if (t.startsWith('//')) return 'https:' + t;
+        if (!t.startsWith('http://') && !t.startsWith('https://') && !t.startsWith('/') && !t.startsWith('data:image/')) {
+          if (t.indexOf('.') !== -1 && t.indexOf(' ') === -1) {
+            return 'https://' + t;
+          }
+        }
+        return t;
+      }
+
+      function updateAvatarPreview(url) {
+        var norm = normalizeUrl(url);
+        var previewImg = document.getElementById('avatarPreviewImg');
+        var previewInitials = document.getElementById('avatarPreviewInitials');
+
+        // Check matching preset button
+        presetBtns.forEach(function (b) {
+          var bUrl = b.getAttribute('data-url');
+          if (bUrl && (bUrl === norm || bUrl === (url || '').trim())) {
+            b.classList.add('active');
+          } else {
+            b.classList.remove('active');
+          }
+        });
+
+        if (!norm) {
+          if (previewImg) previewImg.style.display = 'none';
+          if (previewInitials) previewInitials.style.display = 'flex';
+          if (headerAvatarImg) headerAvatarImg.style.display = 'none';
+          if (headerAvatarInitial) headerAvatarInitial.style.display = 'inline-flex';
+          if (statusBadge) {
+            statusBadge.className = 'avatar-status-pill neutral';
+            statusBadge.textContent = 'Dùng chữ cái mặc định';
+          }
+          return;
+        }
+
+        // Test loading the image
+        var testImg = new Image();
+        testImg.onload = function () {
+          if (previewImg) {
+            previewImg.src = norm;
+            previewImg.style.display = 'block';
+          }
+          if (previewInitials) previewInitials.style.display = 'none';
+          if (headerAvatarImg) {
+            headerAvatarImg.src = norm;
+            headerAvatarImg.style.display = 'block';
+          }
+          if (headerAvatarInitial) headerAvatarInitial.style.display = 'none';
+          if (statusBadge) {
+            statusBadge.className = 'avatar-status-pill valid';
+            statusBadge.innerHTML = '<svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true" style="width:12px;height:12px;"><polyline points="20 6 9 17 4 12"></polyline></svg> Ảnh hợp lệ';
+          }
+        };
+        testImg.onerror = function () {
+          if (previewImg) previewImg.style.display = 'none';
+          if (previewInitials) previewInitials.style.display = 'flex';
+          if (headerAvatarImg) headerAvatarImg.style.display = 'none';
+          if (headerAvatarInitial) headerAvatarInitial.style.display = 'inline-flex';
+          if (statusBadge) {
+            statusBadge.className = 'avatar-status-pill error';
+            statusBadge.textContent = 'Không tải được ảnh, dùng chữ cái';
+          }
+        };
+        testImg.src = norm;
+      }
+
+      // Input event listener
+      avatarInput.addEventListener('input', function () {
+        updateAvatarPreview(avatarInput.value);
+      });
+
+      avatarInput.addEventListener('blur', function () {
+        var norm = normalizeUrl(avatarInput.value);
+        if (norm && norm !== avatarInput.value) {
+          avatarInput.value = norm;
+        }
+      });
+
+      // Preset buttons click
+      presetBtns.forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          var chosenUrl = btn.getAttribute('data-url');
+          avatarInput.value = chosenUrl;
+          updateAvatarPreview(chosenUrl);
+        });
+      });
+
+      // Clear button
+      if (btnClear) {
+        btnClear.addEventListener('click', function (e) {
+          e.preventDefault();
+          avatarInput.value = '';
+          updateAvatarPreview('');
+          avatarInput.focus();
+        });
+      }
+
+      // Paste button
+      if (btnPaste) {
+        btnPaste.addEventListener('click', function (e) {
+          e.preventDefault();
+          if (navigator.clipboard && navigator.clipboard.readText) {
+            navigator.clipboard.readText().then(function (text) {
+              if (text) {
+                avatarInput.value = text.trim();
+                updateAvatarPreview(text.trim());
+              }
+            }).catch(function () {
+              avatarInput.focus();
+              avatarInput.select();
+            });
+          } else {
+            avatarInput.focus();
+            avatarInput.select();
+          }
+        });
+      }
+
+      // Initial run if already has value
+      if (avatarInput.value) {
+        updateAvatarPreview(avatarInput.value);
+      }
+    }
   });
 })();

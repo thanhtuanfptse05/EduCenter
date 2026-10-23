@@ -79,13 +79,42 @@ public final class ValidationUtil {
     }
 
     /**
-     * Validates optional avatar URL: must be valid HTTP/HTTPS or local path.
+     * Normalizes optional avatar URL: trims, handles protocol-relative, data URI, or missing protocol.
+     */
+    public static String normalizeAvatarUrl(String url) {
+        if (url == null) {
+            return null;
+        }
+        String trimmed = url.trim();
+        if (trimmed.isEmpty()) {
+            return null;
+        }
+        if (trimmed.startsWith("//")) {
+            return "https:" + trimmed;
+        }
+        if (!trimmed.startsWith("http://") && !trimmed.startsWith("https://")
+                && !trimmed.startsWith("/") && !trimmed.startsWith("data:image/")) {
+            if (trimmed.contains(".") && !trimmed.contains(" ")) {
+                return "https://" + trimmed;
+            }
+        }
+        return trimmed;
+    }
+
+    /**
+     * Validates optional avatar URL: allows HTTP/HTTPS, absolute local path, or data URI up to 500 chars.
      */
     public static boolean isValidAvatarUrl(String url) {
         if (url == null || url.trim().isEmpty()) {
             return true;
         }
-        String trimmed = url.trim();
-        return trimmed.length() <= 500 && (trimmed.startsWith("http://") || trimmed.startsWith("https://") || trimmed.startsWith("/"));
+        String normalized = normalizeAvatarUrl(url);
+        if (normalized == null || normalized.length() > 500) {
+            return false;
+        }
+        return normalized.startsWith("http://")
+                || normalized.startsWith("https://")
+                || normalized.startsWith("/")
+                || normalized.startsWith("data:image/");
     }
 }

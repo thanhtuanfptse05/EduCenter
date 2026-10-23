@@ -65,7 +65,8 @@ public class UserServiceImpl implements UserService {
         if (!ValidationUtil.isValidPhone(dto.getPhone(), false)) {
             throw new ValidationException("Số điện thoại không đúng định dạng Việt Nam.");
         }
-        if (!ValidationUtil.isValidAvatarUrl(dto.getAvatarUrl())) {
+        String normalizedAvatar = ValidationUtil.normalizeAvatarUrl(dto.getAvatarUrl());
+        if (!ValidationUtil.isValidAvatarUrl(normalizedAvatar)) {
             throw new ValidationException("Đường dẫn ảnh đại diện không hợp lệ (tối đa 500 ký tự).");
         }
 
@@ -78,7 +79,7 @@ public class UserServiceImpl implements UserService {
 
             user.setFullName(dto.getFullName().trim());
             user.setPhone(dto.getPhone() != null && !dto.getPhone().trim().isEmpty() ? dto.getPhone().trim() : null);
-            user.setAvatarUrl(dto.getAvatarUrl() != null && !dto.getAvatarUrl().trim().isEmpty() ? dto.getAvatarUrl().trim() : null);
+            user.setAvatarUrl(normalizedAvatar);
 
             User updated = userRepository.update(em, user);
             tx.commit();

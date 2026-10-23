@@ -30,12 +30,13 @@
                             <div class="profile-avatar-wrapper">
                                 <c:choose>
                                     <c:when test="${not empty userProfile.avatarUrl}">
-                                        <img src="<c:out value='${userProfile.avatarUrl}' />" alt="<c:out value='${userProfile.fullName}' />"
-                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
-                                        <span style="display: none;"><c:out value="${userProfile.fullName != null && !userProfile.fullName.isEmpty() ? userProfile.fullName.substring(0, 1).toUpperCase() : 'U'}" /></span>
+                                        <img id="headerOverviewAvatarImg" src="<c:out value='${userProfile.avatarUrl}' />" alt="<c:out value='${userProfile.fullName}' />"
+                                             onerror="this.style.display='none'; document.getElementById('headerOverviewAvatarInitial').style.display='inline-flex';">
+                                        <span id="headerOverviewAvatarInitial" style="display: none;"><c:out value="${userProfile.fullName != null && !userProfile.fullName.isEmpty() ? userProfile.fullName.substring(0, 1).toUpperCase() : 'U'}" /></span>
                                     </c:when>
                                     <c:otherwise>
-                                        <span><c:out value="${userProfile.fullName != null && !userProfile.fullName.isEmpty() ? userProfile.fullName.substring(0, 1).toUpperCase() : 'U'}" /></span>
+                                        <img id="headerOverviewAvatarImg" src="" alt="Avatar" style="display: none;">
+                                        <span id="headerOverviewAvatarInitial"><c:out value="${userProfile.fullName != null && !userProfile.fullName.isEmpty() ? userProfile.fullName.substring(0, 1).toUpperCase() : 'U'}" /></span>
                                     </c:otherwise>
                                 </c:choose>
                                 <button type="button" class="profile-avatar-overlay" title="Cập nhật ảnh đại diện" onclick="document.getElementById('prof-avatar').focus();">
@@ -97,7 +98,7 @@
                                     Thông tin cá nhân &amp; Liên hệ
                                 </h2>
                                 <p style="font-size: var(--font-size-xs); color: var(--text-muted); margin: 4px 0 0 0;">
-                                    Cập nhật thông tin định danh và số điện thoại liên lạc của tài khoản.
+                                    Cập nhật thông tin định danh, số điện thoại liên lạc và ảnh đại diện.
                                 </p>
                             </div>
                         </div>
@@ -160,17 +161,89 @@
                                 </div>
                             </div>
 
-                            <!-- Avatar URL -->
-                            <div class="form-group" style="margin-bottom: 16px;">
-                                <label for="prof-avatar" class="form-label">Đường dẫn ảnh đại diện (Avatar URL)</label>
-                                <div class="input-wrapper">
-                                    <svg class="icon icon-sm input-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                        <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
-                                        <circle cx="9" cy="9" r="2"></circle>
-                                        <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
-                                    </svg>
-                                    <input type="url" id="prof-avatar" name="avatarUrl" class="form-control"
-                                           placeholder="https://example.com/avatar.jpg" value="<c:out value='${userProfile.avatarUrl}' />">
+                            <!-- Avatar Studio & Interactive Preset Selector -->
+                            <div class="avatar-studio-container">
+                                <div class="avatar-studio-top">
+                                    <div class="avatar-live-preview-box" id="avatarLivePreview">
+                                        <c:choose>
+                                            <c:when test="${not empty userProfile.avatarUrl}">
+                                                <img id="avatarPreviewImg" src="<c:out value='${userProfile.avatarUrl}' />" alt="Preview"
+                                                     onerror="this.style.display='none'; document.getElementById('avatarPreviewInitials').style.display='flex';">
+                                                <span id="avatarPreviewInitials" class="avatar-initials-preview" style="display: none;"><c:out value="${userProfile.fullName != null && !userProfile.fullName.isEmpty() ? userProfile.fullName.substring(0, 1).toUpperCase() : 'U'}" /></span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img id="avatarPreviewImg" src="" alt="Preview" style="display: none;">
+                                                <span id="avatarPreviewInitials" class="avatar-initials-preview"><c:out value="${userProfile.fullName != null && !userProfile.fullName.isEmpty() ? userProfile.fullName.substring(0, 1).toUpperCase() : 'U'}" /></span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+
+                                    <div class="avatar-studio-input-col">
+                                        <div class="avatar-studio-label-row">
+                                            <label for="prof-avatar" class="form-label" style="margin-bottom: 0; font-weight: 600;">
+                                                Ảnh đại diện (Avatar URL)
+                                            </label>
+                                            <span id="avatarStatusBadge" class="avatar-status-pill neutral">
+                                                <c:choose>
+                                                    <c:when test="${not empty userProfile.avatarUrl}">Ảnh đang dùng</c:when>
+                                                    <c:otherwise>Chưa có ảnh</c:otherwise>
+                                                </c:choose>
+                                            </span>
+                                        </div>
+
+                                        <div class="input-wrapper">
+                                            <svg class="icon icon-sm input-icon" viewBox="0 0 24 24" aria-hidden="true">
+                                                <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                                                <circle cx="9" cy="9" r="2"></circle>
+                                                <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+                                            </svg>
+                                            <input type="text" id="prof-avatar" name="avatarUrl" class="form-control"
+                                                   placeholder="Dán link ảnh bất kỳ (Google, Unsplash, Facebook...)"
+                                                   value="<c:out value='${userProfile.avatarUrl}' />" maxlength="500">
+                                        </div>
+
+                                        <div class="avatar-input-action-row">
+                                            <button type="button" class="avatar-action-btn" id="btnPasteAvatar" title="Dán nhanh liên kết từ khay nhớ tạm">
+                                                <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true" style="width: 12px; height: 12px;"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path></svg>
+                                                <span>Dán từ clipboard</span>
+                                            </button>
+                                            <button type="button" class="avatar-action-btn" id="btnClearAvatar" title="Đặt lại về ảnh đại diện chữ cái mặc định">
+                                                <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true" style="width: 12px; height: 12px;"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                                <span>Xóa về mặc định</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Preset Avatar Selector -->
+                                <div class="avatar-presets-wrapper">
+                                    <div class="avatar-presets-title">
+                                        <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px; color: var(--primary);"><circle cx="12" cy="12" r="10"></circle><path d="m10 15 5-3-5-3v6Z"></path></svg>
+                                        <span>Hoặc chọn nhanh ảnh đại diện mẫu:</span>
+                                    </div>
+                                    <div class="avatar-presets-grid">
+                                        <button type="button" class="avatar-preset-btn" data-url="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" title="Mẫu 1: Nữ hiện đại">
+                                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Mẫu 1">
+                                        </button>
+                                        <button type="button" class="avatar-preset-btn" data-url="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" title="Mẫu 2: Nam thanh lịch">
+                                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" alt="Mẫu 2">
+                                        </button>
+                                        <button type="button" class="avatar-preset-btn" data-url="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80" title="Mẫu 3: Nữ giảng viên">
+                                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80" alt="Mẫu 3">
+                                        </button>
+                                        <button type="button" class="avatar-preset-btn" data-url="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80" title="Mẫu 4: Nam học viên">
+                                            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80" alt="Mẫu 4">
+                                        </button>
+                                        <button type="button" class="avatar-preset-btn" data-url="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80" title="Mẫu 5: Nữ năng động">
+                                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80" alt="Mẫu 5">
+                                        </button>
+                                        <button type="button" class="avatar-preset-btn" data-url="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" title="Mẫu 6: Chuyên gia tri thức">
+                                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80" alt="Mẫu 6">
+                                        </button>
+                                    </div>
+                                    <div style="font-size: var(--font-size-xs); color: var(--text-muted); margin-top: 8px;">
+                                        Bạn có thể dán đường dẫn ảnh bất kỳ từ Google, Imgur, Facebook... hoặc nhấp chọn một ảnh mẫu bên trên.
+                                    </div>
                                 </div>
                             </div>
 

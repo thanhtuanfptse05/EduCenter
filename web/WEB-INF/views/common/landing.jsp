@@ -117,6 +117,10 @@
             <%@ include file="/WEB-INF/views/common/public-header.jspf" %>
 
             <main id="main-content" class="public-home">
+                <div class="landing-alert-container" style="max-width: 1320px; margin: 16px auto 0; padding: 0 24px;">
+                    <%@ include file="/WEB-INF/views/common/alert.jsp" %>
+                </div>
+
                 <!-- SECTION 02: HERO SECTION -->
                 <section class="portal-hero">
                     <div class="portal-hero-container">

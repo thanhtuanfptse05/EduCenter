@@ -105,7 +105,7 @@ public class AuthServlet extends HttpServlet {
     private void handleGetLogout(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO currentUser)
             throws ServletException, IOException {
         if (currentUser == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
+            resp.sendRedirect(req.getContextPath() + "/");
             return;
         }
         req.setAttribute("pageTitle", "Xác nhận đăng xuất — EduCenter ERP");
@@ -228,7 +228,7 @@ public class AuthServlet extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-        resp.sendRedirect(req.getContextPath() + "/login?loggedOut=true");
+        resp.sendRedirect(req.getContextPath() + "/?loggedOut=true");
     }
 
     private void handlePostForgotPassword(HttpServletRequest req, HttpServletResponse resp) throws IOException {

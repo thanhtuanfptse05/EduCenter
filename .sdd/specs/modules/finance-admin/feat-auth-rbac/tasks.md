@@ -104,7 +104,9 @@ flowchart TD
   - [register.jsp](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/web/WEB-INF/views/auth/register.jsp) (AUTH-02)
   - [forgot-password.jsp](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/web/WEB-INF/views/auth/forgot-password.jsp) (AUTH-03)
   - [reset-password.jsp](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/web/WEB-INF/views/auth/reset-password.jsp) (AUTH-04)
-  - [profile.jsp](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/web/WEB-INF/views/auth/profile.jsp) (AUTH-05)
+  - [profile.jsp](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/web/WEB-INF/views/auth/profile.jsp) (AUTH-05): Nâng cấp giao diện hồ sơ hiện đại, tích hợp Avatar Studio (live preview, tự động chuẩn hóa URL, nút dán clipboard, xóa ảnh mặc định, kho ảnh mẫu 6 preset đa dạng).
+  - [public-header.jspf](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/web/WEB-INF/views/common/public-header.jspf): Nâng cấp thanh điều hướng với chip tài khoản người dùng chuyên nghiệp (avatar tròn, tên, role tag, dropdown menu điều hướng và đăng xuất) đồng bộ chiều cao 40px với nút "Không gian của tôi".
+  - POST `/logout`: Chuyển hướng về trang landing page (`/?loggedOut=true`) kèm thông báo đăng xuất thành công thay vì chuyển về trang login hay đăng ký.
 - [x] **TASK-06-06**: Xây dựng trang quản trị người dùng [user-list.jsp](file:///d:/wd%20c%20sang%20d/Documents/NetBeansProjects/EduCenter/web/WEB-INF/views/admin/user-list.jsp) (ADM-18) với bảng danh sách, bộ lọc role, tìm kiếm và nút khóa/mở tài khoản.
 
 ---

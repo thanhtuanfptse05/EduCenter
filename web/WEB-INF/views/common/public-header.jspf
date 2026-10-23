@@ -26,13 +26,61 @@
         <svg class="icon icon-md theme-icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
         <svg class="icon icon-md theme-icon-sun" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1 1M18 18l1 1M5 19l1-1M18 6l1-1"/></svg>
       </button>
-      <c:choose><c:when test="${not empty sessionScope.currentUser}">
-        <a class="site-link site-user" href="${pageContext.request.contextPath}/profile"><c:out value="${sessionScope.currentUser.fullName}"/></a>
-        <a class="btn btn-secondary btn-sm site-desktop-action" href="${pageContext.request.contextPath}${sessionScope.currentUser.defaultDashboardUrl}">Không gian của tôi</a>
-      </c:when><c:otherwise>
-        <a class="site-link site-desktop-action" href="${pageContext.request.contextPath}/login">Đăng nhập</a>
-        <a class="btn btn-primary btn-sm site-desktop-action" href="${pageContext.request.contextPath}/#dang-ky-tu-van">Đăng ký tư vấn</a>
-      </c:otherwise></c:choose>
+      <c:choose>
+        <c:when test="${not empty sessionScope.currentUser}">
+          <a class="site-workspace-btn site-desktop-action" href="${pageContext.request.contextPath}${sessionScope.currentUser.defaultDashboardUrl}">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            <span>Không gian của tôi</span>
+          </a>
+          <div class="site-user-dropdown" data-user-menu>
+            <button type="button" class="site-user-trigger" aria-haspopup="true" aria-expanded="false" id="siteUserMenuBtn" aria-label="Menu tài khoản">
+              <span class="site-user-avatar-wrap">
+                <c:choose>
+                  <c:when test="${not empty sessionScope.currentUser.avatarUrl}">
+                    <img src="<c:out value='${sessionScope.currentUser.avatarUrl}'/>" alt="" class="site-user-avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <span class="site-user-avatar-initials" style="display:none;"><c:out value="${sessionScope.currentUser.fullName != null && !sessionScope.currentUser.fullName.isEmpty() ? sessionScope.currentUser.fullName.substring(0, 1).toUpperCase() : 'U'}"/></span>
+                  </c:when>
+                  <c:otherwise>
+                    <span class="site-user-avatar-initials"><c:out value="${sessionScope.currentUser.fullName != null && !sessionScope.currentUser.fullName.isEmpty() ? sessionScope.currentUser.fullName.substring(0, 1).toUpperCase() : 'U'}"/></span>
+                  </c:otherwise>
+                </c:choose>
+              </span>
+              <span class="site-user-name-text"><c:out value="${sessionScope.currentUser.fullName}"/></span>
+              <svg class="icon icon-xs site-user-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="site-user-menu-panel" role="menu" aria-labelledby="siteUserMenuBtn">
+              <div class="site-user-menu-profile-summary">
+                <div class="site-user-menu-pname"><c:out value="${sessionScope.currentUser.fullName}"/></div>
+                <div class="site-user-menu-pemail"><c:out value="${sessionScope.currentUser.email}"/></div>
+                <div style="margin-top: 6px;">
+                  <span class="badge badge-admin" style="font-size: 11px;"><c:out value="${sessionScope.currentUser.primaryRole}"/></span>
+                </div>
+              </div>
+              <div class="site-user-menu-divider"></div>
+              <a href="${pageContext.request.contextPath}${sessionScope.currentUser.defaultDashboardUrl}" class="site-user-menu-item" role="menuitem">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                <span>Bảng điều khiển tác nghiệp</span>
+              </a>
+              <a href="${pageContext.request.contextPath}/profile" class="site-user-menu-item" role="menuitem">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <span>Hồ sơ cá nhân &amp; Mật khẩu</span>
+              </a>
+              <div class="site-user-menu-divider"></div>
+              <form action="${pageContext.request.contextPath}/logout" method="post" style="margin: 0; padding: 0;">
+                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                <button type="submit" class="site-user-menu-item site-user-menu-logout" role="menuitem">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  <span>Đăng xuất</span>
+                </button>
+              </form>
+            </div>
+          </div>
+        </c:when>
+        <c:otherwise>
+          <a class="site-link site-desktop-action" href="${pageContext.request.contextPath}/login">Đăng nhập</a>
+          <a class="btn btn-primary btn-sm site-desktop-action" href="${pageContext.request.contextPath}/#dang-ky-tu-van">Đăng ký tư vấn</a>
+        </c:otherwise>
+      </c:choose>
       <button type="button" class="site-icon site-menu-button" data-site-menu aria-controls="site-mobile-menu" aria-expanded="false" aria-label="Mở menu điều hướng"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
     </div>
   </div>
@@ -43,6 +91,7 @@
     <a href="${pageContext.request.contextPath}/#doi-ngu">Giáo viên</a><a href="${pageContext.request.contextPath}/#dang-ky-tu-van">Đăng ký tư vấn</a>
     <c:choose><c:when test="${not empty sessionScope.currentUser}"><a href="${pageContext.request.contextPath}${sessionScope.currentUser.defaultDashboardUrl}">Không gian của tôi</a><a href="${pageContext.request.contextPath}/profile">Hồ sơ cá nhân</a><a href="${pageContext.request.contextPath}/logout">Đăng xuất</a></c:when>
     <c:otherwise><a href="${pageContext.request.contextPath}/login">Đăng nhập</a><a href="${pageContext.request.contextPath}/register">Đăng ký tài khoản</a></c:otherwise></c:choose>
+  </nav>
 </header>
 <script>
 (function () {
@@ -58,6 +107,36 @@
           a.setAttribute('aria-current', 'false');
         }
       });
+    }
+
+    var userDropdown = document.querySelector('[data-user-menu]');
+    if (userDropdown) {
+      var trigger = userDropdown.querySelector('.site-user-trigger');
+      if (trigger) {
+        trigger.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var isOpen = userDropdown.classList.contains('is-open');
+          if (isOpen) {
+            userDropdown.classList.remove('is-open');
+            trigger.setAttribute('aria-expanded', 'false');
+          } else {
+            userDropdown.classList.add('is-open');
+            trigger.setAttribute('aria-expanded', 'true');
+          }
+        });
+        document.addEventListener('click', function(e) {
+          if (!userDropdown.contains(e.target)) {
+            userDropdown.classList.remove('is-open');
+            trigger.setAttribute('aria-expanded', 'false');
+          }
+        });
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') {
+            userDropdown.classList.remove('is-open');
+            trigger.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
     }
   } catch (e) {}
 })();
