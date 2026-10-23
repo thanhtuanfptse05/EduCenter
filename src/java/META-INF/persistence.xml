@@ -18,6 +18,9 @@
         <class>com.educenter.entity.Lead</class>
         <class>com.educenter.entity.RegistrationCartItem</class>
         <class>com.educenter.entity.SystemSetting</class>
+        <class>com.educenter.entity.Student</class>
+        <class>com.educenter.entity.Guardian</class>
+        <class>com.educenter.entity.StudentGuardian</class>
 
         <!-- Cấu hình kết nối Microsoft SQL Server -->
         <properties>
