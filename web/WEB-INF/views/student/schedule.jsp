@@ -126,6 +126,65 @@
                     </form>
                 </div>
 
+                <!-- Summary Statistics Bar (4 columns - Above Timetable) -->
+                <section class="portal-kpi-grid">
+                    <div class="portal-kpi-card">
+                        <div class="portal-kpi-content">
+                            <span class="portal-kpi-label">Tổng ca trong kỳ lọc</span>
+                            <div class="portal-kpi-val-row">
+                                <span class="portal-kpi-value"><c:out value="${scheduleList.size()}" /></span>
+                                <span class="portal-kpi-sub">buổi học</span>
+                            </div>
+                        </div>
+                        <div class="portal-kpi-icon-box bg-primary-tint">
+                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        </div>
+                    </div>
+
+                    <div class="portal-kpi-card">
+                        <div class="portal-kpi-content">
+                            <span class="portal-kpi-label">Đã hoàn thành</span>
+                            <div class="portal-kpi-val-row">
+                                <span class="portal-kpi-value text-success"><c:out value="${completedCount}" /></span>
+                                <span class="portal-kpi-sub">buổi học</span>
+                            </div>
+                        </div>
+                        <div class="portal-kpi-icon-box bg-success-tint">
+                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                    </div>
+
+                    <div class="portal-kpi-card">
+                        <div class="portal-kpi-content">
+                            <span class="portal-kpi-label">Sắp diễn ra</span>
+                            <div class="portal-kpi-val-row">
+                                <span class="portal-kpi-value text-primary"><c:out value="${upcomingCount}" /></span>
+                                <span class="portal-kpi-sub">buổi học</span>
+                            </div>
+                        </div>
+                        <div class="portal-kpi-icon-box bg-info-tint">
+                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        </div>
+                    </div>
+
+                    <div class="portal-kpi-card">
+                        <div class="portal-kpi-content">
+                            <span class="portal-kpi-label">Tiến độ hoàn thành</span>
+                            <div class="portal-kpi-val-row">
+                                <span class="portal-kpi-value text-warning">
+                                    <fmt:formatNumber value="${scheduleList.size() > 0 ? (completedCount * 100.0 / scheduleList.size()) : 0}" maxFractionDigits="0"/>%
+                                </span>
+                                <span class="portal-kpi-sub" style="color: var(--text-muted); font-weight: 500;">
+                                    Đã học <c:out value="${completedCount}"/>/<c:out value="${scheduleList.size()}"/> buổi
+                                </span>
+                            </div>
+                        </div>
+                        <div class="portal-kpi-icon-box bg-warning-tint">
+                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Detailed Timetable Table Container -->
                 <section class="portal-table-panel">
                     <c:choose>
@@ -240,82 +299,6 @@
                         </c:otherwise>
                     </c:choose>
                 </section>
-
-                <!-- Summary Statistics Bar (4 columns) -->
-                <section class="portal-kpi-grid">
-                    <div class="portal-kpi-card">
-                        <div class="portal-kpi-content">
-                            <span class="portal-kpi-label">Tổng ca trong kỳ lọc</span>
-                            <div class="portal-kpi-val-row">
-                                <span class="portal-kpi-value"><c:out value="${scheduleList.size()}" /></span>
-                                <span class="portal-kpi-sub">buổi học</span>
-                            </div>
-                        </div>
-                        <div class="portal-kpi-icon-box bg-primary-tint">
-                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        </div>
-                    </div>
-
-                    <div class="portal-kpi-card">
-                        <div class="portal-kpi-content">
-                            <span class="portal-kpi-label">Đã hoàn thành</span>
-                            <div class="portal-kpi-val-row">
-                                <span class="portal-kpi-value text-success"><c:out value="${completedCount}" /></span>
-                                <span class="portal-kpi-sub">buổi học</span>
-                            </div>
-                        </div>
-                        <div class="portal-kpi-icon-box bg-success-tint">
-                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        </div>
-                    </div>
-
-                    <div class="portal-kpi-card">
-                        <div class="portal-kpi-content">
-                            <span class="portal-kpi-label">Sắp diễn ra</span>
-                            <div class="portal-kpi-val-row">
-                                <span class="portal-kpi-value text-primary"><c:out value="${upcomingCount}" /></span>
-                                <span class="portal-kpi-sub">buổi học</span>
-                            </div>
-                        </div>
-                        <div class="portal-kpi-icon-box bg-info-tint">
-                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        </div>
-                    </div>
-
-                    <div class="portal-kpi-card">
-                        <div class="portal-kpi-content">
-                            <span class="portal-kpi-label">Tỷ lệ đúng giờ</span>
-                            <div class="portal-kpi-val-row">
-                                <span class="portal-kpi-value text-warning">98.5%</span>
-                                <span class="portal-kpi-sub" style="color: var(--success); font-weight: 600;">Chuẩn A+</span>
-                            </div>
-                        </div>
-                        <div class="portal-kpi-icon-box bg-warning-tint">
-                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Educational Support & Room Facility Footnote Card -->
-                <div class="advisory-ribbon">
-                    <div class="advisory-ribbon-left">
-                        <div class="advisory-icon-circle">
-                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="12" y1="16" x2="12" y2="12"></line>
-                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="advisory-title">Quy định đổi ca học và học bù</h3>
-                            <p class="advisory-desc">Học sinh có nhu cầu chuyển ca học hoặc xin học bù cần gửi thông báo trước ít nhất <strong>04 giờ</strong> qua hệ thống hoặc liên hệ trực tiếp giáo vụ tại phòng tuyển sinh.</p>
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 10px; flex-shrink: 0;">
-                        <a href="${pageContext.request.contextPath}/profile" class="btn btn-secondary btn-sm">Đăng ký học bù</a>
-                        <a href="${pageContext.request.contextPath}/courses" class="btn btn-primary btn-sm">Xem lớp bổ trợ</a>
-                    </div>
-                </div>
             </div>
         </main>
     </div>

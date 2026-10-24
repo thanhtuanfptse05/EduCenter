@@ -342,27 +342,6 @@
                         </c:otherwise>
                     </c:choose>
                 </section>
-
-                <!-- Support & Academic Advisory Ribbon -->
-                <aside class="advisory-ribbon">
-                    <div class="advisory-ribbon-left">
-                        <div class="advisory-icon-circle">
-                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="advisory-title">Đồng hành cùng kết quả học tập của con</h3>
-                            <p class="advisory-desc">Đội ngũ giáo viên và chuyên viên khảo thí EduCenter luôn sẵn sàng lắng nghe và phối hợp cùng quý phụ huynh.</p>
-                        </div>
-                    </div>
-                    <div>
-                        <a href="${pageContext.request.contextPath}/profile" class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
-                            <span>Liên hệ ban giáo vụ</span>
-                            <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </a>
-                    </div>
-                </aside>
             </div>
         </main>
     </div>
