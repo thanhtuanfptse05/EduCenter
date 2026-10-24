@@ -1049,3 +1049,274 @@
   background: var(--surface-muted);
 }
 
+/* ==========================================================================
+   8. CRM & LEAD MANAGEMENT (lead-list.jsp, dashboard.jsp)
+   ========================================================================== */
+.crm-kpi-grid-5 {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+@media (max-width: 1200px) {
+  .crm-kpi-grid-5 { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .crm-kpi-grid-5 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .crm-kpi-grid-5 { grid-template-columns: 1fr; }
+}
+
+.crm-kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.crm-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.crm-kpi-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.crm-kpi-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.crm-kpi-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.crm-kpi-icon-wrap.primary   { background: var(--primary-subtle); color: var(--primary); }
+.crm-kpi-icon-wrap.info      { background: #e0f2fe; color: #0284c7; }
+.crm-kpi-icon-wrap.warning   { background: var(--warning-subtle); color: #d97706; }
+.crm-kpi-icon-wrap.success   { background: var(--success-subtle); color: #059669; }
+.crm-kpi-icon-wrap.danger    { background: var(--danger-subtle); color: #dc2626; }
+
+.crm-kpi-val-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.crm-kpi-val {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+
+.crm-kpi-sub {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.crm-kpi-bar {
+  width: 100%;
+  height: 5px;
+  background: var(--surface-muted);
+  border-radius: 999px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.crm-kpi-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* CRM Table specific */
+.lead-code-pill {
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-subtle);
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.lead-tel-link {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: monospace;
+  font-size: 13px;
+  transition: opacity 0.15s ease;
+}
+.lead-tel-link:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
+
+.lead-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+.lead-status-pill .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.lead-status-pill.status-new {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+.lead-status-pill.status-new .dot {
+  background: #2563eb;
+  animation: pulse-dot 1.5s infinite;
+}
+.lead-status-pill.status-contacted {
+  background: var(--surface-muted);
+  color: var(--text-muted);
+}
+.lead-status-pill.status-contacted .dot { background: var(--text-muted); }
+.lead-status-pill.status-consulting {
+  background: #fef3c7;
+  color: #b45309;
+}
+.lead-status-pill.status-consulting .dot { background: #d97706; }
+.lead-status-pill.status-assessed {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+.lead-status-pill.status-assessed .dot { background: #7c3aed; }
+.lead-status-pill.status-enrolled {
+  background: #d1fae5;
+  color: #047857;
+}
+.lead-status-pill.status-enrolled .dot { background: #059669; }
+.lead-status-pill.status-lost {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.lead-status-pill.status-lost .dot { background: #dc2626; }
+
+@keyframes pulse-dot {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.8; }
+}
+
+.lead-source-tag {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2.5px 7px;
+  border-radius: 4px;
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+}
+
+.lead-row-unassigned {
+  background: rgba(37, 99, 235, 0.04) !important;
+}
+
+/* ==========================================================================
+   9. TIMETABLE WEEK MATRIX ENHANCEMENTS (timetable.jsp)
+   ========================================================================== */
+.tt-kpi-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+@media (max-width: 992px) {
+  .tt-kpi-grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 576px) {
+  .tt-kpi-grid-4 { grid-template-columns: 1fr; }
+}
+
+.tt-nav-bar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 20px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.tt-week-range-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.tt-legend-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 12px 20px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 13px;
+}
+
+/* Capacity bar helpers */
+.cap-bar-wrap {
+  width: 90px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-muted);
+  overflow: hidden;
+}
+.cap-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+
