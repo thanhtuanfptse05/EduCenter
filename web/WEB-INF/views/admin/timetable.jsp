@@ -6,8 +6,8 @@
 <html lang="vi">
 <head>
     <%@ include file="/WEB-INF/views/common/head.jspf" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/staff-management.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261024_05">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/staff-management.css?v=20261024_05">
     <title>Thời khóa biểu giảng dạy &amp; học tập | EduCenter ERP</title>
 </head>
 <body class="admin-body">
