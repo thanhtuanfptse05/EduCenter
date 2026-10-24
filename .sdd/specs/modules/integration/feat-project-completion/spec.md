@@ -121,6 +121,11 @@ Tách rời phụ thuộc CSDL thật trong `AttendanceServiceImpl` bằng cách
 - **FR-COMP-020**: CSDL MUST có bộ script Seed Data chia tách theo thứ tự `01` - `08`, cung cấp dữ liệu dồi dào, chạy được ngay bằng SSMS hoặc script PowerShell/Batch.
 - **FR-COMP-021**: `AssessmentRepository.findClassesByTeacher` MUST sử dụng `JOIN FETCH` để nạp sẵn `c.course cr`, `cr.subject`, và `c.room` nhằm triệt tiêu hoàn toàn lỗi `LazyInitializationException` khi giáo viên xem Dashboard giảng dạy ngoài phiên EntityManager.
 - **FR-COMP-022**: Chuẩn hóa cấu trúc layout nội bộ trong `admin/dashboard.jsp`, `admin/reports.jsp`, `staff/lead-list.jsp`, `staff/lead-detail.jsp` sang cấu trúc chuẩn `<div class="admin-layout">`, `<div class="admin-main">`, `<main class="admin-content">` và định nghĩa fallback tokens/classes `.dashboard-container`, `.dashboard-main`, `.dashboard-content` trong `admin.css` để bảo đảm giao diện không bị lệch layout, xô đẩy thanh topbar hay tạo khoảng trắng bất thường.
+- **FR-COMP-023**: Xây dựng `StaffDashboardServlet` (`/staff/dashboard`) và giao diện `staff/dashboard.jsp` cung cấp Dashboard Tuyển sinh & Vận hành dành riêng cho nhân viên tư vấn; đồng thời bổ sung cơ chế gán phụ trách và tự nhận phụ trách Lead (Self-assign) trực tiếp trên giao diện CRM.
+- **FR-COMP-024**: Triệt tiêu toàn bộ liên kết trùng lặp trong `sidebar.jspf` trên mọi vai trò (Staff, Parent, Student, Teacher); bổ sung route `/parent/progress` trong `ParentPortalServlet` phục vụ màn hình chi tiết "Tiến độ & Kết quả học tập của con" độc lập với "Bảng điều khiển".
+- **FR-COMP-025**: Cập nhật logic hiển thị trạng thái ca học trong thời khóa biểu (`timetable.jsp`, `schedule.jsp`) dựa trên ngày giờ thực tế: ca học ngày đã qua không được hiển thị "Sắp diễn ra", mà hiển thị "Đã hoàn thành" hoặc "Đã kết thúc / Chờ chốt điểm danh".
+- **FR-COMP-026**: Khắc phục lỗi tràn và khuất cột trong danh sách học viên (`staff/student-list.jsp`): cấu hình `overflow-x: auto` trên `.table-responsive` và độ rộng tối thiểu cho `.data-table` để đảm bảo 100% cột và nút thao tác hiển thị đầy đủ, không bị `overflow: hidden` cắt cụt.
+- **FR-COMP-027**: Hoàn thiện toàn bộ các file nạp dữ liệu mẫu (`04`, `06`, `07`, `08`) và script `run_all_seeds.ps1`: sửa lỗi cú pháp SQL, `SET QUOTED_IDENTIFIER ON`, nạp dữ liệu phong phú (học viên `student.nam` có ghi danh, điểm danh, bài kiểm tra; phụ huynh `parent.tuan` liên kết con; leads đầy đủ trạng thái và người phụ trách).
 
 ---
 
@@ -134,3 +139,8 @@ Tách rời phụ thuộc CSDL thật trong `AttendanceServiceImpl` bằng cách
 - **SC-006**: Bộ script CSDL được chia tách rõ ràng, người mới có thể khởi tạo toàn bộ CSDL và dữ liệu kiểm thử chỉ với một lệnh.
 - **SC-007**: Bàn làm việc giáo viên (`/teacher/dashboard`) tải thành công 100% cho mọi tài khoản giáo viên, không còn bị lỗi đóng kết nối / màn hình trắng.
 - **SC-008**: Bảng điều khiển Admin (`/admin/dashboard`), Báo cáo (`/admin/reports`) và CRM Tuyển sinh (`/staff/leads`) hiển thị chuẩn xác layout flexbox, không bị chèn khoảng trắng hay tràn vỡ layout.
+- **SC-009**: Nhân viên tư vấn có Dashboard riêng tại `/staff/dashboard` với KPI tuyển sinh, phễu lead, lối tắt nhanh, hoàn toàn tách biệt với danh sách `/staff/leads`.
+- **SC-010**: Không còn bất kỳ mục menu nào trong Sidebar bị trùng lặp URL với "Bảng điều khiển"; Phụ huynh truy cập "Tiến độ & Kết quả của con" tại `/parent/progress` hiển thị báo cáo học tập chi tiết thay vì lặp lại trang Dashboard.
+- **SC-011**: Các ca học trong quá khứ trên thời khóa biểu hiển thị đúng trạng thái hoàn thành hoặc đã kết thúc, không còn gắn nhãn "Sắp diễn ra".
+- **SC-012**: Bảng Quản lý Hồ sơ & Trạng thái Học viên hiển thị trọn vẹn tất cả cột trạng thái và nút hành động, hỗ trợ thanh cuộn ngang khi màn hình nhỏ.
+- **SC-013**: CSDL được nạp đầy đủ dữ liệu thực tế: tài khoản học viên và phụ huynh kiểm thử hiển thị đầy đủ lớp đang học, chuyên cần > 0%, điểm kiểm tra có thực và lịch học rõ ràng.

@@ -75,4 +75,12 @@ public class ClassAdminViewDTO implements Serializable {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public String getFormattedStartDate() {
+        return startDate != null ? startDate.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+    }
+
+    public String getFormattedEndDate() {
+        return endDate != null ? endDate.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+    }
 }

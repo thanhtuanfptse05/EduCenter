@@ -322,11 +322,9 @@
                                                 </td>
                                                 <td>
                                                     <div style="font-size: 13px;">
-                                                        <fmt:parseDate value="${cItem.startDate}" pattern="yyyy-MM-dd" var="sDate" type="date"/>
-                                                        <fmt:formatDate value="${sDate}" pattern="dd/MM/yyyy"/>
+                                                        <c:out value="${cItem.formattedStartDate}" />
                                                         <span style="color: var(--text-muted);"> &rarr; </span>
-                                                        <fmt:parseDate value="${cItem.endDate}" pattern="yyyy-MM-dd" var="eDate" type="date"/>
-                                                        <fmt:formatDate value="${eDate}" pattern="dd/MM/yyyy"/>
+                                                        <c:out value="${cItem.formattedEndDate}" />
                                                     </div>
                                                 </td>
                                                 <td>

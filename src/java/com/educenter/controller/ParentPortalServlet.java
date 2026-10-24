@@ -20,6 +20,7 @@ import java.io.IOException;
  */
 @WebServlet(name = "ParentPortalServlet", urlPatterns = {
         "/parent/dashboard",
+        "/parent/progress",
         "/parent/children/detail"
 })
 public class ParentPortalServlet extends HttpServlet {
@@ -43,6 +44,7 @@ public class ParentPortalServlet extends HttpServlet {
         String path = req.getServletPath();
         switch (path) {
             case "/parent/dashboard" -> handleDashboard(req, resp, currentUser);
+            case "/parent/progress" -> handleProgress(req, resp, currentUser);
             case "/parent/children/detail" -> handleChildDetail(req, resp, currentUser);
             default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -64,6 +66,52 @@ public class ParentPortalServlet extends HttpServlet {
         req.setAttribute("pageTitle", "Cổng phụ huynh — Theo dõi học tập của con");
         req.setAttribute("internalShell", true);
         req.getRequestDispatcher("/WEB-INF/views/parent/dashboard.jsp").forward(req, resp);
+    }
+
+    private void handleProgress(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO currentUser)
+            throws ServletException, IOException {
+        String childIdStr = req.getParameter("childId");
+        if (childIdStr == null || childIdStr.trim().isEmpty()) {
+            childIdStr = req.getParameter("id");
+        }
+
+        Long childStudentId = null;
+        if (childIdStr != null && !childIdStr.trim().isEmpty()) {
+            try {
+                childStudentId = Long.parseLong(childIdStr.trim());
+            } catch (NumberFormatException ignored) {}
+        }
+
+        ParentDashboardSummaryDTO parentSummary = portalService.getParentDashboard(currentUser.getUserId(), childStudentId);
+        if (childStudentId == null) {
+            childStudentId = parentSummary.getSelectedChildId();
+        }
+        if (childStudentId == null && parentSummary.hasChildren()) {
+            childStudentId = parentSummary.getVerifiedChildren().get(0).getId();
+        }
+
+        if (childStudentId == null) {
+            req.setAttribute("dashboard", parentSummary);
+            req.setAttribute("activeNav", "parent-progress");
+            req.setAttribute("pageTitle", "Tiến độ học tập của con — EduCenter");
+            req.setAttribute("internalShell", true);
+            req.getRequestDispatcher("/WEB-INF/views/parent/dashboard.jsp").forward(req, resp);
+            return;
+        }
+
+        try {
+            StudentDashboardSummaryDTO childDetail = portalService.getChildDetail(currentUser.getUserId(), childStudentId);
+            req.setAttribute("childDetail", childDetail);
+            req.setAttribute("parentSummary", parentSummary);
+            req.setAttribute("activeNav", "parent-progress");
+            req.setAttribute("breadcrumb", "Tiến độ & Kết quả học tập của con");
+            req.setAttribute("pageTitle", "Tiến độ học tập: " + childDetail.getStudentName() + " — EduCenter");
+            req.setAttribute("internalShell", true);
+            req.getRequestDispatcher("/WEB-INF/views/parent/child-detail.jsp").forward(req, resp);
+        } catch (ValidationException e) {
+            FlashMessageUtil.setError(req, e.getMessage());
+            resp.sendRedirect(req.getContextPath() + "/parent/dashboard");
+        }
     }
 
     private void handleChildDetail(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO currentUser)

@@ -107,4 +107,38 @@ public class ClassSessionDTO implements Serializable {
         if (sessionDate == null) return "";
         return sessionDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
+
+    public boolean isPast() {
+        if ("COMPLETED".equalsIgnoreCase(status) || "CANCELLED".equalsIgnoreCase(status)) {
+            return true;
+        }
+        LocalDate today = LocalDate.now();
+        if (sessionDate == null) return false;
+        if (sessionDate.isBefore(today)) return true;
+        if (sessionDate.isEqual(today)) {
+            LocalTime now = LocalTime.now();
+            return endAt != null && endAt.isBefore(now);
+        }
+        return false;
+    }
+
+    public boolean isHappeningNow() {
+        if ("CANCELLED".equalsIgnoreCase(status) || "COMPLETED".equalsIgnoreCase(status)) {
+            return false;
+        }
+        LocalDate today = LocalDate.now();
+        if (sessionDate != null && sessionDate.isEqual(today)) {
+            LocalTime now = LocalTime.now();
+            return startAt != null && endAt != null && !now.isBefore(startAt) && !now.isAfter(endAt);
+        }
+        return false;
+    }
+
+    public String getDisplayStatusBadge() {
+        if ("CANCELLED".equalsIgnoreCase(status)) return "CANCELLED";
+        if ("COMPLETED".equalsIgnoreCase(status)) return "COMPLETED";
+        if (isPast()) return "PAST";
+        if (isHappeningNow()) return "HAPPENING";
+        return "SCHEDULED";
+    }
 }

@@ -87,3 +87,21 @@
 - [x] **Task 8.3**: Chuẩn hóa `web/WEB-INF/views/admin/dashboard.jsp` và `web/WEB-INF/views/admin/reports.jsp` sang cấu trúc chuẩn `<div class="admin-layout">`, `<div class="admin-main">`, `<main class="admin-content">` và đặt `internalShell=true`.
 - [x] **Task 8.4**: Chuẩn hóa `web/WEB-INF/views/staff/lead-list.jsp` và `web/WEB-INF/views/staff/lead-detail.jsp` sang cấu trúc chuẩn `<div class="admin-layout">`, `<div class="admin-main">`, `<main class="admin-content">` và đặt `internalShell=true`.
 - [x] **Task 8.5**: Kiểm thử trực tiếp bằng HTTP request tới các endpoint `/admin/dashboard`, `/teacher/dashboard`, `/student/dashboard`, `/parent/dashboard`, `/staff/leads` bảo đảm trả về Status 200 và giao diện hoàn chỉnh.
+
+---
+
+## Task Group 9: Comprehensive Real Data Seeding, Menu Deduplication & UI Fixes (FR-COMP-023 to FR-COMP-027)
+
+- [x] **Task 9.1**: Sửa toàn bộ lỗi cú pháp trong các file seed CSDL (`04`, `06`, `07`, `08`) và script `run_all_seeds.ps1`:
+  - `04`: Sửa lỗi cột `notes` và `created_at` trong `dbo.StudentGuardians`.
+  - `06`: Đánh dấu các ca học quá khứ (đến 23/10/2026) là `COMPLETED`.
+  - `07`: Thêm `SET QUOTED_IDENTIFIER ON; SET ANSI_NULLS ON;` cho bảng có computed columns; đảm bảo `student.nam` có ghi danh và học phí.
+  - `08`: Sửa tên cột `dbo.TeachingJournals`, cú pháp `max_score` trong `dbo.Assessments`, chuẩn hóa trạng thái `Leads` (`CONSULTING`, `NEW`, `ENROLLED`).
+  - `run_all_seeds.ps1`: Sửa lỗi encoding UTF-8 / cú pháp ngoặc nhọn để chạy mượt mà 100%.
+- [x] **Task 9.2**: Chạy nạp lại dữ liệu toàn bộ CSDL và kiểm tra số lượng bản ghi (15 học viên, 22 ghi danh, đầy đủ điểm danh, bài kiểm tra, phễu lead phong phú).
+- [x] **Task 9.3**: Xây dựng `StaffDashboardServlet.java` (`/staff/dashboard`) và `web/WEB-INF/views/staff/dashboard.jsp` cung cấp Dashboard Tuyển sinh & Vận hành chuyên dụng cho nhân viên; cập nhật `UserPrincipalDTO.getDefaultDashboardUrl()`.
+- [x] **Task 9.4**: Bổ sung route `/parent/progress` trong `ParentPortalServlet.java` hiển thị chi tiết tiến độ học tập của con; tối ưu `sidebar.jspf` loại bỏ 100% mục menu trùng lặp URL với Bảng điều khiển (trên cả 4 role Staff, Parent, Student, Teacher).
+- [x] **Task 9.5**: Cập nhật logic hiển thị trạng thái ca học trong `admin/timetable.jsp` và `student/schedule.jsp` theo mốc thời gian thực (ca quá khứ không hiển thị "Sắp diễn ra").
+- [x] **Task 9.6**: Khắc phục lỗi tràn và khuất cột trong `web/WEB-INF/views/staff/student-list.jsp`: cấu hình `overflow-x: auto` trên `.table-responsive` và min-width cho `.data-table`.
+- [x] **Task 9.7**: Bổ sung nút / luồng "Nhận phụ trách" (Self-assign) và hiển thị phụ trách rõ ràng trên `lead-list.jsp`.
+- [x] **Task 9.8**: Biên dịch, kiểm tra HTTP và xác minh không mở trình duyệt, commit và push lên `main`.

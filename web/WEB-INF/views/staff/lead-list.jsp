@@ -92,6 +92,15 @@
             .filter-grid { grid-template-columns: 1fr; }
         }
 
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .table-responsive table {
+            min-width: 950px;
+        }
+
         .modal-backdrop-custom {
             display: none;
             position: fixed;
@@ -332,10 +341,19 @@
                                         <td style="padding: 14px 18px;">
                                             <c:choose>
                                                 <c:when test="${not empty item.assignedToName}">
-                                                    <div style="font-size: 0.875rem; font-weight: 500; color: var(--text);">${item.assignedToName}</div>
+                                                    <div style="font-size: 0.875rem; font-weight: 600; color: var(--text);">${item.assignedToName}</div>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <span style="color: var(--warning); font-size: 0.8125rem;">Chưa phân công</span>
+                                                    <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                                        <span style="color: var(--warning); font-size: 0.8125rem; font-weight: 500;">Chưa phân công</span>
+                                                        <form action="${pageContext.request.contextPath}/staff/leads/claim" method="POST" style="margin: 0; display: inline;">
+                                                            <input type="hidden" name="csrfToken" value="${csrfToken}">
+                                                            <input type="hidden" name="leadId" value="${item.id}">
+                                                            <button type="submit" class="btn btn-secondary btn-sm" style="font-size: 11px; padding: 2px 8px; height: auto;" title="Nhận lead này vào danh sách chăm sóc của tôi">
+                                                                Nhận lead
+                                                            </button>
+                                                        </form>
+                                                    </div>
                                                 </c:otherwise>
                                             </c:choose>
                                         </td>

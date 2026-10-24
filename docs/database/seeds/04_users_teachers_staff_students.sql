@@ -237,8 +237,7 @@ USING (
         v.relationship,
         v.is_primary,
         GETDATE() AS verified_at,
-        @AdminId AS verified_by,
-        N'Đã xác minh qua sổ hộ khẩu và căn cước công dân' AS notes
+        @AdminId AS verified_by
     FROM (VALUES
         ('student.nam@educenter.vn', 'parent.tuan@educenter.vn', N'Bố', 1),
         ('student.mai@educenter.vn', 'parent.lan@educenter.vn', N'Mẹ', 1),
@@ -256,10 +255,10 @@ USING (
 ) AS source
 ON target.student_id = source.student_id AND target.guardian_id = source.guardian_id
 WHEN MATCHED THEN
-    UPDATE SET relationship = source.relationship, is_primary = source.is_primary, verified_at = source.verified_at, verified_by = source.verified_by, notes = source.notes
+    UPDATE SET relationship = source.relationship, is_primary = source.is_primary, verified_at = source.verified_at, verified_by = source.verified_by
 WHEN NOT MATCHED THEN
-    INSERT (student_id, guardian_id, relationship, is_primary, verified_at, verified_by, notes, created_at)
-    VALUES (source.student_id, source.guardian_id, source.relationship, source.is_primary, source.verified_at, source.verified_by, source.notes, GETDATE());
+    INSERT (student_id, guardian_id, relationship, is_primary, verified_at, verified_by)
+    VALUES (source.student_id, source.guardian_id, source.relationship, source.is_primary, source.verified_at, source.verified_by);
 GO
 
 PRINT N'Hoàn thành Bước 04: Khởi tạo đầy đủ 30+ người dùng, 5 giáo viên, 3 nhân viên, 15 học viên và 10 phụ huynh xác thực!';

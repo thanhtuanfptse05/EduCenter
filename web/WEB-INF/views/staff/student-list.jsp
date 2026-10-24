@@ -85,6 +85,14 @@
             overflow: hidden;
             margin-bottom: 24px;
         }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .data-table {
+            min-width: 1100px;
+        }
         .filter-panel {
             padding: 20px;
             background: var(--surface);

@@ -9,8 +9,8 @@
 <body>
 <c:set var="internalShell" value="true" scope="request"/>
 <div class="admin-layout">
-    <c:set var="activeNav" value="parent-dashboard" scope="request" />
-    <c:set var="breadcrumb" value="Hồ sơ chi tiết của con" scope="request" />
+    <c:set var="activeNav" value="${empty activeNav ? 'parent-progress' : activeNav}" scope="request" />
+    <c:set var="breadcrumb" value="${empty breadcrumb ? 'Hồ sơ chi tiết của con' : breadcrumb}" scope="request" />
     <%@ include file="/WEB-INF/views/common/sidebar.jspf" %>
 
     <div class="admin-main">

@@ -20,7 +20,8 @@ import java.util.Map;
         "/staff/leads/detail",
         "/staff/leads/create",
         "/staff/leads/status",
-        "/staff/leads/consultation"
+        "/staff/leads/consultation",
+        "/staff/leads/claim"
 })
 public class StaffLeadServlet extends HttpServlet {
 
@@ -124,7 +125,26 @@ public class StaffLeadServlet extends HttpServlet {
             case "/staff/leads/create" -> handleCreateLead(req, resp, currentUser);
             case "/staff/leads/status" -> handleUpdateStatus(req, resp, currentUser);
             case "/staff/leads/consultation" -> handleAddConsultation(req, resp, currentUser);
+            case "/staff/leads/claim" -> handleClaimLead(req, resp, currentUser);
             default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+
+    private void handleClaimLead(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO currentUser) throws IOException {
+        String leadIdStr = req.getParameter("leadId");
+        if (leadIdStr == null || leadIdStr.trim().isEmpty()) {
+            FlashMessageUtil.setError(req, "Mã khách hàng không hợp lệ.");
+            resp.sendRedirect(req.getContextPath() + "/staff/leads");
+            return;
+        }
+        try {
+            Long leadId = Long.parseLong(leadIdStr.trim());
+            leadService.updateLeadStatus(leadId, "CONSULTING", "Nhân viên " + currentUser.getFullName() + " tiếp nhận chăm sóc tư vấn.", currentUser.getUserId(), currentUser);
+            FlashMessageUtil.setSuccess(req, "Bạn đã nhận phụ trách tư vấn khách hàng #LEAD-" + leadId + " thành công!");
+            resp.sendRedirect(req.getContextPath() + "/staff/leads");
+        } catch (Exception ex) {
+            FlashMessageUtil.setError(req, "Lỗi nhận lead: " + ex.getMessage());
+            resp.sendRedirect(req.getContextPath() + "/staff/leads");
         }
     }
 

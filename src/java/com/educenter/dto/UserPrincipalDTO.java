@@ -84,7 +84,7 @@ public class UserPrincipalDTO implements Serializable {
         String primary = getPrimaryRole();
         return switch (primary) {
             case "ADMIN" -> "/admin/dashboard";
-            case "STAFF" -> "/staff/leads";
+            case "STAFF" -> "/staff/dashboard";
             case "TEACHER" -> "/teacher/dashboard";
             case "STUDENT" -> "/student/dashboard";
             case "PARENT" -> "/parent/dashboard";

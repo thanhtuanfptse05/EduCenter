@@ -83,4 +83,8 @@ public class EnrollmentViewDTO implements Serializable {
 
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
+
+    public String getEnrolledAtFormatted() {
+        return enrolledAt != null ? enrolledAt.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) : "";
+    }
 }

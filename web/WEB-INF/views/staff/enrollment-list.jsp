@@ -273,8 +273,7 @@
                                         <td>
                                             <div style="font-size: 0.875rem;"><c:out value="${item.startDate}" /></div>
                                             <div style="font-size: 0.75rem; color: var(--text-muted);">
-                                                Ghi danh: <fmt:parseDate value="${item.enrolledAt}" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDate" type="both"/>
-                                                <fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy HH:mm"/>
+                                                Ghi danh: <c:out value="${item.enrolledAtFormatted}" />
                                             </div>
                                         </td>
                                         <td>

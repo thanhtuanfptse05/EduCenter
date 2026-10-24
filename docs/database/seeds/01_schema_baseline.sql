@@ -192,7 +192,7 @@ CREATE TABLE dbo.Leads (
     source VARCHAR(50) NOT NULL CONSTRAINT DF_Leads_Source DEFAULT 'WEBSITE'
         CONSTRAINT CK_Leads_Source CHECK (source IN ('WEBSITE', 'FACEBOOK', 'HOTLINE', 'REFERRAL', 'WALK_IN')),
     status VARCHAR(30) NOT NULL CONSTRAINT DF_Leads_Status DEFAULT 'NEW'
-        CONSTRAINT CK_Leads_Status CHECK (status IN ('NEW', 'CONTACTED', 'CONSULTED', 'TEST_SCHEDULED', 'ENROLLED', 'CANCELLED')),
+        CONSTRAINT CK_Leads_Status CHECK (status IN ('NEW', 'CONTACTED', 'CONSULTING', 'CONSULTED', 'ASSESSED', 'TEST_SCHEDULED', 'ENROLLED', 'LOST', 'CANCELLED')),
     assigned_to BIGINT NULL,
     notes NVARCHAR(MAX) NULL,
     created_at DATETIME2(0) NOT NULL CONSTRAINT DF_Leads_CreatedAt DEFAULT GETDATE(),
@@ -206,13 +206,9 @@ CREATE TABLE dbo.Consultations (
     id BIGINT IDENTITY(1,1) CONSTRAINT PK_Consultations PRIMARY KEY,
     lead_id BIGINT NOT NULL,
     staff_id BIGINT NOT NULL,
-    consultation_date DATETIME2(0) NOT NULL CONSTRAINT DF_Consultations_Date DEFAULT GETDATE(),
-    method VARCHAR(30) NOT NULL CONSTRAINT CK_Consultations_Method CHECK (method IN ('PHONE', 'ONLINE_MEET', 'OFFLINE_OFFICE')),
-    content NVARCHAR(MAX) NOT NULL,
-    result_status VARCHAR(50) NULL,
-    next_action NVARCHAR(255) NULL,
-    next_follow_up DATE NULL,
-    created_at DATETIME2(0) NOT NULL CONSTRAINT DF_Consultations_CreatedAt DEFAULT GETDATE(),
+    notes NVARCHAR(MAX) NOT NULL,
+    contacted_at DATETIME2(0) NOT NULL CONSTRAINT DF_Consultations_ContactedAt DEFAULT GETDATE(),
+    next_appointment DATETIME2(0) NULL,
     CONSTRAINT FK_Consultations_Lead FOREIGN KEY (lead_id) REFERENCES dbo.Leads(id) ON DELETE CASCADE,
     CONSTRAINT FK_Consultations_Staff FOREIGN KEY (staff_id) REFERENCES dbo.Users(id) ON DELETE NO ACTION
 );
@@ -278,6 +274,7 @@ CREATE TABLE dbo.Classes (
     end_date DATE NOT NULL,
     status VARCHAR(20) NOT NULL CONSTRAINT DF_Classes_Status DEFAULT 'OPEN'
         CONSTRAINT CK_Classes_Status CHECK (status IN ('OPEN', 'ONGOING', 'COMPLETED', 'CANCELLED')),
+    version INT NOT NULL CONSTRAINT DF_Classes_Version DEFAULT 0,
     created_at DATETIME2(0) NOT NULL CONSTRAINT DF_Classes_CreatedAt DEFAULT GETDATE(),
     updated_at DATETIME2(0) NOT NULL CONSTRAINT DF_Classes_UpdatedAt DEFAULT GETDATE(),
     CONSTRAINT CK_Classes_Dates CHECK (end_date >= start_date),
@@ -300,6 +297,7 @@ CREATE TABLE dbo.ClassSessions (
     status VARCHAR(20) NOT NULL CONSTRAINT DF_ClassSessions_Status DEFAULT 'SCHEDULED'
         CONSTRAINT CK_ClassSessions_Status CHECK (status IN ('SCHEDULED', 'COMPLETED', 'CANCELLED')),
     created_at DATETIME2(0) NOT NULL CONSTRAINT DF_ClassSessions_CreatedAt DEFAULT GETDATE(),
+    updated_at DATETIME2(0) NOT NULL CONSTRAINT DF_ClassSessions_UpdatedAt DEFAULT GETDATE(),
     CONSTRAINT CK_ClassSessions_Time CHECK (end_at > start_at),
     CONSTRAINT FK_ClassSessions_Class FOREIGN KEY (class_id) REFERENCES dbo.Classes(id) ON DELETE CASCADE,
     CONSTRAINT FK_ClassSessions_Teacher FOREIGN KEY (teacher_id) REFERENCES dbo.Teachers(id) ON DELETE NO ACTION,
@@ -310,10 +308,13 @@ GO
 -- 16. RegistrationCartItems
 CREATE TABLE dbo.RegistrationCartItems (
     id BIGINT IDENTITY(1,1) CONSTRAINT PK_RegistrationCartItems PRIMARY KEY,
-    session_token VARCHAR(100) NOT NULL,
+    user_id BIGINT NOT NULL,
     course_id BIGINT NOT NULL,
+    quantity INT NOT NULL CONSTRAINT DF_RegistrationCartItems_Quantity DEFAULT 1,
     notes NVARCHAR(500) NULL,
     created_at DATETIME2(0) NOT NULL CONSTRAINT DF_RegistrationCartItems_CreatedAt DEFAULT GETDATE(),
+    CONSTRAINT UQ_RegistrationCartItems_User_Course UNIQUE (user_id, course_id),
+    CONSTRAINT FK_RegistrationCartItems_User FOREIGN KEY (user_id) REFERENCES dbo.Users(id) ON DELETE NO ACTION,
     CONSTRAINT FK_RegistrationCartItems_Course FOREIGN KEY (course_id) REFERENCES dbo.Courses(id) ON DELETE CASCADE
 );
 GO
@@ -343,6 +344,7 @@ CREATE TABLE dbo.Attendances (
     student_id BIGINT NOT NULL,
     status VARCHAR(20) NOT NULL
         CONSTRAINT CK_Attendances_Status CHECK (status IN ('PRESENT', 'LATE', 'ABSENT_EXCUSED', 'ABSENT_UNEXCUSED')),
+    remarks NVARCHAR(255) NULL,
     notes NVARCHAR(255) NULL,
     recorded_at DATETIME2(0) NOT NULL CONSTRAINT DF_Attendances_RecordedAt DEFAULT GETDATE(),
     recorded_by BIGINT NOT NULL,
@@ -357,15 +359,12 @@ GO
 CREATE TABLE dbo.TeachingJournals (
     id BIGINT IDENTITY(1,1) CONSTRAINT PK_TeachingJournals PRIMARY KEY,
     session_id BIGINT NOT NULL CONSTRAINT UQ_TeachingJournals_Session UNIQUE,
-    teacher_id BIGINT NOT NULL,
-    lesson_topic NVARCHAR(255) NOT NULL,
-    homework_assigned NVARCHAR(MAX) NULL,
-    student_evaluations NVARCHAR(MAX) NULL,
-    teacher_feedback NVARCHAR(MAX) NULL,
+    content NVARCHAR(MAX) NOT NULL,
+    homework NVARCHAR(MAX) NULL,
+    teacher_remarks NVARCHAR(MAX) NULL,
     created_at DATETIME2(0) NOT NULL CONSTRAINT DF_TeachingJournals_CreatedAt DEFAULT GETDATE(),
     updated_at DATETIME2(0) NOT NULL CONSTRAINT DF_TeachingJournals_UpdatedAt DEFAULT GETDATE(),
-    CONSTRAINT FK_TeachingJournals_Session FOREIGN KEY (session_id) REFERENCES dbo.ClassSessions(id) ON DELETE CASCADE,
-    CONSTRAINT FK_TeachingJournals_Teacher FOREIGN KEY (teacher_id) REFERENCES dbo.Teachers(id) ON DELETE NO ACTION
+    CONSTRAINT FK_TeachingJournals_Session FOREIGN KEY (session_id) REFERENCES dbo.ClassSessions(id) ON DELETE CASCADE
 );
 GO
 
@@ -373,8 +372,11 @@ GO
 CREATE TABLE dbo.Assessments (
     id BIGINT IDENTITY(1,1) CONSTRAINT PK_Assessments PRIMARY KEY,
     class_id BIGINT NOT NULL,
-    name NVARCHAR(150) NOT NULL,
-    weight DECIMAL(3,2) NOT NULL CONSTRAINT DF_Assessments_Weight DEFAULT 1.00 CONSTRAINT CK_Assessments_Weight CHECK (weight > 0),
+    title NVARCHAR(200) NOT NULL,
+    name NVARCHAR(200) NULL,
+    assessment_type VARCHAR(30) NOT NULL CONSTRAINT DF_Assessments_Type DEFAULT 'MID_TERM'
+        CONSTRAINT CK_Assessments_Type CHECK (assessment_type IN ('ENTRANCE', '15_MIN', '1_PERIOD', 'MID_TERM', 'FINAL', 'TRIAL', 'QUIZ', 'HOMEWORK')),
+    weight DECIMAL(4,2) NOT NULL CONSTRAINT DF_Assessments_Weight DEFAULT 1.00 CONSTRAINT CK_Assessments_Weight CHECK (weight > 0),
     max_score DECIMAL(5,2) NOT NULL CONSTRAINT DF_Assessments_MaxScore DEFAULT 10.00 CONSTRAINT CK_Assessments_MaxScore CHECK (max_score > 0),
     test_date DATE NOT NULL,
     description NVARCHAR(500) NULL,
@@ -391,7 +393,8 @@ CREATE TABLE dbo.AssessmentScores (
     id BIGINT IDENTITY(1,1) CONSTRAINT PK_AssessmentScores PRIMARY KEY,
     assessment_id BIGINT NOT NULL,
     student_id BIGINT NOT NULL,
-    score DECIMAL(5,2) NULL CONSTRAINT CK_AssessmentScores_Score CHECK (score >= 0),
+    score DECIMAL(5,2) NOT NULL CONSTRAINT CK_AssessmentScores_Score CHECK (score >= 0),
+    remarks NVARCHAR(500) NULL,
     feedback NVARCHAR(500) NULL,
     graded_at DATETIME2(0) NOT NULL CONSTRAINT DF_AssessmentScores_GradedAt DEFAULT GETDATE(),
     graded_by BIGINT NOT NULL,

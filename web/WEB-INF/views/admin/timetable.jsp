@@ -301,6 +301,9 @@
         }
         .status-pill.scheduled { color: #0284c7; }
         .status-pill.completed { color: #059669; }
+        .status-pill.past { color: #64748b; }
+        .status-pill.happening { color: #047857; font-weight: 700; }
+        .status-pill.cancelled { color: #dc2626; }
 
         .day-empty {
             flex: 1;
@@ -479,8 +482,17 @@
                                                 <!-- Trạng thái -->
                                                 <div>
                                                     <c:choose>
-                                                        <c:when test="${sess.status == 'COMPLETED'}">
+                                                        <c:when test="${sess.status == 'COMPLETED' or sess.displayStatusBadge == 'COMPLETED'}">
                                                             <span class="status-pill completed">&#10003; Đã hoàn thành</span>
+                                                        </c:when>
+                                                        <c:when test="${sess.status == 'CANCELLED' or sess.displayStatusBadge == 'CANCELLED'}">
+                                                            <span class="status-pill cancelled">&#10005; Đã hủy</span>
+                                                        </c:when>
+                                                        <c:when test="${sess.displayStatusBadge == 'PAST'}">
+                                                            <span class="status-pill past">&#10003; Đã kết thúc</span>
+                                                        </c:when>
+                                                        <c:when test="${sess.displayStatusBadge == 'HAPPENING'}">
+                                                            <span class="status-pill happening">&bull; Đang diễn ra</span>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <span class="status-pill scheduled">&bull; Sắp diễn ra</span>

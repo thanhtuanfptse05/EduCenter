@@ -202,11 +202,7 @@
                                                 </td>
                                                 <td>
                                                     <div style="font-size: 12px; color: var(--text-muted);">
-                                                        <fmt:parseDate value="${cItem.startDate}" pattern="yyyy-MM-dd" var="sD" type="date"/>
-                                                        <fmt:formatDate value="${sD}" pattern="dd/MM/yyyy"/>
-                                                        &rarr;
-                                                        <fmt:parseDate value="${cItem.endDate}" pattern="yyyy-MM-dd" var="eD" type="date"/>
-                                                        <fmt:formatDate value="${eD}" pattern="dd/MM/yyyy"/>
+                                                        <c:out value="${cItem.formattedStartDate}" /> &rarr; <c:out value="${cItem.formattedEndDate}" />
                                                     </div>
                                                 </td>
                                                 <td style="text-align: right;">
