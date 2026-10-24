@@ -64,4 +64,15 @@ public interface EnrollmentService {
      * Danh sách học sinh hợp lệ cho form ghi danh.
      */
     List<Student> getActiveStudents();
+
+    /**
+     * Tìm hoặc khởi tạo học viên từ Lead (CRM).
+     * Phục vụ luồng chuyển tiếp từ hồ sơ tư vấn sang ghi danh lớp học.
+     */
+    Student getOrCreateStudentFromLead(Long leadId);
+
+    /**
+     * Cập nhật trạng thái Lead sang ENROLLED sau khi ghi danh thành công.
+     */
+    void markLeadAsEnrolled(Long leadId);
 }

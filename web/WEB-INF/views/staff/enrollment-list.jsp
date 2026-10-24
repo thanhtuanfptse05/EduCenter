@@ -570,6 +570,7 @@
         </div>
         <form action="${pageContext.request.contextPath}/staff/enrollments/save" method="post">
             <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+            <input type="hidden" name="leadId" value="<c:out value='${preselectedLeadId}' />">
             <div class="mgmt-modal-body">
                 <div class="mgmt-callout primary" style="margin-bottom: 16px;">
                     <svg class="mgmt-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -588,7 +589,7 @@
                     <select name="studentId" class="mgmt-select" required>
                         <option value="">-- Chọn học viên từ danh sách hồ sơ --</option>
                         <c:forEach var="s" items="${pageData.studentOptions}">
-                            <option value="${s.id}">
+                            <option value="${s.id}" ${preselectedStudentId == s.id ? 'selected' : ''}>
                                 <c:out value="${s.fullName}"/> - Mã: <c:out value="${s.code}"/> (<c:out value="${s.phone}"/>)
                             </option>
                         </c:forEach>
@@ -893,6 +894,12 @@
             activeModals.forEach(function(m) { m.classList.remove('active'); });
         }
     });
+
+    <c:if test="${autoOpenModal}">
+    document.addEventListener('DOMContentLoaded', function() {
+        openEnrollModal();
+    });
+    </c:if>
 </script>
 </body>
 </html>

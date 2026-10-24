@@ -479,4 +479,84 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             em.close();
         }
     }
+
+    @Override
+    public Student getOrCreateStudentFromLead(Long leadId) {
+        if (leadId == null) {
+            return null;
+        }
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            Lead lead = em.find(Lead.class, leadId);
+            if (lead == null) {
+                return null;
+            }
+
+            String phone = (lead.getPhone() != null) ? lead.getPhone().trim() : "";
+            if (!phone.isEmpty()) {
+                List<Student> existingByPhone = em.createQuery(
+                        "SELECT s FROM Student s WHERE s.phone = :phone", Student.class)
+                        .setParameter("phone", phone)
+                        .getResultList();
+
+                if (!existingByPhone.isEmpty()) {
+                    return existingByPhone.get(0);
+                }
+            }
+
+            String email = (lead.getEmail() != null) ? lead.getEmail().trim() : "";
+            if (!email.isEmpty()) {
+                List<Student> existingByEmail = em.createQuery(
+                        "SELECT s FROM Student s WHERE s.email = :email", Student.class)
+                        .setParameter("email", email)
+                        .getResultList();
+                if (!existingByEmail.isEmpty()) {
+                    return existingByEmail.get(0);
+                }
+            }
+
+            tx.begin();
+            Student newStudent = new Student();
+            newStudent.setFullName(lead.getName());
+            newStudent.setPhone(phone.isEmpty() ? null : phone);
+            newStudent.setEmail(email.isEmpty() ? null : email);
+            newStudent.setGradeLevel(lead.getGradeLevel() != null ? lead.getGradeLevel() : 10);
+            newStudent.setStatus("STUDYING");
+            newStudent.setCreatedAt(LocalDateTime.now());
+            newStudent.setUpdatedAt(LocalDateTime.now());
+
+            em.persist(newStudent);
+            tx.commit();
+            return newStudent;
+        } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
+            LOGGER.log(Level.SEVERE, "Lỗi khi lấy hoặc tạo học sinh từ Lead: " + e.getMessage(), e);
+            throw new RuntimeException("Không thể khởi tạo hồ sơ học viên từ thông tin tư vấn: " + e.getMessage(), e);
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public void markLeadAsEnrolled(Long leadId) {
+        if (leadId == null) return;
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction tx = em.getTransaction();
+        try {
+            tx.begin();
+            Lead lead = em.find(Lead.class, leadId);
+            if (lead != null) {
+                lead.setStatus("ENROLLED");
+                lead.setUpdatedAt(LocalDateTime.now());
+                em.merge(lead);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if (tx.isActive()) tx.rollback();
+            LOGGER.log(Level.WARNING, "Không thể cập nhật trạng thái Lead sang ENROLLED: " + e.getMessage(), e);
+        } finally {
+            em.close();
+        }
+    }
 }

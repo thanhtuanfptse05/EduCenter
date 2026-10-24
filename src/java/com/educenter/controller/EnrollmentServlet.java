@@ -3,6 +3,7 @@ package com.educenter.controller;
 import com.educenter.dto.EnrollmentFormDTO;
 import com.educenter.dto.EnrollmentPageDTO;
 import com.educenter.dto.UserPrincipalDTO;
+import com.educenter.entity.Student;
 import com.educenter.service.EnrollmentService;
 import com.educenter.service.EnrollmentServiceImpl;
 import com.educenter.service.ValidationException;
@@ -21,6 +22,7 @@ import java.util.logging.Logger;
 
 @WebServlet(name = "EnrollmentServlet", urlPatterns = {
         "/staff/enrollments",
+        "/staff/enrollments/create",
         "/staff/enrollments/save",
         "/staff/enrollments/transfer",
         "/staff/enrollments/reserve",
@@ -41,9 +43,35 @@ public class EnrollmentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getServletPath();
-        if (!"/staff/enrollments".equals(path)) {
+        if (!"/staff/enrollments".equals(path) && !"/staff/enrollments/create".equals(path)) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
+        }
+
+        Long preselectedStudentId = null;
+        Long preselectedLeadId = null;
+        boolean autoOpenModal = "/staff/enrollments/create".equals(path);
+
+        String leadIdStr = req.getParameter("leadId");
+        if (leadIdStr != null && !leadIdStr.isBlank()) {
+            try {
+                preselectedLeadId = Long.parseLong(leadIdStr.trim());
+                Student student = enrollmentService.getOrCreateStudentFromLead(preselectedLeadId);
+                if (student != null) {
+                    preselectedStudentId = student.getId();
+                    autoOpenModal = true;
+                }
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Không thể chuyển đổi Lead sang học viên: " + leadIdStr, e);
+            }
+        }
+
+        String studentIdStr = req.getParameter("studentId");
+        if (studentIdStr != null && !studentIdStr.isBlank()) {
+            try {
+                preselectedStudentId = Long.parseLong(studentIdStr.trim());
+                autoOpenModal = true;
+            } catch (NumberFormatException ignored) {}
         }
 
         Long classId = null;
@@ -68,6 +96,9 @@ public class EnrollmentServlet extends HttpServlet {
         EnrollmentPageDTO pageData = enrollmentService.getEnrollmentsPaged(classId, status, keyword, page, 10);
 
         req.setAttribute("pageData", pageData);
+        req.setAttribute("preselectedStudentId", preselectedStudentId);
+        req.setAttribute("preselectedLeadId", preselectedLeadId);
+        req.setAttribute("autoOpenModal", autoOpenModal);
         req.setAttribute("pageTitle", "Quản lý ghi danh & Xếp lớp — EduCenter ERP");
         req.setAttribute("activeNav", "enrollments");
         req.setAttribute("internalShell", true);
@@ -101,6 +132,7 @@ public class EnrollmentServlet extends HttpServlet {
             Long classId = Long.parseLong(req.getParameter("classId"));
             String startDateStr = req.getParameter("startDate");
             String notes = req.getParameter("notes");
+            String leadIdStr = req.getParameter("leadId");
 
             LocalDate startDate = LocalDate.parse(startDateStr);
 
@@ -111,6 +143,16 @@ public class EnrollmentServlet extends HttpServlet {
             form.setNotes(notes);
 
             enrollmentService.enrollStudent(form, user.getUserId());
+
+            if (leadIdStr != null && !leadIdStr.isBlank()) {
+                try {
+                    Long leadId = Long.parseLong(leadIdStr.trim());
+                    enrollmentService.markLeadAsEnrolled(leadId);
+                } catch (Exception ex) {
+                    LOGGER.log(Level.WARNING, "Không thể cập nhật Lead status: " + ex.getMessage());
+                }
+            }
+
             FlashMessageUtil.setSuccess(req, "Ghi danh thành công học sinh vào lớp học! Hóa đơn học phí ban đầu đã được khởi tạo.");
         } catch (NumberFormatException | DateTimeParseException e) {
             FlashMessageUtil.setError(req, "Dữ liệu nhập vào không hợp lệ (mã học sinh, lớp hoặc ngày bắt đầu)!");

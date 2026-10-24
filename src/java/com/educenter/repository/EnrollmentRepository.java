@@ -220,7 +220,7 @@ public class EnrollmentRepository {
     public List<Student> findActiveStudents(EntityManager em) {
         TypedQuery<Student> query = em.createQuery(
                 "SELECT s FROM Student s " +
-                "WHERE s.status = 'ACTIVE' " +
+                "WHERE s.status IN ('ACTIVE', 'STUDYING') " +
                 "ORDER BY s.fullName ASC",
                 Student.class
         );
