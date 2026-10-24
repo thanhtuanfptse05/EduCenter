@@ -224,6 +224,7 @@
                 <form action="${pageContext.request.contextPath}/teacher/attendance/save" method="post" id="attendanceForm">
                     <input type="hidden" name="sessionId" value="${sessionData.sessionId}">
                     <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                    <input type="hidden" name="completeAfterSave" id="completeAfterSave" value="false">
 
                     <div class="ops-table-card">
                         <c:choose>
@@ -242,9 +243,11 @@
                                         </thead>
                                         <tbody id="attendanceTableBody">
                                             <c:forEach var="item" items="${sessionData.roster}" varStatus="loop">
-                                                <input type="hidden" name="studentIds" value="${item.studentId}">
                                                 <tr class="student-row" data-id="${item.studentId}" data-code="<c:out value='${item.studentCode}' />" data-name="<c:out value='${item.studentName}' />" data-phone="<c:out value='${item.studentPhone}' />">
-                                                    <td style="text-align: center; color: var(--text-muted); font-weight: 500;">${loop.count}</td>
+                                                    <td style="text-align: center; color: var(--text-muted); font-weight: 500;">
+                                                        <input type="hidden" name="studentIds" value="${item.studentId}">
+                                                        ${loop.count}
+                                                    </td>
                                                     <td>
                                                         <span class="ops-code-pill" style="color: var(--primary);"><c:out value="${item.studentCode}" /></span>
                                                     </td>
@@ -358,7 +361,7 @@
                             </a>
 
                             <c:if test="${sessionData.sessionStatus != 'COMPLETED' or sessionScope.currentUser.admin}">
-                                <button type="submit" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+                                <button type="submit" class="btn btn-secondary btn-sm" onclick="document.getElementById('completeAfterSave').value='false';" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
                                     <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                                     <span>Lưu tạm điểm danh</span>
                                 </button>
@@ -426,7 +429,7 @@
     }
 
     function setAllAttendance(status) {
-        const radios = document.querySelectorAll(`input[type="radio"][value="${status}"]`);
+        const radios = document.querySelectorAll('input[type="radio"][value="' + status + '"]');
         radios.forEach(radio => {
             if (!radio.disabled) {
                 radio.checked = true;
@@ -482,15 +485,14 @@
     function confirmCompleteAttendance() {
         const unmarked = parseInt(document.getElementById('metric-unmarked').textContent || '0', 10);
         if (unmarked > 0) {
-            if (!confirm(`Còn ${unmarked} học sinh chưa được chọn trạng thái điểm danh.\nBạn có chắc chắn muốn chốt hoàn tất ca học không?`)) {
-                return;
-            }
-        } else {
-            if (!confirm('XÁC NHẬN CHỐT HOÀN TẤT ĐIỂM DANH:\n\nSau khi chốt hoàn tất, ca học sẽ chuyển sang trạng thái COMPLETED và đồng bộ tức thì sang Cổng phụ huynh. Giáo viên không thể tự ý sửa đổi lại.\n\nBạn có chắc chắn muốn chốt ca học này?')) {
-                return;
-            }
+            alert('Còn ' + unmarked + ' học sinh chưa được ghi nhận điểm danh.\nVui lòng điểm danh đầy đủ trước khi chốt buổi học!');
+            return;
         }
-        document.getElementById('completeAttendanceForm').submit();
+        if (!confirm('XÁC NHẬN CHỐT HOÀN TẤT ĐIỂM DANH:\n\nSau khi chốt hoàn tất, ca học sẽ chuyển sang trạng thái COMPLETED và đồng bộ tức thì sang Cổng phụ huynh. Giáo viên không thể tự ý sửa đổi lại.\n\nBạn có chắc chắn muốn chốt ca học này?')) {
+            return;
+        }
+        document.getElementById('completeAfterSave').value = 'true';
+        document.getElementById('attendanceForm').submit();
     }
 
     document.addEventListener('DOMContentLoaded', function() {

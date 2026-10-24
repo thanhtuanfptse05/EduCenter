@@ -28,3 +28,11 @@
 ## Phase 7: Verification & Push to Main
 - [x] Task 7.1: Chạy `scripts\verify.ps1` và `validate_specs.py`.
 - [x] Task 7.2: Commit và push lên nhánh `main`.
+
+## Phase 8: Teacher Attendance Bug Fixes & Robustness
+- [x] Task 8.1: Sửa hàm `setAllAttendance` trong `attendance.jsp` để tránh nuốt tham số bởi JSP EL; cập nhật giao diện visual label và metrics.
+- [x] Task 8.2: Chuyển thẻ input hidden `studentIds` vào trong `<td>` của dòng học viên để chuẩn hóa cấu trúc DOM bảng.
+- [x] Task 8.3: Cập nhật `confirmCompleteAttendance()` và `TeacherAttendanceServlet` để chốt ca học gửi kèm toàn bộ dữ liệu điểm danh và lưu trước khi chuyển sang `COMPLETED`.
+- [x] Task 8.4: Nâng cấp check constraint `CK_ClassSessions_Status` trong SQL Server để hỗ trợ `IN_PROGRESS` và bảo vệ giao dịch `saveAttendance`.
+- [x] Task 8.5: Khử trùng lặp `studentId` và fallback `actor` an toàn trong `AttendanceServiceImpl.java`.
+- [x] Task 8.6: Kiểm thử tự động và xác minh luồng người dùng thực tế.

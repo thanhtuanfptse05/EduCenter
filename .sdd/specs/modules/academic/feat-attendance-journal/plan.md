@@ -57,3 +57,9 @@
   - Bổ sung menu điều hướng cho TEACHER trong `sidebar.jspf`.
 - **Phase 7: Verification & Push to Main**
   - Chạy `verify.ps1`, `validate_specs.py`, commit và push lên `main`.
+- **Phase 8: Teacher Attendance Bug Fixes & Robustness**
+  - Khắc phục `setAllAttendance` trong `attendance.jsp`: Loại bỏ xung đột JSP EL `${status}` bằng phép nối chuỗi JavaScript an toàn; đồng bộ visual label classes và metrics.
+  - Tích hợp luồng Chốt hoàn tất ca học nguyên tử: Gửi kèm dữ liệu điểm danh từ form chính với cờ `completeAfterSave=true`, xử lý lưu điểm danh trước rồi chuyển `COMPLETED` trong cùng một request.
+  - Sắp xếp DOM hợp lệ: Đặt input hidden `studentIds` vào trong thẻ `<td>` của hàng học viên, tránh lỗi foster-parenting của trình duyệt.
+  - Cập nhật ràng buộc CSDL: Đảm bảo bảng `ClassSessions` hỗ trợ đầy đủ trạng thái `IN_PROGRESS` trong check constraint `CK_ClassSessions_Status`, tránh rollback transaction khi lưu điểm danh.
+  - Kiểm soát giao dịch Backend: Khử trùng lặp studentId trước khi persist, fallback `actor` an toàn để không vi phạm NOT NULL trên `recorded_by`.

@@ -255,4 +255,32 @@ public class AttendanceServiceTest {
         });
         assertEquals(1, mockRepo.attendances.size());
     }
+
+    @Test
+    @DisplayName("FR-003: Khử trùng lặp studentId trong roster submit")
+    void testSaveAttendance_DeduplicatesStudentIds() {
+        List<AttendanceRosterItemDTO> roster = new ArrayList<>();
+        roster.add(new AttendanceRosterItemDTO(1L, "HV0001", "Học sinh 1", "0912345678", "PRESENT", "First"));
+        roster.add(new AttendanceRosterItemDTO(1L, "HV0001", "Học sinh 1", "0912345678", "LATE", "Updated"));
+
+        assertDoesNotThrow(() -> {
+            attendanceService.saveAttendance(10L, roster, 50L, false);
+        });
+        assertEquals(1, mockRepo.attendances.size());
+        assertEquals("LATE", mockRepo.attendances.get(0).getStatus());
+    }
+
+    @Test
+    @DisplayName("FR-002: Fallback actor an toàn từ phân công giảng dạy khi actorId không tìm thấy")
+    void testSaveAttendance_ActorFallbackToTeacherUser() {
+        List<AttendanceRosterItemDTO> roster = new ArrayList<>();
+        roster.add(new AttendanceRosterItemDTO(1L, "HV0001", "Học sinh 1", "0912345678", "PRESENT", ""));
+
+        // actorUserId = 999L (not in stub User find) but session teacher user exists
+        assertDoesNotThrow(() -> {
+            attendanceService.saveAttendance(10L, roster, 999L, true);
+        });
+        assertEquals(1, mockRepo.attendances.size());
+        assertNotNull(mockRepo.attendances.get(0).getRecordedBy());
+    }
 }

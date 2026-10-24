@@ -138,6 +138,12 @@ public class AttendanceServiceImpl implements AttendanceService {
             }
 
             User actor = em.find(User.class, actorUserId);
+            if (actor == null && session.getTeacher() != null && session.getTeacher().getUser() != null) {
+                actor = session.getTeacher().getUser();
+            }
+            if (actor == null) {
+                throw new ValidationException("Không xác định được danh tính người thực hiện điểm danh!");
+            }
 
             tx.begin();
 
@@ -149,8 +155,15 @@ public class AttendanceServiceImpl implements AttendanceService {
             }
 
             if (rosterItems != null) {
+                // Khử trùng lặp studentId nếu danh sách form gửi lên có phần tử lặp
+                java.util.Map<Long, AttendanceRosterItemDTO> uniqueItems = new java.util.LinkedHashMap<>();
                 for (AttendanceRosterItemDTO item : rosterItems) {
-                    if (item.getStudentId() == null) continue;
+                    if (item != null && item.getStudentId() != null) {
+                        uniqueItems.put(item.getStudentId(), item);
+                    }
+                }
+
+                for (AttendanceRosterItemDTO item : uniqueItems.values()) {
                     String status = item.getAttendanceStatus();
                     if (status == null || status.isBlank()) continue;
 
@@ -160,10 +173,13 @@ public class AttendanceServiceImpl implements AttendanceService {
                         throw new ValidationException("Trạng thái điểm danh '" + status + "' không hợp lệ!");
                     }
 
-                    // B01: Kiểm tra học viên có thuộc danh sách hợp lệ của lớp tại thời điểm buổi học
-                    long validCount = attendanceRepository.countValidEnrollmentForStudent(em, session.getEduClass().getId(), item.getStudentId(), session.getSessionDate());
-                    if (validCount <= 0) {
-                        throw new ValidationException("Học viên (ID: " + item.getStudentId() + ") không có ghi danh hợp lệ trong lớp " + session.getEduClass().getCode() + " vào ngày " + session.getSessionDate() + "!");
+                    // B01: Kiểm tra học viên có thuộc danh sách hợp lệ của lớp tại thời điểm buổi học hoặc đã có bản ghi điểm danh
+                    Optional<Attendance> existingOpt = attendanceRepository.findAttendanceBySessionAndStudent(em, sessionId, item.getStudentId());
+                    if (existingOpt.isEmpty()) {
+                        long validCount = attendanceRepository.countValidEnrollmentForStudent(em, session.getEduClass().getId(), item.getStudentId(), session.getSessionDate());
+                        if (validCount <= 0) {
+                            throw new ValidationException("Học viên (ID: " + item.getStudentId() + ") không có ghi danh hợp lệ trong lớp " + session.getEduClass().getCode() + " vào ngày " + session.getSessionDate() + "!");
+                        }
                     }
 
                     Student student = em.find(Student.class, item.getStudentId());
@@ -171,7 +187,6 @@ public class AttendanceServiceImpl implements AttendanceService {
                         throw new ValidationException("Học viên (ID: " + item.getStudentId() + ") không tồn tại trong hệ thống!");
                     }
 
-                    Optional<Attendance> existingOpt = attendanceRepository.findAttendanceBySessionAndStudent(em, sessionId, student.getId());
                     Attendance attendance = existingOpt.orElseGet(() -> {
                         Attendance a = new Attendance();
                         a.setSession(session);

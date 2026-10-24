@@ -166,9 +166,7 @@ public class AttendanceRepository {
         );
         query.setParameter("classId", classId);
         query.setParameter("sessionDate", sessionDate);
-        List<Student> students = new ArrayList<>(query.getResultList());
 
-        // 2. Lấy điểm danh hiện có của buổi học
         TypedQuery<Attendance> attQuery = em.createQuery(
                 "SELECT a FROM Attendance a " +
                 "JOIN FETCH a.student s " +
@@ -178,12 +176,19 @@ public class AttendanceRepository {
         attQuery.setParameter("sessionId", sessionId);
         List<Attendance> attendances = attQuery.getResultList();
 
-        // B05: Đảm bảo học viên đã có bản ghi điểm danh trong quá khứ không bị mất khỏi danh sách
-        for (Attendance a : attendances) {
-            if (students.stream().noneMatch(s -> s.getId().equals(a.getStudent().getId()))) {
-                students.add(a.getStudent());
+        java.util.Map<Long, Student> studentMap = new java.util.LinkedHashMap<>();
+        for (Student s : query.getResultList()) {
+            if (s != null && s.getId() != null) {
+                studentMap.put(s.getId(), s);
             }
         }
+        // B05: Đảm bảo học viên đã có bản ghi điểm danh trong quá khứ không bị mất khỏi danh sách
+        for (Attendance a : attendances) {
+            if (a.getStudent() != null && a.getStudent().getId() != null) {
+                studentMap.putIfAbsent(a.getStudent().getId(), a.getStudent());
+            }
+        }
+        List<Student> students = new ArrayList<>(studentMap.values());
         students.sort(Comparator.comparing(Student::getFullName, String.CASE_INSENSITIVE_ORDER));
 
         List<AttendanceRosterItemDTO> roster = new ArrayList<>();

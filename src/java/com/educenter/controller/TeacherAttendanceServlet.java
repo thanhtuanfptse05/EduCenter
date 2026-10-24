@@ -170,7 +170,14 @@ public class TeacherAttendanceServlet extends HttpServlet {
             }
 
             attendanceService.saveAttendance(sessionId, rosterItems, user.getUserId(), user.isAdmin());
-            FlashMessageUtil.setSuccess(req, "Lưu thông tin điểm danh thành công!");
+
+            boolean completeAfterSave = "true".equalsIgnoreCase(req.getParameter("completeAfterSave"));
+            if (completeAfterSave) {
+                attendanceService.completeSessionAttendance(sessionId, user.getUserId(), user.isAdmin());
+                FlashMessageUtil.setSuccess(req, "Chốt hoàn tất ca học và lưu điểm danh thành công! Trạng thái ca học đã được cập nhật sang COMPLETED.");
+            } else {
+                FlashMessageUtil.setSuccess(req, "Lưu thông tin điểm danh thành công!");
+            }
         } catch (ValidationException e) {
             FlashMessageUtil.setError(req, e.getMessage());
         } catch (Exception e) {
@@ -189,6 +196,17 @@ public class TeacherAttendanceServlet extends HttpServlet {
         Long sessionId = null;
         try {
             sessionId = Long.parseLong(req.getParameter("sessionId"));
+            String[] studentIds = req.getParameterValues("studentIds");
+            if (studentIds != null && studentIds.length > 0) {
+                List<AttendanceRosterItemDTO> rosterItems = new ArrayList<>();
+                for (String sIdStr : studentIds) {
+                    Long studentId = Long.parseLong(sIdStr);
+                    String status = req.getParameter("status_" + studentId);
+                    String remarks = req.getParameter("remarks_" + studentId);
+                    rosterItems.add(new AttendanceRosterItemDTO(studentId, null, null, null, status, remarks));
+                }
+                attendanceService.saveAttendance(sessionId, rosterItems, user.getUserId(), user.isAdmin());
+            }
             attendanceService.completeSessionAttendance(sessionId, user.getUserId(), user.isAdmin());
             FlashMessageUtil.setSuccess(req, "Chốt hoàn tất buổi học thành công! Trạng thái ca học đã được cập nhật sang COMPLETED.");
         } catch (ValidationException e) {
