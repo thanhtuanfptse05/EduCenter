@@ -292,7 +292,7 @@
                                                     </c:choose>
                                                 </span>
                                                 <div class="chart-bar-pillar" style="height: ${barHeight}px;" title="<fmt:formatNumber value='${revVal}' pattern='#,###'/> VNĐ"></div>
-                                                <span class="chart-bar-month"><c:out value="${item.monthName}"/></span>
+                                                <span class="chart-bar-month"><c:out value="${item.label}"/></span>
                                             </div>
                                         </c:forEach>
                                     </div>
@@ -337,21 +337,22 @@
                             <c:when test="${not empty dashboard.leadSources}">
                                 <div class="channel-list">
                                     <c:forEach var="src" items="${dashboard.leadSources}" varStatus="status">
+                                        <c:set var="leadPct" value="${dashboard.newLeadsThisMonth > 0 ? (src.totalLeads * 100.0 / dashboard.newLeadsThisMonth) : (src.totalLeads > 0 ? 100 : 0)}"/>
                                         <div class="channel-row">
                                             <div class="channel-header">
                                                 <span class="channel-name">
-                                                    <span class="channel-dot" style="background: ${status.index == 0 ? 'var(--primary)' : (status.index == 1 ? 'var(--success)' : (status.index == 2 ? 'var(--warning)' : '#8B5CF6'))};"></span>
+                                                    <span class="channel-dot" style="background: ${status.index == 0 ? 'var(--primary)' : (status.index == 1 ? 'var(--secondary)' : (status.index == 2 ? 'var(--warning)' : '#8B5CF6'))};"></span>
                                                     <c:out value="${src.source}"/>
                                                 </span>
                                                 <div>
-                                                    <span class="channel-count"><c:out value="${src.count}"/></span>
+                                                    <span class="channel-count"><c:out value="${src.totalLeads}"/></span>
                                                     <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 4px;">
-                                                        (<fmt:formatNumber value="${src.percentage}" pattern="0.0"/>%)
+                                                        (<fmt:formatNumber value="${src.conversionRate}" pattern="0.0"/>% CVR)
                                                     </span>
                                                 </div>
                                             </div>
                                             <div class="channel-bar-track">
-                                                <div class="channel-bar-fill" style="width: ${src.percentage}%; background: ${status.index == 0 ? 'var(--primary)' : (status.index == 1 ? 'var(--success)' : (status.index == 2 ? 'var(--warning)' : '#8B5CF6'))};"></div>
+                                                <div class="channel-bar-fill" style="width: ${leadPct > 100 ? 100 : leadPct}%; background: ${status.index == 0 ? 'var(--primary)' : (status.index == 1 ? 'var(--secondary)' : (status.index == 2 ? 'var(--warning)' : '#8B5CF6'))};"></div>
                                             </div>
                                         </div>
                                     </c:forEach>
@@ -367,7 +368,7 @@
 
                     <div class="chart-footer-strip">
                         <span style="font-size: 12px; color: var(--text-muted);">Đã chuyển đổi thành công:</span>
-                        <strong style="color: var(--success); font-size: 12.5px;"><c:out value="${dashboard.enrolledLeadsCount}"/> học viên</strong>
+                        <strong style="color: var(--secondary); font-size: 12.5px;"><c:out value="${dashboard.enrolledLeadsCount}"/> học viên</strong>
                     </div>
                 </div>
             </div>
@@ -394,7 +395,7 @@
                                     <thead>
                                         <tr style="background: var(--bg-alt);">
                                             <th>Mã phiếu</th>
-                                            <th>Học viên &amp; Khóa học</th>
+                                            <th>Học viên &amp; Hóa đơn</th>
                                             <th style="text-align: right;">Số tiền</th>
                                             <th style="text-align: right;">Thời gian</th>
                                         </tr>
@@ -403,17 +404,17 @@
                                         <c:forEach var="p" items="${dashboard.recentPayments}">
                                             <tr>
                                                 <td style="font-family: monospace; font-weight: 700; color: var(--primary); font-size: 12px;">
-                                                    <c:out value="${p.receiptNumber}"/>
+                                                    <c:out value="${p.paymentCode}"/>
                                                 </td>
                                                 <td>
                                                     <div style="font-weight: 600; color: var(--text);"><c:out value="${p.studentName}"/></div>
-                                                    <div style="font-size: 11.5px; color: var(--text-muted);"><c:out value="${p.courseName}"/></div>
+                                                    <div style="font-size: 11.5px; color: var(--text-muted); font-family: monospace;"><c:out value="${p.invoiceCode}"/> • <c:out value="${p.paymentMethod}"/></div>
                                                 </td>
-                                                <td style="text-align: right; font-family: monospace; font-weight: 700; color: var(--success); font-size: 13px;">
+                                                <td style="text-align: right; font-family: monospace; font-weight: 700; color: var(--secondary); font-size: 13px;">
                                                     +<fmt:formatNumber value="${p.amount}" pattern="#,###"/> đ
                                                 </td>
                                                 <td style="text-align: right; font-size: 12px; color: var(--text-muted); font-family: monospace;">
-                                                    <c:out value="${p.paymentDate}"/>
+                                                    <c:out value="${p.paidAt != null ? p.paidAt.toLocalDate() : '--'}"/>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -458,21 +459,23 @@
                                             <tr>
                                                 <td>
                                                     <div style="display: flex; align-items: center; gap: 10px;">
-                                                        <div style="width: 32px; height: 32px; border-radius: var(--radius-sm); background: var(--primary-subtle); color: var(--primary); font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                                        <div style="width: 32px; height: 32px; border-radius: var(--radius-sm); background: rgba(0, 83, 219, 0.1); color: var(--primary); font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                                             <c:out value="${e.studentName != null && e.studentName.length() > 0 ? e.studentName.substring(0, 1) : 'H'}"/>
                                                         </div>
                                                         <div>
                                                             <div style="font-weight: 600; color: var(--text);"><c:out value="${e.studentName}"/></div>
-                                                            <div style="font-size: 11px; color: var(--text-muted); font-family: monospace;">Mã: <c:out value="${e.studentCode}"/></div>
+                                                            <div style="font-size: 11px; color: var(--text-muted); font-family: monospace;">
+                                                                <span class="badge" style="font-size: 10px; padding: 1px 6px;"><c:out value="${e.status}"/></span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div style="font-weight: 500; color: var(--text); font-size: 12.5px;"><c:out value="${e.className}"/></div>
-                                                    <div style="font-size: 11px; color: var(--text-muted);">GV: <c:out value="${e.teacherName != null ? e.teacherName : 'Chưa phân công'}"/></div>
+                                                    <div style="font-size: 11px; color: var(--text-muted);"><c:out value="${e.courseName != null ? e.courseName : '--'}"/></div>
                                                 </td>
                                                 <td style="text-align: right; font-size: 12px; color: var(--text-muted); font-family: monospace;">
-                                                    <c:out value="${e.enrollmentDate}"/>
+                                                    <c:out value="${e.enrolledAt != null ? e.enrolledAt.toLocalDate() : '--'}"/>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -482,7 +485,7 @@
                         </c:when>
                         <c:otherwise>
                             <div style="text-align: center; padding: 36px 20px; color: var(--text-muted); font-size: 13px;">
-                                Chưa có học viên ghi danh mới nào gần đây.
+                                Chưa có học viên mới ghi danh nào gần đây.
                             </div>
                         </c:otherwise>
                     </c:choose>
