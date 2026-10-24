@@ -12,10 +12,24 @@
         <class>com.educenter.entity.Subject</class>
         <class>com.educenter.entity.Course</class>
         <class>com.educenter.entity.Teacher</class>
+        <class>com.educenter.entity.Room</class>
         <class>com.educenter.entity.EduClass</class>
+        <class>com.educenter.entity.ClassSession</class>
         <class>com.educenter.entity.Lead</class>
+        <class>com.educenter.entity.Consultation</class>
         <class>com.educenter.entity.RegistrationCartItem</class>
         <class>com.educenter.entity.SystemSetting</class>
+        <class>com.educenter.entity.Student</class>
+        <class>com.educenter.entity.Guardian</class>
+        <class>com.educenter.entity.StudentGuardian</class>
+        <class>com.educenter.entity.Enrollment</class>
+        <class>com.educenter.entity.Attendance</class>
+        <class>com.educenter.entity.TeachingJournal</class>
+        <class>com.educenter.entity.Assessment</class>
+        <class>com.educenter.entity.AssessmentScore</class>
+        <class>com.educenter.entity.Invoice</class>
+        <class>com.educenter.entity.InvoiceItem</class>
+        <class>com.educenter.entity.Payment</class>
 
         <!-- Cấu hình kết nối Microsoft SQL Server -->
         <properties>

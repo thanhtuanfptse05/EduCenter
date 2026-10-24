@@ -2,6 +2,8 @@
 
 Ứng dụng Java Web quản lý trung tâm gia sư và luyện thi lớp 6–12. Stack: Java 17, Jakarta Servlet/JSP/JSTL, JPA 3.1/Hibernate, SQL Server, Ant và Tomcat 10.1.
 
+> 🚀 **Dành cho người mới:** Xem cẩm nang hướng dẫn tải mã nguồn, cài đặt database và cấu hình khởi chạy dự án từ A - Z tại **[SETUP_GUIDE.md](SETUP_GUIDE.md)**.
+
 ## Bộ đặc tả đầy đủ và thứ tự triển khai
 
 [Mục lục specs](.sdd/specs/README.md) bao phủ 12 module, 35 use case (31 P0 + 4 P1), 20 business rules, 30 bảng nghiệp vụ và 49 màn hình theo SRS v1.1. Xem [thứ tự code từng tính năng](.sdd/specs/implementation-order.md), [truy vết yêu cầu](.sdd/specs/traceability.md) và [hợp đồng tích hợp](.sdd/specs/integration.md). Đây là baseline đặc tả mới; code và kiểm thử các module còn lại chưa được xác nhận hoàn tất.
