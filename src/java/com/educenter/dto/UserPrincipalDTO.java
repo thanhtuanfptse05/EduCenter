@@ -98,8 +98,16 @@ public class UserPrincipalDTO implements Serializable {
         return userId;
     }
 
+    public Long getId() {
+        return userId;
+    }
+
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public void setId(Long id) {
+        this.userId = id;
     }
 
     public String getEmail() {
