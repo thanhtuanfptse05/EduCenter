@@ -1,182 +1,11 @@
-﻿<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <%@ include file="/WEB-INF/views/common/head.jspf" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261024_05">
-    <style>
-        .kpi-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-        @media (max-width: 992px) {
-            .kpi-row { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 576px) {
-            .kpi-row { grid-template-columns: 1fr; }
-        }
-        .kpi-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        .kpi-icon-wrap {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--primary-subtle);
-            color: var(--primary);
-            flex-shrink: 0;
-        }
-        .kpi-icon-wrap.success {
-            background: var(--success-subtle);
-            color: var(--success);
-        }
-        .kpi-icon-wrap.warning {
-            background: var(--warning-subtle);
-            color: var(--warning);
-        }
-        .kpi-icon-wrap.neutral {
-            background: var(--bg);
-            color: var(--text-muted);
-        }
-        .kpi-val {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text);
-            line-height: 1.2;
-        }
-        .kpi-lbl {
-            font-size: var(--font-size-xs);
-            color: var(--text-muted);
-            font-weight: 500;
-            margin-top: 2px;
-        }
-        .content-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-        }
-        .table-toolbar {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .table-title {
-            font-size: var(--font-size-md);
-            font-weight: 700;
-            color: var(--text);
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .code-badge {
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 3px 8px;
-            border-radius: var(--radius-xs);
-            background: var(--primary-subtle);
-            color: var(--primary);
-            display: inline-block;
-        }
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            padding: 3px 10px;
-            border-radius: var(--radius-full);
-            font-size: 12px;
-            font-weight: 600;
-        }
-        .status-badge.active {
-            background: var(--success-subtle);
-            color: var(--success);
-        }
-        .status-badge.inactive {
-            background: var(--warning-subtle);
-            color: var(--warning);
-        }
-        /* Modal dialog styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(15, 23, 42, 0.45);
-            backdrop-filter: blur(4px);
-            z-index: 1050;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
-        .modal-overlay.open {
-            display: flex;
-        }
-        .modal-container {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            width: 100%;
-            max-width: 520px;
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-            animation: modalFadeIn 0.2s ease-out;
-        }
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-12px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .modal-header {
-            padding: 18px 24px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .modal-title {
-            font-size: var(--font-size-md);
-            font-weight: 700;
-            color: var(--text);
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .modal-body {
-            padding: 24px;
-        }
-        .modal-footer {
-            padding: 16px 24px;
-            border-top: 1px solid var(--border);
-            background: var(--bg);
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 12px;
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261025_02">
 </head>
 <body>
 <c:set var="internalShell" value="true" scope="request"/>
@@ -390,11 +219,11 @@
                                                         <button type="button" class="btn btn-sm btn-secondary"
                                                                 onclick="openEditModal('${s.id}', '${s.code}', '${s.name}', '${s.description}', '${s.status}')"
                                                                 title="Chỉnh sửa thông tin môn học"
-                                                                style="padding: 6px 10px; display: inline-flex; align-items: center; gap: 4px;">
+                                                                style="padding: 6px 12px; border-radius: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
                                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                                 <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
                                                             </svg>
-                                                            Sửa
+                                                            <span>Sửa</span>
                                                         </button>
 
                                                         <!-- Toggle Status Form -->
@@ -403,20 +232,20 @@
                                                             <input type="hidden" name="id" value="${s.id}">
                                                             <c:choose>
                                                                 <c:when test="${s.status == 'ACTIVE'}">
-                                                                    <button type="submit" class="btn btn-sm" style="padding: 6px 10px; background: none; border: 1px solid var(--border); color: var(--warning); display: inline-flex; align-items: center; gap: 4px;" title="Tạm ngừng môn học">
+                                                                    <button type="submit" class="btn btn-sm" style="padding: 6px 12px; border-radius: 8px; font-weight: 600; background: var(--warning-subtle); border: 1px solid rgba(217, 119, 6, 0.25); color: var(--warning); display: inline-flex; align-items: center; gap: 6px;" title="Tạm ngừng môn học">
                                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                                             <circle cx="12" cy="12" r="10"></circle>
                                                                             <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
                                                                         </svg>
-                                                                        Dừng
+                                                                        <span>Dừng</span>
                                                                     </button>
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <button type="submit" class="btn btn-sm" style="padding: 6px 10px; background: none; border: 1px solid var(--border); color: var(--success); display: inline-flex; align-items: center; gap: 4px;" title="Kích hoạt lại môn học">
+                                                                    <button type="submit" class="btn btn-sm" style="padding: 6px 12px; border-radius: 8px; font-weight: 600; background: var(--success-subtle); border: 1px solid rgba(22, 163, 74, 0.25); color: var(--success); display: inline-flex; align-items: center; gap: 6px;" title="Kích hoạt lại môn học">
                                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                                             <polyline points="20 6 9 17 4 12"></polyline>
                                                                         </svg>
-                                                                        Mở lại
+                                                                        <span>Mở lại</span>
                                                                     </button>
                                                                 </c:otherwise>
                                                             </c:choose>
@@ -437,13 +266,20 @@
             <div id="subjectModal" class="modal-overlay" onclick="handleBackdropClick(event)">
                 <div class="modal-container" onclick="event.stopPropagation()">
                     <div class="modal-header">
-                        <h3 class="modal-title" id="modalHeaderTitle">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
-                            </svg>
-                            <span id="modalTitleText">Thêm môn học mới</span>
-                        </h3>
-                        <button type="button" class="btn btn-sm btn-ghost" onclick="closeSubjectModal()" style="border: none; background: none; cursor: pointer; color: var(--text-muted);">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <div style="width: 38px; height: 38px; border-radius: 10px; background: var(--primary-subtle); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="modal-title" id="modalHeaderTitle" style="font-size: 16px; margin: 0;">
+                                    <span id="modalTitleText">Thêm môn học mới</span>
+                                </h3>
+                                <span style="font-size: 12px; color: var(--text-muted);">Cấu hình thông tin môn học và phạm vi đào tạo</span>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-ghost" onclick="closeSubjectModal()" style="border: none; background: none; cursor: pointer; color: var(--text-muted); padding: 6px; border-radius: 8px;">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="18" y1="6" x2="6" y2="18"></line>
                                 <line x1="6" y1="6" x2="18" y2="18"></line>

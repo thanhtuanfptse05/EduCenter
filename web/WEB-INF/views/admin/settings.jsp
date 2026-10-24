@@ -5,7 +5,7 @@
 <html lang="vi">
 <head>
     <%@ include file="/WEB-INF/views/common/head.jspf" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261024_05">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261025_02">
     <style>
         .settings-grid {
             display: grid;
@@ -21,10 +21,11 @@
         .settings-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-lg);
             padding: 24px;
             margin-bottom: 24px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            transition: box-shadow 0.2s ease;
         }
         .settings-card-header {
             display: flex;

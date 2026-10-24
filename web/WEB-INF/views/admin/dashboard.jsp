@@ -5,7 +5,7 @@
 <html lang="vi">
 <head>
     <%@ include file="/WEB-INF/views/common/head.jspf" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261025_01">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261025_02">
     <title>${pageTitle} | EduCenter ERP</title>
 </head>
 <body>
@@ -272,9 +272,9 @@
                                         <c:forEach var="item" items="${dashboard.monthlyRevenues}" varStatus="status">
                                             <%-- Dynamic scale height calculation --%>
                                             <c:set var="revVal" value="${item.revenue != null ? item.revenue.doubleValue() : 0.0}" />
-                                            <c:set var="barHeight" value="${revVal > 0 ? (revVal / 60000000.0 * 150) : 10}" />
-                                            <c:if test="${barHeight > 165}">
-                                                <c:set var="barHeight" value="165" />
+                                            <c:set var="barHeight" value="${revVal > 0 ? (revVal / 60000000.0 * 130) : 10}" />
+                                            <c:if test="${barHeight > 140}">
+                                                <c:set var="barHeight" value="140" />
                                             </c:if>
                                             <c:if test="${barHeight < 14 && revVal > 0}">
                                                 <c:set var="barHeight" value="14" />
@@ -393,27 +393,29 @@
                             <div class="table-responsive" style="margin: 0; border: none;">
                                 <table class="table" style="margin: 0;">
                                     <thead>
-                                        <tr style="background: var(--bg-alt);">
-                                            <th>Mã phiếu</th>
+                                        <tr>
+                                            <th style="width: 140px;">Mã phiếu</th>
                                             <th>Học viên &amp; Hóa đơn</th>
-                                            <th style="text-align: right;">Số tiền</th>
-                                            <th style="text-align: right;">Thời gian</th>
+                                            <th class="text-right" style="width: 130px; white-space: nowrap;">Số tiền</th>
+                                            <th class="text-right" style="width: 110px; white-space: nowrap;">Thời gian</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <c:forEach var="p" items="${dashboard.recentPayments}">
                                             <tr>
-                                                <td style="font-family: monospace; font-weight: 700; color: var(--primary); font-size: 12px;">
-                                                    <c:out value="${p.paymentCode}"/>
+                                                <td class="col-code">
+                                                    <span class="code-badge"><c:out value="${p.paymentCode}"/></span>
                                                 </td>
                                                 <td>
                                                     <div style="font-weight: 600; color: var(--text);"><c:out value="${p.studentName}"/></div>
-                                                    <div style="font-size: 11.5px; color: var(--text-muted); font-family: monospace;"><c:out value="${p.invoiceCode}"/> • <c:out value="${p.paymentMethod}"/></div>
+                                                    <div style="font-size: 11.5px; color: var(--text-muted); font-family: monospace; margin-top: 2px;">
+                                                        <c:out value="${p.invoiceCode}"/> • <span style="text-transform: uppercase;"><c:out value="${p.paymentMethod}"/></span>
+                                                    </div>
                                                 </td>
-                                                <td style="text-align: right; font-family: monospace; font-weight: 700; color: var(--secondary); font-size: 13px;">
+                                                <td class="text-right col-amount" style="color: var(--success);">
                                                     +<fmt:formatNumber value="${p.amount}" pattern="#,###"/> đ
                                                 </td>
-                                                <td style="text-align: right; font-size: 12px; color: var(--text-muted); font-family: monospace;">
+                                                <td class="text-right col-date">
                                                     <c:out value="${p.paidAt != null ? p.paidAt.toLocalDate() : '--'}"/>
                                                 </td>
                                             </tr>
@@ -448,33 +450,35 @@
                             <div class="table-responsive" style="margin: 0; border: none;">
                                 <table class="table" style="margin: 0;">
                                     <thead>
-                                        <tr style="background: var(--bg-alt);">
+                                        <tr>
                                             <th>Học viên</th>
                                             <th>Lớp học tiếp nhận</th>
-                                            <th style="text-align: right;">Ngày ghi danh</th>
+                                            <th class="text-right" style="width: 130px; white-space: nowrap;">Ngày ghi danh</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <c:forEach var="e" items="${dashboard.recentEnrollments}">
                                             <tr>
                                                 <td>
-                                                    <div style="display: flex; align-items: center; gap: 10px;">
-                                                        <div style="width: 32px; height: 32px; border-radius: var(--radius-sm); background: rgba(0, 83, 219, 0.1); color: var(--primary); font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                                        <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, rgba(37,99,235,0.12) 0%, rgba(37,99,235,0.04) 100%); border: 1px solid rgba(37,99,235,0.25); color: var(--primary); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
                                                             <c:out value="${e.studentName != null && e.studentName.length() > 0 ? e.studentName.substring(0, 1) : 'H'}"/>
                                                         </div>
                                                         <div>
                                                             <div style="font-weight: 600; color: var(--text);"><c:out value="${e.studentName}"/></div>
-                                                            <div style="font-size: 11px; color: var(--text-muted); font-family: monospace;">
-                                                                <span class="badge" style="font-size: 10px; padding: 1px 6px;"><c:out value="${e.status}"/></span>
+                                                            <div style="margin-top: 2px;">
+                                                                <span class="status-badge active" style="font-size: 10px; padding: 1px 7px;">
+                                                                    <c:out value="${e.status}"/>
+                                                                </span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div style="font-weight: 500; color: var(--text); font-size: 12.5px;"><c:out value="${e.className}"/></div>
-                                                    <div style="font-size: 11px; color: var(--text-muted);"><c:out value="${e.courseName != null ? e.courseName : '--'}"/></div>
+                                                    <div style="font-weight: 600; color: var(--text); font-size: 13px;"><c:out value="${e.className}"/></div>
+                                                    <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 1px;"><c:out value="${e.courseName != null ? e.courseName : '--'}"/></div>
                                                 </td>
-                                                <td style="text-align: right; font-size: 12px; color: var(--text-muted); font-family: monospace;">
+                                                <td class="text-right col-date">
                                                     <c:out value="${e.enrolledAt != null ? e.enrolledAt.toLocalDate() : '--'}"/>
                                                 </td>
                                             </tr>

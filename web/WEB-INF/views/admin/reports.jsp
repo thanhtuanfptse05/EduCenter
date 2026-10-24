@@ -5,7 +5,7 @@
 <html lang="vi">
 <head>
     <%@ include file="/WEB-INF/views/common/head.jspf" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261025_01">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261025_02">
     <title>${pageTitle} | EduCenter ERP</title>
 </head>
 <body>

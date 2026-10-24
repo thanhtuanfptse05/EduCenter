@@ -6,85 +6,8 @@
 <html lang="vi">
 <head>
     <%@ include file="/WEB-INF/views/common/head.jspf" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261024_05">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261025_02">
     <style>
-        .kpi-row-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        @media (max-width: 768px) {
-            .kpi-row-3 { grid-template-columns: 1fr; }
-        }
-        .kpi-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 18px;
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .kpi-icon-wrap {
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--primary-subtle);
-            color: var(--primary);
-            flex-shrink: 0;
-        }
-        .kpi-icon-wrap.success { background: var(--success-subtle); color: var(--success); }
-        .kpi-icon-wrap.warning { background: var(--warning-subtle); color: var(--warning); }
-        .kpi-val { font-size: 24px; font-weight: 700; color: var(--text); line-height: 1.2; }
-        .kpi-lbl { font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; margin-top: 2px; }
-        
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-card {
-            background: var(--surface);
-            border-radius: var(--radius-md);
-            border: 1px solid var(--border);
-            width: 100%;
-            max-width: 480px;
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-            animation: modalFadeIn 0.2s ease-out;
-        }
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.96); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .modal-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .modal-body { padding: 20px; }
-        .modal-footer {
-            padding: 14px 20px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            background: var(--bg);
-        }
         .room-code-badge {
             font-family: monospace;
             font-weight: 600;

@@ -6,70 +6,8 @@
 <html lang="vi">
 <head>
     <%@ include file="/WEB-INF/views/common/head.jspf" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261024_05">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261025_02">
     <style>
-        .kpi-row {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        @media (max-width: 1200px) {
-            .kpi-row { grid-template-columns: repeat(3, 1fr); }
-        }
-        @media (max-width: 768px) {
-            .kpi-row { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 480px) {
-            .kpi-row { grid-template-columns: 1fr; }
-        }
-        .kpi-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 18px;
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .kpi-icon-wrap {
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--primary-subtle);
-            color: var(--primary);
-            flex-shrink: 0;
-        }
-        .kpi-icon-wrap.success { background: var(--success-subtle); color: var(--success); }
-        .kpi-icon-wrap.info { background: #e0f2fe; color: #0284c7; }
-        .kpi-icon-wrap.warning { background: var(--warning-subtle); color: var(--warning); }
-        .kpi-icon-wrap.neutral { background: var(--bg); color: var(--text-muted); }
-        .kpi-val {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--text);
-            line-height: 1.2;
-        }
-        .kpi-lbl {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 500;
-            margin-top: 2px;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-        .content-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            box-shadow: var(--shadow-sm);
-            overflow: hidden;
-            margin-bottom: 24px;
-        }
         .filter-panel {
             padding: 20px;
             background: var(--surface);

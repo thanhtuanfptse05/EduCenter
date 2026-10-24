@@ -5,7 +5,7 @@
 <html lang="vi">
 <head>
     <%@ include file="/WEB-INF/views/common/head.jspf" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261024_05">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261025_02">
 </head>
 <body>
 <c:set var="internalShell" value="true" scope="request"/>
@@ -40,7 +40,7 @@
             <%@ include file="/WEB-INF/views/common/alert.jsp" %>
 
             <!-- Filter Bar -->
-            <div class="card" style="padding: 16px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 24px;">
+            <div class="card" style="padding: 16px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04); margin-bottom: 24px;">
                 <form action="${pageContext.request.contextPath}/admin/academic-stats" method="get" style="display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap;">
                     <div style="flex: 1; min-width: 180px;">
                         <label class="form-label" for="fromDate" style="font-size: 12px; font-weight: 600; margin-bottom: 6px; display: block;">Từ ngày:</label>
