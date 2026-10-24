@@ -6,94 +6,7 @@
 <head>
     <%@ include file="/WEB-INF/views/common/head.jspf" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css">
-    <style>
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-        .kpi-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            box-shadow: var(--shadow-sm);
-        }
-        .kpi-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .kpi-icon.blue { background: var(--primary-subtle); color: var(--primary); }
-        .kpi-icon.green { background: var(--success-subtle); color: var(--success); }
-        .kpi-icon.amber { background: var(--warning-subtle); color: var(--warning); }
-        .kpi-icon.sky { background: var(--info-subtle); color: var(--info); }
-        .kpi-val { font-size: 26px; font-weight: 700; color: var(--text); line-height: 1.2; }
-        .kpi-lbl { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-
-        .dashboard-section {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: var(--shadow-sm);
-        }
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-        .section-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 0;
-        }
-        .session-card {
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-            background: var(--bg);
-        }
-        .session-card:hover {
-            border-color: var(--primary);
-        }
-        .empty-state {
-            padding: 32px 16px;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-        .badge-draft { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; padding: 2px 8px; border-radius: var(--radius-xs); font-size: 12px; font-weight: 600; }
-        .badge-published { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; padding: 2px 8px; border-radius: var(--radius-xs); font-size: 12px; font-weight: 600; }
-        .status-pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: var(--radius-full); font-size: 12px; font-weight: 600; }
-        .status-completed { background: #dcfce7; color: #15803d; }
-        .status-scheduled { background: #eff6ff; color: #1d4ed8; }
-        .status-cancelled { background: #fee2e2; color: #b91c1c; }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/staff-management.css">
 </head>
 <body>
 <c:set var="internalShell" value="true" scope="request"/>
@@ -106,265 +19,531 @@
         <%@ include file="/WEB-INF/views/common/header.jspf" %>
 
         <main class="admin-content">
-            <%@ include file="/WEB-INF/views/common/alert.jsp" %>
+            <div class="mgmt-wrap">
+                <!-- Flash Alerts -->
+                <%@ include file="/WEB-INF/views/common/alert.jsp" %>
 
-            <!-- Page Header -->
-            <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
-                <div>
-                    <h1 class="page-title" style="margin: 0;">Bàn Làm Việc Giảng Dạy</h1>
-                    <p class="page-subtitle" style="margin-top: 4px;">Xin chào Thầy/Cô <strong><c:out value="${sessionScope.currentUser.fullName}"/></strong> · Quản lý lịch dạy, điểm danh và đánh giá học tập</p>
-                </div>
-                <div style="display: flex; gap: 8px;">
-                    <a href="${pageContext.request.contextPath}/teacher/attendance" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
-                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-                        <span>Sổ điểm danh</span>
-                    </a>
-                    <a href="${pageContext.request.contextPath}/teacher/assessments" class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
-                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                        <span>Bài kiểm tra</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- KPI Cards -->
-            <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="kpi-icon blue">
-                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                    </div>
-                    <div>
-                        <div class="kpi-val"><c:out value="${totalClassesCount}"/></div>
-                        <div class="kpi-lbl">Lớp học phụ trách</div>
-                    </div>
-                </div>
-
-                <div class="kpi-card">
-                    <div class="kpi-icon sky">
-                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    </div>
-                    <div>
-                        <div class="kpi-val"><c:out value="${todaySessionsCount}"/></div>
-                        <div class="kpi-lbl">Ca dạy hôm nay</div>
-                    </div>
-                </div>
-
-                <div class="kpi-card">
-                    <div class="kpi-icon green">
-                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-                    </div>
-                    <div>
-                        <div class="kpi-val"><c:out value="${completedSessionsCount}"/></div>
-                        <div class="kpi-lbl">Buổi dạy đã hoàn thành</div>
-                    </div>
-                </div>
-
-                <div class="kpi-card">
-                    <div class="kpi-icon amber">
-                        <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    </div>
-                    <div>
-                        <div class="kpi-val"><c:out value="${assessmentsCount}"/></div>
-                        <div class="kpi-lbl">Bài kiểm tra & Bảng điểm</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 1: Ca dạy hôm nay -->
-            <div class="dashboard-section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <svg class="icon icon-sm text-primary" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        Lịch dạy hôm nay &amp; Thao tác nhanh
-                    </h2>
-                    <span style="font-size: 13px; color: var(--text-muted);">
-                        Hôm nay: <c:out value="${todaySessionsCount}"/> ca dạy
-                    </span>
-                </div>
-
-                <c:choose>
-                    <c:when test="${not empty todaySessions}">
-                        <div style="display: flex; flex-direction: column; gap: 12px;">
-                            <c:forEach var="s" items="${todaySessions}">
-                                <div class="session-card">
-                                    <div>
-                                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                                            <span style="font-weight: 700; font-size: 15px; color: var(--text);"><c:out value="${s.classCode}"/></span>
-                                            <span style="color: var(--text-muted);">—</span>
-                                            <span style="font-weight: 500; font-size: 14px; color: var(--text);"><c:out value="${s.className}"/></span>
-                                            <c:choose>
-                                                <c:when test="${s.sessionStatus == 'COMPLETED' || s.status == 'COMPLETED'}">
-                                                    <span class="status-pill status-completed">Đã hoàn thành</span>
-                                                </c:when>
-                                                <c:when test="${s.sessionStatus == 'CANCELLED' || s.status == 'CANCELLED'}">
-                                                    <span class="status-pill status-cancelled">Đã hủy</span>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span class="status-pill status-scheduled">Lên lịch</span>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </div>
-                                        <div style="font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-                                            <span>
-                                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="vertical-align: -2px;" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                                                <c:out value="${s.startTime}"/> – <c:out value="${s.endTime}"/>
-                                            </span>
-                                            <span>
-                                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="vertical-align: -2px;" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
-                                                Phòng: <c:out value="${empty s.roomName ? 'Chưa xếp phòng' : s.roomName}"/>
-                                            </span>
-                                            <span>
-                                                <svg class="icon icon-sm" viewBox="0 0 24 24" style="vertical-align: -2px;" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-                                                Sĩ số: <c:out value="${s.presentCount + s.lateCount + s.excusedCount + s.unexcusedCount}"/> HV
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div style="display: flex; gap: 8px;">
-                                        <a href="${pageContext.request.contextPath}/teacher/attendance?sessionId=${s.sessionId}" class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
-                                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-                                            <span>Điểm danh</span>
-                                        </a>
-                                        <a href="${pageContext.request.contextPath}/teacher/journal?sessionId=${s.sessionId}" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 6px;">
-                                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
-                                            <span>Nhật ký</span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </c:forEach>
+                <!-- 1. Top Command & Action Bar -->
+                <div class="mgmt-header">
+                    <div class="mgmt-header-left">
+                        <div class="mgmt-breadcrumb">
+                            <span class="mgmt-badge-version">TCH-01 • GIẢNG VIÊN CƠ HỮU</span>
+                            <span>•</span>
+                            <span>Niên khóa 2026 – 2027</span>
                         </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="empty-state">
-                            <svg class="icon icon-lg text-muted" viewBox="0 0 24 24" style="margin-bottom: 8px;" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                            <p style="margin: 0; font-weight: 500;">Hôm nay bạn không có ca dạy nào theo thời khóa biểu.</p>
-                            <span style="font-size: 12px; color: var(--text-muted);">Kiểm tra lại toàn bộ lịch dạy trong tuần tại sổ điểm danh.</span>
+                        <div class="mgmt-title-row">
+                            <h1 class="mgmt-title">Bàn Làm Việc Giảng Dạy</h1>
                         </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-
-            <!-- Section 2: Lớp học đang phụ trách -->
-            <div class="dashboard-section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <svg class="icon icon-sm text-primary" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        Lớp học được phân công phụ trách
-                    </h2>
-                    <span style="font-size: 13px; color: var(--text-muted);"><c:out value="${totalClassesCount}"/> lớp</span>
+                        <p class="mgmt-subtitle">
+                            Xin chào Thầy/Cô <strong><c:out value="${sessionScope.currentUser.fullName}"/></strong> — Quản lý lịch dạy, điểm danh lớp học và theo dõi đánh giá học tập cá nhân.
+                        </p>
+                    </div>
+                    <div class="mgmt-header-actions">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="window.print();" title="In hoặc lưu lịch giảng dạy">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                <rect height="18" rx="2" ry="2" width="18" x="3" y="4"></rect>
+                                <line x1="16" x2="16" y1="2" y2="6"></line>
+                                <line x1="8" x2="8" y1="2" y2="6"></line>
+                                <line x1="3" x2="21" y1="10" y2="10"></line>
+                            </svg>
+                            <span>Xuất lịch iCal</span>
+                        </button>
+                        <a href="${pageContext.request.contextPath}/teacher/attendance" class="btn btn-secondary btn-sm">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                <polyline points="9 11 12 14 22 4"></polyline>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                            </svg>
+                            <span>Sổ điểm danh</span>
+                        </a>
+                        <a href="${pageContext.request.contextPath}/teacher/assessments" class="btn btn-primary btn-sm">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                <line x1="12" x2="12" y1="5" y2="19"></line>
+                                <line x1="5" x2="19" y1="12" y2="12"></line>
+                            </svg>
+                            <span>Tạo bài kiểm tra mới</span>
+                        </a>
+                    </div>
                 </div>
 
-                <c:choose>
-                    <c:when test="${not empty assignedClasses}">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Mã lớp</th>
-                                        <th>Tên lớp học</th>
-                                        <th>Khóa học / Môn học</th>
-                                        <th>Phòng học</th>
-                                        <th>Sức chứa</th>
-                                        <th>Trạng thái</th>
-                                        <th style="text-align: right;">Hành động</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach var="c" items="${assignedClasses}">
-                                        <tr>
-                                            <td><strong><c:out value="${c.code}"/></strong></td>
-                                            <td><c:out value="${c.name}"/></td>
-                                            <td>
-                                                <c:out value="${c.course != null ? c.course.name : '—'}"/>
-                                                <c:if test="${c.course != null and c.course.subject != null}">
-                                                    <span style="font-size: 12px; color: var(--text-muted);"> (<c:out value="${c.course.subject.name}"/>)</span>
+                <!-- 2. Metric KPI Cards Row (4 Columns) -->
+                <div class="mgmt-kpi-grid">
+                    <!-- KPI 1 -->
+                    <div class="mgmt-kpi-card">
+                        <div class="mgmt-kpi-content">
+                            <span class="mgmt-kpi-label">Lớp học phụ trách</span>
+                            <div class="mgmt-kpi-val-row">
+                                <span class="mgmt-kpi-value"><c:out value="${totalClassesCount}"/></span>
+                                <span class="mgmt-kpi-sub">lớp</span>
+                            </div>
+                            <span style="font-size: 11.5px; color: #047857; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                                <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981;"></span>
+                                Lớp đang hoạt động trong kỳ
+                            </span>
+                        </div>
+                        <div class="mgmt-kpi-icon-box bg-primary-tint">
+                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- KPI 2 -->
+                    <div class="mgmt-kpi-card">
+                        <div class="mgmt-kpi-content">
+                            <span class="mgmt-kpi-label">Ca dạy hôm nay</span>
+                            <div class="mgmt-kpi-val-row">
+                                <span class="mgmt-kpi-value" style="color: var(--primary);"><c:out value="${todaySessionsCount}"/></span>
+                                <span class="mgmt-kpi-sub">ca trọng điểm</span>
+                            </div>
+                            <span style="font-size: 11.5px; color: var(--text-muted); font-weight: 500;">
+                                <c:choose>
+                                    <c:when test="${todaySessionsCount > 0}">Cần hoàn thành điểm danh</c:when>
+                                    <c:otherwise>Không có lịch dạy hôm nay</c:otherwise>
+                                </c:choose>
+                            </span>
+                        </div>
+                        <div class="mgmt-kpi-icon-box bg-info-tint">
+                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- KPI 3 -->
+                    <div class="mgmt-kpi-card">
+                        <div class="mgmt-kpi-content">
+                            <span class="mgmt-kpi-label">Buổi dạy đã hoàn thành</span>
+                            <div class="mgmt-kpi-val-row">
+                                <span class="mgmt-kpi-value" style="color: #047857;"><c:out value="${completedSessionsCount}"/></span>
+                                <span class="mgmt-kpi-sub">buổi thực dạy</span>
+                            </div>
+                            <span style="font-size: 11.5px; color: #047857; font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                                <svg class="icon icon-sm" style="width: 13px; height: 13px;" viewBox="0 0 24 24" aria-hidden="true">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                                Đã chốt sổ và điểm danh
+                            </span>
+                        </div>
+                        <div class="mgmt-kpi-icon-box bg-success-tint">
+                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- KPI 4 -->
+                    <div class="mgmt-kpi-card">
+                        <div class="mgmt-kpi-content">
+                            <span class="mgmt-kpi-label">Bài kiểm tra & Đánh giá</span>
+                            <div class="mgmt-kpi-val-row">
+                                <span class="mgmt-kpi-value"><c:out value="${assessmentsCount}"/></span>
+                                <span class="mgmt-kpi-sub">đợt thi</span>
+                            </div>
+                            <span style="font-size: 11.5px; color: var(--text-muted); font-weight: 500;">
+                                Bảng điểm & phổ điểm định kỳ
+                            </span>
+                        </div>
+                        <div class="mgmt-kpi-icon-box bg-warning-tint">
+                            <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Section 1: Lịch dạy hôm nay & Thao tác nhanh -->
+                <div class="teacher-hero-card">
+                    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="mgmt-pulse-dot" style="background: var(--primary);"></div>
+                            <h2 style="font-size: 16px; font-weight: 700; color: var(--text); margin: 0;">Lịch dạy hôm nay &amp; Thao tác nhanh</h2>
+                        </div>
+                        <div class="mgmt-stat-pill pill-primary">
+                            <svg class="icon icon-sm" style="width: 14px; height: 14px;" viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <span>Hôm nay: <c:out value="${todaySessionsCount}"/> ca dạy</span>
+                        </div>
+                    </div>
+
+                    <c:choose>
+                        <c:when test="${not empty todaySessions}">
+                            <div style="display: flex; flex-direction: column; gap: 14px;">
+                                <c:forEach var="s" items="${todaySessions}">
+                                    <div class="teacher-hero-inner">
+                                        <div style="display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 0;">
+                                            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                                                <span class="mgmt-code-pill" style="font-size: 13px; font-weight: 800; padding: 3px 10px; background: var(--primary); color: #fff;">
+                                                    <c:out value="${s.classCode}"/>
+                                                </span>
+                                                <span style="font-size: 16px; font-weight: 700; color: var(--text);">
+                                                    <c:out value="${s.className}"/>
+                                                </span>
+                                                <c:if test="${not empty s.subjectName}">
+                                                    <span style="font-size: 13px; color: var(--text-muted);">• <c:out value="${s.subjectName}"/></span>
                                                 </c:if>
-                                            </td>
-                                            <td><c:out value="${c.room != null ? c.room.name : 'Chưa xếp phòng'}"/></td>
-                                            <td><c:out value="${c.capacity}"/> học viên</td>
-                                            <td>
-                                                <span class="status-pill status-scheduled"><c:out value="${c.status}"/></span>
-                                            </td>
-                                            <td style="text-align: right;">
-                                                <a href="${pageContext.request.contextPath}/teacher/assessments?classId=${c.id}" class="btn btn-secondary btn-sm" title="Quản lý bài kiểm tra của lớp">
-                                                    Bài kiểm tra
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="empty-state">
-                            <p style="margin: 0; font-weight: 500;">Chưa có lớp học nào được phân công cho tài khoản của bạn.</p>
-                            <span style="font-size: 12px; color: var(--text-muted);">Vui lòng liên hệ Bộ phận Giáo vụ để nhận lịch phân công lớp mới.</span>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-
-            <!-- Section 3: Bài kiểm tra gần đây & Bảng điểm -->
-            <div class="dashboard-section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <svg class="icon icon-sm text-primary" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                        Bài kiểm tra gần đây
-                    </h2>
-                    <a href="${pageContext.request.contextPath}/teacher/assessments" class="btn btn-ghost btn-sm" style="font-size: 13px;">Xem tất cả</a>
-                </div>
-
-                <c:choose>
-                    <c:when test="${not empty assessments}">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Tên bài kiểm tra</th>
-                                        <th>Lớp học</th>
-                                        <th>Ngày thi</th>
-                                        <th>Trọng số</th>
-                                        <th>Trạng thái</th>
-                                        <th style="text-align: right;">Thao tác</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <c:forEach var="a" items="${assessments}">
-                                        <tr>
-                                            <td><strong><c:out value="${empty a.title ? a.name : a.title}"/></strong></td>
-                                            <td><c:out value="${a.className}"/> (<c:out value="${a.classCode}"/>)</td>
-                                            <td><c:out value="${a.testDate}"/></td>
-                                            <td><c:out value="${a.weight}"/>x (Thang <c:out value="${a.maxScore}"/>)</td>
-                                            <td>
                                                 <c:choose>
-                                                    <c:when test="${a.status == 'PUBLISHED'}">
-                                                        <span class="badge-published">ĐÃ CÔNG BỐ</span>
+                                                    <c:when test="${s.sessionStatus == 'COMPLETED'}">
+                                                        <span class="mgmt-badge badge-active">ĐÃ HOÀN TẤT</span>
+                                                    </c:when>
+                                                    <c:when test="${s.sessionStatus == 'IN_PROGRESS'}">
+                                                        <span class="mgmt-badge badge-status-opening">ĐANG DIỄN RA</span>
+                                                    </c:when>
+                                                    <c:when test="${s.sessionStatus == 'CANCELLED'}">
+                                                        <span class="mgmt-badge badge-status-closed">ĐÃ HỦY</span>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <span class="badge-draft">BẢN NHÁP</span>
+                                                        <span class="mgmt-badge badge-status-draft">LÊN LỊCH</span>
                                                     </c:otherwise>
                                                 </c:choose>
-                                            </td>
-                                            <td style="text-align: right;">
-                                                <a href="${pageContext.request.contextPath}/teacher/scores?id=${a.id}" class="btn btn-secondary btn-sm">
-                                                    <c:choose>
-                                                        <c:when test="${a.status == 'PUBLISHED'}">Xem bảng điểm</c:when>
-                                                        <c:otherwise>Nhập điểm</c:otherwise>
-                                                    </c:choose>
-                                                </a>
-                                            </td>
+                                            </div>
+
+                                            <div class="teacher-hero-grid">
+                                                <!-- Time -->
+                                                <div class="teacher-meta-item">
+                                                    <div class="teacher-meta-icon" style="color: var(--primary);">
+                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                                            <circle cx="12" cy="12" r="10"></circle>
+                                                            <polyline points="12 6 12 12 16 14"></polyline>
+                                                        </svg>
+                                                    </div>
+                                                    <div style="display: flex; flex-direction: column;">
+                                                        <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Thời gian ca</span>
+                                                        <span style="font-size: 14px; font-weight: 700; color: var(--text);"><c:out value="${s.startTime}"/> – <c:out value="${s.endTime}"/></span>
+                                                        <span style="font-size: 11.5px; color: var(--text-muted);">Ngày: <c:out value="${s.sessionDate}"/></span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Room -->
+                                                <div class="teacher-meta-item">
+                                                    <div class="teacher-meta-icon" style="color: #047857;">
+                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                                        </svg>
+                                                    </div>
+                                                    <div style="display: flex; flex-direction: column;">
+                                                        <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Phòng học</span>
+                                                        <span style="font-size: 14px; font-weight: 700; color: var(--text);"><c:out value="${empty s.roomName ? 'Chưa xếp phòng' : s.roomName}"/></span>
+                                                        <span style="font-size: 11.5px; color: var(--text-muted);">Cơ sở trung tâm</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Attendance Counts -->
+                                                <div class="teacher-meta-item">
+                                                    <div class="teacher-meta-icon" style="color: #b45309;">
+                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                                            <circle cx="9" cy="7" r="4"></circle>
+                                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                                        </svg>
+                                                    </div>
+                                                    <div style="display: flex; flex-direction: column;">
+                                                        <span style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Sĩ số & Chuyên cần</span>
+                                                        <div class="att-badge-row" style="margin-top: 2px;">
+                                                            <span class="att-badge present" title="Có mặt">Có: ${s.presentCount}</span>
+                                                            <span class="att-badge late" title="Đi muộn">Muộn: ${s.lateCount}</span>
+                                                            <span class="att-badge absent" title="Vắng mặt">Vắng: ${s.excusedCount + s.unexcusedCount}</span>
+                                                            <span class="att-badge muted">Tổng: ${s.totalStudents}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Action Cluster -->
+                                        <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap;">
+                                            <a href="${pageContext.request.contextPath}/teacher/attendance?sessionId=${s.sessionId}" class="btn btn-primary btn-sm">
+                                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                                    <circle cx="9" cy="7" r="4"></circle>
+                                                    <polyline points="16 11 18 13 22 9"></polyline>
+                                                </svg>
+                                                <span>Điểm danh ngay</span>
+                                            </a>
+                                            <a href="${pageContext.request.contextPath}/teacher/journal?sessionId=${s.sessionId}" class="btn btn-secondary btn-sm">
+                                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                                    <path d="M12 20h9"></path>
+                                                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                                </svg>
+                                                <span>Ghi nhật ký dạy</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="mgmt-empty-box" style="padding: 36px 20px;">
+                                <div class="mgmt-empty-icon" style="width: 48px; height: 48px;">
+                                    <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <h3 class="mgmt-empty-title" style="font-size: 15px;">Hôm nay bạn không có ca dạy nào</h3>
+                                <p class="mgmt-empty-desc" style="font-size: 13px;">Thời khóa biểu hôm nay trống. Thầy/Cô có thể xem toàn bộ ca dạy trong tuần hoặc chuẩn bị bài giảng tại Sổ điểm danh.</p>
+                                <div class="mgmt-empty-actions">
+                                    <a href="${pageContext.request.contextPath}/teacher/attendance" class="btn btn-secondary btn-sm">Xem toàn bộ lịch dạy</a>
+                                </div>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+
+                <!-- 4. Section 2: Lớp học được phân công phụ trách -->
+                <div class="mgmt-table-card">
+                    <div class="mgmt-table-meta-header">
+                        <div class="mgmt-table-title-group">
+                            <svg class="icon icon-sm" style="color: var(--primary);" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
+                            <span class="mgmt-table-title">Lớp học được phân công phụ trách</span>
+                            <span class="mgmt-table-count-badge"><c:out value="${totalClassesCount}"/> lớp</span>
+                        </div>
+                        <div class="mgmt-table-actions-right">
+                            <a href="${pageContext.request.contextPath}/teacher/attendance" class="btn btn-ghost btn-sm" style="color: var(--primary); font-weight: 600;">
+                                <span>Xem toàn bộ thời khóa biểu</span>
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                    <polyline points="9 18 15 12 9 6"></polyline>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <c:choose>
+                        <c:when test="${not empty assignedClasses}">
+                            <div class="mgmt-table-responsive">
+                                <table class="mgmt-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 120px;">Mã lớp</th>
+                                            <th>Tên lớp học &amp; Cấp độ</th>
+                                            <th>Khóa học / Bộ môn</th>
+                                            <th>Phòng học &amp; Cơ sở</th>
+                                            <th style="min-width: 140px;">Sĩ số / Sức chứa</th>
+                                            <th style="text-align: center;">Trạng thái</th>
+                                            <th style="text-align: right; width: 170px;">Hành động</th>
                                         </tr>
-                                    </c:forEach>
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="c" items="${assignedClasses}">
+                                            <tr>
+                                                <td>
+                                                    <span class="mgmt-code-pill" style="font-size: 12px; font-weight: 800; color: var(--primary);">
+                                                        <c:out value="${c.code}"/>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div style="font-weight: 700; color: var(--text);"><c:out value="${c.name}"/></div>
+                                                    <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                                                        Giảng viên: <c:out value="${sessionScope.currentUser.fullName}"/>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="font-weight: 600; color: var(--text);"><c:out value="${c.course != null ? c.course.name : '—'}"/></div>
+                                                    <c:if test="${c.course != null and c.course.subject != null}">
+                                                        <div style="font-size: 11.5px; color: var(--text-muted);"><c:out value="${c.course.subject.name}"/></div>
+                                                    </c:if>
+                                                </td>
+                                                <td>
+                                                    <div style="font-weight: 600; color: var(--text);"><c:out value="${c.room != null ? c.room.name : 'Chưa xếp phòng'}"/></div>
+                                                    <div style="font-size: 11.5px; color: var(--text-muted);">EduCenter Central</div>
+                                                </td>
+                                                <td>
+                                                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
+                                                        <span><c:out value="${c.capacity}"/> học viên</span>
+                                                        <span style="color: var(--text-muted);">Sức chứa tối đa</span>
+                                                    </div>
+                                                    <div class="mgmt-progress-track">
+                                                        <div class="mgmt-progress-fill" style="width: 75%;"></div>
+                                                    </div>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <c:choose>
+                                                        <c:when test="${c.status == 'OPENING'}">
+                                                            <span class="mgmt-badge badge-status-opening">ĐANG MỞ</span>
+                                                        </c:when>
+                                                        <c:when test="${c.status == 'ONGOING'}">
+                                                            <span class="mgmt-badge badge-active">ONGOING</span>
+                                                        </c:when>
+                                                        <c:when test="${c.status == 'CLOSED' || c.status == 'COMPLETED'}">
+                                                            <span class="mgmt-badge badge-status-closed">KẾT THÚC</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="mgmt-badge badge-status-draft"><c:out value="${c.status}"/></span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                                <td style="text-align: right;">
+                                                    <div style="display: inline-flex; align-items: center; gap: 6px;">
+                                                        <a href="${pageContext.request.contextPath}/teacher/attendance" class="btn btn-secondary btn-sm" title="Xem ca học & điểm danh">
+                                                            Điểm danh
+                                                        </a>
+                                                        <a href="${pageContext.request.contextPath}/teacher/assessments?classId=${c.id}" class="btn btn-secondary btn-sm" style="color: var(--primary);" title="Quản lý bài kiểm tra của lớp">
+                                                            Bài thi
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="mgmt-empty-box">
+                                <div class="mgmt-empty-icon">
+                                    <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="mgmt-empty-title">Chưa có lớp học được phân công</h3>
+                                <p class="mgmt-empty-desc">Tài khoản của Thầy/Cô hiện chưa được phân công lớp học nào trong học kỳ này. Vui lòng liên hệ Bộ phận Giáo vụ để nhận lịch phân công.</p>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+
+                <!-- 5. Section 3: Bài kiểm tra gần đây & Bảng điểm -->
+                <div class="mgmt-table-card">
+                    <div class="mgmt-table-meta-header">
+                        <div class="mgmt-table-title-group">
+                            <svg class="icon icon-sm" style="color: var(--primary);" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M9 11l3 3L22 4"></path>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                            </svg>
+                            <span class="mgmt-table-title">Bài kiểm tra gần đây &amp; Bảng điểm</span>
                         </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="empty-state">
-                            <p style="margin: 0; font-weight: 500;">Chưa có bài kiểm tra nào được tạo.</p>
-                            <span style="font-size: 12px; color: var(--text-muted);">Bấm vào nút "Tạo bài kiểm tra" ở đầu trang để lập bảng điểm cho lớp của bạn.</span>
+                        <div class="mgmt-table-actions-right">
+                            <a href="${pageContext.request.contextPath}/teacher/assessments" class="btn btn-ghost btn-sm" style="color: var(--primary); font-weight: 600;">
+                                <span>Xem tất cả <c:out value="${assessmentsCount}"/> bài kiểm tra</span>
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                    <line x1="5" x2="19" y1="12" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </a>
                         </div>
-                    </c:otherwise>
-                </c:choose>
+                    </div>
+
+                    <c:choose>
+                        <c:when test="${not empty assessments}">
+                            <div class="mgmt-table-responsive">
+                                <table class="mgmt-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tên bài kiểm tra</th>
+                                            <th>Lớp học</th>
+                                            <th>Ngày thi</th>
+                                            <th>Trọng số / Thang điểm</th>
+                                            <th style="text-align: center;">Trạng thái</th>
+                                            <th>Kết quả / Tiến độ</th>
+                                            <th style="text-align: right; width: 150px;">Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="a" items="${assessments}" varStatus="loop">
+                                            <c:if test="${loop.count <= 6}">
+                                                <tr>
+                                                    <td>
+                                                        <div style="font-weight: 700; color: var(--text);">
+                                                            <a href="${pageContext.request.contextPath}/teacher/scores?id=${a.id}" style="color: var(--primary); text-decoration: none;">
+                                                                <c:out value="${empty a.title ? a.name : a.title}"/>
+                                                            </a>
+                                                        </div>
+                                                        <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                                                            Phân loại: <c:out value="${a.assessmentType}"/>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span class="mgmt-code-pill" style="font-size: 12px; font-weight: 700; color: var(--primary);"><c:out value="${a.classCode}"/></span>
+                                                        <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;"><c:out value="${a.className}"/></div>
+                                                    </td>
+                                                    <td style="font-size: 13px; font-weight: 600; color: var(--text);">
+                                                        <c:out value="${a.testDate}"/>
+                                                    </td>
+                                                    <td>
+                                                        <span style="font-weight: 700; color: var(--text);"><c:out value="${a.weight}"/>x</span>
+                                                        <span style="font-size: 11.5px; color: var(--text-muted); display: block;">Thang <c:out value="${a.maxScore}"/></span>
+                                                    </td>
+                                                    <td style="text-align: center;">
+                                                        <c:choose>
+                                                            <c:when test="${a.status == 'PUBLISHED'}">
+                                                                <span class="mgmt-badge badge-active">ĐÃ CÔNG BỐ</span>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <span class="mgmt-badge badge-status-draft">BẢN NHÁP</span>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </td>
+                                                    <td>
+                                                        <div style="font-size: 12.5px; font-weight: 700; color: var(--text);">
+                                                            <c:choose>
+                                                                <c:when test="${not empty a.averageScore}">
+                                                                    Điểm TB: <fmt:formatNumber value="${a.averageScore}" minFractionDigits="1" maxFractionDigits="2"/>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <span style="color: var(--text-muted); font-weight: 500;">Chưa chốt điểm</span>
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </div>
+                                                        <div style="font-size: 11.5px; color: var(--text-muted);">
+                                                            Đã chấm: ${a.gradedCount} / ${a.totalStudents} HV
+                                                        </div>
+                                                    </td>
+                                                    <td style="text-align: right;">
+                                                        <a href="${pageContext.request.contextPath}/teacher/scores?id=${a.id}" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 5px;">
+                                                            <svg class="icon icon-sm" style="width: 13px; height: 13px;" viewBox="0 0 24 24" aria-hidden="true">
+                                                                <path d="M12 20h9"></path>
+                                                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                                            </svg>
+                                                            <span>${a.status == 'PUBLISHED' ? 'Xem bảng điểm' : 'Nhập điểm'}</span>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </c:if>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mgmt-table-footer">
+                                <div>Hiển thị tối đa 6 bài kiểm tra gần nhất trong học kỳ</div>
+                                <div style="display: flex; align-items: center; gap: 6px;">
+                                    <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981;"></span>
+                                    <span>Tự động đồng bộ lên Cổng Học Viên &amp; Phụ Huynh</span>
+                                </div>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="mgmt-empty-box">
+                                <div class="mgmt-empty-icon">
+                                    <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    </svg>
+                                </div>
+                                <h3 class="mgmt-empty-title">Chưa có bài kiểm tra nào được tạo</h3>
+                                <p class="mgmt-empty-desc">Thầy/Cô hãy bắt đầu tạo các bài kiểm tra 15 phút, 1 tiết hoặc thi thử định kỳ cho các lớp học phụ trách.</p>
+                                <div class="mgmt-empty-actions">
+                                    <a href="${pageContext.request.contextPath}/teacher/assessments" class="btn btn-primary btn-sm">Tạo bài kiểm tra đầu tiên</a>
+                                </div>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
             </div>
         </main>
     </div>
