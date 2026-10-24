@@ -41,7 +41,7 @@ Là TEACHER, tôi muốn lưu nội dung và bài tập để học viên biết
 
 **Acceptance Scenarios:**
 1. Given buổi được giao, When lưu nhật ký và hoàn tất, Then portal thấy nội dung thật.
-2. Given COMPLETED, When ADMIN sửa chuyên cần với lý do, Then có audit before/after và tỷ lệ cập nhật; Teacher không tự sửa.
+2. Given COMPLETED, When ADMIN sửa chuyên cần với lý do, Then có audit before/after và tỷ lệ cập nhật; Giáo viên thực dạy của buổi cũng được sửa chuyên cần buổi đã chốt (v1.1), mọi lần sửa đều có audit.
 
 ### Edge Cases
 
@@ -61,7 +61,7 @@ Các yêu cầu áp dụng đồng thời QG01–QG12. Cột nghiệm thu là k�
 | FR-002 | THE SYSTEM SHALL chỉ nhận PRESENT, ABSENT_EXCUSED, ABSENT_UNEXCUSED, LATE, với ghi chú tùy chọn, actor/time. Thao tác chọn hàng loạt (đánh dấu tất cả có mặt/đặt lại) trên giao diện phải hoạt động tin cậy, đồng bộ trạng thái radio, nhãn visual (.is-active) và bảng chỉ số metrics, không bị triệt tiêu bởi JSP Expression Language. | M07; UC20 | Status sai bị chặn; dòng chưa chọn không tự là PRESENT; nút chọn hàng loạt cập nhật tức thì mọi học viên. |
 | FR-003 | THE SYSTEM SHALL có tối đa một Attendance/session/student; lặp request không nhân bản, sửa phiên bản cũ báo xung đột. | BR08; QG06 | Double-click không trùng; hai người sửa không mất thay đổi nhau; loại trừ trùng lặp studentId trước khi persist. |
 | FR-004 | WHEN bắt đầu/hoàn tất, THE SYSTEM SHALL kiểm tra ngày/trạng thái buổi; chỉ hoàn tất khi đủ roster; không ghi buổi CANCELLED/RESCHEDULED. Hành động chốt hoàn tất ca học phải gửi kèm toàn bộ dữ liệu điểm danh hiện hành trên form để lưu và chuyển COMPLETED nguyên tử trong một luồng giao dịch, chặn gửi khi còn học viên chưa điểm danh. | WF-02; UC20 | Buổi tương lai không COMPLETED; roster còn học viên chưa chọn bị chặn ngay tại client; chốt hoàn tất tự động lưu điểm danh và đóng ca thành công. |
-| FR-005 | WHILE COMPLETED, THE SYSTEM SHALL khóa nhập thường; chỉ ADMIN sửa chuyên cần/nhật ký có lý do và audit. | BR16; BR18; UC20 | Teacher gửi form cũ bị chặn; ADMIN correction có lịch sử. |
+| FR-005 | WHILE COMPLETED, THE SYSTEM SHALL cho phép ADMIN và giáo viên thực dạy của buổi đó sửa chuyên cần/nhật ký; mọi lần sửa ghi audit. Giáo viên khác vẫn bị chặn. | BR16; BR18; UC20 | Teacher thực dạy sửa được buổi COMPLETED; teacher không phụ trách bị chặn; có lịch sử audit. |
 | FR-006 | WHEN lưu journal (P1), THE SYSTEM SHALL có tối đa một journal/buổi, lưu nội dung, bài tập, nhận xét và tác giả theo quyền. | UC21; M07 | Tra cứu lại đúng nội dung; chưa có journal báo chưa cập nhật. |
 | FR-007 | THE SYSTEM SHALL tính chuyên cần theo D11, hiển thị số có mặt/vắng/thiếu và mẫu số bên cạnh tỷ lệ. | M07; M11; D11 | PRESENT+LATE chia COMPLETED đủ điều kiện; mẫu số 0 báo chưa có dữ liệu. |
 | FR-008 | THE SYSTEM SHALL chỉ công bố chuyên cần/journal cho người học sau COMPLETED và áp dụng liên kết giám hộ hiện hành. | WF-02; BR15 | Parent khác không đọc được; buổi IN_PROGRESS không lộ bản ghi dở. |

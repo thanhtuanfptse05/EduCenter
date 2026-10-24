@@ -129,10 +129,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
             validateTeacherPermission(session, actorUserId, isAdmin);
 
-            // BR16, BR18, FR-005: Khóa sửa khi COMPLETED, chỉ ADMIN được sửa có kiểm soát
-            if ("COMPLETED".equalsIgnoreCase(session.getStatus()) && !isAdmin) {
-                throw new ValidationException("Buổi học đã hoàn tất điểm danh. Giáo viên không thể tự ý sửa đổi, vui lòng liên hệ Admin!");
-            }
+            // FR-005 (v1.1): giáo viên thực dạy (đã qua validateTeacherPermission) được sửa buổi COMPLETED
             if ("CANCELLED".equalsIgnoreCase(session.getStatus())) {
                 throw new ValidationException("Buổi học đã bị hủy, không thể điểm danh!");
             }

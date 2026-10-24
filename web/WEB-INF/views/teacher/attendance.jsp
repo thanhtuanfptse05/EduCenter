@@ -201,7 +201,7 @@
                 <!-- 4. Bulk Actions & Quick Filter Toolbar -->
                 <div class="ops-toolbar no-print">
                     <div class="ops-toolbar-actions">
-                        <c:if test="${sessionData.sessionStatus != 'COMPLETED' or sessionScope.currentUser.admin}">
+                        <c:if test="${true}">
                             <button type="button" class="btn btn-secondary btn-sm" onclick="setAllAttendance('PRESENT')" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
                                 <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--success);"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                 <span>Đánh dấu tất cả CÓ MẶT</span>
@@ -268,40 +268,40 @@
                                                     <td style="text-align: center;">
                                                         <div class="att-segment-group" role="group">
                                                             <!-- Có mặt -->
-                                                            <label class="att-segment-btn btn-present ${item.attendanceStatus == 'PRESENT' ? 'is-active' : ''} ${sessionData.sessionStatus == 'COMPLETED' and not sessionScope.currentUser.admin ? 'is-disabled' : ''}">
+                                                            <label class="att-segment-btn btn-present ${item.attendanceStatus == 'PRESENT' ? 'is-active' : ''} ">
                                                                 <input type="radio" name="status_${item.studentId}" value="PRESENT"
                                                                        ${item.attendanceStatus == 'PRESENT' ? 'checked' : ''}
-                                                                       ${sessionData.sessionStatus == 'COMPLETED' and not sessionScope.currentUser.admin ? 'disabled' : ''}
+                                                                       
                                                                        onchange="onAttendanceStatusChange(this, ${item.studentId})">
                                                                 <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                                                 <span>Có mặt</span>
                                                             </label>
 
                                                             <!-- Đi muộn -->
-                                                            <label class="att-segment-btn btn-late ${item.attendanceStatus == 'LATE' ? 'is-active' : ''} ${sessionData.sessionStatus == 'COMPLETED' and not sessionScope.currentUser.admin ? 'is-disabled' : ''}">
+                                                            <label class="att-segment-btn btn-late ${item.attendanceStatus == 'LATE' ? 'is-active' : ''} ">
                                                                 <input type="radio" name="status_${item.studentId}" value="LATE"
                                                                        ${item.attendanceStatus == 'LATE' ? 'checked' : ''}
-                                                                       ${sessionData.sessionStatus == 'COMPLETED' and not sessionScope.currentUser.admin ? 'disabled' : ''}
+                                                                       
                                                                        onchange="onAttendanceStatusChange(this, ${item.studentId})">
                                                                 <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                                                                 <span>Đi muộn</span>
                                                             </label>
 
                                                             <!-- Có phép -->
-                                                            <label class="att-segment-btn btn-excused ${item.attendanceStatus == 'ABSENT_EXCUSED' ? 'is-active' : ''} ${sessionData.sessionStatus == 'COMPLETED' and not sessionScope.currentUser.admin ? 'is-disabled' : ''}">
+                                                            <label class="att-segment-btn btn-excused ${item.attendanceStatus == 'ABSENT_EXCUSED' ? 'is-active' : ''} ">
                                                                 <input type="radio" name="status_${item.studentId}" value="ABSENT_EXCUSED"
                                                                        ${item.attendanceStatus == 'ABSENT_EXCUSED' ? 'checked' : ''}
-                                                                       ${sessionData.sessionStatus == 'COMPLETED' and not sessionScope.currentUser.admin ? 'disabled' : ''}
+                                                                       
                                                                        onchange="onAttendanceStatusChange(this, ${item.studentId})">
                                                                 <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
                                                                 <span>Có phép</span>
                                                             </label>
 
                                                             <!-- Không phép -->
-                                                            <label class="att-segment-btn btn-unexcused ${item.attendanceStatus == 'ABSENT_UNEXCUSED' ? 'is-active' : ''} ${sessionData.sessionStatus == 'COMPLETED' and not sessionScope.currentUser.admin ? 'is-disabled' : ''}">
+                                                            <label class="att-segment-btn btn-unexcused ${item.attendanceStatus == 'ABSENT_UNEXCUSED' ? 'is-active' : ''} ">
                                                                 <input type="radio" name="status_${item.studentId}" value="ABSENT_UNEXCUSED"
                                                                        ${item.attendanceStatus == 'ABSENT_UNEXCUSED' ? 'checked' : ''}
-                                                                       ${sessionData.sessionStatus == 'COMPLETED' and not sessionScope.currentUser.admin ? 'disabled' : ''}
+                                                                       
                                                                        onchange="onAttendanceStatusChange(this, ${item.studentId})">
                                                                 <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                                                 <span>Không phép</span>
@@ -312,7 +312,7 @@
                                                         <input type="text" name="remarks_${item.studentId}" class="form-control form-control-sm"
                                                                placeholder="Lý do đi muộn / nghỉ / thái độ học tập..."
                                                                value="<c:out value='${item.remarks}' />"
-                                                               ${sessionData.sessionStatus == 'COMPLETED' and not sessionScope.currentUser.admin ? 'disabled' : ''}>
+                                                               >
                                                     </td>
                                                 </tr>
                                             </c:forEach>
@@ -351,7 +351,7 @@
                             <span class="legend-dot" style="background: var(--primary);"></span>
                             <span>Giảng viên: <strong><c:out value="${sessionData.teacherName}" /></strong></span>
                             <c:if test="${sessionData.sessionStatus == 'COMPLETED'}">
-                                <span style="color: var(--danger); font-size: 12px; margin-left: 8px;">(Ca học đã chốt khóa — chỉ Admin có quyền sửa)</span>
+                                <span style="color: var(--text-muted); font-size: 12px; margin-left: 8px;">(Ca học đã chốt — giáo viên vẫn có thể chỉnh sửa và lưu lại)</span>
                             </c:if>
                         </div>
 
@@ -360,15 +360,24 @@
                                 Quay lại
                             </a>
 
-                            <c:if test="${sessionData.sessionStatus != 'COMPLETED' or sessionScope.currentUser.admin}">
-                                <button type="submit" class="btn btn-secondary btn-sm" onclick="document.getElementById('completeAfterSave').value='false';" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
-                                    <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                                    <span>Lưu tạm điểm danh</span>
-                                </button>
-                                <button type="button" class="btn btn-primary btn-sm" onclick="confirmCompleteAttendance()" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
-                                    <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                    <span>Chốt hoàn tất ca học &amp; Điểm danh</span>
-                                </button>
+                            <c:if test="${true}">
+                                <c:choose>
+                                    <c:when test="${sessionData.sessionStatus == 'COMPLETED'}">
+                                        <button type="submit" class="btn btn-primary btn-sm" onclick="document.getElementById('completeAfterSave').value='false';" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+                                            <span>Lưu chỉnh sửa điểm danh</span>
+                                        </button>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <button type="submit" class="btn btn-secondary btn-sm" onclick="document.getElementById('completeAfterSave').value='false';" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+                                            <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                            <span>Lưu tạm điểm danh</span>
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="confirmCompleteAttendance()" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+                                            <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            <span>Chốt hoàn tất ca học &amp; Điểm danh</span>
+                                        </button>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:if>
                         </div>
                     </div>
@@ -488,7 +497,7 @@
             alert('Còn ' + unmarked + ' học sinh chưa được ghi nhận điểm danh.\nVui lòng điểm danh đầy đủ trước khi chốt buổi học!');
             return;
         }
-        if (!confirm('XÁC NHẬN CHỐT HOÀN TẤT ĐIỂM DANH:\n\nSau khi chốt hoàn tất, ca học sẽ chuyển sang trạng thái COMPLETED và đồng bộ tức thì sang Cổng phụ huynh. Giáo viên không thể tự ý sửa đổi lại.\n\nBạn có chắc chắn muốn chốt ca học này?')) {
+        if (!confirm('XÁC NHẬN CHỐT HOÀN TẤT ĐIỂM DANH:\n\nSau khi chốt hoàn tất, ca học sẽ chuyển sang trạng thái COMPLETED và đồng bộ tức thì sang Cổng phụ huynh. Giáo viên vẫn có thể chỉnh sửa lại sau khi chốt.\n\nBạn có chắc chắn muốn chốt ca học này?')) {
             return;
         }
         document.getElementById('completeAfterSave').value = 'true';

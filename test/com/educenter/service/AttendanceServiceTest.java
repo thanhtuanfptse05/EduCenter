@@ -195,16 +195,19 @@ public class AttendanceServiceTest {
     }
 
     @Test
-    @DisplayName("FR-005: Buổi học COMPLETED bị khóa với giáo viên thường, Admin được hiệu chỉnh")
-    void testCompletedSession_LockedForTeacher() {
+    @DisplayName("FR-005: Buổi học COMPLETED vẫn cho giáo viên thực dạy sửa, giáo viên khác bị chặn")
+    void testCompletedSession_EditableByAssignedTeacher() {
         mockRepo.session.setStatus("COMPLETED");
 
         List<AttendanceRosterItemDTO> roster = new ArrayList<>();
         roster.add(new AttendanceRosterItemDTO(1L, "HV0001", "Học sinh 1", "0912345678", "PRESENT", ""));
 
-        // Giáo viên thường sửa -> bị chặn
+        // Giáo viên thực dạy sửa -> được phép
+        assertDoesNotThrow(() -> attendanceService.saveAttendance(10L, roster, 50L, false));
+
+        // Giáo viên không phụ trách -> bị chặn
         assertThrows(ValidationException.class, () -> {
-            attendanceService.saveAttendance(10L, roster, 50L, false);
+            attendanceService.saveAttendance(10L, roster, 99L, false);
         });
     }
 

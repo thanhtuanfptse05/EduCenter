@@ -15,8 +15,8 @@
 2. **BR08 (Trạng thái điểm danh hợp lệ):**
    - Chỉ chấp nhận 4 trạng thái: `PRESENT` (Có mặt), `LATE` (Đi muộn), `ABSENT_EXCUSED` (Nghỉ có phép), `ABSENT_UNEXCUSED` (Nghỉ không phép).
 3. **WF-02 & FR-004, FR-005 (Vòng đời buổi học & Khóa sửa):**
-   - Khi hoàn tất điểm danh (`COMPLETED`), buổi học chuyển trạng thái sang `COMPLETED`, khóa sửa đổi đối với Giáo viên.
-   - Chỉ ADMIN mới có quyền hiệu chỉnh lại điểm danh của buổi `COMPLETED` kèm lý do giải trình.
+   - Khi hoàn tất điểm danh (`COMPLETED`), buổi học chuyển trạng thái sang `COMPLETED`, vẫn cho phép giáo viên thực dạy chỉnh sửa (có audit).
+   - ADMIN và giáo viên thực dạy được hiệu chỉnh điểm danh của buổi `COMPLETED`; giáo viên khác bị chặn bởi `validateTeacherPermission`.
 4. **TCH-04 (Nhật ký giảng dạy & Bài tập):**
    - Mỗi buổi học có tối đa 1 bản ghi `TeachingJournal` lưu nội dung bài học, bài tập về nhà và nhận xét chung.
 
