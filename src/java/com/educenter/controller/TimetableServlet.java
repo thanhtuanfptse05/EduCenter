@@ -81,6 +81,7 @@ public class TimetableServlet extends HttpServlet {
         req.setAttribute("currentMonday", monday);
         req.setAttribute("prevMonday", monday.minusWeeks(1));
         req.setAttribute("nextMonday", monday.plusWeeks(1));
+        req.setAttribute("todayDate", LocalDate.now());
         req.setAttribute("weekRangeLabel", weekRangeLabel);
         req.setAttribute("isAdmin", isAdmin);
         req.setAttribute("pageTitle", "Thời khóa biểu giảng dạy & học tập");

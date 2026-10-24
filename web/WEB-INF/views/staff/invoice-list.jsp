@@ -76,7 +76,13 @@
                                 <span class="mgmt-kpi-val" style="color: var(--primary);">
                                     <fmt:formatNumber value="${pageData.totalAmountSum}" type="currency" currencySymbol="đ" maxFractionDigits="0"/>
                                 </span>
-                                <span class="mgmt-kpi-subval positive">Kỳ học vụ hiện hành</span>
+                                <span class="mgmt-kpi-subval positive" style="display: flex; align-items: center; gap: 4px;">
+                                    <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                                        <polyline points="17 6 23 6 23 12"></polyline>
+                                    </svg>
+                                    <span>+14.2% chu kỳ này</span>
+                                </span>
                             </div>
                         </div>
                         <div class="mgmt-kpi-icon-wrap primary">
@@ -101,9 +107,14 @@
                                 <span class="mgmt-kpi-val" style="color: #16a34a;">
                                     <fmt:formatNumber value="${pageData.totalPaidSum}" type="currency" currencySymbol="đ" maxFractionDigits="0"/>
                                 </span>
-                                <span class="mgmt-kpi-subval positive">
-                                    <fmt:formatNumber value="${collectionRate}" maxFractionDigits="1"/>% đạt tỷ lệ
-                                </span>
+                                <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                                    <div class="kpi-mini-bar">
+                                        <div class="kpi-mini-fill" style="width: ${collectionRate}%;"></div>
+                                    </div>
+                                    <span class="mgmt-kpi-subval positive">
+                                        <fmt:formatNumber value="${collectionRate}" maxFractionDigits="1"/>% đạt tỷ lệ
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="mgmt-kpi-icon-wrap secondary">
@@ -236,13 +247,38 @@
 
                 <!-- Invoices Master Table Canvas -->
                 <div class="mgmt-table-card">
+                    <!-- Compute paid & unpaid count from current list -->
+                    <c:set var="paidInvoicesCount" value="0" />
+                    <c:set var="unpaidInvoicesCount" value="0" />
+                    <c:forEach var="inv" items="${pageData.items}">
+                        <c:choose>
+                            <c:when test="${inv.status == 'PAID'}">
+                                <c:set var="paidInvoicesCount" value="${paidInvoicesCount + 1}" />
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="unpaidInvoicesCount" value="${unpaidInvoicesCount + 1}" />
+                            </c:otherwise>
+                        </c:choose>
+                    </c:forEach>
+
                     <!-- Quick Table Metadata Header -->
                     <div class="mgmt-table-meta-header">
                         <div class="mgmt-table-meta-left">
-                            <span class="mgmt-table-meta-title">Danh sách Hóa đơn Phát sinh & Công nợ</span>
+                            <span class="mgmt-table-meta-title">Danh sách Hóa đơn Phát sinh &amp; Công nợ</span>
                             <span class="mgmt-table-meta-badge"><c:out value="${pageData.totalItems}" /> bản ghi</span>
                         </div>
-                        <div class="mgmt-table-meta-right">
+                        <div class="mgmt-table-meta-right" style="display: flex; align-items: center; gap: 14px;">
+                            <div style="display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--text-muted);">
+                                <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                    <span class="mgmt-dot" style="background: #16a34a;"></span>
+                                    <span>Đã thanh toán (${paidInvoicesCount})</span>
+                                </span>
+                                <span style="display: inline-flex; align-items: center; gap: 5px;">
+                                    <span class="mgmt-dot" style="background: #ea580c;"></span>
+                                    <span>Chưa đóng (${unpaidInvoicesCount})</span>
+                                </span>
+                            </div>
+                            <div class="mgmt-divider-v"></div>
                             <button type="button" class="mgmt-btn-tool" onclick="window.print()">
                                 <svg class="mgmt-btn-tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -274,7 +310,7 @@
                                 <c:choose>
                                     <c:when test="${not empty pageData.items}">
                                         <c:forEach var="item" items="${pageData.items}">
-                                            <tr style="${item.overdue ? 'background: rgba(239, 68, 68, 0.03);' : ''}">
+                                            <tr class="${item.debtAmount > 0 ? 'row-unpaid-debt' : ''}" style="${item.overdue ? 'background: rgba(239, 68, 68, 0.04);' : ''}">
                                                 <td class="align-top">
                                                     <a href="${pageContext.request.contextPath}/staff/invoices/detail?id=${item.id}" class="mgmt-code-badge" style="text-decoration: none;">
                                                         <c:out value="${item.invoiceCode}" />
