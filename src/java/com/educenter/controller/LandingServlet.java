@@ -52,8 +52,16 @@ public class LandingServlet extends HttpServlet {
             LandingDataDTO portalData = landingService.getLandingPortalData();
             req.setAttribute("portalData", portalData);
             if (session != null) {
-                req.setAttribute("leadDraft", session.getAttribute("LEAD_FORM_DRAFT"));
-                session.removeAttribute("LEAD_FORM_DRAFT");
+                Object draft = session.getAttribute("LEAD_FORM_DRAFT");
+                if (draft == null && currentUser != null && (currentUser.isStudent() || currentUser.isParent())) {
+                    LeadFormDTO autoFill = new LeadFormDTO();
+                    autoFill.setFullName(currentUser.getFullName());
+                    autoFill.setPhone(currentUser.getPhone());
+                    req.setAttribute("leadDraft", autoFill);
+                } else {
+                    req.setAttribute("leadDraft", draft);
+                    session.removeAttribute("LEAD_FORM_DRAFT");
+                }
             }
             req.getRequestDispatcher("/WEB-INF/views/common/landing.jsp").forward(req, resp);
             return;
@@ -90,6 +98,14 @@ public class LandingServlet extends HttpServlet {
 
     private void handleConsultationSubmission(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession(true);
+        UserPrincipalDTO currentUser = (UserPrincipalDTO) session.getAttribute("currentUser");
+
+        if (currentUser != null && !currentUser.isStudent() && !currentUser.isParent()) {
+            session.setAttribute("alertType", "error");
+            session.setAttribute("alertMessage", "Tính năng đăng ký tư vấn chỉ dành cho tài khoản Học sinh hoặc Phụ huynh.");
+            resp.sendRedirect(req.getContextPath() + "/#dang-ky-tu-van");
+            return;
+        }
 
         LeadFormDTO form = new LeadFormDTO();
         form.setFullName(req.getParameter("fullName"));

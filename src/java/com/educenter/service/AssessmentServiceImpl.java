@@ -321,6 +321,9 @@ public class AssessmentServiceImpl implements AssessmentService {
 
     @Override
     public void reopenAssessment(Long assessmentId, Long actorUserId, boolean isAdmin, String reason) {
+        if (!isAdmin) {
+            throw new ValidationException("Chỉ quản trị viên (Admin) mới có quyền mở lại bài kiểm tra đã công bố.");
+        }
         if (reason == null || reason.trim().length() < 3) {
             throw new ValidationException("Vui lòng nhập lý do mở lại bài kiểm tra (tối thiểu 3 ký tự).");
         }

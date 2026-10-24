@@ -58,6 +58,16 @@ public class RegistrationCartServlet extends HttpServlet {
         req.setAttribute("cartCount", cart.getTotalCourses());
 
         if ("/registration/confirm".equals(path)) {
+            if (currentUser == null) {
+                FlashMessageUtil.setWarning(req, "Vui lòng đăng nhập bằng tài khoản Học sinh hoặc Phụ huynh để xác nhận đăng ký khóa học.");
+                resp.sendRedirect(req.getContextPath() + "/login?redirect_url=" + java.net.URLEncoder.encode(req.getContextPath() + "/registration/confirm", java.nio.charset.StandardCharsets.UTF_8));
+                return;
+            }
+            if (!currentUser.isStudent() && !currentUser.isParent()) {
+                FlashMessageUtil.setError(req, "Tính năng chốt đăng ký và thanh toán chỉ dành cho tài khoản Phụ huynh hoặc Học sinh.");
+                resp.sendRedirect(req.getContextPath() + "/registration-cart");
+                return;
+            }
             if (!systemSettingService.isAdmissionsOpen()) {
                 FlashMessageUtil.setWarning(req, "Hiện tại trung tâm đang tạm dừng tiếp nhận đơn đăng ký mới. Quý khách vui lòng liên hệ hotline để được hỗ trợ.");
                 resp.sendRedirect(req.getContextPath() + "/registration-cart");
@@ -107,6 +117,18 @@ public class RegistrationCartServlet extends HttpServlet {
 
         UserPrincipalDTO currentUser = (UserPrincipalDTO) session.getAttribute("currentUser");
         Long userId = (currentUser != null) ? currentUser.getUserId() : null;
+
+        if (currentUser != null && !currentUser.isStudent() && !currentUser.isParent()) {
+            FlashMessageUtil.setError(req, "Tính năng giỏ hàng và đăng ký khóa học chỉ dành cho tài khoản Phụ huynh hoặc Học sinh.");
+            resp.sendRedirect(req.getContextPath() + ("/registration-cart/add".equals(path) ? "/courses" : "/registration-cart"));
+            return;
+        }
+
+        if ("/registration/confirm".equals(path) && currentUser == null) {
+            FlashMessageUtil.setWarning(req, "Vui lòng đăng nhập tài khoản Học sinh hoặc Phụ huynh để hoàn tất bước đăng ký và thanh toán.");
+            resp.sendRedirect(req.getContextPath() + "/login?redirect_url=" + java.net.URLEncoder.encode(req.getContextPath() + "/registration/confirm", java.nio.charset.StandardCharsets.UTF_8));
+            return;
+        }
 
         try { switch (path) {
             case "/registration-cart/add" -> handleAddToCart(req, resp, session, userId);

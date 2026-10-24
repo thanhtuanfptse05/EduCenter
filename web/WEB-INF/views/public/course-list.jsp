@@ -167,14 +167,24 @@
                       Chi tiết
                     </a>
                     <c:if test="${course.openForRegistration}">
-                      <form action="${pageContext.request.contextPath}/registration-cart/add" method="post">
-                        <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}"/>
-                        <input type="hidden" name="courseId" value="${course.id}"/>
-                        <button class="btn btn-primary btn-sm" type="submit">
-                          <svg class="icon-sm" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                          Thêm vào danh sách
-                        </button>
-                      </form>
+                      <c:choose>
+                        <c:when test="${not empty sessionScope.currentUser and not sessionScope.currentUser.student and not sessionScope.currentUser.parent}">
+                          <button class="btn btn-secondary btn-sm" type="button" disabled title="Tính năng thêm vào danh sách chỉ dành cho Học sinh hoặc Phụ huynh" style="opacity: 0.6; cursor: not-allowed;">
+                            <svg class="icon-sm" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                            Dành cho HS/PH
+                          </button>
+                        </c:when>
+                        <c:otherwise>
+                          <form action="${pageContext.request.contextPath}/registration-cart/add" method="post">
+                            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}"/>
+                            <input type="hidden" name="courseId" value="${course.id}"/>
+                            <button class="btn btn-primary btn-sm" type="submit">
+                              <svg class="icon-sm" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                              Thêm vào danh sách
+                            </button>
+                          </form>
+                        </c:otherwise>
+                      </c:choose>
                     </c:if>
                   </div>
                 </div>

@@ -173,10 +173,12 @@ public class AuthServlet extends HttpServlet {
             if (guestCart != null) newSession.setAttribute(com.educenter.service.CartServiceImpl.SESSION_CART_KEY, guestCart);
             CsrfUtil.getOrCreateToken(newSession);
 
-            try {
-                new com.educenter.service.CartServiceImpl().mergeGuestCart(newSession, principal.getUserId());
-            } catch (RuntimeException ex) {
-                FlashMessageUtil.setWarning(req, "Đã giữ lại lựa chọn từ giỏ khách. Vui lòng kiểm tra danh sách đăng ký trước khi xác nhận.");
+            if (principal.isStudent() || principal.isParent()) {
+                try {
+                    new com.educenter.service.CartServiceImpl().mergeGuestCart(newSession, principal.getUserId());
+                } catch (RuntimeException ex) {
+                    FlashMessageUtil.setWarning(req, "Đã giữ lại lựa chọn từ giỏ khách. Vui lòng kiểm tra danh sách đăng ký trước khi xác nhận.");
+                }
             }
 
             FlashMessageUtil.setSuccess(req, "Đăng nhập thành công! Chào mừng " + principal.getFullName() + ".");

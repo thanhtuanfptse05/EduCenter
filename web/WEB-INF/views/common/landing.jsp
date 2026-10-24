@@ -1392,6 +1392,17 @@
                                         <c:remove var="alertType" scope="session" />
                                     </c:if>
 
+                                    <c:if test="${not empty sessionScope.currentUser and not sessionScope.currentUser.student and not sessionScope.currentUser.parent}">
+                                        <div class="portal-alert-box alert-warning" style="margin-bottom: 20px;">
+                                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                            </svg>
+                                            <span>Bạn đang đăng nhập bằng tài khoản vai trò <strong><c:out value="${sessionScope.currentUser.primaryRole}"/></strong>. Chức năng đăng ký tư vấn chỉ dành cho Học sinh hoặc Phụ huynh.</span>
+                                        </div>
+                                    </c:if>
+
                                     <form action="${pageContext.request.contextPath}/dang-ky-tu-van" method="POST" id="lead-consultation-form">
                                         <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
 
@@ -1437,7 +1448,7 @@
                                             <textarea id="lead-notes" name="notes" class="portal-textarea" maxlength="3000" rows="2" placeholder="Ví dụ: Đang bị hổng kiến thức Hình không gian Lớp 11, cần mục tiêu 8.0 môn Toán thi THPT Quốc gia..."><c:out value="${leadDraft.notes}"/></textarea>
                                         </div>
 
-                                        <button type="submit" class="portal-submit-btn" id="lead-submit-btn">
+                                        <button type="submit" class="portal-submit-btn" id="lead-submit-btn" ${not empty sessionScope.currentUser and not sessionScope.currentUser.student and not sessionScope.currentUser.parent ? 'disabled title="Tính năng chỉ dành cho Học sinh hoặc Phụ huynh" style="opacity: 0.6; cursor: not-allowed;"' : ''}>
                                             <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                                 <line x1="22" y1="2" x2="11" y2="13"></line>
                                                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
