@@ -6,8 +6,8 @@
 <html lang="vi">
 <head>
     <%@ include file="/WEB-INF/views/common/head.jspf" %>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261024_06">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/staff-management.css?v=20261024_06">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css?v=20261024_05">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/staff-management.css?v=20261024_05">
     <title>Quản lý Khách hàng & CRM Tuyển sinh | EduCenter ERP</title>
 </head>
 <body class="admin-body">
@@ -55,11 +55,11 @@
                     <div class="mgmt-header-actions">
                         <button type="button" class="mgmt-btn mgmt-btn-outline" onclick="window.print()" title="In danh sách hoặc lưu PDF">
                             <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                                <path d="M6 9V2h12v7"></path>
+                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                                <rect width="12" height="8" x="6" y="14"></rect>
                             </svg>
-                            <span>Xuất dữ liệu Excel/CSV</span>
+                            <span>Xuất dữ liệu</span>
                         </button>
                         <button type="button" class="mgmt-btn mgmt-btn-primary" onclick="openCreateModal()">
                             <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -71,25 +71,12 @@
                     </div>
                 </div>
 
-                <!-- 2. Operational SLA Micro-Alert -->
-                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm); flex-wrap: wrap; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--primary-subtle); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                            <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
-                        </div>
-                        <span style="font-size: 13px; color: var(--text);">
-                            <strong style="color: var(--primary);">Chỉ số SLA Tuyển sinh:</strong> Lead mới tiếp nhận cần được chuyên viên liên hệ trong vòng 15–30 phút để bảo đảm xác suất chuyển đổi ghi danh tối đa.
-                        </span>
-                    </div>
-                    <span style="font-size: 11.5px; color: var(--text-muted); font-weight: 600;">Thời gian phản hồi TB: 18 phút</span>
-                </div>
-
-                <!-- 3. 5 Stat KPI Cards Grid (Matches Reference Design) -->
+                <!-- 2. 5 Stat KPI Cards Grid (Matches Reference Design) -->
                 <div class="crm-kpi-grid-5">
                     <!-- Card 1: Tổng khách hàng -->
                     <div class="crm-kpi-card">
                         <div class="crm-kpi-header">
-                            <span class="crm-kpi-label">TỔNG KHÁCH HÀNG</span>
+                            <span class="crm-kpi-label">Tổng khách hàng</span>
                             <div class="crm-kpi-icon-wrap primary">
                                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                             </div>
@@ -106,7 +93,7 @@
                     <!-- Card 2: Mới tiếp nhận -->
                     <div class="crm-kpi-card">
                         <div class="crm-kpi-header">
-                            <span class="crm-kpi-label">MỚI TIẾP NHẬN</span>
+                            <span class="crm-kpi-label">Mới tiếp nhận</span>
                             <div class="crm-kpi-icon-wrap info">
                                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
                             </div>
@@ -124,7 +111,7 @@
                     <!-- Card 3: Đang tư vấn / Test -->
                     <div class="crm-kpi-card">
                         <div class="crm-kpi-header">
-                            <span class="crm-kpi-label">ĐANG TƯ VẤN / TEST</span>
+                            <span class="crm-kpi-label">Đang tư vấn / Test</span>
                             <div class="crm-kpi-icon-wrap warning">
                                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                             </div>
@@ -144,7 +131,7 @@
                     <!-- Card 4: Đã ghi danh -->
                     <div class="crm-kpi-card">
                         <div class="crm-kpi-header">
-                            <span class="crm-kpi-label">ĐÃ GHI DANH</span>
+                            <span class="crm-kpi-label">Đã ghi danh</span>
                             <div class="crm-kpi-icon-wrap success">
                                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                             </div>
@@ -163,7 +150,7 @@
                     <!-- Card 5: Hủy / Thất bại -->
                     <div class="crm-kpi-card">
                         <div class="crm-kpi-header">
-                            <span class="crm-kpi-label">HỦY / THẤT BẠI</span>
+                            <span class="crm-kpi-label">Hủy / Thất bại</span>
                             <div class="crm-kpi-icon-wrap danger">
                                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
                             </div>
@@ -180,7 +167,7 @@
                     </div>
                 </div>
 
-                <!-- 4. Advanced Multi-condition Filter Bar Card -->
+                <!-- 3. Advanced Filter Bar Card -->
                 <div class="mgmt-filter-card">
                     <form action="${pageContext.request.contextPath}/staff/leads" method="GET" class="mgmt-filter-grid">
                         <!-- Search Input -->
@@ -218,10 +205,10 @@
                             <div class="mgmt-select-wrap">
                                 <select name="source" id="filterSource" class="mgmt-select">
                                     <option value="">-- Tất cả nguồn --</option>
-                                    <option value="WEBSITE" ${filter.source == 'WEBSITE' ? 'selected' : ''}>Website</option>
-                                    <option value="HOTLINE" ${filter.source == 'HOTLINE' ? 'selected' : ''}>Hotline</option>
+                                    <option value="WEBSITE" ${filter.source == 'WEBSITE' ? 'selected' : ''}>Website Form</option>
+                                    <option value="HOTLINE" ${filter.source == 'HOTLINE' ? 'selected' : ''}>Tổng đài Hotline</option>
                                     <option value="DIRECT" ${filter.source == 'DIRECT' ? 'selected' : ''}>Trực tiếp (Walk-in)</option>
-                                    <option value="FACEBOOK" ${filter.source == 'FACEBOOK' ? 'selected' : ''}>Facebook</option>
+                                    <option value="FACEBOOK" ${filter.source == 'FACEBOOK' ? 'selected' : ''}>Facebook / Fanpage</option>
                                     <option value="REFERRAL" ${filter.source == 'REFERRAL' ? 'selected' : ''}>Giới thiệu (Referral)</option>
                                 </select>
                                 <svg class="mgmt-select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
@@ -261,12 +248,12 @@
                     </form>
                 </div>
 
-                <!-- 5. Leads Data Table Card -->
+                <!-- 4. Leads Data Table Card -->
                 <div class="mgmt-table-card">
                     <!-- Table Header Info Bar -->
                     <div class="mgmt-table-meta-header">
                         <div class="mgmt-table-meta-left">
-                            <span class="mgmt-table-meta-title">Danh sách Khách hàng tiềm năng</span>
+                            <span class="mgmt-table-meta-title">Danh sách Khách hàng</span>
                             <span class="mgmt-table-meta-badge">
                                 <fmt:formatNumber value="${data.totalCount != null ? data.totalCount : 0}" pattern="#,###"/> hồ sơ khả dụng
                             </span>
@@ -278,20 +265,20 @@
                         </div>
                     </div>
 
-                    <!-- Responsive Table View -->
+                    <!-- Responsive Table -->
                     <div class="mgmt-table-responsive">
                         <table class="mgmt-table">
                             <thead>
                                 <tr>
-                                    <th style="width: 110px;">MÃ LEAD</th>
-                                    <th style="min-width: 220px;">KHÁCH HÀNG &amp; LIÊN HỆ</th>
-                                    <th style="min-width: 140px;">SỐ ĐIỆN THOẠI</th>
-                                    <th style="width: 100px; text-align: center;">KHỐI LỚP</th>
-                                    <th style="width: 120px;">NGUỒN</th>
-                                    <th style="min-width: 150px;">TRẠNG THÁI</th>
-                                    <th style="min-width: 190px;">PHỤ TRÁCH</th>
-                                    <th style="width: 110px;">TIẾP NHẬN</th>
-                                    <th style="width: 110px; text-align: right;">HÀNH ĐỘNG</th>
+                                    <th style="width: 100px;">Mã Lead</th>
+                                    <th style="min-width: 220px;">Khách hàng</th>
+                                    <th style="min-width: 150px;">Số điện thoại</th>
+                                    <th style="width: 100px; text-align: center;">Khối lớp</th>
+                                    <th style="width: 120px;">Nguồn</th>
+                                    <th style="min-width: 150px;">Trạng thái</th>
+                                    <th style="min-width: 190px;">Phụ trách</th>
+                                    <th style="width: 120px;">Tiếp nhận</th>
+                                    <th style="width: 110px; text-align: right;">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -356,10 +343,11 @@
                                                         </c:when>
                                                         <c:otherwise>
                                                             <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                                                <span style="color: var(--warning); font-size: 11.5px; font-weight: 600;">Chưa phân công</span>
                                                                 <form action="${pageContext.request.contextPath}/staff/leads/claim" method="POST" style="margin: 0; display: inline;">
                                                                     <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                                                                     <input type="hidden" name="leadId" value="${item.id}">
-                                                                    <button type="submit" class="mgmt-btn mgmt-btn-primary" style="padding: 2px 8px; height: 26px; font-size: 11px; gap: 3px;" title="Nhận lead này vào danh sách chăm sóc của tôi">
+                                                                    <button type="submit" class="mgmt-btn mgmt-btn-primary" style="padding: 2px 8px; height: 24px; font-size: 11px; gap: 3px;" title="Nhận lead này vào danh sách chăm sóc của tôi">
                                                                         <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                                                         <span>Nhận lead</span>
                                                                     </button>
@@ -418,7 +406,7 @@
                     <c:if test="${data.totalPages > 1}">
                         <div class="mgmt-pagination">
                             <span class="mgmt-pagination-info">
-                                Hiển thị trang <strong>${data.currentPage}</strong> trong tổng số <strong>${data.totalPages}</strong> trang (${data.totalCount} kết quả)
+                                Hiển thị trang <strong>${data.currentPage}</strong> trong tổng số <strong>${data.totalPages}</strong> trang
                             </span>
                             <div class="mgmt-pagination-pages">
                                 <c:forEach var="p" begin="1" end="${data.totalPages}">
@@ -430,104 +418,6 @@
                             </div>
                         </div>
                     </c:if>
-                </div>
-
-                <!-- 6. Operational Footer Context & Activity Bar -->
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 8px;">
-                    <!-- Quick Analytics Overview -->
-                    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <span style="font-size: 13.5px; font-weight: 700; color: var(--text);">Tỷ lệ chuyển đổi kênh</span>
-                            <svg style="width: 16px; height: 16px; color: var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <div>
-                                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
-                                    <span style="color: var(--text-muted);">Website Tuyển sinh</span>
-                                    <span style="font-family: monospace; font-weight: 700; color: var(--text);">52% (19 leads)</span>
-                                </div>
-                                <div style="width: 100%; height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden;">
-                                    <div style="width: 52%; height: 100%; background: var(--primary);"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
-                                    <span style="color: var(--text-muted);">Hotline Tổng Đài</span>
-                                    <span style="font-family: monospace; font-weight: 700; color: var(--text);">24% (9 leads)</span>
-                                </div>
-                                <div style="width: 100%; height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden;">
-                                    <div style="width: 24%; height: 100%; background: var(--warning);"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px;">
-                                    <span style="color: var(--text-muted);">Walk-in &amp; Giới thiệu</span>
-                                    <span style="font-family: monospace; font-weight: 700; color: var(--text);">24% (8 leads)</span>
-                                </div>
-                                <div style="width: 100%; height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden;">
-                                    <div style="width: 24%; height: 100%; background: var(--success);"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Active Advisor Workload -->
-                    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <span style="font-size: 13.5px; font-weight: 700; color: var(--text);">Định biên Phụ trách tư vấn</span>
-                            <span style="font-size: 11.5px; font-weight: 700; color: var(--success);">Ca trực hôm nay</span>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12.5px;">
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <div class="avatar-initials-sm blue">TH</div>
-                                    <span style="font-weight: 600; color: var(--text);">Trần Thu Hà</span>
-                                </div>
-                                <span style="font-family: monospace; color: var(--text-muted);">8 lead đang xử lý</span>
-                            </div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12.5px;">
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <div class="avatar-initials-sm emerald">ĐL</div>
-                                    <span style="font-weight: 600; color: var(--text);">Đỗ Linh Đan</span>
-                                </div>
-                                <span style="font-family: monospace; color: var(--text-muted);">4 lead đang xử lý</span>
-                            </div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12.5px;">
-                                <div style="display: flex; align-items: center; gap: 8px;">
-                                    <div class="avatar-initials-sm amber">VA</div>
-                                    <span style="font-weight: 600; color: var(--text);">Vũ Anh Tuấn</span>
-                                </div>
-                                <span style="font-family: monospace; color: var(--text-muted);">2 lead đang xử lý</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- System Audit Micro-feed -->
-                    <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <span style="font-size: 13.5px; font-weight: 700; color: var(--text);">Nhật ký Tiếp nhận Real-time</span>
-                            <span style="display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: var(--success);">
-                                <span class="live-pulse-dot"></span>
-                                Đang đồng bộ
-                            </span>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: var(--text-muted);">
-                            <div style="display: flex; align-items: flex-start; gap: 8px;">
-                                <svg style="width: 14px; height: 14px; color: var(--primary); margin-top: 2px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-                                <div>
-                                    <span style="font-weight: 600; color: var(--text);">#LEAD-${data.leads != null and data.leads.size() > 0 ? data.leads[0].id : '36'}</span> nhận từ Website Form THPT.
-                                    <div style="font-size: 11px; color: var(--text-muted);">Vừa cập nhật</div>
-                                </div>
-                            </div>
-                            <div style="display: flex; align-items: flex-start; gap: 8px;">
-                                <svg style="width: 14px; height: 14px; color: var(--success); margin-top: 2px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                                <div>
-                                    Chuyên viên tư vấn xác nhận liên hệ thành công.
-                                    <div style="font-size: 11px; color: var(--text-muted);">Hệ thống lưu vết</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </main>
