@@ -167,6 +167,28 @@ public class PortalServiceImpl implements PortalService {
         }
     }
 
+    @Override
+    public List<PortalScheduleItemDTO> getChildSchedule(Long guardianUserId, Long childStudentId, LocalDate fromDate, LocalDate toDate) {
+        if (guardianUserId == null || childStudentId == null) {
+            throw new ValidationException("Dữ liệu tra cứu thời khóa biểu học sinh không hợp lệ.");
+        }
+        EntityManager em = entityManagerSupplier.get();
+        try {
+            boolean authorized = portalRepository.isGuardianOfStudent(em, guardianUserId, childStudentId);
+            if (!authorized) {
+                LOGGER.warning("Cảnh báo bảo mật: Phụ huynh UserID " + guardianUserId + " cố tình truy cập TKB học sinh ID " + childStudentId + " không được phân quyền!");
+                throw new ValidationException("Bạn không có quyền truy cập thời khóa biểu của học sinh này hoặc quan hệ giám hộ chưa được xác minh.");
+            }
+
+            LocalDate start = fromDate != null ? fromDate : LocalDate.now().with(DayOfWeek.MONDAY);
+            LocalDate end = toDate != null ? toDate : start.plusDays(13); // Default 2 weeks
+
+            return portalRepository.findScheduleByStudentId(em, childStudentId, start, end);
+        } finally {
+            em.close();
+        }
+    }
+
     private StudentDashboardSummaryDTO buildStudentSummary(EntityManager em, Student student) {
         StudentDashboardSummaryDTO summary = new StudentDashboardSummaryDTO();
         summary.setStudentId(student.getId());

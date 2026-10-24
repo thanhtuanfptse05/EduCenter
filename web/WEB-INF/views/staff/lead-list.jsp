@@ -403,6 +403,7 @@
         </div>
 
         <form action="${pageContext.request.contextPath}/staff/leads/create" method="POST">
+            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
             <div style="margin-bottom: 14px;">
                 <label class="form-label" style="font-size: 0.875rem; font-weight: 600; display: block; margin-bottom: 6px;">Họ và tên khách hàng <span style="color: var(--danger);">*</span></label>
                 <input type="text" name="name" class="form-control" required placeholder="Ví dụ: Nguyễn Thị Mai">

@@ -51,6 +51,11 @@ public class TeacherAssessmentServlet extends HttpServlet {
             return;
         }
 
+        if (user.isAdmin() && !user.isTeacher() && !"/teacher/scores".equals(path)) {
+            resp.sendRedirect(req.getContextPath() + "/admin/academic-stats");
+            return;
+        }
+
         if ("/teacher/scores".equals(path)) {
             handleGetScores(req, resp, user);
             return;

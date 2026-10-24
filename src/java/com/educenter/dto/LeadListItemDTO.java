@@ -53,6 +53,9 @@ public class LeadListItemDTO implements Serializable {
     public String getAssignedToName() { return assignedToName; }
     public void setAssignedToName(String assignedToName) { this.assignedToName = assignedToName; }
 
+    public String getAssignedStaffName() { return assignedToName; }
+    public void setAssignedStaffName(String assignedStaffName) { this.assignedToName = assignedStaffName; }
+
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 

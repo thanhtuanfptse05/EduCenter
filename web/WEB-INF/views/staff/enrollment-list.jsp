@@ -360,6 +360,7 @@
                                                     <form action="${pageContext.request.contextPath}/staff/enrollments/resume" method="post" style="display: inline;"
                                                           data-student-name="<c:out value='${item.studentName}'/>"
                                                           onsubmit="return confirm('Xác nhận phục hồi học tập cho học viên ' + this.getAttribute('data-student-name') + '? (Sẽ kiểm tra sĩ số lớp)');">
+                                                        <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                                                         <input type="hidden" name="enrollmentId" value="${item.enrollmentId}">
                                                         <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--success);" title="Quay lại học">
                                                             <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
@@ -432,6 +433,7 @@
                 <button type="button" class="modal-close" onclick="closeModal('enrollModal')">&times;</button>
             </div>
             <form action="${pageContext.request.contextPath}/staff/enrollments/save" method="post">
+                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                 <div class="modal-body">
                     <div class="info-callout">
                         <strong>Quy tắc nghiệp vụ:</strong> Hệ thống sẽ tự động kiểm tra sĩ số lớp học (BR04), xung đột thời khóa biểu buổi học (BR07), và đồng thời khởi tạo hóa đơn học phí tương ứng (BR12) trong cùng một giao dịch.
@@ -498,6 +500,7 @@
                 <button type="button" class="modal-close" onclick="closeModal('transferModal')">&times;</button>
             </div>
             <form action="${pageContext.request.contextPath}/staff/enrollments/transfer" method="post">
+                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                 <input type="hidden" name="enrollmentId" id="transferEnrollmentId">
                 <div class="modal-body">
                     <div class="info-callout">
@@ -549,6 +552,7 @@
                 <button type="button" class="modal-close" onclick="closeModal('reserveModal')">&times;</button>
             </div>
             <form action="${pageContext.request.contextPath}/staff/enrollments/reserve" method="post">
+                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                 <input type="hidden" name="enrollmentId" id="reserveEnrollmentId">
                 <div class="modal-body">
                     <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 12px;">
@@ -577,6 +581,7 @@
                 <button type="button" class="modal-close" onclick="closeModal('dropModal')">&times;</button>
             </div>
             <form action="${pageContext.request.contextPath}/staff/enrollments/status" method="post">
+                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                 <input type="hidden" name="enrollmentId" id="dropEnrollmentId">
                 <input type="hidden" name="newStatus" value="DROPPED">
                 <div class="modal-body">

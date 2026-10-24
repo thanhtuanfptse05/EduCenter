@@ -97,6 +97,7 @@
             <!-- Attendance Form -->
             <form action="${pageContext.request.contextPath}/teacher/attendance/save" method="post" id="attendanceForm">
                 <input type="hidden" name="sessionId" value="${sessionData.sessionId}">
+                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
 
                 <div class="admin-card">
                     <div style="padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
@@ -220,6 +221,7 @@
             <!-- Form ẩn chốt buổi học -->
             <form id="completeForm" action="${pageContext.request.contextPath}/teacher/attendance/complete" method="post" style="display: none;">
                 <input type="hidden" name="sessionId" value="${sessionData.sessionId}">
+                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
             </form>
         </main>
     </div>

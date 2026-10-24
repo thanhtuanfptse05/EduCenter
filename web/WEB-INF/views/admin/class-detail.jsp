@@ -250,7 +250,7 @@
                         </a>
                         <!-- Form chuyển trạng thái nhanh -->
                         <form method="post" action="${pageContext.request.contextPath}/admin/classes/status" style="margin-top: 4px;">
-                            <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">
+                            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                             <input type="hidden" name="classId" value="${classDetail.id}">
                             <div style="display: flex; gap: 4px;">
                                 <select name="status" class="form-control" style="font-size: 12px; padding: 6px 8px;">
@@ -361,7 +361,7 @@
                             <button type="button" class="btn-close" onclick="closeScheduleModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted);">&times;</button>
                         </div>
                         <form method="post" action="${pageContext.request.contextPath}/admin/classes/generate-schedule">
-                            <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">
+                            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                             <input type="hidden" name="classId" value="${classDetail.id}">
 
                             <div class="modal-body">

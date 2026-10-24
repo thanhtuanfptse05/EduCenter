@@ -250,7 +250,7 @@
                             <button type="button" class="btn-close" onclick="closeRoomModal()" style="background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted);">&times;</button>
                         </div>
                         <form id="roomForm" method="post" action="${pageContext.request.contextPath}/admin/rooms/create">
-                            <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">
+                            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                             <input type="hidden" id="roomId" name="id" value="">
 
                             <div class="modal-body">

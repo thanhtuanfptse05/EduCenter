@@ -87,6 +87,14 @@
                 </svg>
                 <span>Quản lý Phòng học</span>
             </a>
+            <a href="${pageContext.request.contextPath}/admin/academic-stats" class="nav-link ${activeNav == 'academic-stats' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <span>Thống kê Giảng dạy & Học vụ</span>
+            </a>
 
             <div class="nav-group-title">Quản trị Hệ thống</div>
             <a href="${pageContext.request.contextPath}/admin/users" class="nav-link ${activeNav == 'users' ? 'active' : ''}">
@@ -166,8 +174,8 @@
             </a>
         </c:if>
 
-        <!-- 3a. Giảng dạy (Teacher) -->
-        <c:if test="${sessionScope.currentUser != null and (sessionScope.currentUser.teacher or sessionScope.currentUser.admin)}">
+        <!-- 3a. Giảng dạy (Teacher - Chỉ dành riêng cho Giáo viên giảng dạy) -->
+        <c:if test="${sessionScope.currentUser != null and sessionScope.currentUser.teacher and not sessionScope.currentUser.admin}">
             <div class="nav-group-title">Giảng dạy & Học vụ</div>
             <a href="${pageContext.request.contextPath}/teacher/attendance" class="nav-link ${activeNav == 'attendance' ? 'active' : ''}">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
@@ -209,6 +217,13 @@
         <!-- 3c. Cổng giám sát dành cho Phụ huynh (Parent) -->
         <c:if test="${sessionScope.currentUser != null and sessionScope.currentUser.parent}">
             <div class="nav-group-title">Giám sát con học</div>
+            <a href="${pageContext.request.contextPath}/parent/schedule" class="nav-link ${activeNav == 'parent-schedule' ? 'active' : ''}">
+                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Thời khóa biểu của con</span>
+            </a>
             <a href="${pageContext.request.contextPath}/parent/progress" class="nav-link ${activeNav == 'parent-progress' ? 'active' : ''}">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>

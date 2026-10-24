@@ -78,7 +78,7 @@
                 </c:if>
 
                 <form method="post" action="${pageContext.request.contextPath}/admin/classes/${isEdit ? 'edit' : 'create'}">
-                    <input type="hidden" name="csrf_token" value="${sessionScope.csrf_token}">
+                    <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                     <c:if test="${isEdit}">
                         <input type="hidden" name="id" value="${classForm.id}">
                     </c:if>

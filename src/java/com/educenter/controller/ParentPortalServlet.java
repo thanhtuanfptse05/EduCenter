@@ -1,6 +1,7 @@
 package com.educenter.controller;
 
 import com.educenter.dto.ParentDashboardSummaryDTO;
+import com.educenter.dto.PortalScheduleItemDTO;
 import com.educenter.dto.StudentDashboardSummaryDTO;
 import com.educenter.dto.UserPrincipalDTO;
 import com.educenter.service.PortalService;
@@ -14,12 +15,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.List;
 
 /**
  * Controller handling Parent Portal views (PAR-01, PAR-02) with strict child verification.
  */
 @WebServlet(name = "ParentPortalServlet", urlPatterns = {
         "/parent/dashboard",
+        "/parent/schedule",
         "/parent/progress",
         "/parent/children/detail"
 })
@@ -44,6 +49,7 @@ public class ParentPortalServlet extends HttpServlet {
         String path = req.getServletPath();
         switch (path) {
             case "/parent/dashboard" -> handleDashboard(req, resp, currentUser);
+            case "/parent/schedule" -> handleSchedule(req, resp, currentUser);
             case "/parent/progress" -> handleProgress(req, resp, currentUser);
             case "/parent/children/detail" -> handleChildDetail(req, resp, currentUser);
             default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -66,6 +72,58 @@ public class ParentPortalServlet extends HttpServlet {
         req.setAttribute("pageTitle", "Cổng phụ huynh — Theo dõi học tập của con");
         req.setAttribute("internalShell", true);
         req.getRequestDispatcher("/WEB-INF/views/parent/dashboard.jsp").forward(req, resp);
+    }
+
+    private void handleSchedule(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO currentUser)
+            throws ServletException, IOException {
+        String childIdStr = req.getParameter("childId");
+        if (childIdStr == null || childIdStr.trim().isEmpty()) {
+            childIdStr = req.getParameter("id");
+        }
+
+        Long childStudentId = null;
+        if (childIdStr != null && !childIdStr.trim().isEmpty()) {
+            try {
+                childStudentId = Long.parseLong(childIdStr.trim());
+            } catch (NumberFormatException ignored) {}
+        }
+
+        ParentDashboardSummaryDTO parentSummary = portalService.getParentDashboard(currentUser.getUserId(), childStudentId);
+        if (childStudentId == null) {
+            childStudentId = parentSummary.getSelectedChildId();
+        }
+        if (childStudentId == null && parentSummary.hasChildren()) {
+            childStudentId = parentSummary.getVerifiedChildren().get(0).getId();
+        }
+
+        String fromStr = req.getParameter("fromDate");
+        String toStr = req.getParameter("toDate");
+        LocalDate fromDate = null;
+        LocalDate toDate = null;
+        try {
+            if (fromStr != null && !fromStr.trim().isEmpty()) fromDate = LocalDate.parse(fromStr.trim());
+            if (toStr != null && !toStr.trim().isEmpty()) toDate = LocalDate.parse(toStr.trim());
+        } catch (DateTimeParseException ignored) {}
+
+        List<PortalScheduleItemDTO> scheduleList = List.of();
+        if (childStudentId != null) {
+            try {
+                scheduleList = portalService.getChildSchedule(currentUser.getUserId(), childStudentId, fromDate, toDate);
+            } catch (ValidationException e) {
+                FlashMessageUtil.setError(req, e.getMessage());
+            }
+        }
+
+        req.setAttribute("parentSummary", parentSummary);
+        req.setAttribute("selectedChildId", childStudentId);
+        req.setAttribute("scheduleList", scheduleList);
+        req.setAttribute("fromDate", fromDate != null ? fromDate.toString() : "");
+        req.setAttribute("toDate", toDate != null ? toDate.toString() : "");
+        req.setAttribute("activeNav", "parent-schedule");
+        req.setAttribute("pageTitle", "Thời khóa biểu của con — EduCenter");
+        req.setAttribute("breadcrumb", "Thời khóa biểu của con");
+        req.setAttribute("internalShell", true);
+        req.getRequestDispatcher("/WEB-INF/views/parent/schedule.jsp").forward(req, resp);
     }
 
     private void handleProgress(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO currentUser)

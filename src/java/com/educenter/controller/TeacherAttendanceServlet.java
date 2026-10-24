@@ -59,6 +59,11 @@ public class TeacherAttendanceServlet extends HttpServlet {
             } catch (NumberFormatException ignored) {}
         }
 
+        if (user.isAdmin() && !user.isTeacher() && sessionId == null && !path.startsWith("/teacher/journal")) {
+            resp.sendRedirect(req.getContextPath() + "/admin/academic-stats");
+            return;
+        }
+
         if (path.startsWith("/teacher/journal")) {
             handleGetJournal(req, resp, user, sessionId);
             return;

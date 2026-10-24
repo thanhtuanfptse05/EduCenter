@@ -58,8 +58,26 @@ public class ClassAdminViewDTO implements Serializable {
     public Integer getCapacity() { return capacity; }
     public void setCapacity(Integer capacity) { this.capacity = capacity; }
 
+    public Integer getMaxCapacity() { return capacity != null ? capacity : 0; }
+
     public Long getEnrolledCount() { return enrolledCount != null ? enrolledCount : 0L; }
     public void setEnrolledCount(Long enrolledCount) { this.enrolledCount = enrolledCount; }
+
+    public Long getCurrentEnrollment() { return getEnrolledCount(); }
+
+    public String getSubjectName() {
+        return courseName != null ? courseName : (courseCode != null ? courseCode : "Đang cập nhật");
+    }
+
+    public Integer getGradeLevel() {
+        if (code != null) {
+            if (code.contains("12") || code.contains("L12")) return 12;
+            if (code.contains("11") || code.contains("L11")) return 11;
+            if (code.contains("10") || code.contains("L10")) return 10;
+            if (code.contains("9") || code.contains("L9")) return 9;
+        }
+        return 12;
+    }
 
     public int getRemainingSlots() {
         int cap = capacity != null ? capacity : 0;

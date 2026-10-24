@@ -54,4 +54,17 @@ public interface PortalService {
      * @throws ValidationException if access is unauthorized or relationship unverified
      */
     StudentDashboardSummaryDTO getChildDetail(Long guardianUserId, Long childStudentId);
+
+    /**
+     * Retrieves timetable / schedule of a specific child for a guardian.
+     * Validates active verification between guardian and student before returning schedule.
+     *
+     * @param guardianUserId current guardian user ID
+     * @param childStudentId target child student ID
+     * @param fromDate start date (inclusive)
+     * @param toDate end date (inclusive)
+     * @return list of session DTOs for the child
+     * @throws ValidationException if access is unauthorized or relationship unverified
+     */
+    List<PortalScheduleItemDTO> getChildSchedule(Long guardianUserId, Long childStudentId, LocalDate fromDate, LocalDate toDate);
 }

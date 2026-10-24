@@ -50,6 +50,7 @@
             <div class="admin-card">
                 <form action="${pageContext.request.contextPath}/teacher/journal/save" method="post">
                     <input type="hidden" name="sessionId" value="${sessionData.sessionId}">
+                    <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
 
                     <div style="padding: 24px;">
                         <!-- Nội dung bài học -->

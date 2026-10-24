@@ -204,9 +204,9 @@ public class AssessmentServiceImpl implements AssessmentService {
 
             checkTeacherPermission(a.getEduClass(), teacherUserId, isAdmin);
 
-            if ("PUBLISHED".equals(a.getStatus())) {
-                throw new ValidationException("Bài kiểm tra đã công bố không thể sửa điểm trực tiếp. Vui lòng mở lại bài kiểm tra (Reopen) với lý do chính đáng để hiệu chỉnh điểm (BR18).");
-            }
+            boolean wasPublished = "PUBLISHED".equals(a.getStatus());
+            a.setUpdatedAt(LocalDateTime.now());
+            assessmentRepository.updateAssessment(em, a);
 
             // B01: Lấy danh sách học viên hợp lệ thuộc lớp học
             List<Student> classStudents = assessmentRepository.findActiveStudentsInClass(em, a.getEduClass().getId());
@@ -321,11 +321,8 @@ public class AssessmentServiceImpl implements AssessmentService {
 
     @Override
     public void reopenAssessment(Long assessmentId, Long actorUserId, boolean isAdmin, String reason) {
-        if (!isAdmin) {
-            throw new ValidationException("Chỉ Quản trị viên (ADMIN) mới có quyền mở lại bài kiểm tra đã công bố (BR18).");
-        }
-        if (reason == null || reason.trim().length() < 5) {
-            throw new ValidationException("Vui lòng nhập lý do mở lại bài kiểm tra (tối thiểu 5 ký tự).");
+        if (reason == null || reason.trim().length() < 3) {
+            throw new ValidationException("Vui lòng nhập lý do mở lại bài kiểm tra (tối thiểu 3 ký tự).");
         }
 
         EntityManager em = getEntityManager();
@@ -335,6 +332,8 @@ public class AssessmentServiceImpl implements AssessmentService {
 
             Assessment a = assessmentRepository.findAssessmentById(em, assessmentId)
                     .orElseThrow(() -> new ValidationException("Không tìm thấy bài kiểm tra ID: " + assessmentId));
+
+            checkTeacherPermission(a.getEduClass(), actorUserId, isAdmin);
 
             a.setStatus("DRAFT");
             a.setUpdatedAt(LocalDateTime.now());

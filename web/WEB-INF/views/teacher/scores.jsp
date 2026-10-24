@@ -51,11 +51,10 @@
                     <c:choose>
                         <c:when test="${gradeView.status == 'PUBLISHED'}">
                             <span class="badge badge-published" style="font-size: 0.875rem; padding: 6px 14px;">Đã công bố (PUBLISHED)</span>
-                            <c:if test="${sessionScope.currentUser.admin}">
-                                <button type="button" class="btn btn-secondary btn-sm" onclick="openReopenModal();" style="color: #b45309;">
-                                    Mở lại chỉnh sửa (Admin)
-                                </button>
-                            </c:if>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="openReopenModal();" style="display: inline-flex; align-items: center; gap: 4px; color: #b45309;">
+                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+                                <span>Chuyển về Bản nháp (DRAFT)</span>
+                            </button>
                         </c:when>
                         <c:otherwise>
                             <span class="badge badge-draft" style="font-size: 0.875rem; padding: 6px 14px;">Bản nháp (DRAFT)</span>
@@ -94,12 +93,14 @@
                 </div>
             </div>
 
-            <c:if test="${gradeView.status == 'PUBLISHED' and not sessionScope.currentUser.admin}">
-                <div style="padding: 12px 16px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.875rem; color: #166534; display: flex; align-items: center; gap: 8px;">
-                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                    </svg>
-                    <span>Bài kiểm tra này đã được <strong>công bố chính thức</strong> cho Học sinh và Phụ huynh. Chế độ chỉ đọc. Nếu cần đính chính điểm số, vui lòng liên hệ Ban Quản lý (Admin).</span>
+            <c:if test="${gradeView.status == 'PUBLISHED'}">
+                <div style="padding: 12px 16px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-md); margin-bottom: 20px; font-size: 0.875rem; color: #1e40af; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        <span>Bài kiểm tra đã công bố. Thầy/Cô có thể trực tiếp chỉnh sửa điểm số hoặc nhận xét tại bảng bên dưới, sau đó bấm <strong>Cập nhật điểm</strong>.</span>
+                    </div>
                 </div>
             </c:if>
 
@@ -135,14 +136,12 @@
                                                 <input type="number" name="score_${st.studentId}" class="form-control score-input"
                                                        min="0" max="${gradeView.maxScore}" step="0.25"
                                                        placeholder="-"
-                                                       value="${st.score}"
-                                                       ${gradeView.status == 'PUBLISHED' and not sessionScope.currentUser.admin ? 'readonly' : ''}>
+                                                       value="${st.score}">
                                             </td>
                                             <td>
                                                 <input type="text" name="remarks_${st.studentId}" class="form-control"
                                                        placeholder="Nhận xét cụ thể (nếu có)..."
-                                                       value="<c:out value='${st.remarks}' />"
-                                                       ${gradeView.status == 'PUBLISHED' and not sessionScope.currentUser.admin ? 'readonly' : ''}>
+                                                       value="<c:out value='${st.remarks}' />">
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -150,24 +149,22 @@
                                 </table>
                             </div>
 
-                            <c:if test="${gradeView.status != 'PUBLISHED' or sessionScope.currentUser.admin}">
-                                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border);">
-                                    <button type="button" class="btn btn-secondary" onclick="submitScores('DRAFT');" style="display: inline-flex; align-items: center; gap: 6px;">
-                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                                            <polyline points="7 3 7 8 15 8"></polyline>
-                                        </svg>
-                                        <span>Lưu nháp (DRAFT)</span>
-                                    </button>
-                                    <button type="button" class="btn btn-primary" onclick="submitScores('PUBLISH');" style="display: inline-flex; align-items: center; gap: 6px;">
-                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                            <polyline points="20 6 9 17 4 12"></polyline>
-                                        </svg>
-                                        <span>Công bố điểm cho Học viên (PUBLISH)</span>
-                                    </button>
-                                </div>
-                            </c:if>
+                            <div style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border);">
+                                <button type="button" class="btn btn-secondary" onclick="submitScores('DRAFT');" style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                        <polyline points="7 3 7 8 15 8"></polyline>
+                                    </svg>
+                                    <span>Lưu nháp điểm (DRAFT)</span>
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="submitScores('PUBLISH');" style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                        <polyline points="20 6 9 17 4 12"></polyline>
+                                    </svg>
+                                    <span>${gradeView.status == 'PUBLISHED' ? 'Cập nhật & Công bố điểm' : 'Công bố điểm cho Học viên (PUBLISH)'}</span>
+                                </button>
+                            </div>
                         </c:when>
                         <c:otherwise>
                             <div class="empty-state" style="text-align: center; padding: 40px 24px;">

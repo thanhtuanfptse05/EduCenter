@@ -149,6 +149,10 @@
                                     <svg class="icon icon-sm" style="color: var(--primary);" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                                     <span>Lịch học sắp tới của con</span>
                                 </h2>
+                                <a href="${pageContext.request.contextPath}/parent/schedule?childId=${dashboard.selectedChildId}" class="btn btn-ghost btn-sm" style="font-size: 12px; display: inline-flex; align-items: center; gap: 4px;">
+                                    <span>Xem toàn bộ TKB</span>
+                                    <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </a>
                             </div>
 
                             <c:choose>
@@ -190,6 +194,10 @@
                                     <svg class="icon icon-sm" style="color: var(--success);" viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                                     <span>Điểm kiểm tra gần đây của con</span>
                                 </h2>
+                                <a href="${pageContext.request.contextPath}/parent/progress?childId=${dashboard.selectedChildId}" class="btn btn-ghost btn-sm" style="font-size: 12px; display: inline-flex; align-items: center; gap: 4px;">
+                                    <span>Xem bảng điểm chi tiết</span>
+                                    <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                </a>
                             </div>
 
                             <c:choose>

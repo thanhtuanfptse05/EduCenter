@@ -556,7 +556,9 @@ CREATE TABLE dbo.SystemSettings (
     setting_key VARCHAR(100) NOT NULL CONSTRAINT UQ_SystemSettings_Key UNIQUE,
     setting_value NVARCHAR(MAX) NOT NULL,
     description NVARCHAR(255) NULL,
-    updated_at DATETIME2(0) NOT NULL CONSTRAINT DF_SystemSettings_UpdatedAt DEFAULT GETDATE()
+    updated_by BIGINT NULL,
+    updated_at DATETIME2(0) NOT NULL CONSTRAINT DF_SystemSettings_UpdatedAt DEFAULT GETDATE(),
+    CONSTRAINT FK_SystemSettings_Updater FOREIGN KEY (updated_by) REFERENCES dbo.Users(id) ON DELETE NO ACTION
 );
 GO
 

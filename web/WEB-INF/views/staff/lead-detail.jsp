@@ -152,6 +152,7 @@
                         </h3>
 
                         <form action="${pageContext.request.contextPath}/staff/leads/status" method="POST">
+                            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                             <input type="hidden" name="leadId" value="${lead.id}">
 
                             <div style="margin-bottom: 14px;">
@@ -200,6 +201,7 @@
                         </h3>
 
                         <form action="${pageContext.request.contextPath}/staff/leads/consultation" method="POST">
+                            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                             <input type="hidden" name="leadId" value="${lead.id}">
 
                             <div style="margin-bottom: 14px;">

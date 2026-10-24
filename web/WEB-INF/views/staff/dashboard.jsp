@@ -238,8 +238,8 @@
                                                 </td>
                                                 <td style="padding: 12px 16px;">
                                                     <c:choose>
-                                                        <c:when test="${not empty lead.assignedStaffName}">
-                                                            <span style="font-size: 12px; color: var(--text);"><c:out value="${lead.assignedStaffName}" /></span>
+                                                        <c:when test="${not empty lead.assignedToName}">
+                                                            <span style="font-size: 12px; color: var(--text);"><c:out value="${lead.assignedToName}" /></span>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <span style="font-size: 12px; color: var(--warning); font-weight: 600;">Chưa phân công</span>
