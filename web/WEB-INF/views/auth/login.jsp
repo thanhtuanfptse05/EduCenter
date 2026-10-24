@@ -31,12 +31,15 @@
               </div>
             </div>
 
-            <!-- Page Heading -->
-            <div class="auth-title-block">
-              <h1 class="auth-main-heading">Đăng nhập vào EduCenter</h1>
-              <p class="auth-sub-desc">
-                Nền tảng quản lý gia sư &amp; luyện thi THPT chuẩn hóa mô hình phân quyền tác nghiệp.
-              </p>
+            <!-- Page Heading & Mascot -->
+            <div class="auth-title-block" style="display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-4);">
+              <img src="${pageContext.request.contextPath}/assets/images/logo/mascot_owl_icon.png" alt="EduCenter Mascot Dr. Owl" style="width: 54px; height: 54px; border-radius: var(--radius-md); object-fit: contain; box-shadow: var(--shadow-sm); flex-shrink: 0; background: #FFF; border: 1px solid var(--border); padding: 2px;">
+              <div>
+                <h1 class="auth-main-heading" style="margin-bottom: var(--space-1); font-size: 20px;">Đăng nhập vào EduCenter</h1>
+                <p class="auth-sub-desc" style="margin: 0;">
+                  Nền tảng quản lý gia sư &amp; luyện thi THPT chuẩn hóa mô hình phân quyền tác nghiệp.
+                </p>
+              </div>
             </div>
 
             <!-- Flash Alert Messages -->

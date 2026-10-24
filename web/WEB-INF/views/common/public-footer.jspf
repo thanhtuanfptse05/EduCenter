@@ -12,8 +12,8 @@
     <!-- Top Brand & Contact Row -->
     <div class="site-footer-top-brand">
       <div class="site-footer-brand-info">
-        <a href="${pageContext.request.contextPath}/" class="site-footer-brand-header" aria-label="EduCenter — Trang chủ">
-          <div class="site-footer-brand-logo">E</div>
+        <a href="${pageContext.request.contextPath}/" class="site-footer-brand-header" aria-label="EduCenter — Trang chủ" style="display: flex; align-items: center; gap: 12px;">
+          <img src="${pageContext.request.contextPath}/assets/images/logo/mascot_owl_icon.png" alt="EduCenter Mascot" style="width: 44px; height: 44px; border-radius: var(--radius-sm); object-fit: contain; background: #FFF; box-shadow: var(--shadow-sm); padding: 2px;">
           <div>
             <div class="site-footer-brand-title">EduCenter</div>
             <span class="site-footer-brand-sub">THPT Tutoring &amp; ERP Platform</span>

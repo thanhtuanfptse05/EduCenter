@@ -15,8 +15,8 @@
         <div class="register-main-col">
           <!-- Stepper / Status Top Bar -->
           <div class="register-stepper-bar">
-            <div class="stepper-left">
-              <div class="stepper-num-badge">01</div>
+            <div class="stepper-left" style="display: flex; align-items: center; gap: var(--space-3);">
+              <img src="${pageContext.request.contextPath}/assets/images/logo/mascot_owl_icon.png" alt="EduCenter Mascot Dr. Owl" style="width: 44px; height: 44px; border-radius: var(--radius-sm); object-fit: contain; box-shadow: var(--shadow-sm); flex-shrink: 0; background: #FFF; border: 1px solid var(--border); padding: 1px;">
               <div>
                 <div class="stepper-sub">SRS AUTH-02 · Xác thực tài khoản</div>
                 <div class="stepper-title">Đăng ký thành viên hệ thống EduCenter</div>

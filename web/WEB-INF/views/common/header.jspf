@@ -10,13 +10,8 @@
 <header class="admin-topbar app-header">
 <button type="button" class="site-icon app-menu-button" data-app-menu aria-controls="app-sidebar" aria-expanded="false" aria-label="Mở menu nội bộ"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
     <div class="topbar-left app-header-nav">
-        <a href="${pageContext.request.contextPath}/" class="app-brand">
-            <span class="app-brand-badge-box">
-                <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true" style="color: #ffffff;">
-                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                    <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-                </svg>
-            </span>
+        <a href="${pageContext.request.contextPath}/" class="app-brand" style="display: flex; align-items: center; gap: 8px;">
+            <img src="${pageContext.request.contextPath}/assets/images/logo/mascot_owl_icon.png" alt="EduCenter Mascot" style="width: 28px; height: 28px; border-radius: var(--radius-sm); object-fit: contain; background: #FFF; box-shadow: var(--shadow-xs); padding: 1px;">
             <span>EduCenter</span>
             <span class="app-brand-badge">THPT Tutoring</span>
         </a>

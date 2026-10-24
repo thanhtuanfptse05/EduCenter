@@ -3,8 +3,8 @@
 <a class="site-skip" href="#main-content">Đến nội dung chính</a>
 <header class="site-header" data-shared-public-header>
   <div class="site-header-inner">
-    <a href="${pageContext.request.contextPath}/" class="site-brand" aria-label="EduCenter — Trang chủ">
-      <span class="site-brand-symbol"><svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true"><path d="m2 10 10-5 10 5-10 5zM6 12v5c3 3 9 3 12 0v-5M22 10v6"/></svg></span>
+    <a href="${pageContext.request.contextPath}/" class="site-brand" aria-label="EduCenter — Trang chủ" style="display: flex; align-items: center; gap: 10px;">
+      <img src="${pageContext.request.contextPath}/assets/images/logo/mascot_owl_icon.png" alt="EduCenter Logo" style="width: 36px; height: 36px; border-radius: var(--radius-sm); object-fit: contain; background: #FFF; box-shadow: var(--shadow-xs); padding: 1px;">
       <span>EduCenter</span>
     </a>
     <nav class="site-links" aria-label="Điều hướng chính">

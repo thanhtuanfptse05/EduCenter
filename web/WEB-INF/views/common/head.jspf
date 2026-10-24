@@ -6,6 +6,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><c:out value="${pageTitle != null ? pageTitle : 'EduCenter — Hệ Thống Quản Trị Trung Tâm Gia Sư & Luyện Thi'}" /></title>
 
+<!-- Brand Mascot Favicon -->
+<link rel="icon" type="image/png" href="${pageContext.request.contextPath}/assets/images/logo/favicon.png">
+<link rel="shortcut icon" type="image/png" href="${pageContext.request.contextPath}/assets/images/logo/favicon.png">
+<link rel="apple-touch-icon" href="${pageContext.request.contextPath}/assets/images/logo/mascot_owl_icon.png">
+
 <!-- Pre-CSS Theme Execution: Strictly enforces default light mode per design.md -->
 <script>
 (function () {

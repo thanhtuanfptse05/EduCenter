@@ -2,14 +2,9 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
 <aside class="admin-sidebar" id="app-sidebar">
-    <div class="sidebar-brand">
-        <span style="display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: var(--primary); color: #FFF; border-radius: var(--radius-sm);">
-            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
-                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
-            </svg>
-        </span>
-        <span>EduCenter</span>
+    <div class="sidebar-brand" style="display: flex; align-items: center; gap: var(--space-3);">
+        <img src="${pageContext.request.contextPath}/assets/images/logo/mascot_owl_icon.png" alt="EduCenter Mascot" style="width: 32px; height: 32px; border-radius: var(--radius-sm); object-fit: contain; box-shadow: var(--shadow-sm); background: #FFF; padding: 1px;">
+        <span style="font-weight: 700; font-size: 16px; letter-spacing: -0.02em;">EduCenter</span>
     </div>
 
     <nav class="sidebar-nav">

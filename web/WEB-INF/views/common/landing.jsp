@@ -183,9 +183,9 @@
                                 <!-- Campus Hero Showcase Banner -->
                                 <div class="hero-campus-banner">
                                     <img src="<c:url value='/assets/images/courses/classroom-hero.jpg' />" alt="Không gian giảng đường & phòng học chuyên đề EduCenter" class="hero-campus-img" />
-                                    <div class="hero-campus-tag">
-                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
-                                        <span>EduCenter Campus • Cơ sở học thuật chuẩn quốc gia</span>
+                                    <div class="hero-campus-tag" style="display: flex; align-items: center; gap: 8px;">
+                                        <img src="<c:url value='/assets/images/logo/mascot_owl_icon.png' />" alt="Linh vật EduCenter Dr. Owl" style="width: 24px; height: 24px; border-radius: 4px; object-fit: contain; background: #FFF; padding: 1px;">
+                                        <span>Linh vật Dr. Owl • Đồng hành bứt phá học lực 24/7</span>
                                     </div>
                                 </div>
 
