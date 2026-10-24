@@ -36,15 +36,15 @@ window.addEventListener('pageshow', function (event) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- Local Stylesheets -->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/tokens.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/base.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/public-shell.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/screens.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/auth.css">
-<script charset="UTF-8" defer src="${pageContext.request.contextPath}/assets/js/theme.js"></script>
-<script charset="UTF-8" defer src="${pageContext.request.contextPath}/assets/js/auth.js"></script>
-<script charset="UTF-8" defer src="${pageContext.request.contextPath}/assets/js/public-shell.js"></script>
+<!-- Local Stylesheets with cache busting -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/tokens.css?v=20261024_03">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/base.css?v=20261024_03">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/public-shell.css?v=20261024_03">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/screens.css?v=20261024_03">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/auth.css?v=20261024_03">
+<script charset="UTF-8" defer src="${pageContext.request.contextPath}/assets/js/theme.js?v=20261024_03"></script>
+<script charset="UTF-8" defer src="${pageContext.request.contextPath}/assets/js/auth.js?v=20261024_03"></script>
+<script charset="UTF-8" defer src="${pageContext.request.contextPath}/assets/js/public-shell.js?v=20261024_03"></script>
 
 <style>
   :root {

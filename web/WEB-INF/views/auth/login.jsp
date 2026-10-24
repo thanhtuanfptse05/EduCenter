@@ -31,19 +31,22 @@
               </div>
             </div>
 
-            <!-- Page Heading & Mascot -->
-            <div class="auth-title-block" style="display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-4);">
-              <img src="${pageContext.request.contextPath}/assets/images/logo/mascot_owl_icon.png" alt="EduCenter Mascot Dr. Owl" style="width: 54px; height: 54px; border-radius: var(--radius-md); object-fit: contain; box-shadow: var(--shadow-sm); flex-shrink: 0; background: #FFF; border: 1px solid var(--border); padding: 2px;">
-              <div>
-                <h1 class="auth-main-heading" style="margin-bottom: var(--space-1); font-size: 20px;">Đăng nhập vào EduCenter</h1>
-                <p class="auth-sub-desc" style="margin: 0;">
-                  Nền tảng quản lý gia sư &amp; luyện thi THPT chuẩn hóa mô hình phân quyền tác nghiệp.
-                </p>
+            <!-- Page Heading & Brand Identity -->
+            <div class="auth-title-block" style="margin-top: 16px; margin-bottom: 28px;">
+              <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+                <img src="${pageContext.request.contextPath}/assets/images/logo/mascot_owl_icon.png" alt="EduCenter Mascot" style="width: 46px; height: 46px; border-radius: 10px; object-fit: contain; box-shadow: var(--shadow-sm); background: #FFF; border: 1px solid var(--border); padding: 2px; flex-shrink: 0;">
+                <div>
+                  <h1 class="auth-main-heading" style="margin: 0; font-size: 22px; font-weight: 700; line-height: 1.25;">Đăng nhập vào EduCenter</h1>
+                  <span style="font-size: 11px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.04em;">Cổng xác thực tác nghiệp</span>
+                </div>
               </div>
+              <p class="auth-sub-desc" style="margin: 0; font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+                Nền tảng quản lý gia sư &amp; luyện thi THPT chuẩn hóa mô hình phân quyền tác nghiệp.
+              </p>
             </div>
 
             <!-- Flash Alert Messages -->
-            <div class="mb-4">
+            <div style="margin-bottom: 16px;">
               <%@ include file="/WEB-INF/views/common/alert.jsp" %>
             </div>
 
