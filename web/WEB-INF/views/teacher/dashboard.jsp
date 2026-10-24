@@ -361,12 +361,11 @@
                                                     <div style="font-size: 11.5px; color: var(--text-muted);">EduCenter Central</div>
                                                 </td>
                                                 <td>
-                                                    <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 4px;">
-                                                        <span><c:out value="${c.capacity}"/> học viên</span>
-                                                        <span style="color: var(--text-muted);">Sức chứa tối đa</span>
+                                                    <div style="font-weight: 700; color: var(--text);">
+                                                        <c:out value="${c.capacity}"/> học viên
                                                     </div>
-                                                    <div class="mgmt-progress-track">
-                                                        <div class="mgmt-progress-fill" style="width: 75%;"></div>
+                                                    <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                                                        Sức chứa tối đa của lớp
                                                     </div>
                                                 </td>
                                                 <td style="text-align: center;">

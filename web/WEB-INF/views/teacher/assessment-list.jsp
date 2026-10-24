@@ -29,9 +29,21 @@
                 <c:set var="totalEnrolledCount" value="0"/>
                 <c:set var="totalAverageSum" value="0"/>
                 <c:set var="scoredTestsCount" value="0"/>
+                <c:set var="draftCount" value="0"/>
+                <c:set var="publishedCount" value="0"/>
+                <c:set var="pendingGradingStudents" value="0"/>
                 <c:forEach var="item" items="${assessments}">
                     <c:set var="totalGradedCount" value="${totalGradedCount + item.gradedCount}"/>
                     <c:set var="totalEnrolledCount" value="${totalEnrolledCount + item.totalStudents}"/>
+                    <c:choose>
+                        <c:when test="${item.status == 'DRAFT'}">
+                            <c:set var="draftCount" value="${draftCount + 1}"/>
+                            <c:set var="pendingGradingStudents" value="${pendingGradingStudents + (item.totalStudents - item.gradedCount)}"/>
+                        </c:when>
+                        <c:when test="${item.status == 'PUBLISHED'}">
+                            <c:set var="publishedCount" value="${publishedCount + 1}"/>
+                        </c:when>
+                    </c:choose>
                     <c:if test="${not empty item.averageScore}">
                         <c:set var="totalAverageSum" value="${totalAverageSum + item.averageScore}"/>
                         <c:set var="scoredTestsCount" value="${scoredTestsCount + 1}"/>
@@ -391,119 +403,124 @@
                     </c:choose>
                 </div>
 
-                <!-- 5. Operational Analytical Insight Strip (2 columns + 1 column) -->
-                <div class="mgmt-protocol-grid-3">
-                    <!-- Distribution Chart Card (Spans 2 cols) -->
-                    <div class="mgmt-kpi-card" style="grid-column: span 2; display: flex; flex-direction: column; align-items: stretch; gap: 14px;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-                            <div>
-                                <h3 style="font-size: 15px; font-weight: 700; color: var(--text); margin: 0;">Phổ điểm bài thi gần nhất (Quy chuẩn hệ 10)</h3>
-                                <p style="font-size: 12px; color: var(--text-muted); margin: 2px 0 0 0;">Dựa trên dữ liệu các lượt chấm điểm đã hoàn tất của Thầy/Cô</p>
-                            </div>
-                            <span class="mgmt-stat-pill pill-primary" style="font-size: 11.5px; padding: 4px 10px;">
-                                <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--primary);"></span>
-                                Đạt chuẩn học lực giỏi: 68%
-                            </span>
-                        </div>
-
-                        <!-- Bar Histogram Chart -->
-                        <div class="score-dist-wrap">
-                            <!-- Col < 5.0 -->
-                            <div class="score-dist-col">
-                                <span class="score-dist-count">0</span>
-                                <div class="score-dist-bar" style="height: 6%;"></div>
-                                <span class="score-dist-label">&lt; 5.0</span>
-                            </div>
-                            <!-- Col 5.0-6.5 -->
-                            <div class="score-dist-col">
-                                <span class="score-dist-count">3</span>
-                                <div class="score-dist-bar" style="height: 18%;"></div>
-                                <span class="score-dist-label">5.0–6.5</span>
-                            </div>
-                            <!-- Col 6.5-7.9 -->
-                            <div class="score-dist-col">
-                                <span class="score-dist-count">8</span>
-                                <div class="score-dist-bar" style="height: 45%;"></div>
-                                <span class="score-dist-label">6.5–7.9</span>
-                            </div>
-                            <!-- Col 8.0-8.9 (Dominant) -->
-                            <div class="score-dist-col">
-                                <span class="score-dist-count" style="color: var(--primary); font-weight: 800;">15</span>
-                                <div class="score-dist-bar primary" style="height: 85%;"></div>
-                                <span class="score-dist-label" style="color: var(--primary); font-weight: 700;">8.0–8.9</span>
-                            </div>
-                            <!-- Col 9.0-10 (Excellent) -->
-                            <div class="score-dist-col">
-                                <span class="score-dist-count" style="color: #047857; font-weight: 800;">8</span>
-                                <div class="score-dist-bar success" style="height: 52%;"></div>
-                                <span class="score-dist-label" style="color: #047857; font-weight: 700;">9.0–10</span>
-                            </div>
-                        </div>
-
-                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 10px;">
-                            <div style="display: flex; align-items: center; gap: 14px;">
-                                <span style="display: inline-flex; align-items: center; gap: 5px;">
-                                    <span style="width: 8px; height: 8px; border-radius: 2px; background: var(--primary);"></span>
-                                    Nhóm 8.0 – 8.9 (Chiếm đa số)
-                                </span>
-                                <span style="display: inline-flex; align-items: center; gap: 5px;">
-                                    <span style="width: 8px; height: 8px; border-radius: 2px; background: #10b981;"></span>
-                                    Nhóm Xuất Sắc 9.0+
-                                </span>
-                            </div>
-                            <span>Học kỳ 1 • 2026-2027</span>
-                        </div>
-                    </div>
-
-                    <!-- SLA & Deadline Monitor Card (Spans 1 col) -->
-                    <div class="mgmt-kpi-card" style="display: flex; flex-direction: column; align-items: stretch; justify-content: space-between; gap: 14px;">
-                        <div>
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                                <h3 style="font-size: 15px; font-weight: 700; color: var(--text); margin: 0;">Hạn Chót Chấm &amp; Công Bố</h3>
-                                <span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444;"></span>
-                            </div>
-                            <p style="font-size: 12px; color: var(--text-muted); margin: 0;">
-                                Quy định học vụ TCH-06: Bài 15p hoàn thành chấm trong 48h, bài 1 tiết trong 5 ngày.
-                            </p>
-                        </div>
-
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <div style="background: var(--surface-muted); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 12px; display: flex; align-items: flex-start; gap: 10px;">
-                                <span style="padding: 4px; border-radius: 4px; background: #fff1f2; color: #be123c; margin-top: 2px;">
-                                    <svg class="icon icon-sm" style="width: 14px; height: 14px;" viewBox="0 0 24 24" aria-hidden="true">
+                <!-- 5. Giám sát Hạn Chót Chấm & Công Bố (TCH-06 - 100% Dữ liệu thực tế) -->
+                <div class="mgmt-protocol-box">
+                    <div style="display: flex; flex-direction: column; gap: 16px; width: 100%;">
+                        <!-- Header -->
+                        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; border-bottom: 1px solid var(--border); padding-bottom: 14px;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <div class="mgmt-protocol-icon">
+                                    <svg class="icon icon-md" viewBox="0 0 24 24" aria-hidden="true">
                                         <circle cx="12" cy="12" r="10"></circle>
-                                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
                                     </svg>
-                                </span>
-                                <div style="flex: 1;">
-                                    <div style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700;">
-                                        <span>Bản nháp chờ nhập điểm</span>
-                                        <span style="color: #be123c;">Ưu tiên</span>
+                                </div>
+                                <div>
+                                    <div class="mgmt-protocol-title-row">
+                                        <h4 class="mgmt-protocol-title">Hạn Chót Chấm &amp; Công Bố Điểm Số (TCH-06)</h4>
+                                        <c:choose>
+                                            <c:when test="${draftCount > 0}">
+                                                <span class="mgmt-protocol-tag" style="background: #fff1f2; color: #be123c; border-color: #fecdd3;">
+                                                    CẦN XỬ LÝ (${draftCount} BÀI NHÁP)
+                                                </span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="mgmt-protocol-tag">ĐÃ CÔNG BỐ TOÀN BỘ</span>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
-                                    <p style="font-size: 11.5px; color: var(--text-muted); margin: 2px 0 0 0;">Vui lòng hoàn thiện điểm số để phụ huynh theo dõi tiến độ</p>
+                                    <p class="mgmt-protocol-desc">
+                                        Quy định học vụ TCH-06: Bài 15p hoàn thành chấm trong 48h, bài 1 tiết / định kỳ hoàn thành chấm trong 5 ngày.
+                                    </p>
                                 </div>
                             </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span class="mgmt-stat-pill pill-primary">
+                                    Tổng cộng: <strong><c:out value="${totalTestsCount}"/></strong> bài kiểm tra
+                                </span>
+                            </div>
+                        </div>
 
-                            <div style="background: var(--surface-muted); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 10px 12px; display: flex; align-items: flex-start; gap: 10px;">
-                                <span style="padding: 4px; border-radius: 4px; background: #ecfdf5; color: #047857; margin-top: 2px;">
-                                    <svg class="icon icon-sm" style="width: 14px; height: 14px;" viewBox="0 0 24 24" aria-hidden="true">
+                        <!-- 2 Dynamic Cards based on Real Data -->
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px;">
+                            <!-- Card 1: Bản nháp chờ nhập điểm -->
+                            <div style="background: var(--surface-muted); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px 18px; display: flex; align-items: flex-start; gap: 12px;">
+                                <c:choose>
+                                    <c:when test="${draftCount > 0}">
+                                        <span style="padding: 6px; border-radius: 6px; background: #fff1f2; color: #be123c; margin-top: 2px; flex-shrink: 0;">
+                                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                            </svg>
+                                        </span>
+                                        <div style="flex: 1;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                                <span style="font-size: 14px; font-weight: 700; color: var(--text);">Bản nháp chờ nhập điểm</span>
+                                                <span style="font-size: 11.5px; font-weight: 700; color: #be123c; background: #ffe4e6; padding: 2px 8px; border-radius: 4px;">
+                                                    Ưu tiên: <c:out value="${draftCount}"/> bài
+                                                </span>
+                                            </div>
+                                            <p style="font-size: 12.5px; color: var(--text-muted); margin: 0 0 10px 0; line-height: 1.5;">
+                                                Đang có <strong><c:out value="${draftCount}"/></strong> bài kiểm tra của Thầy/Cô chưa hoàn tất chấm điểm (còn <strong><c:out value="${pendingGradingStudents}"/></strong> bài thi học sinh chờ vào điểm). Vui lòng hoàn thiện điểm số để phụ huynh theo dõi tiến độ học tập.
+                                            </p>
+                                            <a href="${pageContext.request.contextPath}/teacher/assessments?status=DRAFT" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 5px;">
+                                                <span>Xem <c:out value="${draftCount}"/> bài thi chờ chấm</span>
+                                                <svg class="icon icon-sm" style="width: 12px; height: 12px;" viewBox="0 0 24 24" aria-hidden="true">
+                                                    <line x1="5" x2="19" y1="12" y2="12"></line>
+                                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span style="padding: 6px; border-radius: 6px; background: #ecfdf5; color: #047857; margin-top: 2px; flex-shrink: 0;">
+                                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
+                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                            </svg>
+                                        </span>
+                                        <div style="flex: 1;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                                <span style="font-size: 14px; font-weight: 700; color: var(--text);">Bản nháp chờ nhập điểm</span>
+                                                <span style="font-size: 11.5px; font-weight: 700; color: #047857; background: #dcfce7; padding: 2px 8px; border-radius: 4px;">
+                                                    Hoàn tất 100%
+                                                </span>
+                                            </div>
+                                            <p style="font-size: 12.5px; color: var(--text-muted); margin: 0; line-height: 1.5;">
+                                                Thầy/Cô không có bài kiểm tra nào đang ở dạng bản nháp. Toàn bộ các bài kiểm tra đã được nhập điểm và công bố đầy đủ cho học sinh &amp; phụ huynh.
+                                            </p>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+
+                            <!-- Card 2: Báo cáo điện tử tự động -->
+                            <div style="background: var(--surface-muted); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px 18px; display: flex; align-items: flex-start; gap: 12px;">
+                                <span style="padding: 6px; border-radius: 6px; background: #ecfdf5; color: #047857; margin-top: 2px; flex-shrink: 0;">
+                                    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                                         <polyline points="20 6 9 17 4 12"></polyline>
                                     </svg>
                                 </span>
                                 <div style="flex: 1;">
-                                    <div style="display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700;">
-                                        <span>Báo cáo điện tử tự động</span>
-                                        <span style="color: #047857;">Hoạt động</span>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                        <span style="font-size: 14px; font-weight: 700; color: var(--text);">Báo cáo điện tử tự động</span>
+                                        <span style="font-size: 11.5px; font-weight: 700; color: #047857; background: #dcfce7; padding: 2px 8px; border-radius: 4px;">
+                                            Đã gửi: <c:out value="${publishedCount}"/> bài
+                                        </span>
                                     </div>
-                                    <p style="font-size: 11.5px; color: var(--text-muted); margin: 2px 0 0 0;">Điểm số đã công bố gửi thẳng về cổng phụ huynh</p>
+                                    <p style="font-size: 12.5px; color: var(--text-muted); margin: 0 0 10px 0; line-height: 1.5;">
+                                        Điểm số của <strong><c:out value="${publishedCount}"/></strong> bài kiểm tra đã công bố được tự động đồng bộ kết quả gửi thẳng về Cổng Học Viên &amp; Phụ Huynh trong thời gian thực.
+                                    </p>
+                                    <a href="${pageContext.request.contextPath}/teacher/assessments?status=PUBLISHED" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 5px;">
+                                        <span>Xem <c:out value="${publishedCount}"/> bài đã công bố</span>
+                                        <svg class="icon icon-sm" style="width: 12px; height: 12px;" viewBox="0 0 24 24" aria-hidden="true">
+                                            <line x1="5" x2="19" y1="12" y2="12"></line>
+                                            <polyline points="12 5 19 12 12 19"></polyline>
+                                        </svg>
+                                    </a>
                                 </div>
                             </div>
                         </div>
-
-                        <button type="button" class="btn btn-secondary btn-sm" style="width: 100%; justify-content: center;" onclick="alert('Đã đồng bộ lịch thi toàn trung tâm với thời khóa biểu.');">
-                            Xem lịch kiểm tra toàn trung tâm
-                        </button>
                     </div>
                 </div>
             </div>
