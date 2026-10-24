@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <c:set var="internalShell" value="true" scope="request"/>
 <!DOCTYPE html>
 <html lang="vi">
@@ -354,25 +355,29 @@
 
                                                 <!-- Session Topic / Title -->
                                                 <c:if test="${not empty sess.title}">
-                                                    <p class="session-topic-text" title="<c:out value='${sess.title}' />">
+                                                    <p class="session-topic-text">
                                                         <c:out value="${sess.title}" />
                                                     </p>
                                                 </c:if>
 
                                                 <!-- Room & Teacher Meta Box -->
+                                                <c:set var="cleanRoomName" value="${sess.roomName}" />
+                                                <c:if test="${not empty sess.roomName and fn:contains(sess.roomName, '(')}">
+                                                    <c:set var="cleanRoomName" value="${fn:trim(fn:substringBefore(sess.roomName, '('))}" />
+                                                </c:if>
                                                 <div class="session-meta-box">
-                                                    <div class="session-meta-item">
+                                                    <div class="session-meta-item" title="<c:out value='${sess.roomCode}' /> • <c:out value='${sess.roomName}' />">
                                                         <svg style="width: 13px; height: 13px; color: var(--text-muted); flex-shrink: 0; margin-top: 1px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                             <path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                                         </svg>
-                                                        <span><strong><c:out value="${sess.roomCode}" /></strong> • <c:out value="${sess.roomName}" /></span>
+                                                        <span class="session-meta-text"><strong><c:out value="${sess.roomCode}" /></strong> • <c:out value="${cleanRoomName}" /></span>
                                                     </div>
-                                                    <div class="session-meta-item">
+                                                    <div class="session-meta-item" title="Giảng viên: <c:out value='${sess.teacherName}' />">
                                                         <svg style="width: 13px; height: 13px; color: var(--text-muted); flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                             <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                                             <circle cx="12" cy="7" r="4"></circle>
                                                         </svg>
-                                                        <span><c:out value="${sess.teacherName}" /></span>
+                                                        <span class="session-meta-text"><c:out value="${sess.teacherName}" /></span>
                                                     </div>
                                                 </div>
 
@@ -397,8 +402,8 @@
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </div>
-                                                    <span style="font-size: 10px; color: var(--text-muted); font-family: monospace;">
-                                                        ID: SES-${sess.id}
+                                                    <span class="session-id-pill" title="Mã ca học SES-${sess.id}">
+                                                        #SES-${sess.id}
                                                     </span>
                                                 </div>
                                             </article>
@@ -500,23 +505,27 @@
                                                     </c:choose>
                                                 </div>
                                                 <c:if test="${not empty sess.title}">
-                                                    <p class="session-topic-text" title="<c:out value='${sess.title}' />">
+                                                    <p class="session-topic-text">
                                                         <c:out value="${sess.title}" />
                                                     </p>
                                                 </c:if>
+                                                <c:set var="cleanRoomNameDay" value="${sess.roomName}" />
+                                                <c:if test="${not empty sess.roomName and fn:contains(sess.roomName, '(')}">
+                                                    <c:set var="cleanRoomNameDay" value="${fn:trim(fn:substringBefore(sess.roomName, '('))}" />
+                                                </c:if>
                                                 <div class="session-meta-box">
-                                                    <div class="session-meta-item">
-                                                        <svg style="width: 13px; height: 13px; color: var(--text-muted); flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <div class="session-meta-item" title="<c:out value='${sess.roomCode}' /> • <c:out value='${sess.roomName}' />">
+                                                        <svg style="width: 13px; height: 13px; color: var(--text-muted); flex-shrink: 0; margin-top: 1px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                             <path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                                         </svg>
-                                                        <span><strong><c:out value="${sess.roomCode}" /></strong> • <c:out value="${sess.roomName}" /></span>
+                                                        <span class="session-meta-text"><strong><c:out value="${sess.roomCode}" /></strong> • <c:out value="${cleanRoomNameDay}" /></span>
                                                     </div>
-                                                    <div class="session-meta-item">
+                                                    <div class="session-meta-item" title="Giảng viên: <c:out value='${sess.teacherName}' />">
                                                         <svg style="width: 13px; height: 13px; color: var(--text-muted); flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                             <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                                             <circle cx="12" cy="7" r="4"></circle>
                                                         </svg>
-                                                        <span><c:out value="${sess.teacherName}" /></span>
+                                                        <span class="session-meta-text"><c:out value="${sess.teacherName}" /></span>
                                                     </div>
                                                 </div>
                                                 <div class="session-status-row">
@@ -539,8 +548,8 @@
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </div>
-                                                    <span style="font-size: 10px; color: var(--text-muted); font-family: monospace;">
-                                                        ID: SES-${sess.id}
+                                                    <span class="session-id-pill" title="Mã ca học SES-${sess.id}">
+                                                        #SES-${sess.id}
                                                     </span>
                                                 </div>
                                             </article>

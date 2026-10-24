@@ -205,7 +205,7 @@
                 </c:if>
 
                 <!-- KPI Cards Row -->
-                <div class="kpi-row">
+                <div class="kpi-row-5">
                     <div class="kpi-card">
                         <div class="kpi-icon-wrap info">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

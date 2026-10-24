@@ -153,15 +153,18 @@
             color: inherit;
             display: flex;
             cursor: pointer;
+            border-radius: var(--radius-lg);
             transition: all var(--transition-fast);
         }
         .kpi-card-link:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
         }
         .kpi-card-link.active .kpi-card {
             border-color: var(--primary);
             box-shadow: 0 0 0 2px var(--primary-subtle);
+        }
+        .kpi-card-link.active .kpi-card::before {
+            background: var(--primary);
         }
     </style>
 </head>
@@ -230,7 +233,7 @@
                 </c:if>
 
                 <!-- KPI Cards Row -->
-                <div class="kpi-row">
+                <div class="kpi-row-5">
                     <a href="${pageContext.request.contextPath}/admin/courses?status=all" class="kpi-card-link ${empty filterStatus || filterStatus == 'all' ? 'active' : ''}">
                         <div class="kpi-card" style="width: 100%;">
                             <div class="kpi-icon-wrap info">
