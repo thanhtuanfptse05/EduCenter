@@ -84,14 +84,14 @@ CREATE TABLE dbo.Users (
 );
 GO
 
--- 3. PasswordResetTokens
+-- 3. PasswordResetTokens (FR-004 Quên & đặt lại mật khẩu)
 CREATE TABLE dbo.PasswordResetTokens (
     id BIGINT IDENTITY(1,1) CONSTRAINT PK_PasswordResetTokens PRIMARY KEY,
     user_id BIGINT NOT NULL,
-    token VARCHAR(100) NOT NULL CONSTRAINT UQ_PasswordResetTokens_Token UNIQUE,
-    expiry_time DATETIME2(0) NOT NULL,
-    is_used BIT NOT NULL CONSTRAINT DF_PasswordResetTokens_Used DEFAULT 0,
+    token_hash VARCHAR(64) NOT NULL CONSTRAINT UQ_PasswordResetTokens_Hash UNIQUE,
+    expires_at DATETIME2(0) NOT NULL,
     created_at DATETIME2(0) NOT NULL CONSTRAINT DF_PasswordResetTokens_CreatedAt DEFAULT GETDATE(),
+    consumed_at DATETIME2(0) NULL,
     CONSTRAINT FK_PasswordResetTokens_User FOREIGN KEY (user_id) REFERENCES dbo.Users(id) ON DELETE CASCADE
 );
 GO
