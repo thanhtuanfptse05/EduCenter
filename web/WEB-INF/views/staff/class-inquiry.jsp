@@ -53,15 +53,15 @@
                     </div>
 
                     <div class="mgmt-header-actions">
-                        <a href="${pageContext.request.contextPath}/staff/timetable" class="mgmt-btn mgmt-btn-outline">
+                        <button type="button" class="mgmt-btn mgmt-btn-outline" onclick="toggleTimetableDrawer()">
                             <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
                                 <line x1="16" y1="2" x2="16" y2="6"></line>
                                 <line x1="8" y1="2" x2="8" y2="6"></line>
                                 <line x1="3" y1="10" x2="21" y2="10"></line>
                             </svg>
-                            <span>Tra cứu TKB tuần</span>
-                        </a>
+                            <span>Toàn cảnh Lịch Tuần</span>
+                        </button>
                         <a href="${pageContext.request.contextPath}/staff/enrollments" class="mgmt-btn mgmt-btn-primary">
                             <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
@@ -346,13 +346,15 @@
                                                 </td>
                                                 <td class="align-top text-right">
                                                     <div style="display: inline-flex; align-items: center; gap: 6px;">
-                                                        <a href="${pageContext.request.contextPath}/staff/classes/detail?id=${cItem.id}" class="mgmt-btn mgmt-btn-outline" style="padding: 4px 8px; height: 28px; font-size: 11.5px; gap: 4px; text-decoration: none;" title="Xem lịch học & chi tiết lớp">
+                                                        <button type="button" class="mgmt-btn mgmt-btn-outline" style="padding: 4px 8px; height: 28px; font-size: 11.5px; gap: 4px;"
+                                                                onclick="showScheduleModal('<c:out value="${cItem.code}"/>', '<c:out value="${cItem.name}"/>', '<c:out value="${cItem.roomName != null ? cItem.roomName : 'Phòng học tiêu chuẩn'}"/>', '${cItem.id}')"
+                                                                title="Xem lịch học chi tiết">
                                                             <svg style="width: 13px; height: 13px; color: var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                                 <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                                                                 <circle cx="12" cy="12" r="3"></circle>
                                                             </svg>
                                                             <span>Xem lịch</span>
-                                                        </a>
+                                                        </button>
                                                         <c:if test="${cItem.remainingSlots > 0}">
                                                             <a href="${pageContext.request.contextPath}/staff/enrollments?classId=${cItem.id}" class="mgmt-btn mgmt-btn-primary" style="padding: 4px 8px; height: 28px; font-size: 11.5px; gap: 3px; text-decoration: none;" title="Ghi danh học viên vào lớp này">
                                                                 <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -415,10 +417,189 @@
                     </c:if>
                 </div>
             </div>
+
+            <!-- Weekly Schedule Modal Dialog (Interactive) -->
+            <div class="schedule-modal-backdrop" id="scheduleModal">
+                <div class="schedule-modal-dialog">
+                    <div class="schedule-modal-header">
+                        <div>
+                            <h3 class="schedule-modal-title" id="modalClassTitle">Thời Khóa Biểu Chi Tiết Lớp</h3>
+                            <p class="schedule-modal-subtitle" id="modalClassSubtitle">Chi tiết ca học &amp; tình trạng thiết bị phòng</p>
+                        </div>
+                        <button type="button" class="mgmt-btn-icon-sq" onclick="closeScheduleModal()" title="Đóng">
+                            <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="schedule-modal-body">
+                        <div class="schedule-week-grid">
+                            <div class="schedule-day-box">
+                                <div class="schedule-day-header">Thứ Hai</div>
+                                <div class="schedule-day-slot slot-primary">Ca tối<br>17:30 - 19:30</div>
+                            </div>
+                            <div class="schedule-day-box">
+                                <div class="schedule-day-header">Thứ Ba</div>
+                                <div class="schedule-day-slot slot-empty">Nghỉ</div>
+                            </div>
+                            <div class="schedule-day-box">
+                                <div class="schedule-day-header">Thứ Tư</div>
+                                <div class="schedule-day-slot slot-primary">Ca tối<br>17:30 - 19:30</div>
+                            </div>
+                            <div class="schedule-day-box">
+                                <div class="schedule-day-header">Thứ Năm</div>
+                                <div class="schedule-day-slot slot-empty">Nghỉ</div>
+                            </div>
+                            <div class="schedule-day-box">
+                                <div class="schedule-day-header">Thứ Sáu</div>
+                                <div class="schedule-day-slot slot-secondary">Ca phụ đạo<br>18:00 - 19:30</div>
+                            </div>
+                            <div class="schedule-day-box">
+                                <div class="schedule-day-header">Thứ Bảy</div>
+                                <div class="schedule-day-slot slot-empty">Nghỉ</div>
+                            </div>
+                            <div class="schedule-day-box">
+                                <div class="schedule-day-header">Chủ Nhật</div>
+                                <div class="schedule-day-slot slot-empty">Nghỉ</div>
+                            </div>
+                        </div>
+
+                        <!-- Class Quick Meta Box -->
+                        <div style="padding: 16px; border-radius: var(--radius-lg); background: var(--surface-muted); border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: flex-start; gap: 12px; max-width: 480px;">
+                                <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(16, 185, 129, 0.12); color: #059669; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div style="font-size: 13.5px; font-weight: 700; color: var(--text);">Chính sách giữ chỗ tư vấn tuyển sinh (BR04)</div>
+                                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Giữ chỗ tối đa 48 giờ sau khi tạo hồ sơ nhập học tạm thời cho học viên.</div>
+                                </div>
+                            </div>
+                            <a id="modalEnrollBtn" href="${pageContext.request.contextPath}/staff/enrollments" class="mgmt-btn mgmt-btn-primary" style="text-decoration: none;">
+                                Ghi danh ngay vào lớp này
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Timetable Drawer (Offcanvas) -->
+            <div class="timetable-drawer-backdrop" id="timetableDrawer">
+                <div class="timetable-drawer-panel">
+                    <div class="timetable-drawer-header">
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 700; color: var(--text); margin: 0;">Toàn cảnh Lịch Tuần Phân Hiệu</h3>
+                            <p style="font-size: 12px; color: var(--text-muted); margin: 2px 0 0 0;">Lưới phòng học tại Cơ sở Q.10 (Áp dụng Học kỳ 1 - 2026)</p>
+                        </div>
+                        <button type="button" class="mgmt-btn-icon-sq" onclick="toggleTimetableDrawer()" title="Đóng">
+                            <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="timetable-drawer-body">
+                        <div class="room-schedule-card">
+                            <div class="room-schedule-card-header">
+                                <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/></svg>
+                                <span>Phòng 101 (Tầng 1 - Sức chứa 15 học viên)</span>
+                            </div>
+                            <div class="room-schedule-item">
+                                <span>Thứ 3 &amp; Thứ 5 (17:30 - 19:30): L12-VAN-01</span>
+                                <span style="font-weight: 700; color: #059669;">3/15 HV</span>
+                            </div>
+                            <div class="room-schedule-item">
+                                <span>Thứ 4 &amp; Thứ 7 (17:30 - 19:30): L12-TOAN-01</span>
+                                <span style="font-weight: 700; color: #059669;">6/15 HV</span>
+                            </div>
+                            <div class="room-schedule-item">
+                                <span>Thứ 2 &amp; Thứ 5 (17:30 - 19:30): L12-ENG-01</span>
+                                <span style="font-weight: 700; color: #059669;">6/15 HV</span>
+                            </div>
+                        </div>
+
+                        <div class="room-schedule-card">
+                            <div class="room-schedule-card-header">
+                                <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/></svg>
+                                <span>Phòng 201 (VIP Nhỏ - Sức chứa 8 học viên)</span>
+                            </div>
+                            <div class="room-schedule-item">
+                                <span>Thứ 4 &amp; Thứ 7 (19:30 - 21:30): L12-IELTS-02</span>
+                                <span style="font-weight: 700; color: #059669;">3/8 HV</span>
+                            </div>
+                        </div>
+
+                        <div class="room-schedule-card">
+                            <div class="room-schedule-card-header">
+                                <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/></svg>
+                                <span>Phòng 202 (Tương tác - Sức chứa 15 học viên)</span>
+                            </div>
+                            <div class="room-schedule-item">
+                                <span>Thứ 2 &amp; Thứ 6 (19:30 - 21:30): L12-TOAN-02</span>
+                                <span style="font-weight: 700; color: #059669;">7/15 HV</span>
+                            </div>
+                        </div>
+
+                        <div class="room-schedule-card">
+                            <div class="room-schedule-card-header">
+                                <svg style="width: 16px; height: 16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/></svg>
+                                <span>Phòng 301 &amp; 302 (Khoa học Tự nhiên)</span>
+                            </div>
+                            <div class="room-schedule-item">
+                                <span>T3, T6 (17:45 - 19:45): L12-LY-01 (P301)</span>
+                                <span style="font-weight: 700; color: #059669;">6/15 HV</span>
+                            </div>
+                            <div class="room-schedule-item">
+                                <span>Chủ nhật (08:00 - 11:30): L12-SINH-01 (P302)</span>
+                                <span style="font-weight: 700; color: #059669;">2/15 HV</span>
+                            </div>
+                            <div class="room-schedule-item">
+                                <span>T5, CN (14:00 - 16:30): L12-HOA-01 (P302)</span>
+                                <span style="font-weight: 700; color: #059669;">4/15 HV</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <%@ include file="/WEB-INF/views/common/footer.jspf" %>
     </div>
 </div>
+
+<script>
+    function showScheduleModal(classCode, className, roomName, classId) {
+        var modal = document.getElementById('scheduleModal');
+        var title = document.getElementById('modalClassTitle');
+        var subtitle = document.getElementById('modalClassSubtitle');
+        var enrollBtn = document.getElementById('modalEnrollBtn');
+        if (title) title.textContent = 'Thời Khóa Biểu: ' + classCode;
+        if (subtitle) subtitle.textContent = className + ' | ' + roomName;
+        if (enrollBtn && classId) {
+            enrollBtn.href = '${pageContext.request.contextPath}/staff/enrollments?classId=' + classId;
+        }
+        if (modal) modal.classList.add('is-active');
+    }
+
+    function closeScheduleModal() {
+        var modal = document.getElementById('scheduleModal');
+        if (modal) modal.classList.remove('is-active');
+    }
+
+    function toggleTimetableDrawer() {
+        var drawer = document.getElementById('timetableDrawer');
+        if (drawer) drawer.classList.toggle('is-active');
+    }
+
+    window.addEventListener('click', function(e) {
+        var modal = document.getElementById('scheduleModal');
+        var drawer = document.getElementById('timetableDrawer');
+        if (e.target === modal) closeScheduleModal();
+        if (e.target === drawer) toggleTimetableDrawer();
+    });
+</script>
 </body>
 </html>
