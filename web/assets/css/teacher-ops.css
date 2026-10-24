@@ -1,0 +1,757 @@
+/**
+ * EduCenter ERP — Teacher Operations Dedicated Stylesheet
+ * Covers:
+ * 1. Attendance Roster & Check-in (Điểm danh ca học & kiểm diện)
+ * 2. Class Journal & Teaching Log (Sổ đầu bài & nhật ký giảng dạy)
+ * 3. Assessment Grading & Scores Entry (Bảng điểm & nhận xét bài kiểm tra)
+ * Strictly follows design.md: Default Light mode, Inter font, Lucide SVG icons, token variables.
+ */
+
+.ops-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  padding-bottom: 72px;
+}
+
+/* ==========================================================================
+   1. TOP NAVIGATION & TAB SWITCHER
+   ========================================================================== */
+.ops-top-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .ops-top-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.ops-top-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ops-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.ops-back-btn:hover {
+  color: var(--primary);
+  border-color: var(--primary-border);
+  background: var(--primary-subtle);
+}
+
+.ops-code-pill {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 8px;
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.ops-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface-muted);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.ops-tab-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ops-tab-item:hover {
+  color: var(--text);
+}
+
+.ops-tab-item.active {
+  background: var(--surface);
+  color: var(--primary);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ==========================================================================
+   2. HERO SESSION / ASSESSMENT CARD
+   ========================================================================== */
+.ops-hero-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .ops-hero-card {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.ops-hero-main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.ops-hero-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.ops-hero-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.ops-meta-chips {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.ops-meta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ops-meta-chip strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.ops-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   3. METRICS MATRIX STRIP (GRID)
+   ========================================================================== */
+.ops-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .ops-metrics-grid.cols-6 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .ops-metrics-grid.cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .ops-metrics-grid.cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.ops-metric-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ops-metric-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.ops-metric-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ops-metric-icon.icon-primary {
+  background: var(--primary-subtle);
+  color: var(--primary);
+}
+
+.ops-metric-icon.icon-success {
+  background: var(--success-subtle);
+  color: var(--success);
+}
+
+.ops-metric-icon.icon-warning {
+  background: var(--warning-subtle);
+  color: var(--warning);
+}
+
+.ops-metric-icon.icon-danger {
+  background: var(--danger-subtle);
+  color: var(--danger);
+}
+
+.ops-metric-icon.icon-muted {
+  background: var(--surface-muted);
+  color: var(--text-muted);
+}
+
+.ops-metric-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ops-metric-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.ops-metric-val {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.ops-metric-val.text-success { color: var(--success); }
+.ops-metric-val.text-warning { color: var(--warning); }
+.ops-metric-val.text-primary { color: var(--primary); }
+.ops-metric-val.text-danger { color: var(--danger); }
+
+/* ==========================================================================
+   4. TOOLBAR & SEARCH
+   ========================================================================== */
+.ops-toolbar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 768px) {
+  .ops-toolbar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.ops-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ops-search-box {
+  position: relative;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .ops-search-box {
+    width: 320px;
+  }
+}
+
+.ops-search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.ops-search-input {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px 0 34px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+  font-size: 13.5px;
+  color: var(--text);
+  transition: all 0.15s ease;
+}
+
+.ops-search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* ==========================================================================
+   5. ATTENDANCE SEGMENTED PILLS
+   ========================================================================== */
+.att-segment-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface-muted);
+  padding: 3px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.att-segment-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.att-segment-btn input[type="radio"] {
+  display: none;
+}
+
+.att-segment-btn:hover:not(.is-disabled) {
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.att-segment-btn.btn-present.is-active {
+  background: #DCFCE7;
+  color: #15803D;
+  border-color: #86EFAC;
+  box-shadow: var(--shadow-sm);
+}
+
+.att-segment-btn.btn-late.is-active {
+  background: #FEF9C3;
+  color: #854D0E;
+  border-color: #FDE047;
+  box-shadow: var(--shadow-sm);
+}
+
+.att-segment-btn.btn-excused.is-active {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border-color: #BFDBFE;
+  box-shadow: var(--shadow-sm);
+}
+
+.att-segment-btn.btn-unexcused.is-active {
+  background: #FEE2E2;
+  color: #B91C1C;
+  border-color: #FCA5A5;
+  box-shadow: var(--shadow-sm);
+}
+
+.att-segment-btn.is-disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ==========================================================================
+   6. TABLE & ROSTER DISPLAY
+   ========================================================================== */
+.ops-table-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.ops-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  text-align: left;
+}
+
+.ops-table thead {
+  background: var(--surface-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.ops-table th {
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.ops-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.ops-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.ops-table tbody tr:hover {
+  background: var(--surface-hover);
+}
+
+.ops-avatar-initials {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--primary-subtle);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   7. COMPLIANCE & CALLOUT CARDS
+   ========================================================================== */
+.ops-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.ops-callout-icon {
+  color: var(--primary);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.ops-callout-title {
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+/* ==========================================================================
+   8. STICKY BOTTOM ACTION BAR
+   ========================================================================== */
+.ops-sticky-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 30;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-lg);
+  margin-top: 8px;
+}
+
+@media (min-width: 640px) {
+  .ops-sticky-bar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.ops-sticky-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.ops-sticky-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* ==========================================================================
+   9. MINI FORMATTING TOOLBAR & QUICK TAGS
+   ========================================================================== */
+.ops-mini-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: var(--surface-muted);
+  border-top-left-radius: var(--radius-md);
+  border-top-right-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  border-bottom: none;
+}
+
+.ops-mini-tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ops-tool-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.ops-tool-btn:hover {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+
+.ops-tool-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+.ops-quick-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.ops-quick-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.ops-quick-tag:hover {
+  background: var(--primary-subtle);
+  border-color: var(--primary-border);
+  color: var(--primary);
+}
+
+/* ==========================================================================
+   10. JOURNAL 2-COLUMN LAYOUT
+   ========================================================================== */
+.ops-journal-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 1024px) {
+  .ops-journal-layout {
+    grid-template-columns: 8fr 4fr;
+  }
+}
+
+.ops-journal-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ops-journal-sec-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ops-step-badge {
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-subtle);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.ops-journal-sec-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.ops-journal-sec-desc {
+  margin: 2px 0 0 0;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   11. SCORES & GRADING TABLE STYLES
+   ========================================================================== */
+.ops-score-input {
+  width: 90px;
+  height: 36px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s ease;
+}
+
+.ops-score-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  background: #FFFFFF;
+}
+
+.ops-rank-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ops-rank-badge.rank-gioi {
+  background: #DCFCE7;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+}
+
+.ops-rank-badge.rank-kha {
+  background: #EFF6FF;
+  color: #1D4ED8;
+  border: 1px solid #BFDBFE;
+}
+
+.ops-rank-badge.rank-tb {
+  background: #FEF9C3;
+  color: #854D0E;
+  border: 1px solid #FDE047;
+}
+
+.ops-rank-badge.rank-yeu {
+  background: #FEE2E2;
+  color: #B91C1C;
+  border: 1px solid #FECACA;
+}
+
+.ops-rank-badge.rank-none {
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
