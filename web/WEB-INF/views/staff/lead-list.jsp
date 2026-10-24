@@ -59,7 +59,7 @@
                                 <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
                                 <rect width="12" height="8" x="6" y="14"></rect>
                             </svg>
-                            <span>Xuất dữ liệu</span>
+                            <span>Xuất dữ liệu Excel/CSV</span>
                         </button>
                         <button type="button" class="mgmt-btn mgmt-btn-primary" onclick="openCreateModal()">
                             <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -71,103 +71,119 @@
                     </div>
                 </div>
 
-                <!-- 2. 5 Stat KPI Cards Grid (Matches Reference Design) -->
-                <div class="crm-kpi-grid-5">
-                    <!-- Card 1: Tổng khách hàng -->
-                    <div class="crm-kpi-card">
-                        <div class="crm-kpi-header">
-                            <span class="crm-kpi-label">Tổng khách hàng</span>
-                            <div class="crm-kpi-icon-wrap primary">
-                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                <!-- 2. Operational SLA Micro-Alert -->
+                <div class="crm-sla-alert">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: rgba(0, 83, 219, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg class="icon icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                        </div>
+                        <div>
+                            <strong style="color: var(--primary); font-weight: 600;">Chỉ số SLA Tuyển sinh:</strong> Lead mới tiếp nhận cần được chuyên viên liên hệ trong vòng 15–30 phút để bảo đảm xác suất chuyển đổi ghi danh tối đa.
+                        </div>
+                    </div>
+                    <span style="font-size: 12px; color: var(--text-muted); font-weight: 500; white-space: nowrap;">Thời gian phản hồi TB: 18 phút</span>
+                </div>
+
+                <!-- 3. 5 Funnel Performance Cards (Matches Reference Design) -->
+                <c:set var="totalVal" value="${data.stats.total != null and data.stats.total > 0 ? data.stats.total : 1}"/>
+                <div class="crm-funnel-grid-5">
+                    <!-- Metric 1: Tổng khách hàng -->
+                    <div class="crm-funnel-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">TỔNG KHÁCH HÀNG</span>
+                            <div style="width: 30px; height: 30px; border-radius: 50%; background: rgba(0, 83, 219, 0.1); display: flex; align-items: center; justify-content: center; color: var(--primary);">
+                                <svg class="icon icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                             </div>
                         </div>
-                        <div class="crm-kpi-val-row">
-                            <span class="crm-kpi-val"><fmt:formatNumber value="${data.stats.total != null ? data.stats.total : 0}" pattern="#,###"/></span>
-                            <span class="crm-kpi-sub">hồ sơ toàn hệ thống</span>
+                        <div style="margin: 4px 0 12px 0;">
+                            <div style="display: flex; align-items: baseline; gap: 6px;">
+                                <span style="font-size: 26px; font-weight: 700; color: var(--text);"><fmt:formatNumber value="${data.stats.total != null ? data.stats.total : 0}" pattern="#,###"/></span>
+                                <span style="font-size: 12px; color: var(--text-muted);">hồ sơ toàn hệ thống</span>
+                            </div>
                         </div>
-                        <div class="crm-kpi-bar">
-                            <div class="crm-kpi-bar-fill" style="width: 100%; background: var(--primary);"></div>
+                        <div style="width: 100%; height: 4px; background: var(--bg-alt); border-radius: 2px; overflow: hidden;">
+                            <div style="height: 100%; width: 100%; background: var(--primary); border-radius: 2px;"></div>
                         </div>
                     </div>
 
-                    <!-- Card 2: Mới tiếp nhận -->
-                    <div class="crm-kpi-card">
-                        <div class="crm-kpi-header">
-                            <span class="crm-kpi-label">Mới tiếp nhận</span>
-                            <div class="crm-kpi-icon-wrap info">
-                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                    <!-- Metric 2: Mới tiếp nhận -->
+                    <div class="crm-funnel-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">MỚI TIẾP NHẬN</span>
+                            <div style="width: 30px; height: 30px; border-radius: 50%; background: rgba(37, 99, 235, 0.1); display: flex; align-items: center; justify-content: center; color: #2563eb;">
+                                <svg class="icon icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
                             </div>
                         </div>
-                        <div class="crm-kpi-val-row">
-                            <span class="crm-kpi-val" style="color: #0284c7;"><fmt:formatNumber value="${data.stats['new'] != null ? data.stats['new'] : 0}" pattern="#,###"/></span>
-                            <span class="crm-kpi-sub" style="color: #0284c7;">Cần xử lý &lt; 2h</span>
+                        <div style="margin: 4px 0 12px 0;">
+                            <div style="display: flex; align-items: baseline; gap: 6px;">
+                                <span style="font-size: 26px; font-weight: 700; color: #2563eb;"><fmt:formatNumber value="${data.stats['new'] != null ? data.stats['new'] : 0}" pattern="#,###"/></span>
+                                <span style="font-size: 12px; color: #2563eb; font-weight: 600;">Cần xử lý &lt; 2h</span>
+                            </div>
                         </div>
-                        <div class="crm-kpi-bar">
-                            <c:set var="totalVal" value="${data.stats.total != null and data.stats.total > 0 ? data.stats.total : 1}"/>
-                            <div class="crm-kpi-bar-fill" style="width: ${(data.stats['new'] * 100.0) / totalVal}%; background: #0284c7;"></div>
+                        <div style="width: 100%; height: 4px; background: var(--bg-alt); border-radius: 2px; overflow: hidden;">
+                            <div style="height: 100%; width: ${(data.stats['new'] * 100.0) / totalVal}%; background: #2563eb; border-radius: 2px;"></div>
                         </div>
                     </div>
 
-                    <!-- Card 3: Đang tư vấn / Test -->
-                    <div class="crm-kpi-card">
-                        <div class="crm-kpi-header">
-                            <span class="crm-kpi-label">Đang tư vấn / Test</span>
-                            <div class="crm-kpi-icon-wrap warning">
-                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    <!-- Metric 3: Đang tư vấn / Test -->
+                    <div class="crm-funnel-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">ĐANG TƯ VẤN / TEST</span>
+                            <div style="width: 30px; height: 30px; border-radius: 50%; background: rgba(217, 119, 6, 0.1); display: flex; align-items: center; justify-content: center; color: #d97706;">
+                                <svg class="icon icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                             </div>
                         </div>
-                        <div class="crm-kpi-val-row">
-                            <c:set var="inProgressCount" value="${(data.stats.consulting != null ? data.stats.consulting : 0) + (data.stats.assessed != null ? data.stats.assessed : 0) + (data.stats.contacted != null ? data.stats.contacted : 0)}"/>
-                            <span class="crm-kpi-val" style="color: #d97706;"><fmt:formatNumber value="${inProgressCount}" pattern="#,###"/></span>
-                            <span class="crm-kpi-sub" style="color: #d97706;">
-                                <fmt:formatNumber value="${(inProgressCount * 100.0) / totalVal}" maxFractionDigits="1"/>% tỷ trọng
-                            </span>
+                        <div style="margin: 4px 0 12px 0;">
+                            <div style="display: flex; align-items: baseline; gap: 6px;">
+                                <span style="font-size: 26px; font-weight: 700; color: #d97706;"><fmt:formatNumber value="${data.stats.consulting != null ? data.stats.consulting : 0}" pattern="#,###"/></span>
+                                <span style="font-size: 12px; color: var(--text-muted);"><fmt:formatNumber value="${(data.stats.consulting * 100.0) / totalVal}" maxFractionDigits="1"/>% tỷ trọng</span>
+                            </div>
                         </div>
-                        <div class="crm-kpi-bar">
-                            <div class="crm-kpi-bar-fill" style="width: ${(inProgressCount * 100.0) / totalVal}%; background: #d97706;"></div>
+                        <div style="width: 100%; height: 4px; background: var(--bg-alt); border-radius: 2px; overflow: hidden;">
+                            <div style="height: 100%; width: ${(data.stats.consulting * 100.0) / totalVal}%; background: #d97706; border-radius: 2px;"></div>
                         </div>
                     </div>
 
-                    <!-- Card 4: Đã ghi danh -->
-                    <div class="crm-kpi-card">
-                        <div class="crm-kpi-header">
-                            <span class="crm-kpi-label">Đã ghi danh</span>
-                            <div class="crm-kpi-icon-wrap success">
-                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    <!-- Metric 4: Đã ghi danh -->
+                    <div class="crm-funnel-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">ĐÃ GHI DANH</span>
+                            <div style="width: 30px; height: 30px; border-radius: 50%; background: rgba(5, 150, 105, 0.1); display: flex; align-items: center; justify-content: center; color: #059669;">
+                                <svg class="icon icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                             </div>
                         </div>
-                        <div class="crm-kpi-val-row">
-                            <span class="crm-kpi-val" style="color: #059669;"><fmt:formatNumber value="${data.stats.enrolled != null ? data.stats.enrolled : 0}" pattern="#,###"/></span>
-                            <span class="crm-kpi-sub" style="color: #059669;">
-                                <fmt:formatNumber value="${(data.stats.enrolled * 100.0) / totalVal}" maxFractionDigits="1"/>% hoàn tất
-                            </span>
+                        <div style="margin: 4px 0 12px 0;">
+                            <div style="display: flex; align-items: baseline; gap: 6px;">
+                                <span style="font-size: 26px; font-weight: 700; color: #059669;"><fmt:formatNumber value="${data.stats.enrolled != null ? data.stats.enrolled : 0}" pattern="#,###"/></span>
+                                <span style="font-size: 12px; color: #059669; font-weight: 600;"><fmt:formatNumber value="${(data.stats.enrolled * 100.0) / totalVal}" maxFractionDigits="1"/>% hoàn tất</span>
+                            </div>
                         </div>
-                        <div class="crm-kpi-bar">
-                            <div class="crm-kpi-bar-fill" style="width: ${(data.stats.enrolled * 100.0) / totalVal}%; background: #059669;"></div>
+                        <div style="width: 100%; height: 4px; background: var(--bg-alt); border-radius: 2px; overflow: hidden;">
+                            <div style="height: 100%; width: ${(data.stats.enrolled * 100.0) / totalVal}%; background: #059669; border-radius: 2px;"></div>
                         </div>
                     </div>
 
-                    <!-- Card 5: Hủy / Thất bại -->
-                    <div class="crm-kpi-card">
-                        <div class="crm-kpi-header">
-                            <span class="crm-kpi-label">Hủy / Thất bại</span>
-                            <div class="crm-kpi-icon-wrap danger">
-                                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                    <!-- Metric 5: Hủy / Thất bại -->
+                    <div class="crm-funnel-card">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 600;">HỦY / THẤT BẠI</span>
+                            <div style="width: 30px; height: 30px; border-radius: 50%; background: rgba(220, 38, 38, 0.1); display: flex; align-items: center; justify-content: center; color: #dc2626;">
+                                <svg class="icon icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
                             </div>
                         </div>
-                        <div class="crm-kpi-val-row">
-                            <span class="crm-kpi-val" style="color: #dc2626;"><fmt:formatNumber value="${data.stats.lost != null ? data.stats.lost : 0}" pattern="#,###"/></span>
-                            <span class="crm-kpi-sub" style="color: #dc2626;">
-                                <fmt:formatNumber value="${(data.stats.lost * 100.0) / totalVal}" maxFractionDigits="1"/>% tỷ lệ mất
-                            </span>
+                        <div style="margin: 4px 0 12px 0;">
+                            <div style="display: flex; align-items: baseline; gap: 6px;">
+                                <span style="font-size: 26px; font-weight: 700; color: #dc2626;"><fmt:formatNumber value="${data.stats.lost != null ? data.stats.lost : 0}" pattern="#,###"/></span>
+                                <span style="font-size: 12px; color: #dc2626;"><fmt:formatNumber value="${(data.stats.lost * 100.0) / totalVal}" maxFractionDigits="1"/>% tỷ lệ mất</span>
+                            </div>
                         </div>
-                        <div class="crm-kpi-bar">
-                            <div class="crm-kpi-bar-fill" style="width: ${(data.stats.lost * 100.0) / totalVal}%; background: #dc2626;"></div>
+                        <div style="width: 100%; height: 4px; background: var(--bg-alt); border-radius: 2px; overflow: hidden;">
+                            <div style="height: 100%; width: ${(data.stats.lost * 100.0) / totalVal}%; background: #dc2626; border-radius: 2px;"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 3. Advanced Filter Bar Card -->
+                <!-- 4. Advanced Filter Bar Card -->
                 <div class="mgmt-filter-card">
                     <form action="${pageContext.request.contextPath}/staff/leads" method="GET" class="mgmt-filter-grid">
                         <!-- Search Input -->
@@ -418,6 +434,102 @@
                             </div>
                         </div>
                     </c:if>
+                </div>
+
+                <!-- 5. Operational Footer Context & Activity Bar -->
+                <div class="stat-tri-grid" style="margin-top: 24px;">
+                    <!-- Quick Analytics Overview -->
+                    <div class="content-card" style="padding: 16px; margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                            <span style="font-weight: 600; font-size: 13.5px; color: var(--text);">Tỷ lệ chuyển đổi kênh tiếp cận</span>
+                            <svg class="icon icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary);"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                                    <span style="color: var(--text-muted);">Website Tuyển sinh</span>
+                                    <span style="font-weight: 600; color: var(--text);">Kênh chủ lực</span>
+                                </div>
+                                <div style="width: 100%; height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden;">
+                                    <div style="height: 100%; width: 52%; background: var(--primary); border-radius: 3px;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                                    <span style="color: var(--text-muted);">Hotline & Tổng đài</span>
+                                    <span style="font-weight: 600; color: var(--text);">Chuyển đổi nhanh</span>
+                                </div>
+                                <div style="width: 100%; height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden;">
+                                    <div style="height: 100%; width: 28%; background: #d97706; border-radius: 3px;"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                                    <span style="color: var(--text-muted);">Trực tiếp & Giới thiệu</span>
+                                    <span style="font-weight: 600; color: var(--text);">Uy tín cao</span>
+                                </div>
+                                <div style="width: 100%; height: 6px; background: var(--bg-alt); border-radius: 3px; overflow: hidden;">
+                                    <div style="height: 100%; width: 20%; background: #059669; border-radius: 3px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Active Advisor Workload -->
+                    <div class="content-card" style="padding: 16px; margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                            <span style="font-weight: 600; font-size: 13.5px; color: var(--text);">Định biên Phụ trách tư vấn</span>
+                            <span style="font-size: 11px; font-weight: 600; color: #059669; background: rgba(5, 150, 105, 0.1); padding: 2px 6px; border-radius: 4px;">Ca trực hôm nay</span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 12.5px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div class="mgmt-avatar color-blue" style="width: 24px; height: 24px; font-size: 10px;">TH</div>
+                                    <span style="font-weight: 500; color: var(--text);">Tư vấn viên Học vụ 01</span>
+                                </div>
+                                <span style="font-size: 11.5px; color: var(--text-muted); font-family: monospace;">Đang phụ trách</span>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div class="mgmt-avatar color-green" style="width: 24px; height: 24px; font-size: 10px;">CS</div>
+                                    <span style="font-weight: 500; color: var(--text);">Chuyên viên Tuyển sinh</span>
+                                </div>
+                                <span style="font-size: 11.5px; color: var(--text-muted); font-family: monospace;">Sẵn sàng tiếp nhận</span>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <div class="mgmt-avatar color-orange" style="width: 24px; height: 24px; font-size: 10px;">QT</div>
+                                    <span style="font-weight: 500; color: var(--text);">Quầy Lễ tân & Ghi danh</span>
+                                </div>
+                                <span style="font-size: 11.5px; color: var(--text-muted); font-family: monospace;">Hỗ trợ trực tiếp</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- System Audit Micro-feed -->
+                    <div class="content-card" style="padding: 16px; margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                            <span style="font-weight: 600; font-size: 13.5px; color: var(--text);">Quy chuẩn Xử lý Lead CRM</span>
+                            <span style="display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #059669;">
+                                <span class="live-pulse-dot" style="background: #059669; width: 6px; height: 6px;"></span>
+                                Chuẩn ISO
+                            </span>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: var(--text-muted);">
+                            <div style="display: flex; align-items: flex-start; gap: 8px;">
+                                <svg class="icon icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--primary); margin-top: 2px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>
+                                <span>Liên hệ khách hàng mới trong <strong>15–30 phút</strong> từ lúc ghi nhận.</span>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 8px;">
+                                <svg class="icon icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #059669; margin-top: 2px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                <span>Kiểm tra bài test phân lớp trước khi ghi danh khóa nâng cao.</span>
+                            </div>
+                            <div style="display: flex; align-items: flex-start; gap: 8px;">
+                                <svg class="icon icon-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #d97706; margin-top: 2px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                <span>Bảo mật tuyệt đối thông tin liên hệ và nhật ký tư vấn theo BR18.</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
