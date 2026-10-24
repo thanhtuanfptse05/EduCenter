@@ -72,7 +72,7 @@ public class LandingRepository {
     public List<Teacher> findFacultyTeachers(EntityManager em) {
         TypedQuery<Teacher> query = em.createQuery(
                 "SELECT t FROM Teacher t LEFT JOIN FETCH t.user WHERE t.status = 'ACTIVE' ORDER BY t.id ASC", Teacher.class);
-        return query.setMaxResults(8).getResultList();
+        return query.setMaxResults(12).getResultList();
     }
 
     public List<Subject> findAllActiveSubjects(EntityManager em) {

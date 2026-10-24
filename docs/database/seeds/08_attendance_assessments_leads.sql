@@ -10,156 +10,232 @@ SET QUOTED_IDENTIFIER ON;
 SET NOCOUNT ON;
 GO
 
-DECLARE @TeacherHungUser BIGINT = (SELECT id FROM dbo.Users WHERE email = 'teacher.hung@educenter.vn');
-DECLARE @TeacherHung BIGINT = (SELECT id FROM dbo.Teachers WHERE email = 'teacher.hung@educenter.vn');
-DECLARE @TeacherMaiUser BIGINT = (SELECT id FROM dbo.Users WHERE email = 'teacher.mai@educenter.vn');
-DECLARE @TeacherMai BIGINT = (SELECT id FROM dbo.Teachers WHERE email = 'teacher.mai@educenter.vn');
-
-DECLARE @ClassToan12_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-TOAN-01');
-DECLARE @ClassEng12_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-ENG-01');
-
-DECLARE @sNam BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.nam@educenter.vn');
-DECLARE @sPhong BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.phong@educenter.vn');
-DECLARE @sKien BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.kien@educenter.vn');
-DECLARE @sNgan BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.ngan@educenter.vn');
-
--- 1. Khởi tạo Điểm danh (Attendances) và Sổ đầu bài (TeachingJournals) cho các buổi đã học của lớp L12-TOAN-01
-DECLARE @Sess1 BIGINT = (SELECT id FROM dbo.ClassSessions WHERE class_id = @ClassToan12_01 AND session_date = '2026-10-05');
-DECLARE @Sess2 BIGINT = (SELECT id FROM dbo.ClassSessions WHERE class_id = @ClassToan12_01 AND session_date = '2026-10-08');
-DECLARE @Sess3 BIGINT = (SELECT id FROM dbo.ClassSessions WHERE class_id = @ClassToan12_01 AND session_date = '2026-10-12');
-DECLARE @Sess4 BIGINT = (SELECT id FROM dbo.ClassSessions WHERE class_id = @ClassToan12_01 AND session_date = '2026-10-15');
-DECLARE @Sess5 BIGINT = (SELECT id FROM dbo.ClassSessions WHERE class_id = @ClassToan12_01 AND session_date = '2026-10-19');
-DECLARE @Sess6 BIGINT = (SELECT id FROM dbo.ClassSessions WHERE class_id = @ClassToan12_01 AND session_date = '2026-10-22');
-
-CREATE TABLE #TmpAtt (
-    session_id BIGINT,
-    student_id BIGINT,
-    status VARCHAR(20),
-    notes NVARCHAR(255)
-);
-
--- Buổi 1
-INSERT INTO #TmpAtt VALUES
-(@Sess1, @sNam, 'PRESENT', N'Đi học đúng giờ, hăng hái phát biểu'),
-(@Sess1, @sPhong, 'PRESENT', N'Nắm bài nhanh, làm trọn vẹn bài tập'),
-(@Sess1, @sKien, 'PRESENT', N'Tập trung nghe giảng'),
-(@Sess1, @sNgan, 'PRESENT', N'Học tập nghiêm túc');
-
--- Buổi 2
-INSERT INTO #TmpAtt VALUES
-(@Sess2, @sNam, 'PRESENT', N'Làm bài tập về nhà đầy đủ'),
-(@Sess2, @sPhong, 'PRESENT', N'Có phương pháp giải sáng tạo'),
-(@Sess2, @sKien, 'PRESENT', N'Tiếp thu tốt'),
-(@Sess2, @sNgan, 'PRESENT', N'Đúng giờ');
-
--- Buổi 3
-INSERT INTO #TmpAtt VALUES
-(@Sess3, @sNam, 'PRESENT', N'Hoàn thành bài trên lớp'),
-(@Sess3, @sPhong, 'PRESENT', N'Hoàn thành xuất sắc'),
-(@Sess3, @sKien, 'PRESENT', N'Đúng giờ'),
-(@Sess3, @sNgan, 'PRESENT', N'Buổi cuối trước khi chuyển lớp');
-
--- Buổi 4
-INSERT INTO #TmpAtt VALUES
-(@Sess4, @sNam, 'LATE', N'Đến muộn 15 phút do tắc đường trên đường Cầu Giấy'),
-(@Sess4, @sPhong, 'PRESENT', N'Đúng giờ'),
-(@Sess4, @sKien, 'PRESENT', N'Đúng giờ');
-
--- Buổi 5
-INSERT INTO #TmpAtt VALUES
-(@Sess5, @sNam, 'PRESENT', N'Hiểu bài hình không gian'),
-(@Sess5, @sPhong, 'PRESENT', N'Đúng giờ'),
-(@Sess5, @sKien, 'PRESENT', N'Đúng giờ');
-
--- Buổi 6
-INSERT INTO #TmpAtt VALUES
-(@Sess6, @sNam, 'ABSENT_EXCUSED', N'Phụ huynh có gửi đơn xin phép nghỉ do bị sốt nhẹ'),
-(@Sess6, @sPhong, 'PRESENT', N'Tham gia làm bài kiểm tra định kỳ nghiêm túc'),
-(@Sess6, @sKien, 'LATE', N'Đến muộn 10 phút, làm bài tích cực');
+-- 1. Tự động sinh Điểm danh (Attendances) cho mọi ca học COMPLETED và học viên ghi danh
+PRINT N'Đang đồng bộ hóa dữ liệu Điểm danh (Attendances)...';
 
 INSERT INTO dbo.Attendances (session_id, student_id, status, remarks, notes, recorded_at, recorded_by)
-SELECT t.session_id, t.student_id, t.status, t.notes, t.notes, GETDATE(), @TeacherHungUser
-FROM #TmpAtt t
-WHERE t.session_id IS NOT NULL AND t.student_id IS NOT NULL
+SELECT 
+    cs.id,
+    e.student_id,
+    CASE 
+        WHEN (cs.id * 3 + e.student_id * 7) % 31 = 0 THEN 'ABSENT_UNEXCUSED'
+        WHEN (cs.id * 5 + e.student_id * 11) % 23 = 0 THEN 'ABSENT_EXCUSED'
+        WHEN (cs.id + e.student_id * 2) % 11 = 0 THEN 'LATE'
+        ELSE 'PRESENT'
+    END AS status,
+    CASE 
+        WHEN (cs.id * 3 + e.student_id * 7) % 31 = 0 THEN N'Nghỉ học không phép, bộ phận học vụ đã gọi điện thông báo phụ huynh'
+        WHEN (cs.id * 5 + e.student_id * 11) % 23 = 0 THEN N'Phụ huynh có gửi đơn xin phép nghỉ do ốm/lịch thi đột xuất ở trường'
+        WHEN (cs.id + e.student_id * 2) % 11 = 0 THEN N'Đến muộn 10-15 phút do thời tiết mưa/tắc đường, vào lớp trật tự'
+        ELSE N'Đi học đúng giờ, chuẩn bị bài đầy đủ, tiếp thu nhanh và hăng hái phát biểu'
+    END AS remarks,
+    CASE 
+        WHEN (cs.id * 3 + e.student_id * 7) % 31 = 0 THEN N'Cần xem lại video bài giảng và bù bài tập tờ chuyên đề'
+        WHEN (cs.id * 5 + e.student_id * 11) % 23 = 0 THEN N'Giáo viên đã gửi file tài liệu tóm tắt qua Zalo học tập'
+        WHEN (cs.id + e.student_id * 2) % 11 = 0 THEN N'Nhắc nhở chú ý sắp xếp thời gian đi sớm hơn'
+        ELSE N'Nắm vững kiến thức trọng tâm bài học'
+    END AS notes,
+    DATEADD(minute, 30, CAST(CONCAT(cs.session_date, ' ', cs.start_at) AS DATETIME2)),
+    u.id
+FROM dbo.ClassSessions cs
+JOIN dbo.Classes cl ON cl.id = cs.class_id
+JOIN dbo.Enrollments e ON e.class_id = cl.id AND e.status = 'ACTIVE'
+JOIN dbo.Teachers t ON t.id = cs.teacher_id
+JOIN dbo.Users u ON u.id = t.user_id
+WHERE cs.status = 'COMPLETED'
   AND NOT EXISTS (
-    SELECT 1 FROM dbo.Attendances a WHERE a.session_id = t.session_id AND a.student_id = t.student_id
-);
-
-DROP TABLE #TmpAtt;
-
--- Sổ đầu bài cho các buổi đã học
-IF @Sess1 IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.TeachingJournals WHERE session_id = @Sess1)
-    INSERT INTO dbo.TeachingJournals (session_id, content, homework, teacher_remarks, created_at, updated_at)
-    VALUES (@Sess1, N'Khảo sát sự biến thiên và vẽ đồ thị hàm số chứa dấu giá trị tuyệt đối', N'Bài tập tờ chuyên đề 1 (Câu 1 đến 25)', N'Cả lớp trật tự, tương tác tốt với bảng điện tử. Cần chú ý kỹ thuật vẽ đồ thị đối xứng qua trục hoành', GETDATE(), GETDATE());
-
-IF @Sess2 IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.TeachingJournals WHERE session_id = @Sess2)
-    INSERT INTO dbo.TeachingJournals (session_id, content, homework, teacher_remarks, created_at, updated_at)
-    VALUES (@Sess2, N'Cực trị của hàm số bậc ba và hàm phân thức hữu tỉ nâng cao', N'Bài tập chuyên đề cực trị hàm hợp f(u)', N'Nam và Phong làm bài rất tốt trên bảng. Lớp nắm vững điều kiện cực trị qua dấu đạo hàm bậc nhất', GETDATE(), GETDATE());
+      SELECT 1 FROM dbo.Attendances a WHERE a.session_id = cs.id AND a.student_id = e.student_id
+  );
 GO
 
--- 2. Khởi tạo Bài kiểm tra (Assessments) và Điểm số (AssessmentScores)
+-- 2. Tự động sinh Sổ đầu bài (TeachingJournals) cho mọi ca học COMPLETED
+PRINT N'Đang đồng bộ hóa dữ liệu Sổ đầu bài (TeachingJournals)...';
+
+INSERT INTO dbo.TeachingJournals (session_id, content, homework, teacher_remarks, created_at, updated_at)
+SELECT 
+    cs.id,
+    cs.title,
+    N'Hoàn thành bài tập tự luyện trong tài liệu phát tay (Câu 1 đến Câu 25) và chuẩn bị bài mới',
+    N'Lớp học duy trì nề nếp kỷ luật tốt, tương tác sôi nổi. Đa số các em nắm vững phương pháp và giải nhanh đúng tiến độ.',
+    cs.session_date,
+    cs.session_date
+FROM dbo.ClassSessions cs
+WHERE cs.status = 'COMPLETED'
+  AND NOT EXISTS (SELECT 1 FROM dbo.TeachingJournals tj WHERE tj.session_id = cs.id);
+GO
+
+-- 3. Khởi tạo danh mục Bài kiểm tra (Assessments) và Điểm số chi tiết (AssessmentScores)
+PRINT N'Đang tạo Bài kiểm tra (Assessments) và Bảng điểm (AssessmentScores)...';
+
 DECLARE @TeacherHungUser BIGINT = (SELECT id FROM dbo.Users WHERE email = 'teacher.hung@educenter.vn');
 DECLARE @TeacherMaiUser BIGINT = (SELECT id FROM dbo.Users WHERE email = 'teacher.mai@educenter.vn');
+DECLARE @TeacherTuanUser BIGINT = (SELECT id FROM dbo.Users WHERE email = 'teacher.tuan@educenter.vn');
+DECLARE @TeacherLanUser BIGINT = (SELECT id FROM dbo.Users WHERE email = 'teacher.lan@educenter.vn');
+DECLARE @TeacherPhuongUser BIGINT = (SELECT id FROM dbo.Users WHERE email = 'teacher.phuong@educenter.vn');
+DECLARE @TeacherHoangUser BIGINT = (SELECT id FROM dbo.Users WHERE email = 'teacher.hoang@educenter.vn');
+DECLARE @TeacherMaiAnhUser BIGINT = (SELECT id FROM dbo.Users WHERE email = 'teacher.maianh@educenter.vn');
+DECLARE @TeacherNamUser BIGINT = (SELECT id FROM dbo.Users WHERE email = 'teacher.nam@educenter.vn');
+DECLARE @TeacherNgocUser BIGINT = (SELECT id FROM dbo.Users WHERE email = 'teacher.ngoc@educenter.vn');
 
-DECLARE @ClassToan12_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-TOAN-01');
-DECLARE @ClassEng12_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-ENG-01');
+DECLARE @L12_TOAN_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-TOAN-01');
+DECLARE @L12_TOAN_02 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-TOAN-02');
+DECLARE @L12_DGNL_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-DGNL-01');
+DECLARE @L11_TOAN_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L11-TOAN-01');
+DECLARE @L10_TOAN_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L10-TOAN-01');
+DECLARE @L09_TOAN_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L09-TOAN-01');
 
-DECLARE @sNam BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.nam@educenter.vn');
-DECLARE @sPhong BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.phong@educenter.vn');
-DECLARE @sKien BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.kien@educenter.vn');
+DECLARE @L12_ENG_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-ENG-01');
+DECLARE @L11_IELTS_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L11-IELTS-01');
+DECLARE @L12_IELTS_02 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-IELTS-02');
+DECLARE @L10_ENG_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L10-ENG-01');
+DECLARE @L09_ENG_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L09-ENG-01');
 
--- Bài kiểm tra 1 (Thang 10, Trọng số 1.0, Đã công bố)
-DECLARE @Asm1Id BIGINT;
-IF NOT EXISTS (SELECT 1 FROM dbo.Assessments WHERE class_id = @ClassToan12_01 AND (title = N'Kiểm tra Khảo sát Hàm số & Ứng dụng Đạo hàm (Chương 1)' OR name = N'Kiểm tra Khảo sát Hàm số & Ứng dụng Đạo hàm (Chương 1)'))
+DECLARE @L12_LY_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-LY-01');
+DECLARE @L11_LY_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L11-LY-01');
+DECLARE @L12_HOA_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-HOA-01');
+DECLARE @L11_HOA_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L11-HOA-01');
+DECLARE @L12_SINH_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-SINH-01');
+DECLARE @L12_VAN_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-VAN-01');
+DECLARE @L10_VAN_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L10-VAN-01');
+
+-- Helper bảng tạm chứa các bài kiểm tra
+CREATE TABLE #TmpAsm (
+    class_id BIGINT,
+    title NVARCHAR(255),
+    asm_type VARCHAR(20),
+    weight DECIMAL(4,2),
+    max_score DECIMAL(5,2),
+    test_date DATE,
+    descr NVARCHAR(500),
+    status VARCHAR(20),
+    teacher_user_id BIGINT
+);
+
+INSERT INTO #TmpAsm VALUES
+-- 1. L12-TOAN-01
+(@L12_TOAN_01, N'Kiểm tra Khảo sát Hàm số & Ứng dụng Đạo hàm (Chương 1)', '1_PERIOD', 1.00, 10.00, '2026-10-15', N'Kiểm tra định kỳ 45 phút rèn luyện kỹ năng nhận diện đồ thị và cực trị hàm hợp.', 'PUBLISHED', @TeacherHungUser),
+(@L12_TOAN_01, N'Khảo sát Chất lượng Đầu vào & Thi thử Tốt nghiệp THPT Đợt 1', 'TRIAL', 2.00, 100.00, '2026-10-22', N'Đề thi chuẩn cấu trúc 50 câu trắc nghiệm THPT Quốc Gia phân hóa 4 cấp độ.', 'PUBLISHED', @TeacherHungUser),
+(@L12_TOAN_01, N'Kiểm tra 15 Phút Khởi Động: Hàm số Mũ & Lôgarit', '15_MIN', 1.00, 10.00, '2026-10-26', N'Kiểm tra nhanh công thức lũy thừa và biến đổi biểu thức lôgarit.', 'DRAFT', @TeacherHungUser),
+
+-- 2. L12-TOAN-02
+(@L12_TOAN_02, N'Kiểm tra Chuyên đề Hàm số Phân hóa & Vận dụng Cao 9+', '1_PERIOD', 1.00, 10.00, '2026-10-16', N'Đề bài 25 câu trắc nghiệm phân hóa điểm 8.5 đến 10 câu hỏi tham số m.', 'PUBLISHED', @TeacherHungUser),
+
+-- 3. L12-DGNL-01
+(@L12_DGNL_01, N'Khảo sát ĐGNL ĐHQG Phần Tư duy Định lượng Đợt 1', 'TRIAL', 2.00, 100.00, '2026-10-17', N'Bài thi 50 câu hỏi tư duy logic, phân tích biểu đồ và suy luận số liệu trên máy.', 'PUBLISHED', @TeacherHungUser),
+
+-- 4. L11-TOAN-01
+(@L11_TOAN_01, N'Kiểm tra Định kỳ 1 Tiết: Phương trình Lượng giác & Hình Không gian', '1_PERIOD', 1.00, 10.00, '2026-10-18', N'Đánh giá kỹ năng biến đổi công thức lượng giác và xác định giao tuyến mặt phẳng.', 'PUBLISHED', @TeacherHungUser),
+
+-- 5. L10-TOAN-01
+(@L10_TOAN_01, N'Kiểm tra Giữa kỳ I: Tập hợp, Mệnh đề & Bất phương trình', 'MID_TERM', 1.50, 10.00, '2026-10-19', N'Đánh giá năng lực tư duy toán học đầu cấp THPT theo chương trình GDPT mới.', 'PUBLISHED', @TeacherNamUser),
+
+-- 6. L09-TOAN-01
+(@L09_TOAN_01, N'Khảo sát Năng lực Đầu vào Môn Toán & Rút gọn Biểu thức Chứa căn', '1_PERIOD', 1.00, 10.00, '2026-10-17', N'Kiểm tra trọng tâm các dạng toán điều kiện xác định, rút gọn và bài toán phụ.', 'PUBLISHED', @TeacherNamUser),
+
+-- 7. L12-ENG-01
+(@L12_ENG_01, N'Mid-Term Academic Vocabulary & Grammar Check', 'MID_TERM', 1.50, 10.00, '2026-10-20', N'Kiểm tra giữa kỳ kiến thức thì, mệnh đề quan hệ và ngữ động từ trọng điểm.', 'PUBLISHED', @TeacherMaiUser),
+
+-- 8. L11-IELTS-01
+(@L11_IELTS_01, N'IELTS Progress Check 1: Reading True/False & Writing Task 1', 'MID_TERM', 1.50, 10.00, '2026-10-22', N'Đánh giá kỹ năng viết miêu tả biểu đồ đường và đọc hiểu học thuật Cambridge.', 'PUBLISHED', @TeacherMaiAnhUser),
+
+-- 9. L12-IELTS-02
+(@L12_IELTS_02, N'IELTS Intensive Mock 1: Writing Task 2 & Reading Passage 3 Band 7.5+', 'TRIAL', 2.00, 10.00, '2026-10-21', N'Bài thi kiểm tra áp lực phòng thi đạt chuẩn tiêu chí chấm của Hội đồng Anh / IDP.', 'PUBLISHED', @TeacherMaiAnhUser),
+
+-- 10. L12-LY-01
+(@L12_LY_01, N'Kiểm tra Định kỳ 45 Phút: Dao động Cơ & Sóng Cơ Học Điểm 9+', '1_PERIOD', 1.00, 10.00, '2026-10-19', N'Rèn luyện kỹ năng sử dụng vòng tròn lượng giác và đọc đồ thị sóng cơ học.', 'PUBLISHED', @TeacherTuanUser),
+
+-- 11. L12-HOA-01
+(@L12_HOA_01, N'Kiểm tra 1 Tiết: Este - Lipit & Cacbohiđrat Chuyên sâu', '1_PERIOD', 1.00, 10.00, '2026-10-20', N'Đề trắc nghiệm 30 câu bao gồm các bài toán thủy phân hỗn hợp este phân hóa.', 'PUBLISHED', @TeacherLanUser),
+
+-- 12. L12-SINH-01
+(@L12_SINH_01, N'Khảo sát Di truyền Học Phân tử & Bài toán Phả hệ Y Dược', '1_PERIOD', 1.00, 10.00, '2026-10-21', N'Đánh giá kỹ năng tính xác suất phả hệ và quy luật di truyền phân ly độc lập.', 'PUBLISHED', @TeacherHoangUser),
+
+-- 13. L12-VAN-01
+(@L12_VAN_01, N'Kiểm tra Viết 90 Phút: Nghị luận Xã hội & Đoạn trích Sông Đà', 'MID_TERM', 1.50, 10.00, '2026-10-20', N'Rèn luyện tư duy lập luận sắc sảo, dẫn chứng thực tế và chất văn giàu cảm xúc.', 'PUBLISHED', @TeacherPhuongUser),
+
+-- 14. L10-VAN-01
+(@L10_VAN_01, N'Kiểm tra Đọc hiểu Văn học Dân gian & Đoạn văn Nghị luận 200 chữ', '1_PERIOD', 1.00, 10.00, '2026-10-21', N'Đọc hiểu sử thi anh hùng và kỹ năng phân tích hình tượng nhân vật.', 'PUBLISHED', @TeacherNgocUser);
+
+-- Duyệt chèn Assessments
+DECLARE @aClassId BIGINT, @aTitle NVARCHAR(255), @aType VARCHAR(20), @aWeight DECIMAL(4,2), @aMax DECIMAL(5,2), @aDate DATE, @aDescr NVARCHAR(500), @aStatus VARCHAR(20), @aTeacherUser BIGINT;
+DECLARE @AsmId BIGINT;
+
+DECLARE curAsm CURSOR LOCAL FOR
+SELECT class_id, title, asm_type, weight, max_score, test_date, descr, status, teacher_user_id FROM #TmpAsm;
+
+OPEN curAsm;
+FETCH NEXT FROM curAsm INTO @aClassId, @aTitle, @aType, @aWeight, @aMax, @aDate, @aDescr, @aStatus, @aTeacherUser;
+
+WHILE @@FETCH_STATUS = 0
 BEGIN
-    INSERT INTO dbo.Assessments (class_id, title, name, assessment_type, weight, max_score, test_date, description, status, created_at, updated_at)
-    VALUES (@ClassToan12_01, N'Kiểm tra Khảo sát Hàm số & Ứng dụng Đạo hàm (Chương 1)', N'Kiểm tra Khảo sát Hàm số & Ứng dụng Đạo hàm (Chương 1)', '1_PERIOD', 1.00, 10.00, '2026-10-15', N'Kiểm tra định kỳ 45 phút rèn luyện kỹ năng nhận diện đồ thị và cực trị hàm hợp.', 'PUBLISHED', GETDATE(), GETDATE());
-    SET @Asm1Id = SCOPE_IDENTITY();
+    IF NOT EXISTS (SELECT 1 FROM dbo.Assessments WHERE class_id = @aClassId AND (title = @aTitle OR name = @aTitle))
+    BEGIN
+        INSERT INTO dbo.Assessments (class_id, title, name, assessment_type, weight, max_score, test_date, description, status, created_at, updated_at)
+        VALUES (@aClassId, @aTitle, @aTitle, @aType, @aWeight, @aMax, @aDate, @aDescr, @aStatus, GETDATE(), GETDATE());
 
-    INSERT INTO dbo.AssessmentScores (assessment_id, student_id, score, remarks, feedback, graded_at, graded_by) VALUES
-    (@Asm1Id, @sPhong, 9.50, N'Làm bài xuất sắc, trình bày bài bản và cẩn thận.', N'Làm bài xuất sắc, trình bày bài bản và cẩn thận.', GETDATE(), @TeacherHungUser),
-    (@Asm1Id, @sNam, 8.00, N'Tư duy tốt, cần cẩn thận hơn ở câu hỏi cực trị chứa tham số.', N'Tư duy tốt, cần cẩn thận hơn ở câu hỏi cực trị chứa tham số.', GETDATE(), @TeacherHungUser),
-    (@Asm1Id, @sKien, 7.50, N'Nắm vững kiến thức cơ bản, cần tăng tốc độ làm bài.', N'Nắm vững kiến thức cơ bản, cần tăng tốc độ làm bài.', GETDATE(), @TeacherHungUser);
-END
+        SET @AsmId = SCOPE_IDENTITY();
 
--- Bài kiểm tra 2 (Thang 100, Trọng số 2.0, Đã công bố - Dùng để kiểm thử chuẩn hóa GPA B02: 8/10 và 80/100 -> 8.00/10)
-DECLARE @Asm2Id BIGINT;
-IF NOT EXISTS (SELECT 1 FROM dbo.Assessments WHERE class_id = @ClassToan12_01 AND (title = N'Khảo sát Chất lượng Đầu vào & Thi thử Tốt nghiệp THPT Đợt 1' OR name = N'Khảo sát Chất lượng Đầu vào & Thi thử Tốt nghiệp THPT Đợt 1'))
-BEGIN
-    INSERT INTO dbo.Assessments (class_id, title, name, assessment_type, weight, max_score, test_date, description, status, created_at, updated_at)
-    VALUES (@ClassToan12_01, N'Khảo sát Chất lượng Đầu vào & Thi thử Tốt nghiệp THPT Đợt 1', N'Khảo sát Chất lượng Đầu vào & Thi thử Tốt nghiệp THPT Đợt 1', 'TRIAL', 2.00, 100.00, '2026-10-22', N'Đề thi chuẩn cấu trúc 50 câu trắc nghiệm THPT Quốc Gia phân hóa 4 cấp độ.', 'PUBLISHED', GETDATE(), GETDATE());
-    SET @Asm2Id = SCOPE_IDENTITY();
+        -- Tự động sinh điểm cho học viên của lớp nếu bài kiểm tra là PUBLISHED
+        IF @aStatus = 'PUBLISHED'
+        BEGIN
+            INSERT INTO dbo.AssessmentScores (assessment_id, student_id, score, remarks, feedback, graded_at, graded_by)
+            SELECT 
+                @AsmId,
+                e.student_id,
+                CASE 
+                    WHEN @aMax = 100.00 THEN 
+                        CASE (e.student_id * 7 + @AsmId * 13) % 5
+                            WHEN 0 THEN 94.00
+                            WHEN 1 THEN 88.00
+                            WHEN 2 THEN 82.00
+                            WHEN 3 THEN 76.00
+                            ELSE 90.00
+                        END
+                    ELSE
+                        CASE (e.student_id * 7 + @AsmId * 13) % 5
+                            WHEN 0 THEN 9.50
+                            WHEN 1 THEN 8.80
+                            WHEN 2 THEN 8.00
+                            WHEN 3 THEN 7.50
+                            ELSE 9.00
+                        END
+                END AS score,
+                CASE (e.student_id * 7 + @AsmId * 13) % 5
+                    WHEN 0 THEN N'Làm bài xuất sắc, trình bày bài bản, nắm rất chắc phương pháp giải.'
+                    WHEN 1 THEN N'Tư duy tốt, lập luận rõ ràng, cần cẩn thận hơn ở các câu hỏi bẫy.'
+                    WHEN 2 THEN N'Nắm vững kiến thức trọng tâm, tốc độ làm bài ổn định.'
+                    WHEN 3 THEN N'Có tiến bộ, cần rèn thêm kỹ năng tính toán và quản lý thời gian.'
+                    ELSE N'Kết quả tốt, phát huy tốt phong độ học tập hiện tại.'
+                END AS remarks,
+                CASE (e.student_id * 7 + @AsmId * 13) % 5
+                    WHEN 0 THEN N'Làm bài xuất sắc, trình bày bài bản, nắm rất chắc phương pháp giải.'
+                    WHEN 1 THEN N'Tư duy tốt, lập luận rõ ràng, cần cẩn thận hơn ở các câu hỏi bẫy.'
+                    WHEN 2 THEN N'Nắm vững kiến thức trọng tâm, tốc độ làm bài ổn định.'
+                    WHEN 3 THEN N'Có tiến bộ, cần rèn thêm kỹ năng tính toán và quản lý thời gian.'
+                    ELSE N'Kết quả tốt, phát huy tốt phong độ học tập hiện tại.'
+                END AS feedback,
+                GETDATE(),
+                @aTeacherUser
+            FROM dbo.Enrollments e
+            WHERE e.class_id = @aClassId AND e.status = 'ACTIVE';
+        END;
+    END;
 
-    INSERT INTO dbo.AssessmentScores (assessment_id, student_id, score, remarks, feedback, graded_at, graded_by) VALUES
-    (@Asm2Id, @sPhong, 92.00, N'Đạt 46/50 câu. Kỹ năng tư duy giải nhanh rất tốt.', N'Đạt 46/50 câu. Kỹ năng tư duy giải nhanh rất tốt.', GETDATE(), @TeacherHungUser),
-    (@Asm2Id, @sNam, 80.00, N'Đạt 40/50 câu (Tương đương 8.0 điểm). Tiến bộ rõ rệt phần hình học không gian.', N'Đạt 40/50 câu (Tương đương 8.0 điểm). Tiến bộ rõ rệt phần hình học không gian.', GETDATE(), @TeacherHungUser),
-    (@Asm2Id, @sKien, 74.00, N'Đạt 37/50 câu. Chú ý chống bẫy phần tiệm cận đứng.', N'Đạt 37/50 câu. Chú ý chống bẫy phần tiệm cận đứng.', GETDATE(), @TeacherHungUser);
-END
+    FETCH NEXT FROM curAsm INTO @aClassId, @aTitle, @aType, @aWeight, @aMax, @aDate, @aDescr, @aStatus, @aTeacherUser;
+END;
 
--- Bài kiểm tra 3 (Bản nháp DRAFT để giáo viên kiểm thử giao diện chấm điểm)
-IF NOT EXISTS (SELECT 1 FROM dbo.Assessments WHERE class_id = @ClassToan12_01 AND (title = N'Kiểm tra 15 Phút Khởi Động: Hàm số Mũ & Lôgarit' OR name = N'Kiểm tra 15 Phút Khởi Động: Hàm số Mũ & Lôgarit'))
-BEGIN
-    INSERT INTO dbo.Assessments (class_id, title, name, assessment_type, weight, max_score, test_date, description, status, created_at, updated_at)
-    VALUES (@ClassToan12_01, N'Kiểm tra 15 Phút Khởi Động: Hàm số Mũ & Lôgarit', N'Kiểm tra 15 Phút Khởi Động: Hàm số Mũ & Lôgarit', '15_MIN', 1.00, 10.00, '2026-10-26', N'Kiểm tra nhanh công thức lũy thừa và biến đổi biểu thức lôgarit.', 'DRAFT', GETDATE(), GETDATE());
-END
-
--- Bài kiểm tra Tiếng Anh (L12-ENG-01)
-DECLARE @AsmEngId BIGINT;
-IF NOT EXISTS (SELECT 1 FROM dbo.Assessments WHERE class_id = @ClassEng12_01 AND (title = N'Mid-Term Academic Vocabulary & Grammar Check' OR name = N'Mid-Term Academic Vocabulary & Grammar Check'))
-BEGIN
-    INSERT INTO dbo.Assessments (class_id, title, name, assessment_type, weight, max_score, test_date, description, status, created_at, updated_at)
-    VALUES (@ClassEng12_01, N'Mid-Term Academic Vocabulary & Grammar Check', N'Mid-Term Academic Vocabulary & Grammar Check', 'MID_TERM', 1.50, 10.00, '2026-10-22', N'Kiểm tra giữa kỳ kiến thức thì, mệnh đề quan hệ và ngữ động từ.', 'PUBLISHED', GETDATE(), GETDATE());
-    SET @AsmEngId = SCOPE_IDENTITY();
-
-    INSERT INTO dbo.AssessmentScores (assessment_id, student_id, score, remarks, feedback, graded_at, graded_by) VALUES
-    (@AsmEngId, @sNam, 8.50, N'Rất tốt phần ngữ pháp và câu đồng nghĩa. Cố gắng phát huy!', N'Rất tốt phần ngữ pháp và câu đồng nghĩa. Cố gắng phát huy!', GETDATE(), @TeacherMaiUser);
-END
+CLOSE curAsm;
+DEALLOCATE curAsm;
+DROP TABLE #TmpAsm;
 GO
 
--- 3. Khởi tạo Phễu Tuyển sinh CRM (Leads & Consultations)
+-- 4. Khởi tạo Phễu Tuyển sinh CRM (Leads & Consultations quy mô lớn)
+PRINT N'Đang cập nhật danh sách Leads CRM và Lịch sử tư vấn...';
+
 DECLARE @StaffHa BIGINT = (SELECT id FROM dbo.Users WHERE email = 'staff@educenter.vn');
 DECLARE @StaffLinh BIGINT = (SELECT id FROM dbo.Users WHERE email = 'staff.linh@educenter.vn');
 DECLARE @StaffDung BIGINT = (SELECT id FROM dbo.Users WHERE email = 'staff.dung@educenter.vn');
+DECLARE @StaffMai BIGINT = (SELECT id FROM dbo.Users WHERE email = 'staff.mai@educenter.vn');
 
 MERGE dbo.Leads AS target
 USING (VALUES
@@ -170,48 +246,164 @@ USING (VALUES
     (N'Bùi Thanh Thảo', '0912999000', 'thanhthao.b@gmail.com', 9, 'WEBSITE', 'CONSULTING', @StaffHa, N'Phụ huynh tìm lớp Tiếng Anh ôn thi vào lớp 10 chuyên Sư Phạm'),
     (N'Hoàng Gia Huy', '0913111333', 'giahuy.h@gmail.com', 12, 'HOTLINE', 'NEW', NULL, N'Học sinh muốn học thử lớp Vật lý 12 Thầy Tuấn vào tuần tới'),
     (N'Lê Thùy Dương', '0913222444', 'thuyduong.le@gmail.com', 11, 'FACEBOOK', 'CONSULTING', @StaffLinh, N'Cần gia sư bồi dưỡng Hóa học lớp 11 mục tiêu khối B00'),
-    (N'Trần Minh Đức', '0913555777', 'minhduc.tran@gmail.com', 8, 'WEBSITE', 'CONTACTED', @StaffHa, N'Phụ huynh hẹn cuối tuần đưa con qua trung tâm test đầu vào')
+    (N'Trần Minh Đức', '0913555777', 'minhduc.tran@gmail.com', 8, 'WEBSITE', 'CONTACTED', @StaffHa, N'Phụ huynh hẹn cuối tuần đưa con qua trung tâm test đầu vào'),
+    (N'Nguyễn Văn An', '0913666888', 'vanan.nguyen@gmail.com', 12, 'FACEBOOK', 'ENROLLED', @StaffDung, N'Đã đăng ký combo Toán - Lý - Hóa 12'),
+    (N'Trịnh Bích Hạnh', '0913777999', 'bichhanh.t@gmail.com', 11, 'REFERRAL', 'CONSULTING', @StaffLinh, N'Tìm lớp IELTS target 7.0 du học Canada'),
+    (N'Đoàn Quốc Bảo', '0913888000', 'quocbao.doan@gmail.com', 10, 'HOTLINE', 'CONTACTED', @StaffMai, N'Phụ huynh muốn bổ trợ môn Toán và Ngữ Văn lớp 10'),
+    (N'Lâm Phương Nhi', '0914111222', 'phuongnhi.lam@gmail.com', 9, 'WALK_IN', 'ENROLLED', @StaffHa, N'Đến trực tiếp văn phòng đăng ký khóa Toán 9 vào 10'),
+    (N'Võ Thành Đạt', '0914222333', 'thanhdat.vo@gmail.com', 12, 'WEBSITE', 'NEW', NULL, N'Điền form đăng ký tư vấn thi thử ĐGNL ĐHQG'),
+    (N'Dương Hải Yến', '0914333444', 'haiyen.duong@gmail.com', 11, 'FACEBOOK', 'ASSESSED', @StaffDung, N'Đã làm bài test đầu vào đạt 8.2 điểm môn Tiếng Anh'),
+    (N'Phan Thanh Bình', '0914444555', 'thanhbinh.p@gmail.com', 10, 'HOTLINE', 'LOST', @StaffMai, N'Phụ huynh chuyển công tác vào Đà Nẵng nên tạm hoãn học'),
+    (N'Hồ Ngọc Mai', '0914555666', 'ngocmai.ho@gmail.com', 12, 'REFERRAL', 'ENROLLED', @StaffHa, N'Học sinh Amsterdam đăng ký lớp IELTS 7.5+ Cô Mai Anh'),
+    (N'Tạ Quang Minh', '0914666777', 'quangminh.ta@gmail.com', 11, 'WEBSITE', 'CONSULTING', @StaffLinh, N'Cần cải thiện môn Vật Lý 11 phần dao động điều hòa'),
+    (N'Lương Thảo Nguyên', '0914777888', 'thaonguyen.l@gmail.com', 9, 'FACEBOOK', 'CONTACTED', @StaffDung, N'Phụ huynh hỏi về học phí và lịch học lớp Tiếng Anh vào 10'),
+    (N'Trương Gia Khiêm', '0914888999', 'giakhiem.t@gmail.com', 10, 'WALK_IN', 'ENROLLED', @StaffHa, N'Học sinh Kim Liên đăng ký lớp Toán 10 Thầy Nam'),
+    (N'Đinh Tuyết Mai', '0915111222', 'tuyetmai.d@gmail.com', 12, 'HOTLINE', 'NEW', NULL, N'Hỏi thông tin khóa Luyện đề Tốt nghiệp THPT môn Sinh học'),
+    (N'Bùi Thế Hùng', '0915222333', 'thehung.b@gmail.com', 11, 'REFERRAL', 'CONSULTING', @StaffLinh, N'Học sinh Yên Hòa quan tâm lớp Toán 11 Nâng cao'),
+    (N'Mai Kim Chi', '0915333444', 'kimchi.m@gmail.com', 12, 'WEBSITE', 'ASSESSED', @StaffDung, N'Đã tham gia thi thử ĐGNL đạt 88/100 điểm'),
+    (N'Trần Quốc Bảo', '0915444555', 'quocbao.tran@gmail.com', 9, 'FACEBOOK', 'ENROLLED', @StaffHa, N'Đã hoàn tất đăng ký khóa Toán 9 Chuyên Sư Phạm'),
+    (N'Nguyễn Khánh Linh', '0915555666', 'khanhlinh.nguyen@gmail.com', 10, 'HOTLINE', 'CONTACTED', @StaffMai, N'Phụ huynh gọi điện tham khảo lịch học cuối tuần'),
+    (N'Vũ Trọng Phụng', '0915666777', 'trongphung.vu@gmail.com', 12, 'WALK_IN', 'ENROLLED', @StaffHa, N'Học sinh đăng ký trực tiếp tại cơ sở khóa Ngữ Văn 12')
 ) AS source (name, phone, email, grade_level, source, status, assigned_to, notes)
 ON target.phone = source.phone
 WHEN MATCHED THEN
-    UPDATE SET status = source.status, assigned_to = source.assigned_to, notes = source.notes, updated_at = GETDATE()
+    UPDATE SET 
+        name = source.name,
+        email = source.email,
+        grade_level = source.grade_level,
+        source = source.source,
+        status = source.status,
+        assigned_to = source.assigned_to,
+        notes = source.notes,
+        updated_at = GETDATE()
 WHEN NOT MATCHED THEN
     INSERT (name, phone, email, grade_level, source, status, assigned_to, notes, created_at, updated_at)
     VALUES (source.name, source.phone, source.email, source.grade_level, source.source, source.status, source.assigned_to, source.notes, GETDATE(), GETDATE());
-
--- Thêm lịch sử tư vấn mẫu
-DECLARE @LeadTuanId BIGINT = (SELECT id FROM dbo.Leads WHERE phone = '0912333444');
-DECLARE @LeadThaoId BIGINT = (SELECT id FROM dbo.Leads WHERE phone = '0912999000');
-
-IF @LeadTuanId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @LeadTuanId)
-BEGIN
-    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
-    (@LeadTuanId, @StaffHa, N'Gọi điện thoại tư vấn lộ trình Toán 11 nâng cao và khóa IELTS. Phụ huynh đánh giá cao phương pháp trung tâm.', DATEADD(day, -2, GETDATE()), DATEADD(day, 2, GETDATE())),
-    (@LeadTuanId, @StaffHa, N'Gửi bảng biểu phí và thời khóa biểu chi tiết qua Zalo.', DATEADD(day, -1, GETDATE()), DATEADD(day, 2, GETDATE()));
-END
-
-IF @LeadThaoId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @LeadThaoId)
-BEGIN
-    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
-    (@LeadThaoId, @StaffHa, N'Tư vấn trực tiếp tại văn phòng. Em Thảo có nền tảng ngữ pháp tốt, muốn tập trung kỹ năng viết luận.', DATEADD(day, -3, GETDATE()), DATEADD(day, 1, GETDATE()));
-END
 GO
 
--- 4. Khởi tạo Nhật ký Giám sát Hệ thống (AuditLogs)
-DECLARE @AdminId BIGINT = (SELECT id FROM dbo.Users WHERE email = 'admin@educenter.vn');
-DECLARE @TeacherHungUser BIGINT = (SELECT id FROM dbo.Users WHERE email = 'teacher.hung@educenter.vn');
+-- 5. Bổ sung Lịch sử tư vấn (Consultations) chi tiết cho các Leads
+DECLARE @StaffHa BIGINT = (SELECT id FROM dbo.Users WHERE email = 'staff@educenter.vn');
+DECLARE @StaffLinh BIGINT = (SELECT id FROM dbo.Users WHERE email = 'staff.linh@educenter.vn');
+DECLARE @StaffDung BIGINT = (SELECT id FROM dbo.Users WHERE email = 'staff.dung@educenter.vn');
 
-IF NOT EXISTS (SELECT 1 FROM dbo.AuditLogs WHERE action = 'INITIALIZE_SYSTEM')
+DECLARE @lId BIGINT;
+
+-- Lead: Phạm Anh Tuấn
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0912333444');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
 BEGIN
-    INSERT INTO dbo.AuditLogs (actor_id, action, entity_type, entity_id, old_values, new_values, ip_address, created_at)
-    VALUES
-    (@AdminId, 'INITIALIZE_SYSTEM', 'SystemSetting', 1, NULL, N'Khởi tạo toàn bộ dữ liệu mẫu chuẩn hóa 30 bảng EduCenter ERP', '127.0.0.1', GETDATE()),
-    (@TeacherHungUser, 'PUBLISH_ASSESSMENT', 'Assessment', 1, N'status=DRAFT', N'status=PUBLISHED, name=Kiểm tra Khảo sát Hàm số (Chương 1)', '127.0.0.1', GETDATE());
-END
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffHa, N'Cuộc gọi 1: Tư vấn lộ trình Toán 11 và kiểm tra trình độ IELTS. Phụ huynh rất hài lòng.', DATEADD(day, -4, GETDATE()), DATEADD(day, 2, GETDATE())),
+    (@lId, @StaffHa, N'Cuộc gọi 2: Gửi bảng thời khóa biểu và chính sách ưu đãi combo qua Zalo.', DATEADD(day, -1, GETDATE()), DATEADD(day, 2, GETDATE()));
+END;
+
+-- Lead: Bùi Thanh Thảo
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0912999000');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
+BEGIN
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffHa, N'Tư vấn trực tiếp tại văn phòng. Em Thảo có nền tảng ngữ pháp tốt, muốn tập trung kỹ năng viết luận.', DATEADD(day, -5, GETDATE()), DATEADD(day, 1, GETDATE()));
+END;
+
+-- Lead: Lê Thùy Dương
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0913222444');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
+BEGIN
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffLinh, N'Nhắn tin Fanpage tư vấn khóa Hóa học 11 Cô Lan. Học sinh cần củng cố phần đồng đẳng hóa.', DATEADD(day, -3, GETDATE()), DATEADD(day, 3, GETDATE()));
+END;
+
+-- Lead: Trịnh Bích Hạnh
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0913777999');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
+BEGIN
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffLinh, N'Trao đổi qua điện thoại về mục tiêu 7.0 IELTS du học. Hẹn lịch thi thử mini-mock test cuối tuần.', DATEADD(day, -2, GETDATE()), DATEADD(day, 2, GETDATE()));
+END;
+
+-- Lead: Dương Hải Yến
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0914333444');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
+BEGIN
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffDung, N'Học sinh đã hoàn thành bài thi thử đánh giá đầu vào đạt 8.2 điểm. Xếp vào lớp L11-IELTS-01.', DATEADD(day, -1, GETDATE()), DATEADD(day, 4, GETDATE()));
+END;
+
+-- Lead: Tạ Quang Minh
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0914666777');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
+BEGIN
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffLinh, N'Phụ huynh gọi điện xin tư vấn khóa Vật lý 11 Thầy Tuấn. Đã gửi đề cương chi tiết 8 buổi học.', DATEADD(day, -2, GETDATE()), DATEADD(day, 1, GETDATE()));
+END;
+
+-- Lead: Vũ Hoàng My
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0912111222');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
+BEGIN
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffHa, N'Tư vấn trực tiếp tại văn phòng khóa Toán 12 Thầy Hùng và hoàn tất nhập học.', DATEADD(day, -6, GETDATE()), NULL);
+END;
+
+-- Lead: Nguyễn Văn An
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0913666888');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
+BEGIN
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffDung, N'Tư vấn combo khối A00 (Toán, Lý, Hóa). Phụ huynh đồng ý ghi danh học kỳ I.', DATEADD(day, -5, GETDATE()), NULL);
+END;
+
+-- Lead: Lâm Phương Nhi
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0914111222');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
+BEGIN
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffHa, N'Tiếp đón tại quầy tư vấn tuyển sinh. Đã làm bài test đầu vào môn Tiếng Anh và xếp lớp.', DATEADD(day, -4, GETDATE()), NULL);
+END;
+
+-- Lead: Hồ Ngọc Mai
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0914555666');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
+BEGIN
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffHa, N'Trao đổi qua Zoom với học sinh và phụ huynh về target IELTS 7.5+. Đăng ký lớp IELTS 7.5+ Cô Mai Anh.', DATEADD(day, -3, GETDATE()), NULL);
+END;
+
+-- Lead: Trương Gia Khiêm
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0914888999');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
+BEGIN
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffHa, N'Phụ huynh đưa con đến kiểm tra trình độ Toán 10. Điểm đạt 8.5/10, ghi danh lớp L10-TOAN-01.', DATEADD(day, -2, GETDATE()), NULL);
+END;
+
+-- Lead: Mai Kim Chi
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0915333444');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
+BEGIN
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffDung, N'Thông báo kết quả thi thử ĐGNL đạt 88 điểm. Tư vấn lộ trình bổ trợ 3 tháng cuối.', DATEADD(day, -1, GETDATE()), DATEADD(day, 3, GETDATE()));
+END;
+
+-- Lead: Trần Quốc Bảo
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0915444555');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
+BEGIN
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffHa, N'Phụ huynh hoàn tất hồ sơ đăng ký lớp Toán 9 Chuyên. Bàn giao tài liệu học tập đầu khóa.', DATEADD(day, -3, GETDATE()), NULL);
+END;
+
+-- Lead: Vũ Trọng Phụng
+SET @lId = (SELECT id FROM dbo.Leads WHERE phone = '0915666777');
+IF @lId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Consultations WHERE lead_id = @lId)
+BEGIN
+    INSERT INTO dbo.Consultations (lead_id, staff_id, notes, contacted_at, next_appointment) VALUES
+    (@lId, @StaffHa, N'Tư vấn trực tiếp khóa Ngữ Văn 12 Cô Phương. Học sinh muốn củng cố phần đọc hiểu và NLXH.', DATEADD(day, -2, GETDATE()), NULL);
+END;
 GO
 
-PRINT N'Hoàn thành Bước 08: Khởi tạo đầy đủ nhật ký điểm danh, sổ đầu bài, bảng điểm công bố, CRM Leads và Audit Log!';
+PRINT N'Hoàn thành Bước 08: Khởi tạo dữ liệu điểm danh, sổ đầu bài, bảng điểm công bố và CRM Leads quy mô lớn!';
 PRINT N'=============================================================================';
-PRINT N'CHÚC MỪNG! HỆ THỐNG CƠ SỞ DỮ LIỆU EDUCENTER ĐÃ SẴN SÀNG 100% CHO CHẠY THỬ & DEMO!';
+PRINT N'HỆ THỐNG CƠ SỞ DỮ LIỆU ĐÃ ĐẦY ĐỦ VÀ HOÀN HẢO CHO MỌI VAI TRÒ VÀ BÁO CÁO!';
 PRINT N'=============================================================================';
 GO

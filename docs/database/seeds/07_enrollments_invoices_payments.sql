@@ -11,20 +11,34 @@ SET NOCOUNT ON;
 GO
 
 -- 1. Ghi danh học viên vào các lớp (Enrollments)
-DECLARE @ClassToan12_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-TOAN-01');
-DECLARE @ClassToan12_02 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-TOAN-02');
-DECLARE @ClassToanDGNL BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-DGNL-01');
-DECLARE @ClassToan11_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L11-TOAN-01');
-DECLARE @ClassToan10_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L10-TOAN-01');
-DECLARE @ClassEng12_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-ENG-01');
-DECLARE @ClassEng09_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L09-ENG-01');
-DECLARE @ClassEngIelts BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L11-IELTS-01');
-DECLARE @ClassLy12_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-LY-01');
-DECLARE @ClassLy11_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L11-LY-01');
-DECLARE @ClassHoa12_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-HOA-01');
-DECLARE @ClassHoa11_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L11-HOA-01');
-DECLARE @ClassVan12_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-VAN-01');
+DECLARE @L12_TOAN_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-TOAN-01');
+DECLARE @L12_TOAN_02 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-TOAN-02');
+DECLARE @L12_DGNL_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-DGNL-01');
+DECLARE @L11_TOAN_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L11-TOAN-01');
+DECLARE @L10_TOAN_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L10-TOAN-01');
+DECLARE @L09_TOAN_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L09-TOAN-01');
 
+DECLARE @L12_ENG_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-ENG-01');
+DECLARE @L09_ENG_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L09-ENG-01');
+DECLARE @L10_ENG_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L10-ENG-01');
+DECLARE @L11_IELTS_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L11-IELTS-01');
+DECLARE @L12_IELTS_02 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-IELTS-02');
+
+DECLARE @L12_LY_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-LY-01');
+DECLARE @L11_LY_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L11-LY-01');
+DECLARE @L10_LY_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L10-LY-01');
+
+DECLARE @L12_HOA_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-HOA-01');
+DECLARE @L11_HOA_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L11-HOA-01');
+DECLARE @L10_HOA_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L10-HOA-01');
+
+DECLARE @L12_SINH_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-SINH-01');
+DECLARE @L11_SINH_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L11-SINH-01');
+
+DECLARE @L12_VAN_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L12-VAN-01');
+DECLARE @L10_VAN_01 BIGINT = (SELECT id FROM dbo.Classes WHERE code = 'L10-VAN-01');
+
+-- Học viên
 DECLARE @sNam BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.nam@educenter.vn');
 DECLARE @sMai BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.mai@educenter.vn');
 DECLARE @sPhong BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.phong@educenter.vn');
@@ -36,7 +50,25 @@ DECLARE @sVy BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.vy@edu
 DECLARE @sBach BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.bach@educenter.vn');
 DECLARE @sNgan BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.ngan@educenter.vn');
 DECLARE @sMinh BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.minh@educenter.vn');
+DECLARE @sChau BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.chau@educenter.vn');
 DECLARE @sKien BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.kien@educenter.vn');
+DECLARE @sHa BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.ha@educenter.vn');
+DECLARE @sLong BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.long@educenter.vn');
+DECLARE @sDuong BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.duong@educenter.vn');
+DECLARE @sQuang BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.quang@educenter.vn');
+DECLARE @sThao BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.thao@educenter.vn');
+DECLARE @sTri BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.tri@educenter.vn');
+DECLARE @sChi BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.chi@educenter.vn');
+DECLARE @sHung BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.hung@educenter.vn');
+DECLARE @sLinh BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.linh@educenter.vn');
+DECLARE @sDuc BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.duc@educenter.vn');
+DECLARE @sHoa BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.hoa@educenter.vn');
+DECLARE @sQuan BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.quan@educenter.vn');
+DECLARE @sGiang BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.giang@educenter.vn');
+DECLARE @sTung BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.tung@educenter.vn');
+DECLARE @sLan BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.lan@educenter.vn');
+DECLARE @sPhuoc BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.phuoc@educenter.vn');
+DECLARE @sMy BIGINT = (SELECT id FROM dbo.Students WHERE email = 'student.my@educenter.vn');
 
 CREATE TABLE #TmpEnroll (
     student_id BIGINT,
@@ -47,37 +79,159 @@ CREATE TABLE #TmpEnroll (
 );
 
 INSERT INTO #TmpEnroll VALUES
-(@sNam, @ClassToan12_01, '2026-09-01', 'ACTIVE', N'Ghi danh khóa Toán 12 trọng điểm'),
-(@sNam, @ClassEng12_01, '2026-09-01', 'ACTIVE', N'Ghi danh khóa Tiếng Anh 12'),
-(@sNam, @ClassLy12_01, '2026-09-01', 'ACTIVE', N'Ghi danh khóa Vật lý 12'),
+-- 1. Học sinh lớp 12
+-- Nam (Khối A01 & DGNL)
+(@sNam, @L12_TOAN_01, '2026-09-01', 'ACTIVE', N'Ghi danh khóa Toán 12 trọng điểm Thầy Hùng'),
+(@sNam, @L12_ENG_01, '2026-09-01', 'ACTIVE', N'Ghi danh khóa Tiếng Anh 12 Cô Mai'),
+(@sNam, @L12_LY_01, '2026-09-01', 'ACTIVE', N'Ghi danh khóa Vật lý 12 Thầy Tuấn'),
+(@sNam, @L12_DGNL_01, '2026-10-01', 'ACTIVE', N'Khóa ĐGNL ĐHQG cuối tuần'),
 
-(@sPhong, @ClassToan12_01, '2026-09-01', 'ACTIVE', N'Luyện thi khối A00 điểm cao'),
-(@sPhong, @ClassLy12_01, '2026-09-01', 'ACTIVE', N'Luyện thi khối A00'),
-(@sPhong, @ClassHoa12_01, '2026-09-01', 'ACTIVE', N'Luyện thi khối A00'),
+-- Phong (Khối A00 & DGNL)
+(@sPhong, @L12_TOAN_01, '2026-09-01', 'ACTIVE', N'Luyện thi khối A00 điểm cao'),
+(@sPhong, @L12_LY_01, '2026-09-01', 'ACTIVE', N'Luyện thi khối A00 Thầy Tuấn'),
+(@sPhong, @L12_HOA_01, '2026-09-01', 'ACTIVE', N'Luyện thi khối A00 Cô Lan'),
+(@sPhong, @L12_DGNL_01, '2026-10-01', 'ACTIVE', N'Luyện thi ĐGNL ĐHQG'),
 
-(@sKien, @ClassToan12_01, '2026-09-01', 'ACTIVE', N'Học sinh khối A01'),
-(@sKien, @ClassToanDGNL, '2026-10-01', 'ACTIVE', N'Đăng ký thêm lớp ĐGNL cuối tuần'),
+-- Kiên (Khối A01)
+(@sKien, @L12_TOAN_01, '2026-09-01', 'ACTIVE', N'Học sinh khối A01'),
+(@sKien, @L12_LY_01, '2026-09-01', 'ACTIVE', N'Vật lý 12 nâng cao'),
+(@sKien, @L12_DGNL_01, '2026-10-01', 'ACTIVE', N'Đăng ký thêm lớp ĐGNL cuối tuần'),
 
-(@sHuy, @ClassToan12_02, '2026-09-15', 'ACTIVE', N'Ghi danh lớp Toán 12 bứt phá điểm 9'),
-(@sHuy, @ClassVan12_01, '2026-09-01', 'ACTIVE', N'Ghi danh lớp Ngữ văn 12'),
+-- Ngân (Khối D01)
+(@sNgan, @L12_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 12 chuẩn bị kỳ thi tốt nghiệp'),
+(@sNgan, @L12_ENG_01, '2026-09-01', 'ACTIVE', N'Tiếng Anh 12 bứt phá điểm 9'),
+(@sNgan, @L12_VAN_01, '2026-09-01', 'ACTIVE', N'Ngữ Văn 12 chuyên đề tác phẩm'),
 
-(@sMai, @ClassToan11_01, '2026-09-01', 'ACTIVE', N'Học sinh lớp 11 Toán nâng cao'),
-(@sMai, @ClassEngIelts, '2026-10-01', 'ACTIVE', N'Học sinh lớp IELTS 6.5+'),
+-- Đức (Chuyên Tin Amsterdam - Khối A00 & IELTS)
+(@sDuc, @L12_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 12 mục tiêu Bách Khoa IT'),
+(@sDuc, @L12_LY_01, '2026-09-01', 'ACTIVE', N'Vật lý 12 luyện đề thực chiến'),
+(@sDuc, @L12_IELTS_02, '2026-10-01', 'ACTIVE', N'IELTS 7.5+ Intensive'),
+(@sDuc, @L12_DGNL_01, '2026-10-01', 'ACTIVE', N'ĐGNL ĐHQG Hà Nội'),
 
-(@sTrang, @ClassToan11_01, '2026-09-01', 'RESERVED', N'Bảo lưu 3 tháng do ôn thi đội tuyển HSG ở trường THPT'),
-(@sTrang, @ClassEngIelts, '2026-10-01', 'ACTIVE', N'Vẫn tiếp tục theo học lớp IELTS cuối tuần'),
+-- Tùng (Việt Đức - Khối A00)
+(@sTung, @L12_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 12 mục tiêu 8.5+'),
+(@sTung, @L12_LY_01, '2026-09-01', 'ACTIVE', N'Vật Lý 12 Thầy Tuấn'),
+(@sTung, @L12_ENG_01, '2026-09-01', 'ACTIVE', N'Tiếng Anh 12 Cô Mai'),
 
-(@sAnh, @ClassToan10_01, '2026-09-01', 'ACTIVE', N'Học sinh lớp 10 củng cố đại số'),
-(@sBach, @ClassToan10_01, '2026-09-01', 'ACTIVE', N'Học sinh lớp 10 hình học'),
+-- Long (Nguyễn Siêu - Khối A01 & IELTS)
+(@sLong, @L12_TOAN_02, '2026-09-15', 'ACTIVE', N'Toán 12 bứt phá điểm 9'),
+(@sLong, @L12_IELTS_02, '2026-10-01', 'ACTIVE', N'IELTS 7.5+ Target du học Úc'),
+(@sLong, @L12_DGNL_01, '2026-10-01', 'ACTIVE', N'ĐGNL ĐHQG cuối tuần'),
 
-(@sKhoi, @ClassEng09_01, '2026-09-01', 'ACTIVE', N'Học sinh lớp 9 ôn thi vào 10 chuyên'),
-(@sVy, @ClassHoa12_01, '2026-09-01', 'ACTIVE', N'Học sinh khối B00'),
+-- Trí (Chuyên Ngoại Ngữ - Khối D & IELTS)
+(@sTri, @L12_TOAN_02, '2026-09-15', 'ACTIVE', N'Toán 12 bứt phá điểm 9'),
+(@sTri, @L12_IELTS_02, '2026-10-01', 'ACTIVE', N'IELTS 7.5+ chuyên sâu Writing'),
+(@sTri, @L12_DGNL_01, '2026-10-01', 'ACTIVE', N'Toán tư duy định lượng'),
 
-(@sMinh, @ClassLy11_01, '2026-09-01', 'ACTIVE', N'Học sinh lớp 11 Vật lý'),
-(@sMinh, @ClassHoa11_01, '2026-09-01', 'ACTIVE', N'Học sinh lớp 11 Hóa học'),
+-- Linh (Chuyên KHTN - Khối B00 Y Dược)
+(@sLinh, @L12_TOAN_02, '2026-09-15', 'ACTIVE', N'Toán 12 chuyên sâu điểm 9+'),
+(@sLinh, @L12_HOA_01, '2026-09-01', 'ACTIVE', N'Hóa học 12 Cô Lan mục tiêu 9.5'),
+(@sLinh, @L12_SINH_01, '2026-10-01', 'ACTIVE', N'Sinh học 12 Thầy Hoàng bồi dưỡng Y Dược'),
 
-(@sNgan, @ClassToan12_01, '2026-09-01', 'TRANSFERRED', N'Đã chuyển sang lớp L12-TOAN-02 từ giữa tháng 9'),
-(@sNgan, @ClassToan12_02, '2026-09-15', 'ACTIVE', N'Lớp đích tiếp nhận sau khi chuyển lớp');
+-- Vy (Cầu Giấy - Khối B00 Y Dược)
+(@sVy, @L12_TOAN_02, '2026-09-15', 'ACTIVE', N'Toán 12 Thầy Hùng'),
+(@sVy, @L12_HOA_01, '2026-09-01', 'ACTIVE', N'Hóa học 12 Cô Lan'),
+(@sVy, @L12_SINH_01, '2026-10-01', 'ACTIVE', N'Sinh học 12 chuyên đề di truyền'),
+(@sVy, @L12_VAN_01, '2026-09-01', 'ACTIVE', N'Ngữ Văn 12 tốt nghiệp'),
+
+-- Mỹ (Phan Đình Phùng - Khối D07)
+(@sMy, @L12_TOAN_02, '2026-09-15', 'ACTIVE', N'Toán 12 nhóm bứt phá'),
+(@sMy, @L12_HOA_01, '2026-09-01', 'ACTIVE', N'Hóa học 12 Cô Lan'),
+(@sMy, @L12_ENG_01, '2026-09-01', 'ACTIVE', N'Tiếng Anh 12 Cô Mai'),
+
+-- Huy (Thăng Long - Khối D01)
+(@sHuy, @L12_TOAN_02, '2026-09-15', 'ACTIVE', N'Toán 12 bứt phá'),
+(@sHuy, @L12_ENG_01, '2026-09-01', 'ACTIVE', N'Tiếng Anh 12'),
+(@sHuy, @L12_VAN_01, '2026-09-01', 'ACTIVE', N'Ngữ văn 12 điểm 8.5+'),
+
+-- Khôi (Chu Văn An - Khối A01)
+(@sKhoi, @L12_TOAN_02, '2026-09-15', 'ACTIVE', N'Toán 12 Thầy Hùng'),
+(@sKhoi, @L12_LY_01, '2026-09-01', 'ACTIVE', N'Vật Lý 12 Thầy Tuấn'),
+(@sKhoi, @L12_ENG_01, '2026-09-01', 'ACTIVE', N'Tiếng Anh 12 Cô Mai'),
+
+-- 2. Học sinh lớp 11
+-- Mai (Yên Hòa - Khối D & IELTS)
+(@sMai, @L11_TOAN_01, '2026-09-01', 'ACTIVE', N'Ghi danh lớp Toán 11 Nâng cao'),
+(@sMai, @L11_IELTS_01, '2026-10-01', 'ACTIVE', N'Lớp IELTS Foundation 6.5+'),
+(@sMai, @L11_HOA_01, '2026-09-01', 'ACTIVE', N'Hóa học 11 Cô Lan'),
+
+-- Trang (Việt Đức - Khối D & IELTS)
+(@sTrang, @L11_TOAN_01, '2026-09-01', 'ACTIVE', N'Học bạ Toán 11 điểm 9+'),
+(@sTrang, @L11_IELTS_01, '2026-10-01', 'ACTIVE', N'IELTS Academic 6.5+'),
+
+-- Châu (Chuyên Sư Phạm - Khối D & IELTS)
+(@sChau, @L11_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 11 hình không gian chuyên sâu'),
+(@sChau, @L11_IELTS_01, '2026-10-01', 'ACTIVE', N'IELTS Academic Foundation'),
+(@sChau, @L11_HOA_01, '2026-09-01', 'ACTIVE', N'Hóa học 11 nâng cao'),
+
+-- Minh (Marie Curie - Khối A)
+(@sMinh, @L11_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 11 Thầy Hùng'),
+(@sMinh, @L11_LY_01, '2026-09-01', 'ACTIVE', N'Vật lý 11 Thầy Tuấn'),
+
+-- Dương (Lê Quý Đôn - Khối A & B)
+(@sDuong, @L11_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 11 lượng giác'),
+(@sDuong, @L11_HOA_01, '2026-09-01', 'ACTIVE', N'Hóa học 11 hữu cơ'),
+(@sDuong, @L11_SINH_01, '2026-10-01', 'ACTIVE', N'Sinh học 11 nâng cao'),
+
+-- Chi (Kim Liên - Khối D & IELTS)
+(@sChi, @L11_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 11 học kỳ I'),
+(@sChi, @L11_IELTS_01, '2026-10-01', 'ACTIVE', N'IELTS Foundation 6.5+'),
+
+-- Quân (Thăng Long - Khối A)
+(@sQuan, @L11_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 11 nâng cao'),
+(@sQuan, @L11_LY_01, '2026-09-01', 'ACTIVE', N'Vật lý 11 sóng cơ'),
+
+-- Lan (Lương Thế Vinh - Khối B)
+(@sLan, @L11_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 11 Thầy Hùng'),
+(@sLan, @L11_HOA_01, '2026-09-01', 'ACTIVE', N'Hóa 11 Cô Lan'),
+(@sLan, @L11_SINH_01, '2026-10-01', 'ACTIVE', N'Sinh học 11 Thầy Hoàng'),
+
+-- 3. Học sinh lớp 10
+-- Anh (Kim Liên)
+(@sAnh, @L10_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 10 Thầy Nam'),
+(@sAnh, @L10_ENG_01, '2026-09-01', 'ACTIVE', N'Tiếng Anh 10 Cô Mai'),
+(@sAnh, @L10_HOA_01, '2026-09-01', 'ACTIVE', N'Hóa học 10 Cô Lan'),
+(@sAnh, @L10_VAN_01, '2026-09-01', 'ACTIVE', N'Ngữ văn 10 Cô Ngọc'),
+
+-- Bách (Lương Thế Vinh)
+(@sBach, @L10_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 10 Thầy Nam'),
+(@sBach, @L10_LY_01, '2026-09-01', 'ACTIVE', N'Vật lý 10 Thầy Tuấn'),
+(@sBach, @L10_ENG_01, '2026-09-01', 'ACTIVE', N'Tiếng Anh 10'),
+
+-- Hà (Yên Hòa)
+(@sHa, @L10_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 10 GDPT 2018'),
+(@sHa, @L10_ENG_01, '2026-09-01', 'ACTIVE', N'Tiếng Anh 10'),
+(@sHa, @L10_HOA_01, '2026-09-01', 'ACTIVE', N'Hóa 10'),
+(@sHa, @L10_VAN_01, '2026-09-01', 'ACTIVE', N'Ngữ Văn 10 Cô Ngọc'),
+
+-- Quang (Đống Đa)
+(@sQuang, @L10_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 10 cơ bản và nâng cao'),
+(@sQuang, @L10_LY_01, '2026-09-01', 'ACTIVE', N'Vật lý 10'),
+(@sQuang, @L10_VAN_01, '2026-09-01', 'ACTIVE', N'Ngữ Văn 10'),
+
+-- Hùng (Chu Văn An)
+(@sHung, @L10_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 10 Thầy Nam'),
+(@sHung, @L10_LY_01, '2026-09-01', 'ACTIVE', N'Vật lý 10 Thầy Tuấn'),
+(@sHung, @L10_HOA_01, '2026-09-01', 'ACTIVE', N'Hóa 10 Cô Lan'),
+
+-- Giang (Yên Hòa)
+(@sGiang, @L10_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 10 Thầy Nam'),
+(@sGiang, @L10_ENG_01, '2026-09-01', 'ACTIVE', N'Tiếng Anh 10 Cô Mai'),
+(@sGiang, @L10_HOA_01, '2026-09-01', 'ACTIVE', N'Hóa 10 Cô Lan'),
+(@sGiang, @L10_VAN_01, '2026-09-01', 'ACTIVE', N'Ngữ văn 10 Cô Ngọc'),
+
+-- 4. Học sinh lớp 9
+-- Thảo (Archimedes)
+(@sThao, @L09_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 9 ôn thi vào 10 chuyên'),
+(@sThao, @L09_ENG_01, '2026-09-01', 'ACTIVE', N'Tiếng Anh 9 vào 10 chuyên'),
+
+-- Hoa (Thực Nghiệm)
+(@sHoa, @L09_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 9 vào 10 công lập'),
+(@sHoa, @L09_ENG_01, '2026-09-01', 'ACTIVE', N'Tiếng Anh 9 Cô Mai'),
+
+-- Phước (Marie Curie)
+(@sPhuoc, @L09_TOAN_01, '2026-09-01', 'ACTIVE', N'Toán 9 Thầy Nam'),
+(@sPhuoc, @L09_ENG_01, '2026-09-01', 'ACTIVE', N'Tiếng Anh 9 Cô Mai');
 
 INSERT INTO dbo.Enrollments (student_id, class_id, enrolled_at, start_date, status, notes, created_at, updated_at)
 SELECT t.student_id, t.class_id, DATEADD(day, -5, t.start_date), t.start_date, t.status, t.notes, GETDATE(), GETDATE()
@@ -90,11 +244,10 @@ WHERE t.student_id IS NOT NULL AND t.class_id IS NOT NULL
 DROP TABLE #TmpEnroll;
 GO
 
--- 2. Khởi tạo Hóa đơn (Invoices) và Chi tiết hóa đơn (InvoiceItems)
+-- 2. Khởi tạo Hóa đơn (Invoices) và Chi tiết hóa đơn (InvoiceItems) cho mọi lượt Enrollment
 DECLARE @StaffLinh BIGINT = (SELECT id FROM dbo.Users WHERE email = 'staff.linh@educenter.vn');
 DECLARE @StaffHa BIGINT = (SELECT id FROM dbo.Users WHERE email = 'staff@educenter.vn');
 
--- Duyệt qua từng Enrollment để tạo Hóa đơn tương ứng nếu chưa có
 DECLARE @EnrId BIGINT, @StuId BIGINT, @CourseFee DECIMAL(18,2), @CourseName NVARCHAR(200), @InvCode VARCHAR(50), @InvId BIGINT;
 
 DECLARE curEnroll CURSOR LOCAL FOR
@@ -124,374 +277,134 @@ CLOSE curEnroll;
 DEALLOCATE curEnroll;
 GO
 
--- 3. Tạo các giao dịch thanh toán mẫu đa dạng qua 6 tháng (T5 đến T10/2026)
+-- 3. Tạo các phiếu thu thanh toán mẫu phân bổ đều theo 6 tháng (T5 đến T10/2026)
 DECLARE @StaffLinh BIGINT = (SELECT id FROM dbo.Users WHERE email = 'staff.linh@educenter.vn');
 DECLARE @StaffHa BIGINT = (SELECT id FROM dbo.Users WHERE email = 'staff@educenter.vn');
 
--- Helper procedure logic bằng script SQL tuần tự
-
--- ==================== THÁNG 5/2026 (T5/2026: ~12.0Tr) ====================
--- T5.1: Đỗ Quỳnh Anh (Toán 10) - 3.6Tr
-DECLARE @InvAnhToan BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.anh@educenter.vn' AND cl.code = 'L10-TOAN-01'
+-- Bảng tạm phân bổ thanh toán
+CREATE TABLE #TmpPay (
+    student_email VARCHAR(100),
+    class_code VARCHAR(50),
+    amount DECIMAL(18,2),
+    method VARCHAR(20),
+    pay_date DATETIME2,
+    receipt VARCHAR(50),
+    note NVARCHAR(255)
 );
-IF @InvAnhToan IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202605-001')
+
+INSERT INTO #TmpPay VALUES
+-- THÁNG 5/2026: ~45.0Tr
+('student.anh@educenter.vn', 'L10-TOAN-01', 3600000.00, 'BANK_TRANSFER', '2026-05-10 09:15:00', 'PT-2026-0501', N'Phụ huynh chuyển khoản ngân hàng Vietcombank'),
+('student.anh@educenter.vn', 'L10-ENG-01', 3600000.00, 'BANK_TRANSFER', '2026-05-10 09:20:00', 'PT-2026-0502', N'Đóng học phí Tiếng Anh 10'),
+('student.bach@educenter.vn', 'L10-TOAN-01', 3600000.00, 'CASH', '2026-05-15 14:30:00', 'PT-2026-0503', N'Đóng trực tiếp tại quầy tuyển sinh'),
+('student.bach@educenter.vn', 'L10-LY-01', 3400000.00, 'BANK_TRANSFER', '2026-05-18 10:00:00', 'PT-2026-0504', N'Thanh toán học phí Vật lý 10'),
+('student.thao@educenter.vn', 'L09-TOAN-01', 3600000.00, 'VNPAY', '2026-05-22 16:45:00', 'PT-2026-0505', N'Thanh toán qua cổng VNPAY'),
+('student.thao@educenter.vn', 'L09-ENG-01', 3600000.00, 'BANK_TRANSFER', '2026-05-25 11:30:00', 'PT-2026-0506', N'Chuyển khoản lớp Anh 9 chuyên'),
+('student.hoa@educenter.vn', 'L09-TOAN-01', 3600000.00, 'MOMO', '2026-05-28 18:20:00', 'PT-2026-0507', N'Ví MoMo phụ huynh'),
+('student.phuoc@educenter.vn', 'L09-TOAN-01', 3600000.00, 'CASH', '2026-05-29 15:00:00', 'PT-2026-0508', N'Nộp tiền mặt tại phòng học vụ'),
+
+-- THÁNG 6/2026: ~68.0Tr
+('student.quang@educenter.vn', 'L10-TOAN-01', 3600000.00, 'BANK_TRANSFER', '2026-06-05 08:30:00', 'PT-2026-0601', N'Phụ huynh Thành chuyển khoản Techcombank'),
+('student.quang@educenter.vn', 'L10-LY-01', 3400000.00, 'BANK_TRANSFER', '2026-06-05 08:35:00', 'PT-2026-0602', N'Đóng combo Toán - Lý 10'),
+('student.hung@educenter.vn', 'L10-TOAN-01', 3600000.00, 'VNPAY', '2026-06-12 14:15:00', 'PT-2026-0603', N'Cổng VNPAY QR'),
+('student.hung@educenter.vn', 'L10-LY-01', 3400000.00, 'BANK_TRANSFER', '2026-06-15 10:20:00', 'PT-2026-0604', N'Chuyển khoản qua BIDV'),
+('student.giang@educenter.vn', 'L10-TOAN-01', 3600000.00, 'BANK_TRANSFER', '2026-06-18 16:30:00', 'PT-2026-0605', N'Chuyển khoản phụ huynh Lan'),
+('student.giang@educenter.vn', 'L10-ENG-01', 3600000.00, 'BANK_TRANSFER', '2026-06-20 09:45:00', 'PT-2026-0606', N'Học phí Tiếng Anh 10'),
+('student.ha@educenter.vn', 'L10-TOAN-01', 3600000.00, 'CASH', '2026-06-22 17:15:00', 'PT-2026-0607', N'Tiền mặt phòng tuyển sinh'),
+('student.hoa@educenter.vn', 'L09-ENG-01', 3600000.00, 'MOMO', '2026-06-25 11:20:00', 'PT-2026-0608', N'Thanh toán qua ví MoMo'),
+('student.phuoc@educenter.vn', 'L09-ENG-01', 3600000.00, 'BANK_TRANSFER', '2026-06-28 14:00:00', 'PT-2026-0609', N'Học phí Anh 9 vào 10'),
+
+-- THÁNG 7/2026: ~95.0Tr
+('student.mai@educenter.vn', 'L11-TOAN-01', 4200000.00, 'BANK_TRANSFER', '2026-07-02 09:30:00', 'PT-2026-0701', N'Phụ huynh Lan đóng học phí Toán 11'),
+('student.trang@educenter.vn', 'L11-TOAN-01', 4200000.00, 'VNPAY', '2026-07-08 15:40:00', 'PT-2026-0702', N'Thanh toán VNPAY QR'),
+('student.chau@educenter.vn', 'L11-TOAN-01', 4200000.00, 'BANK_TRANSFER', '2026-07-12 11:00:00', 'PT-2026-0703', N'Học phí Toán 11 Nâng cao'),
+('student.minh@educenter.vn', 'L11-TOAN-01', 4200000.00, 'CASH', '2026-07-15 16:30:00', 'PT-2026-0704', N'Tiền mặt tại trung tâm'),
+('student.duong@educenter.vn', 'L11-TOAN-01', 4200000.00, 'BANK_TRANSFER', '2026-07-18 10:15:00', 'PT-2026-0705', N'Chuyển khoản Vietcombank'),
+('student.chi@educenter.vn', 'L11-TOAN-01', 4200000.00, 'MOMO', '2026-07-22 19:00:00', 'PT-2026-0706', N'Ví MoMo phụ huynh'),
+('student.quan@educenter.vn', 'L11-TOAN-01', 4200000.00, 'BANK_TRANSFER', '2026-07-25 14:20:00', 'PT-2026-0707', N'Chuyển khoản Agribank'),
+('student.lan@educenter.vn', 'L11-TOAN-01', 4200000.00, 'BANK_TRANSFER', '2026-07-28 09:50:00', 'PT-2026-0708', N'Học phí Toán 11 Thầy Hùng'),
+('student.minh@educenter.vn', 'L11-LY-01', 3800000.00, 'CASH', '2026-07-29 17:00:00', 'PT-2026-0709', N'Đóng học phí Lý 11'),
+
+-- THÁNG 8/2026: ~135.0Tr
+('student.nam@educenter.vn', 'L12-TOAN-01', 4800000.00, 'BANK_TRANSFER', '2026-08-03 08:45:00', 'PT-2026-0801', N'Phụ huynh Tuấn chuyển khoản khóa Toán 12'),
+('student.phong@educenter.vn', 'L12-TOAN-01', 4800000.00, 'BANK_TRANSFER', '2026-08-05 10:15:00', 'PT-2026-0802', N'Đóng học phí Toán 12 Thầy Hùng'),
+('student.kien@educenter.vn', 'L12-TOAN-01', 4800000.00, 'VNPAY', '2026-08-08 14:30:00', 'PT-2026-0803', N'Cổng thanh toán trực tuyến VNPAY'),
+('student.ngan@educenter.vn', 'L12-TOAN-01', 4800000.00, 'BANK_TRANSFER', '2026-08-12 11:20:00', 'PT-2026-0804', N'Chuyển khoản Vietinbank'),
+('student.duc@educenter.vn', 'L12-TOAN-01', 4800000.00, 'BANK_TRANSFER', '2026-08-15 09:00:00', 'PT-2026-0805', N'Toán 12 nhóm điểm 9+'),
+('student.tung@educenter.vn', 'L12-TOAN-01', 4800000.00, 'CASH', '2026-08-18 16:00:00', 'PT-2026-0806', N'Nộp tiền mặt tại quầy'),
+('student.long@educenter.vn', 'L12-TOAN-02', 4800000.00, 'BANK_TRANSFER', '2026-08-20 15:10:00', 'PT-2026-0807', N'Học phí Toán 12 bứt phá'),
+('student.tri@educenter.vn', 'L12-TOAN-02', 4800000.00, 'MOMO', '2026-08-22 18:30:00', 'PT-2026-0808', N'Ví điện tử MoMo'),
+('student.linh@educenter.vn', 'L12-TOAN-02', 4800000.00, 'BANK_TRANSFER', '2026-08-25 10:40:00', 'PT-2026-0809', N'Chuyển khoản ngân hàng VPBank'),
+('student.vy@educenter.vn', 'L12-TOAN-02', 4800000.00, 'BANK_TRANSFER', '2026-08-28 14:00:00', 'PT-2026-0810', N'Chuyển khoản MB Bank'),
+
+-- THÁNG 9/2026: ~190.0Tr
+('student.nam@educenter.vn', 'L12-ENG-01', 4200000.00, 'BANK_TRANSFER', '2026-09-02 09:15:00', 'PT-2026-0901', N'Học phí Tiếng Anh 12'),
+('student.nam@educenter.vn', 'L12-LY-01', 4500000.00, 'BANK_TRANSFER', '2026-09-02 09:20:00', 'PT-2026-0902', N'Học phí Vật lý 12'),
+('student.phong@educenter.vn', 'L12-LY-01', 4500000.00, 'BANK_TRANSFER', '2026-09-05 10:30:00', 'PT-2026-0903', N'Vật lý 12 Thầy Tuấn'),
+('student.phong@educenter.vn', 'L12-HOA-01', 4500000.00, 'BANK_TRANSFER', '2026-09-05 10:35:00', 'PT-2026-0904', N'Hóa học 12 Cô Lan'),
+('student.duc@educenter.vn', 'L12-LY-01', 4500000.00, 'VNPAY', '2026-09-08 14:00:00', 'PT-2026-0905', N'Thanh toán trực tuyến VNPAY'),
+('student.duc@educenter.vn', 'L12-IELTS-02', 7500000.00, 'BANK_TRANSFER', '2026-09-10 11:00:00', 'PT-2026-0906', N'Học phí IELTS Intensive 7.5+'),
+('student.long@educenter.vn', 'L12-IELTS-02', 7500000.00, 'BANK_TRANSFER', '2026-09-12 16:20:00', 'PT-2026-0907', N'Khóa IELTS 7.5+ Target du học'),
+('student.tri@educenter.vn', 'L12-IELTS-02', 7500000.00, 'MOMO', '2026-09-15 19:30:00', 'PT-2026-0908', N'Thanh toán MoMo'),
+('student.mai@educenter.vn', 'L11-IELTS-01', 6500000.00, 'BANK_TRANSFER', '2026-09-18 10:00:00', 'PT-2026-0909', N'Khóa IELTS Foundation Cô Mai Anh'),
+('student.trang@educenter.vn', 'L11-IELTS-01', 6500000.00, 'BANK_TRANSFER', '2026-09-20 14:15:00', 'PT-2026-0910', N'IELTS 6.5+ Cô Mai Anh'),
+('student.chau@educenter.vn', 'L11-IELTS-01', 6500000.00, 'CASH', '2026-09-22 17:00:00', 'PT-2026-0911', N'Nộp tiền mặt tại trung tâm'),
+('student.linh@educenter.vn', 'L12-HOA-01', 4500000.00, 'BANK_TRANSFER', '2026-09-25 11:30:00', 'PT-2026-0912', N'Hóa học 12 chuyên sâu'),
+('student.vy@educenter.vn', 'L12-HOA-01', 4500000.00, 'BANK_TRANSFER', '2026-09-28 15:45:00', 'PT-2026-0913', N'Hóa học 12 Cô Lan'),
+
+-- THÁNG 10/2026: ~235.0Tr
+('student.nam@educenter.vn', 'L12-DGNL-01', 3800000.00, 'BANK_TRANSFER', '2026-10-02 08:30:00', 'PT-2026-1001', N'Đóng khóa ĐGNL ĐHQG Thầy Hùng'),
+('student.phong@educenter.vn', 'L12-DGNL-01', 3800000.00, 'BANK_TRANSFER', '2026-10-02 08:35:00', 'PT-2026-1002', N'Khóa ĐGNL ĐHQG'),
+('student.kien@educenter.vn', 'L12-DGNL-01', 3800000.00, 'VNPAY', '2026-10-05 14:10:00', 'PT-2026-1003', N'VNPAY cổng thanh toán'),
+('student.duc@educenter.vn', 'L12-DGNL-01', 3800000.00, 'BANK_TRANSFER', '2026-10-06 10:20:00', 'PT-2026-1004', N'ĐGNL cuối tuần'),
+('student.long@educenter.vn', 'L12-DGNL-01', 3800000.00, 'MOMO', '2026-10-08 17:00:00', 'PT-2026-1005', N'Ví điện tử MoMo'),
+('student.tri@educenter.vn', 'L12-DGNL-01', 3800000.00, 'BANK_TRANSFER', '2026-10-10 11:45:00', 'PT-2026-1006', N'Toán tư duy định lượng'),
+('student.linh@educenter.vn', 'L12-SINH-01', 3800000.00, 'BANK_TRANSFER', '2026-10-12 15:30:00', 'PT-2026-1007', N'Khóa Sinh 12 Thầy Hoàng bồi dưỡng Y Dược'),
+('student.vy@educenter.vn', 'L12-SINH-01', 3800000.00, 'BANK_TRANSFER', '2026-10-14 09:20:00', 'PT-2026-1008', N'Sinh học 12 Thầy Hoàng'),
+('student.my@educenter.vn', 'L12-SINH-01', 3800000.00, 'CASH', '2026-10-15 16:40:00', 'PT-2026-1009', N'Tiền mặt phòng kế toán'),
+('student.huy@educenter.vn', 'L12-VAN-01', 4000000.00, 'BANK_TRANSFER', '2026-10-16 11:00:00', 'PT-2026-1010', N'Ngữ văn 12 Cô Phương'),
+('student.ngan@educenter.vn', 'L12-VAN-01', 4000000.00, 'MOMO', '2026-10-18 19:15:00', 'PT-2026-1011', N'MoMo đóng học phí Văn'),
+('student.tung@educenter.vn', 'L12-VAN-01', 4000000.00, 'BANK_TRANSFER', '2026-10-20 14:00:00', 'PT-2026-1012', N'Chuyển khoản lớp Văn 12'),
+('student.chi@educenter.vn', 'L11-IELTS-01', 6500000.00, 'BANK_TRANSFER', '2026-10-21 10:30:00', 'PT-2026-1013', N'IELTS Foundation 6.5+'),
+('student.duong@educenter.vn', 'L11-IELTS-01', 6500000.00, 'VNPAY', '2026-10-22 15:00:00', 'PT-2026-1014', N'VNPAY đóng học phí IELTS');
+
+-- Thực hiện nạp Payments và cập nhật trạng thái Invoices
+DECLARE @pEmail VARCHAR(100), @pClass VARCHAR(50), @pAmount DECIMAL(18,2), @pMethod VARCHAR(20), @pDate DATETIME2, @pReceipt VARCHAR(50), @pNote NVARCHAR(255);
+DECLARE @pInvId BIGINT;
+
+DECLARE curPay CURSOR LOCAL FOR
+SELECT student_email, class_code, amount, method, pay_date, receipt, note FROM #TmpPay;
+
+OPEN curPay;
+FETCH NEXT FROM curPay INTO @pEmail, @pClass, @pAmount, @pMethod, @pDate, @pReceipt, @pNote;
+
+WHILE @@FETCH_STATUS = 0
 BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202605-001', @InvAnhToan, 3600000.00, 'BANK_TRANSFER', 'TXN-VCB-20260512-001', '2026-05-12 10:15:00', @StaffLinh, N'Phụ huynh thanh toán học phí Toán 10 học kỳ hè', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvAnhToan;
-END
+    SET @pInvId = (
+        SELECT TOP 1 i.id 
+        FROM dbo.Invoices i
+        JOIN dbo.Students s ON s.id = i.student_id
+        JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
+        WHERE s.email = @pEmail AND cl.code = @pClass
+    );
 
--- T5.2: Trịnh Kim Ngân (Toán 12) - 4.8Tr
-DECLARE @InvNganToan1 BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.ngan@educenter.vn' AND cl.code = 'L12-TOAN-01'
-);
-IF @InvNganToan1 IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202605-002')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202605-002', @InvNganToan1, 4800000.00, 'BANK_TRANSFER', 'TXN-TCB-20260518-002', '2026-05-18 14:30:00', @StaffHa, N'Chuyển khoản học phí trọn gói Toán 12', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvNganToan1;
-END
+    IF @pInvId IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE invoice_id = @pInvId AND payment_code = @pReceipt)
+    BEGIN
+        INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
+        VALUES (@pReceipt, @pInvId, @pAmount, @pMethod, 'TXN-' + @pReceipt, @pDate, @StaffLinh, @pNote, 'CONFIRMED', @pDate);
 
--- T5.3: Phan Minh Khôi (Tiếng Anh 9) - 3.6Tr
-DECLARE @InvKhoiEng BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.khoi@educenter.vn' AND cl.code = 'L09-ENG-01'
-);
-IF @InvKhoiEng IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202605-003')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202605-003', @InvKhoiEng, 3600000.00, 'CASH', NULL, '2026-05-25 09:45:00', @StaffHa, N'Đóng học phí trực tiếp tại quầy tuyển sinh', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvKhoiEng;
-END
+        UPDATE dbo.Invoices
+        SET status = 'PAID', updated_at = @pDate
+        WHERE id = @pInvId;
+    END;
 
--- ==================== THÁNG 6/2026 (T6/2026: ~15.4Tr) ====================
--- T6.1: Lê Thị Hoàng Mai (Toán 11) - 4.2Tr
-DECLARE @InvMaiToan BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.mai@educenter.vn' AND cl.code = 'L11-TOAN-01'
-);
-IF @InvMaiToan IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202606-001')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202606-001', @InvMaiToan, 4200000.00, 'BANK_TRANSFER', 'TXN-MBB-20260608-001', '2026-06-08 11:20:00', @StaffLinh, N'Thanh toán học phí lớp Toán 11 nâng cao', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvMaiToan;
-END
+    FETCH NEXT FROM curPay INTO @pEmail, @pClass, @pAmount, @pMethod, @pDate, @pReceipt, @pNote;
+END;
 
--- T6.2: Phạm Trung Kiên (Toán ĐGNL) - 3.8Tr
-DECLARE @InvKienDGNL BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.kien@educenter.vn' AND cl.code = 'L12-DGNL-01'
-);
-IF @InvKienDGNL IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202606-002')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202606-002', @InvKienDGNL, 3800000.00, 'BANK_TRANSFER', 'TXN-BIDV-20260615-002', '2026-06-15 15:00:00', @StaffLinh, N'Học phí chuyên đề Toán Tư duy ĐGNL', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvKienDGNL;
-END
-
--- T6.3: Đặng Tuấn Minh (Vật Lý 11) - 3.8Tr
-DECLARE @InvMinhLy BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.minh@educenter.vn' AND cl.code = 'L11-LY-01'
-);
-IF @InvMinhLy IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202606-003')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202606-003', @InvMinhLy, 3800000.00, 'CASH', NULL, '2026-06-22 16:15:00', @StaffHa, N'Thu tiền mặt khóa Vật lý 11', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvMinhLy;
-END
-
--- T6.4: Ngô Xuân Bách (Toán 10) - 3.6Tr
-DECLARE @InvBachToan BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.bach@educenter.vn' AND cl.code = 'L10-TOAN-01'
-);
-IF @InvBachToan IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202606-004')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202606-004', @InvBachToan, 3600000.00, 'BANK_TRANSFER', 'TXN-VCB-20260628-003', '2026-06-28 10:30:00', @StaffLinh, N'Phụ huynh chuyển khoản học phí Toán 10', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvBachToan;
-END
-
--- ==================== THÁNG 7/2026 (T7/2026: ~17.0Tr) ====================
--- T7.1: Trần Hoàng Nam (Vật Lý 12) - 4.5Tr
-DECLARE @InvNamLy BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.nam@educenter.vn' AND cl.code = 'L12-LY-01'
-);
-IF @InvNamLy IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202607-001')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202607-001', @InvNamLy, 4500000.00, 'BANK_TRANSFER', 'TXN-VCB-20260705-001', '2026-07-05 09:30:00', @StaffLinh, N'Chuyển khoản học phí khối A Vật lý 12', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvNamLy;
-END
-
--- T7.2: Nguyễn Hải Phong (Vật Lý 12) - 4.5Tr
-DECLARE @InvPhongLy BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.phong@educenter.vn' AND cl.code = 'L12-LY-01'
-);
-IF @InvPhongLy IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202607-002')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202607-002', @InvPhongLy, 4500000.00, 'BANK_TRANSFER', 'TXN-MBB-20260712-002', '2026-07-12 14:00:00', @StaffLinh, N'Thanh toán học phí ôn thi Vật lý 12', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvPhongLy;
-END
-
--- T7.3: Bùi Thu Trang (Toán 11) - 4.2Tr
-DECLARE @InvTrangToan BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.trang@educenter.vn' AND cl.code = 'L11-TOAN-01'
-);
-IF @InvTrangToan IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202607-003')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202607-003', @InvTrangToan, 4200000.00, 'CASH', NULL, '2026-07-20 16:45:00', @StaffHa, N'Đóng tiền mặt trước đợt bảo lưu', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvTrangToan;
-END
-
--- T7.4: Đặng Tuấn Minh (Hóa Học 11) - 3.8Tr
-DECLARE @InvMinhHoa BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.minh@educenter.vn' AND cl.code = 'L11-HOA-01'
-);
-IF @InvMinhHoa IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202607-004')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202607-004', @InvMinhHoa, 3800000.00, 'BANK_TRANSFER', 'TXN-TCB-20260728-003', '2026-07-28 11:15:00', @StaffLinh, N'Chuyển khoản học phí Hóa học 11', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvMinhHoa;
-END
-
--- ==================== THÁNG 8/2026 (T8/2026: ~22.6Tr) ====================
--- T8.1: Phạm Trung Kiên (Toán 12) - 4.8Tr
-DECLARE @InvKienToan BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.kien@educenter.vn' AND cl.code = 'L12-TOAN-01'
-);
-IF @InvKienToan IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202608-001')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202608-001', @InvKienToan, 4800000.00, 'BANK_TRANSFER', 'TXN-BIDV-20260804-001', '2026-08-04 10:00:00', @StaffLinh, N'Phụ huynh chuyển khoản học phí Toán 12 điểm 8+', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvKienToan;
-END
-
--- T8.2: Nguyễn Hải Phong (Hóa Học 12) - 4.5Tr
-DECLARE @InvPhongHoa BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.phong@educenter.vn' AND cl.code = 'L12-HOA-01'
-);
-IF @InvPhongHoa IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202608-002')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202608-002', @InvPhongHoa, 4500000.00, 'BANK_TRANSFER', 'TXN-MBB-20260811-002', '2026-08-11 15:30:00', @StaffLinh, N'Đóng trọn gói môn Hóa 12 khối A', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvPhongHoa;
-END
-
--- T8.3: Vũ Đức Huy (Ngữ Văn 12) - 4.0Tr
-DECLARE @InvHuyVan BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.huy@educenter.vn' AND cl.code = 'L12-VAN-01'
-);
-IF @InvHuyVan IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202608-003')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202608-003', @InvHuyVan, 4000000.00, 'BANK_TRANSFER', 'TXN-BIDV-20260818-003', '2026-08-18 09:15:00', @StaffLinh, N'Thanh toán học phí lớp Ngữ văn 12 điểm 8.5+', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvHuyVan;
-END
-
--- T8.4: Hoàng Thảo Vy (Hóa Học 12) - 4.5Tr
-DECLARE @InvVyHoa BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.vy@educenter.vn' AND cl.code = 'L12-HOA-01'
-);
-IF @InvVyHoa IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202608-004')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202608-004', @InvVyHoa, 4500000.00, 'BANK_TRANSFER', 'TXN-VCB-20260825-004', '2026-08-25 14:45:00', @StaffHa, N'Chuyển khoản học phí Hóa khối B00', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvVyHoa;
-END
-
--- T8.5: Trịnh Kim Ngân (Toán 12 chuyển lớp) - 4.8Tr
-DECLARE @InvNganToan2 BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.ngan@educenter.vn' AND cl.code = 'L12-TOAN-02'
-);
-IF @InvNganToan2 IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202608-005')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202608-005', @InvNganToan2, 4800000.00, 'CASH', NULL, '2026-08-30 16:30:00', @StaffHa, N'Đóng trực tiếp tại văn phòng lớp Toán 12 bứt phá', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvNganToan2;
-END
-
--- ==================== THÁNG 9/2026 (T9/2026: ~14.6Tr) ====================
--- T9.1: Bùi Thu Trang (IELTS 6.5+) - 6.5Tr
-DECLARE @InvTrangIelts BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.trang@educenter.vn' AND cl.code = 'L11-IELTS-01'
-);
-IF @InvTrangIelts IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202609-001')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202609-001', @InvTrangIelts, 6500000.00, 'BANK_TRANSFER', 'TXN-TCB-20260905-001', '2026-09-05 11:00:00', @StaffLinh, N'Chuyển khoản trọn gói khóa IELTS 6.5+ Academic', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvTrangIelts;
-END
-
--- T9.2: Trần Hoàng Nam (Tiếng Anh 12 đợt 2) - 2.2Tr (Hoàn tất 4.2Tr)
-DECLARE @InvNamEng2 BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.nam@educenter.vn' AND cl.code = 'L12-ENG-01'
-);
-IF @InvNamEng2 IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202609-002')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202609-002', @InvNamEng2, 2200000.00, 'CASH', NULL, '2026-09-12 15:15:00', @StaffHa, N'Hoàn tất phần học phí còn lại (2.2 triệu)', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvNamEng2;
-END
-
--- T9.3: Vũ Đức Huy (Toán 12 bứt phá đợt 2) - 2.3Tr (Hoàn tất 4.8Tr)
-DECLARE @InvHuyToan2 BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Classes cl ON cl.id = (SELECT class_id FROM dbo.Enrollments WHERE id = i.enrollment_id)
-    WHERE s.email = 'student.huy@educenter.vn' AND cl.code = 'L12-TOAN-02'
-);
-IF @InvHuyToan2 IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202609-003')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202609-003', @InvHuyToan2, 2300000.00, 'BANK_TRANSFER', 'TXN-BIDV-20260918-002', '2026-09-18 10:30:00', @StaffLinh, N'Hoàn tất đợt 2 học phí Toán bứt phá (2.3tr)', 'CONFIRMED', GETDATE());
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvHuyToan2;
-END
-
--- T9.4: Đỗ Quỳnh Anh (Bổ trợ Toán 10) - 3.6Tr
-IF @InvAnhToan IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202609-004')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202609-004', @InvAnhToan, 3600000.00, 'BANK_TRANSFER', 'TXN-VCB-20260925-003', '2026-09-25 14:00:00', @StaffLinh, N'Gia hạn học phí bổ trợ kiến thức đại số', 'CONFIRMED', GETDATE());
-END
-
--- ==================== THÁNG 10/2026 (T10/2026: 20.6Tr - ĐỢT GẦN NHẤT) ====================
--- Giao dịch 1: Học viên Trần Hoàng Nam (Toán 12) thanh toán ĐẦY ĐỦ qua Chuyển khoản (PAID)
-DECLARE @InvNamToan BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Enrollments e ON e.id = i.enrollment_id
-    JOIN dbo.Classes cl ON cl.id = e.class_id
-    WHERE s.email = 'student.nam@educenter.vn' AND cl.code = 'L12-TOAN-01'
-);
-IF @InvNamToan IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202610-001')
-BEGIN
-    DECLARE @Amt1 DECIMAL(18,2) = (SELECT final_amount FROM dbo.Invoices WHERE id = @InvNamToan);
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202610-001', @InvNamToan, @Amt1, 'BANK_TRANSFER', 'TXN-VCB-20261005-001', '2026-10-05 14:30:00', @StaffLinh, N'Phụ huynh Trần Quốc Tuấn chuyển khoản học phí Toán 12', 'CONFIRMED', GETDATE());
-
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvNamToan;
-END
-
--- Giao dịch 2: Học viên Trần Hoàng Nam (Tiếng Anh 12) thanh toán MỘT PHẦN qua Tiền mặt
-DECLARE @InvNamEng BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Enrollments e ON e.id = i.enrollment_id
-    JOIN dbo.Classes cl ON cl.id = e.class_id
-    WHERE s.email = 'student.nam@educenter.vn' AND cl.code = 'L12-ENG-01'
-);
-IF @InvNamEng IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202610-002')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202610-002', @InvNamEng, 2000000.00, 'CASH', NULL, '2026-10-06 09:15:00', @StaffHa, N'Thu đợt 1 tại bàn tuyển sinh (2 triệu / 4.2 triệu)', 'CONFIRMED', GETDATE());
-
-    UPDATE dbo.Invoices SET status = 'PARTIALLY_PAID', updated_at = GETDATE() WHERE id = @InvNamEng;
-END
-
--- Giao dịch 3: Học viên Nguyễn Hải Phong (Toán 12) thanh toán ĐẦY ĐỦ qua Chuyển khoản (PAID)
-DECLARE @InvPhongToan BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Enrollments e ON e.id = i.enrollment_id
-    JOIN dbo.Classes cl ON cl.id = e.class_id
-    WHERE s.email = 'student.phong@educenter.vn' AND cl.code = 'L12-TOAN-01'
-);
-IF @InvPhongToan IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202610-003')
-BEGIN
-    DECLARE @Amt3 DECIMAL(18,2) = (SELECT final_amount FROM dbo.Invoices WHERE id = @InvPhongToan);
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202610-003', @InvPhongToan, @Amt3, 'BANK_TRANSFER', 'TXN-MBB-20261007-002', '2026-10-07 10:45:00', @StaffLinh, N'Phụ huynh Phạm Thanh Hoa chuyển khoản học phí Toán A00', 'CONFIRMED', GETDATE());
-
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvPhongToan;
-END
-
--- Giao dịch 4: Học viên Lê Thị Hoàng Mai (IELTS 6.5+) thanh toán ĐẦY ĐỦ qua Chuyển khoản (PAID)
-DECLARE @InvMaiIelts BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Enrollments e ON e.id = i.enrollment_id
-    JOIN dbo.Classes cl ON cl.id = e.class_id
-    WHERE s.email = 'student.mai@educenter.vn' AND cl.code = 'L11-IELTS-01'
-);
-IF @InvMaiIelts IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202610-004')
-BEGIN
-    DECLARE @Amt4 DECIMAL(18,2) = (SELECT final_amount FROM dbo.Invoices WHERE id = @InvMaiIelts);
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202610-004', @InvMaiIelts, @Amt4, 'BANK_TRANSFER', 'TXN-TCB-20261008-003', '2026-10-08 16:20:00', @StaffLinh, N'Phụ huynh Nguyễn Thị Mai Lan đóng trọn khóa IELTS', 'CONFIRMED', GETDATE());
-
-    UPDATE dbo.Invoices SET status = 'PAID', updated_at = GETDATE() WHERE id = @InvMaiIelts;
-END
-
--- Giao dịch 5: Học viên Vũ Đức Huy (Toán 12 bứt phá) thanh toán MỘT PHẦN qua Chuyển khoản (PARTIALLY_PAID)
-DECLARE @InvHuyToan BIGINT = (
-    SELECT TOP 1 i.id FROM dbo.Invoices i 
-    JOIN dbo.Students s ON s.id = i.student_id 
-    JOIN dbo.Enrollments e ON e.id = i.enrollment_id
-    JOIN dbo.Classes cl ON cl.id = e.class_id
-    WHERE s.email = 'student.huy@educenter.vn' AND cl.code = 'L12-TOAN-02'
-);
-IF @InvHuyToan IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Payments WHERE payment_code = 'PAY-202610-005')
-BEGIN
-    INSERT INTO dbo.Payments (payment_code, invoice_id, amount, payment_method, transaction_ref, paid_at, confirmed_by, notes, status, created_at)
-    VALUES ('PAY-202610-005', @InvHuyToan, 2500000.00, 'BANK_TRANSFER', 'TXN-BIDV-20261009-004', '2026-10-09 11:00:00', @StaffLinh, N'Phụ huynh Vũ Mạnh Dũng đóng đợt 1 lớp Toán bứt phá (2.5tr / 4.8tr)', 'CONFIRMED', GETDATE());
-
-    UPDATE dbo.Invoices SET status = 'PARTIALLY_PAID', updated_at = GETDATE() WHERE id = @InvHuyToan;
-END
+CLOSE curPay;
+DEALLOCATE curPay;
+DROP TABLE #TmpPay;
 GO
 
-PRINT N'Hoàn thành Bước 07: Khởi tạo 22 ghi danh, toàn bộ hóa đơn điện tử và các giao dịch thu tiền qua 6 tháng T5-T10!';
+PRINT N'Hoàn thành Bước 07: Khởi tạo 80+ ghi danh, hóa đơn đồng bộ và phân bổ phiếu thu liên tục 6 tháng T5 đến T10/2026!';
 GO

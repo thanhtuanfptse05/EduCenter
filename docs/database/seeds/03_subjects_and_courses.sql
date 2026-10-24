@@ -37,6 +37,7 @@ DECLARE @BioId BIGINT = (SELECT id FROM dbo.Subjects WHERE code = 'BIO');
 MERGE dbo.Courses AS target
 USING (VALUES
     -- TOÁN HỌC
+    (@MathId, 'TOAN9-VAO10', N'Toán 9 – Chinh Phục Kỳ Thi Vào Lớp 10 Chuyên & Công Lập', 9, N'Vào 10 Chuyên & Công lập', 3600000.00, 12, 24, 15, N'Hệ thống hóa toàn bộ kiến thức Đại số và Hình học lớp 9, rèn kỹ năng xử lý câu hỏi phân hóa điểm 9-10.', '/assets/images/courses/math.jpg', 1, 'OPEN'),
     (@MathId, 'TOAN10-CB', N'Toán 10 – Đại số & Hình học Cơ bản GDPT 2018', 10, N'Học kỳ & Bổ trợ', 3600000.00, 12, 24, 15, N'Khóa học củng cố nền tảng đại số tập hợp, hàm số bậc hai và véc-tơ chuyển cấp cho học sinh vào 10.', '/assets/images/courses/math.jpg', 1, 'OPEN'),
     (@MathId, 'TOAN11-NC', N'Toán 11 – Lượng giác & Hình học Không gian Chuyên sâu', 11, N'Nâng cao & Học bạ', 4200000.00, 14, 28, 15, N'Chuyên sâu các dạng toán góc, khoảng cách không gian cổ điển và đạo hàm phục vụ bứt phá điểm số.', '/assets/images/courses/math.jpg', 1, 'OPEN'),
     (@MathId, 'TOAN12-TN', N'Toán 12 – Luyện Thi Tốt Nghiệp THPT Điểm 8+', 12, N'Tốt nghiệp THPT', 4800000.00, 16, 32, 15, N'Khóa học mũi nhọn tổng ôn toàn diện kiến thức 3 năm THPT, rèn phản xạ chống sai ngớ ngẩn và bẫy đề thi.', '/assets/images/courses/math.jpg', 1, 'OPEN'),
@@ -46,21 +47,26 @@ USING (VALUES
     (@EngId, 'ENG9-VAO10', N'Tiếng Anh 9 – Chinh Phục Kỳ Thi Vào Lớp 10', 9, N'Vào 10 Chuyên & Công lập', 3600000.00, 12, 24, 12, N'Tổng ôn ngữ pháp trọng tâm, từ vựng theo chủ điểm và kỹ năng làm bài thi trắc nghiệm điểm 9+.', '/assets/images/courses/english.jpg', 1, 'OPEN'),
     (@EngId, 'ENG10-CB', N'Tiếng Anh 10 – Ngữ Pháp & Kỹ Năng Đọc Hiểu Học Thuật', 10, N'Bổ trợ & Nền tảng', 3600000.00, 12, 24, 15, N'Rèn luyện ngữ âm, trọng âm, cụm động từ và các dạng bài điền từ, đọc hiểu theo chương trình GDPT mới.', '/assets/images/courses/english.jpg', 0, 'OPEN'),
     (@EngId, 'ENG12-TN', N'Tiếng Anh 12 – Bứt Phá Điểm Số Thi Tốt Nghiệp THPT', 12, N'Tốt nghiệp THPT', 4200000.00, 14, 28, 15, N'Chiến thuật giải quyết bài đọc hiểu dài, phân tích câu đồng nghĩa, tìm lỗi sai và mở rộng vốn từ vựng.', '/assets/images/courses/english.jpg', 1, 'OPEN'),
-    (@EngId, 'ENG-IELTS', N'IELTS Chuyên Sâu 6.5+ & Academic Reading / Writing', 11, N'Chứng chỉ Quốc tế / Tuyển thẳng ĐH', 6500000.00, 16, 32, 10, N'Lộ trình cá nhân hóa hướng tới chứng chỉ IELTS 6.5 - 7.5 phục vụ quy đổi điểm xét tuyển đại học sớm.', '/assets/images/courses/english.jpg', 1, 'OPEN'),
+    (@EngId, 'ENG-IELTS', N'IELTS Foundation & Chuyên Sâu 6.5+', 11, N'Chứng chỉ Quốc tế / Tuyển thẳng ĐH', 6500000.00, 16, 32, 10, N'Lộ trình cá nhân hóa hướng tới chứng chỉ IELTS 6.5 - 7.5 phục vụ quy đổi điểm xét tuyển đại học sớm.', '/assets/images/courses/english.jpg', 1, 'OPEN'),
+    (@EngId, 'ENG-IELTS7', N'IELTS Intensive Target 7.5+ Du Học & Học Bổng', 12, N'Học bổng & Tuyển thẳng', 7500000.00, 16, 32, 10, N'Khóa đào tạo chuyên sâu Writing Task 2 và Speaking phản xạ học thuật với chuyên gia IELTS 8.5.', '/assets/images/courses/english.jpg', 0, 'OPEN'),
 
     -- NGỮ VĂN
     (@LitId, 'VAN10-CB', N'Ngữ Văn 10 – Đọc Hiểu & Kỹ Năng Viết Đoạn Văn Nghị Luận', 10, N'Học kỳ & Nền tảng', 3200000.00, 12, 24, 15, N'Phương pháp tiếp cận các thể loại thần thoại, sử thi và kỹ năng viết bài văn nghị luận xã hội giàu sức thuyết phục.', '/assets/images/courses/literature.jpg', 0, 'OPEN'),
+    (@LitId, 'VAN11-NC', N'Ngữ Văn 11 – Kỹ Năng Đọc Hiểu Văn Bản Hiện Đại & Luận Đề', 11, N'Học kỳ & Bồi dưỡng', 3400000.00, 12, 24, 15, N'Phát triển tư duy phân tích tác phẩm truyện ngắn hiện đại, thơ ca mới và bài luận so sánh văn học.', '/assets/images/courses/literature.jpg', 0, 'OPEN'),
     (@LitId, 'VAN12-TN', N'Ngữ Văn 12 – Chuyên Đề Tác Phẩm & Nghị Luận Văn Học Điểm 8.5+', 12, N'Tốt nghiệp THPT', 4000000.00, 14, 28, 15, N'Phân tích sâu sắc hệ thống tác phẩm trọng tâm, cấu trúc mở bài - kết bài sáng tạo và lập luận sắc bén.', '/assets/images/courses/literature.jpg', 1, 'OPEN'),
 
     -- VẬT LÝ
+    (@PhysId, 'LY10-CB', N'Vật Lý 10 – Động Học, Lực & Năng Lượng GDPT 2018', 10, N'Nền tảng & Thực tế', 3400000.00, 12, 24, 15, N'Làm chủ kiến thức động học chất điểm, định luật Newton và năng lượng bảo toàn theo phương pháp trực quan.', '/assets/images/courses/physics.jpg', 0, 'OPEN'),
     (@PhysId, 'LY11-NC', N'Vật Lý 11 – Dao Động Cơ, Sóng & Điện Trường Chuyên Sâu', 11, N'Nâng cao & Học bạ', 3800000.00, 12, 24, 15, N'Làm chủ bản chất vật lý của dao động điều hòa, sóng dừng, giao thoa sóng và phương pháp giải đồ thị.', '/assets/images/courses/physics.jpg', 0, 'OPEN'),
     (@PhysId, 'LY12-TN', N'Vật Lý 12 – Tổng Ôn Trọng Tâm & Kỹ Thuật Bấm Máy Tính Giải Nhanh', 12, N'Tốt nghiệp THPT', 4500000.00, 14, 28, 15, N'Hệ thống hóa toàn bộ mạch kiến thức Vật lý 12, rèn luyện tốc độ làm 30 câu đầu trong 15 phút.', '/assets/images/courses/physics.jpg', 1, 'OPEN'),
 
     -- HÓA HỌC
+    (@ChemId, 'HOA10-CB', N'Hóa Học 10 – Cấu Tạo Nguyên Tử & Liên Kết Hóa Học', 10, N'Nền tảng & Bản chất', 3400000.00, 12, 24, 15, N'Hiểu sâu bản chất cấu hình electron, bảng tuần hoàn Mendeleev và các loại liên kết hóa học cơ bản.', '/assets/images/courses/chemistry.jpg', 0, 'OPEN'),
     (@ChemId, 'HOA11-NC', N'Hóa Học 11 – Hóa Hữu Cơ & Các Dạng Toán Phân Hóa Cao', 11, N'Nâng cao & Học sinh giỏi', 3800000.00, 12, 24, 15, N'Nắm vững bản chất liên kết hữu cơ, đồng phân, danh pháp và kỹ thuật quy đổi hỗn hợp chất.', '/assets/images/courses/chemistry.jpg', 0, 'OPEN'),
     (@ChemId, 'HOA12-TN', N'Hóa Học 12 – Luyện Đề Thực Chiến & Chống Sai Lý Thuyết Điểm 9+', 12, N'Tốt nghiệp THPT', 4500000.00, 14, 28, 15, N'Quét sạch mọi câu hỏi bẫy đếm chất, bài tập kim loại tác dụng với axit và este nâng cao.', '/assets/images/courses/chemistry.jpg', 1, 'OPEN'),
 
     -- SINH HỌC
+    (@BioId, 'SINH11-NC', N'Sinh Học 11 – Trao Đổi Chất & Năng Lượng Sinh Học', 11, N'Nâng cao & Học sinh giỏi', 3400000.00, 12, 24, 15, N'Khám phá cơ chế quang hợp, hô hấp, tuần hoàn và bài tiết ở thực vật và động vật phục vụ thi chọn HSG.', '/assets/images/courses/biology.jpg', 0, 'OPEN'),
     (@BioId, 'SINH12-TN', N'Sinh Học 12 – Chuyên Đề Di Truyền Học & Quần Thể Khối B', 12, N'Tốt nghiệp & Tuyển sinh Y Dược', 3800000.00, 12, 24, 15, N'Bổ trợ toàn diện các dạng toán phả hệ, quy luật di truyền Menđen và công nghệ tế bào cho khối B.', '/assets/images/courses/biology.jpg', 0, 'OPEN')
 ) AS source (subject_id, code, name, grade_level, target_exam, fee, duration_weeks, total_sessions, max_capacity, description, image_url, is_featured, status)
 ON target.code = source.code
@@ -84,5 +90,5 @@ WHEN NOT MATCHED THEN
     VALUES (source.subject_id, source.code, source.name, source.grade_level, source.target_exam, source.fee, source.duration_weeks, source.total_sessions, source.max_capacity, source.description, source.image_url, source.is_featured, source.status, GETDATE(), GETDATE());
 GO
 
-PRINT N'Hoàn thành Bước 03: Khởi tạo 6 môn học và 15 khóa học chuẩn cho các khối 9-12!';
+PRINT N'Hoàn thành Bước 03: Khởi tạo 6 môn học và 21 khóa học chuẩn cho các khối 9-12!';
 GO
