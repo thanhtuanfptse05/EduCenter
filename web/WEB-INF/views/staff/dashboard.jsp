@@ -273,10 +273,13 @@
                         <h2>
                             <svg class="icon icon-sm" style="color: var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                             <span>Lớp học mở tuyển sinh</span>
+                            <c:if test="${not empty openClasses}">
+                                <span class="badge badge-info" style="font-size: 11px; margin-left: 6px; padding: 2px 8px;">${openClasses.size()} lớp</span>
+                            </c:if>
                         </h2>
                         <a href="${pageContext.request.contextPath}/staff/classes" class="btn btn-secondary btn-sm" style="font-size: 12px;">Tra cứu sĩ số &rarr;</a>
                     </div>
-                    <div>
+                    <div style="max-height: 480px; overflow-y: auto; padding-right: 2px;">
                         <c:choose>
                             <c:when test="${not empty openClasses}">
                                 <c:forEach var="c" items="${openClasses}">

@@ -59,6 +59,8 @@ window.addEventListener('pageshow', function (event) {
   svg.icon {
     display: inline-block;
     vertical-align: middle;
+    width: 18px;
+    height: 18px;
     fill: none;
     stroke: currentColor;
     stroke-width: 2;
@@ -66,6 +68,7 @@ window.addEventListener('pageshow', function (event) {
     stroke-linejoin: round;
     flex-shrink: 0;
   }
+  svg.icon-xs { width: 14px; height: 14px; }
   svg.icon-sm { width: 16px; height: 16px; }
   svg.icon-md { width: 20px; height: 20px; }
   svg.icon-lg { width: 28px; height: 28px; }
