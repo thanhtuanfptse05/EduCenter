@@ -26,6 +26,9 @@ public class LeadListItemDTO implements Serializable {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
+    public String getFullName() { return name; }
+    public void setFullName(String fullName) { this.name = fullName; }
+
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
 

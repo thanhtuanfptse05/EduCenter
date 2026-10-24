@@ -221,7 +221,7 @@
                                         <c:forEach var="lead" items="${myLeads}">
                                             <tr style="border-bottom: 1px solid var(--border); font-size: 13px;">
                                                 <td style="padding: 12px 16px;">
-                                                    <div style="font-weight: 600; color: var(--text);"><c:out value="${lead.fullName}" /></div>
+                                                    <div style="font-weight: 600; color: var(--text);"><c:out value="${empty lead.name ? lead.fullName : lead.name}" /></div>
                                                     <div style="font-size: 12px; color: var(--primary);"><c:out value="${lead.phone}" /></div>
                                                 </td>
                                                 <td style="padding: 12px 16px;">
@@ -368,7 +368,7 @@
                                                 </c:choose>
                                             </td>
                                             <td style="padding: 12px 16px; text-align: right;">
-                                                <a href="${pageContext.request.contextPath}/staff/enrollments/detail?id=${enr.id}" class="btn btn-secondary btn-sm" style="font-size: 12px; padding: 4px 10px;">
+                                                <a href="${pageContext.request.contextPath}/staff/enrollments/detail?id=${empty enr.id ? enr.enrollmentId : enr.id}" class="btn btn-secondary btn-sm" style="font-size: 12px; padding: 4px 10px;">
                                                     Xem chi tiết
                                                 </a>
                                             </td>

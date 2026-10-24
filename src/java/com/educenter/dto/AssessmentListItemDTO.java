@@ -41,6 +41,9 @@ public class AssessmentListItemDTO implements Serializable {
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
+    public String getName() { return title; }
+    public void setName(String name) { this.title = name; }
+
     public String getAssessmentType() { return assessmentType; }
     public void setAssessmentType(String assessmentType) { this.assessmentType = assessmentType; }
 

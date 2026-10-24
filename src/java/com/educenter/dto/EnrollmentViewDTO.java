@@ -27,8 +27,15 @@ public class EnrollmentViewDTO implements Serializable {
     private String invoiceCode;
     private String invoiceStatus;
     private String notes;
+    private Integer gradeLevel;
 
     public EnrollmentViewDTO() {}
+
+    public Long getId() { return enrollmentId; }
+    public void setId(Long id) { this.enrollmentId = id; }
+
+    public Integer getGradeLevel() { return gradeLevel; }
+    public void setGradeLevel(Integer gradeLevel) { this.gradeLevel = gradeLevel; }
 
     public Long getEnrollmentId() { return enrollmentId; }
     public void setEnrollmentId(Long enrollmentId) { this.enrollmentId = enrollmentId; }

@@ -56,7 +56,7 @@ foreach ($item in $seedFiles) {
         exit 1
     }
 
-    $cmdArgs = @("-I", "-b", "-S", $Server, "-d", $Database)
+    $cmdArgs = @("-I", "-b", "-f", "65001", "-S", $Server, "-d", $Database)
     if ($UseWindowsAuth) {
         $cmdArgs += "-E"
     } else {

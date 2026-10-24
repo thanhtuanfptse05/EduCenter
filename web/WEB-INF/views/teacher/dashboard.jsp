@@ -330,7 +330,7 @@
                                 <tbody>
                                     <c:forEach var="a" items="${assessments}">
                                         <tr>
-                                            <td><strong><c:out value="${a.name}"/></strong></td>
+                                            <td><strong><c:out value="${empty a.title ? a.name : a.title}"/></strong></td>
                                             <td><c:out value="${a.className}"/> (<c:out value="${a.classCode}"/>)</td>
                                             <td><c:out value="${a.testDate}"/></td>
                                             <td><c:out value="${a.weight}"/>x (Thang <c:out value="${a.maxScore}"/>)</td>

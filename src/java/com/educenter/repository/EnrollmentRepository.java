@@ -57,6 +57,7 @@ public class EnrollmentRepository {
             dto.setClassName(e.getEduClass().getName());
             dto.setSubjectName(e.getEduClass().getCourse().getSubject().getName());
             dto.setCourseFee(e.getEduClass().getCourse().getFee());
+            dto.setGradeLevel(e.getEduClass().getCourse().getGradeLevel());
 
             dto.setStatus(e.getStatus());
             dto.setEnrolledAt(e.getEnrolledAt());

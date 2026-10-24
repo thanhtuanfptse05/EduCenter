@@ -79,6 +79,7 @@ public class AuthenticationFilter implements Filter {
                 || path.startsWith("/teacher")
                 || path.startsWith("/student")
                 || path.startsWith("/parent")
+                || path.equals("/dashboard")
                 || path.equals("/profile")
                 || path.startsWith("/profile/");
     }
