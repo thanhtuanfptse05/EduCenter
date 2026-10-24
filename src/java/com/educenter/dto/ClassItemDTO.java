@@ -12,6 +12,7 @@ public class ClassItemDTO implements Serializable {
     private String shiftName = "Ca Học Tối";
     private String scheduleText;
     private String roomName;
+    private String subjectName;
     private String teacherName;
     private String teacherDegree;
     private Integer capacity;
@@ -38,6 +39,9 @@ public class ClassItemDTO implements Serializable {
 
     public String getRoomName() { return roomName; }
     public void setRoomName(String roomName) { this.roomName = roomName; }
+
+    public String getSubjectName() { return subjectName; }
+    public void setSubjectName(String subjectName) { this.subjectName = subjectName; }
 
     public String getTeacherName() { return teacherName; }
     public void setTeacherName(String teacherName) { this.teacherName = teacherName; }

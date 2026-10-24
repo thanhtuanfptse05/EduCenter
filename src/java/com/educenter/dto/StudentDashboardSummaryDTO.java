@@ -22,6 +22,8 @@ public class StudentDashboardSummaryDTO implements Serializable {
     private PortalAttendanceSummaryDTO attendanceSummary;
     private List<PortalScheduleItemDTO> upcomingSessions = new ArrayList<>();
     private List<PortalScoreItemDTO> recentScores = new ArrayList<>();
+    private String targetGoal;
+    private String status;
     private List<ClassItemDTO> enrolledClasses = new ArrayList<>();
 
     public StudentDashboardSummaryDTO() {}
@@ -40,6 +42,23 @@ public class StudentDashboardSummaryDTO implements Serializable {
 
     public String getSchool() { return school; }
     public void setSchool(String school) { this.school = school; }
+
+    public String getTargetGoal() { return targetGoal; }
+    public void setTargetGoal(String targetGoal) { this.targetGoal = targetGoal; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
+
+    public String getStatusVi() {
+        if (status == null) return "Đang theo học";
+        return switch (status.toUpperCase()) {
+            case "STUDYING" -> "Đang theo học";
+            case "RESERVED" -> "Bảo lưu khóa học";
+            case "DROPPED" -> "Đã thôi học";
+            case "GRADUATED" -> "Đã tốt nghiệp";
+            default -> status;
+        };
+    }
 
     public int getEnrolledClassCount() { return enrolledClassCount; }
     public void setEnrolledClassCount(int enrolledClassCount) { this.enrolledClassCount = enrolledClassCount; }

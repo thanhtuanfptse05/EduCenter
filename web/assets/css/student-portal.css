@@ -1,0 +1,1070 @@
+/**
+ * EduCenter ERP — Student & Parent Portal Dedicated Stylesheet
+ * Strictly adheres to design.md tokens: Light mode default, Inter typography,
+ * Lucide SVG icon scaling, smooth borders, and responsive 3-tier layout.
+ */
+
+/* Container wrapper */
+.portal-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+/* ==========================================================================
+   1. HERO / PROFILE WELCOME CARD
+   ========================================================================== */
+.portal-profile-hero {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .portal-profile-hero {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.portal-hero-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.portal-hero-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.portal-hero-name {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.portal-code-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: var(--primary-subtle);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  font-family: inherit;
+}
+
+.portal-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1.5px solid transparent;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.portal-status-pill.status-studying {
+  background: #ecfdf5;
+  color: #047857;
+  border-color: #6ee7b7;
+}
+.portal-status-pill.status-studying .portal-status-dot {
+  background-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+}
+
+.portal-status-pill.status-reserved {
+  background: #fffbeb;
+  color: #b45309;
+  border-color: #fcd34d;
+}
+.portal-status-pill.status-reserved .portal-status-dot {
+  background-color: #f59e0b;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.25);
+}
+
+.portal-status-pill.status-dropped {
+  background: #fff1f2;
+  color: #be123c;
+  border-color: #fda4af;
+}
+.portal-status-pill.status-dropped .portal-status-dot {
+  background-color: #e11d48;
+  box-shadow: 0 0 0 2px rgba(225, 29, 72, 0.25);
+}
+
+.portal-status-pill.status-graduated {
+  background: #f5f3ff;
+  color: #6d28d9;
+  border-color: #c4b5fd;
+}
+.portal-status-pill.status-graduated .portal-status-dot {
+  background-color: #8b5cf6;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.25);
+}
+
+.portal-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--success);
+}
+
+/* Status Badges with High Contrast Colors */
+.portal-badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  border: 1.5px solid transparent;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.portal-badge-status.status-completed {
+  background: #ecfdf5;
+  color: #047857;
+  border-color: #6ee7b7;
+}
+
+.portal-badge-status.status-scheduled {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #93c5fd;
+}
+
+.portal-badge-status.status-cancelled {
+  background: #fff1f2;
+  color: #be123c;
+  border-color: #fda4af;
+}
+
+.portal-badge-status.status-in-progress,
+.portal-badge-status.status-happening {
+  background: #fffbeb;
+  color: #b45309;
+  border-color: #fcd34d;
+}
+
+/* Class Enrollment Status Badges */
+.portal-badge-status.class-open {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #86efac;
+}
+
+.portal-badge-status.class-planning {
+  background: #f0f9ff;
+  color: #0284c7;
+  border-color: #7dd3fc;
+}
+
+.portal-badge-status.class-closed {
+  background: #f8fafc;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+/* Assessment Grade Rating Badges */
+.portal-badge-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3.5px 11px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1.5px solid transparent;
+}
+
+.portal-badge-rating.rating-excellent {
+  background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+  color: #6d28d9;
+  border-color: #c4b5fd;
+  box-shadow: 0 2px 4px rgba(109, 40, 217, 0.16);
+  font-weight: 800;
+}
+
+.portal-badge-rating.rating-good {
+  background: #ecfdf5;
+  color: #047857;
+  border-color: #6ee7b7;
+  box-shadow: 0 1px 2px rgba(4, 120, 87, 0.08);
+}
+
+.portal-badge-rating.rating-fair {
+  background: #f0f9ff;
+  color: #0284c7;
+  border-color: #7dd3fc;
+  box-shadow: 0 1px 2px rgba(2, 132, 199, 0.08);
+}
+
+.portal-badge-rating.rating-pass {
+  background: #fffbeb;
+  color: #b45309;
+  border-color: #fcd34d;
+  box-shadow: 0 1px 2px rgba(180, 83, 9, 0.08);
+}
+
+.portal-badge-rating.rating-poor {
+  background: #fff1f2;
+  color: #e11d48;
+  border-color: #fda4af;
+  box-shadow: 0 1px 2px rgba(225, 29, 72, 0.08);
+}
+
+/* Subject Identifiers & Color Tags */
+.portal-badge-subject {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.portal-badge-subject.subject-toan {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.portal-badge-subject.subject-ly {
+  background: #ecfeff;
+  color: #0891b2;
+  border-color: #a5f3fc;
+}
+
+.portal-badge-subject.subject-hoa {
+  background: #faf5ff;
+  color: #7e22ce;
+  border-color: #e9d5ff;
+}
+
+.portal-badge-subject.subject-anh {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+
+.portal-badge-subject.subject-sinh {
+  background: #f0fdf4;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+.portal-badge-subject.subject-van {
+  background: #fff1f2;
+  color: #be123c;
+  border-color: #fecdd3;
+}
+
+.portal-badge-subject.subject-su {
+  background: #fffbeb;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.portal-badge-subject.subject-dia {
+  background: #eef2ff;
+  color: #4338ca;
+  border-color: #c7d2fe;
+}
+
+.portal-badge-subject.subject-default {
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  border-color: var(--border);
+}
+
+/* Left accent bar colors on session cards */
+.portal-session-item.accent-toan::before { background-color: #2563eb; }
+.portal-session-item.accent-ly::before { background-color: #0891b2; }
+.portal-session-item.accent-hoa::before { background-color: #9333ea; }
+.portal-session-item.accent-anh::before { background-color: #ea580c; }
+.portal-session-item.accent-sinh::before { background-color: #16a34a; }
+.portal-session-item.accent-van::before { background-color: #e11d48; }
+
+/* Pulse animation for Upcoming status */
+@keyframes portalPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.3); }
+}
+
+.pulse-indicator {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: currentColor;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  animation: portalPulse 2s infinite ease-in-out;
+}
+.class-open .pulse-indicator {
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.25);
+}
+
+.portal-hero-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.portal-meta-sep {
+  color: var(--border-dark, #c3c6d7);
+  user-select: none;
+}
+
+.portal-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   2. KPI STAT CARDS (4 COLUMNS)
+   ========================================================================== */
+.portal-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .portal-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .portal-kpi-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.portal-kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.portal-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: var(--primary-border, #bfdbfe);
+}
+
+.portal-kpi-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.portal-kpi-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.portal-kpi-val-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.portal-kpi-value {
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+
+.portal-kpi-value.text-success { color: var(--success); }
+.portal-kpi-value.text-primary { color: var(--primary); }
+.portal-kpi-value.text-warning { color: var(--warning); }
+.portal-kpi-value.text-danger { color: var(--danger); }
+
+.portal-kpi-sub {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.portal-kpi-icon-box {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.portal-kpi-icon-box.bg-primary-tint {
+  background: var(--primary-subtle);
+  color: var(--primary);
+}
+
+.portal-kpi-icon-box.bg-success-tint {
+  background: var(--success-subtle);
+  color: var(--success);
+}
+
+.portal-kpi-icon-box.bg-warning-tint {
+  background: var(--warning-subtle);
+  color: var(--warning);
+}
+
+.portal-kpi-icon-box.bg-info-tint {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+/* ==========================================================================
+   3. 2-COLUMN MAIN LAYOUT (SCHEDULE & EXAMS)
+   ========================================================================== */
+.portal-2col-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 1024px) {
+  .portal-2col-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.portal-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.portal-panel-header {
+  padding: 16px 20px;
+  background: var(--surface-muted);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.portal-panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.portal-panel-header-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.portal-panel-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.portal-panel-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 2px 0 0 0;
+}
+
+.portal-panel-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+/* Schedule List Card Items */
+.portal-session-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: all 0.15s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 600px) {
+  .portal-session-item {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.portal-session-item:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary-border, #bfdbfe);
+}
+
+.portal-session-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--primary);
+  border-radius: 2px 0 0 2px;
+}
+
+.portal-session-item.subject-physics::before { background-color: #0284c7; }
+.portal-session-item.subject-english::before { background-color: var(--warning); }
+.portal-session-item.subject-chemistry::before { background-color: #8b5cf6; }
+
+.portal-session-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-left: 6px;
+}
+
+.portal-session-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+.portal-session-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.portal-session-room {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.portal-session-right {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.portal-session-date {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.portal-session-time {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* Exam Score List Items */
+.portal-score-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 13px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: all 0.15s ease;
+}
+
+.portal-score-item:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary-border, #bfdbfe);
+}
+
+.portal-score-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.portal-score-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.portal-score-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.portal-score-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.portal-score-val {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.portal-score-num {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--success);
+}
+
+.portal-score-max {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   4. DATA TABLE PANEL
+   ========================================================================== */
+.portal-table-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.portal-table-header {
+  padding: 16px 22px;
+  background: var(--surface-muted);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.portal-table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.portal-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.portal-table thead tr {
+  background: var(--surface-muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.portal-table th {
+  padding: 12px 18px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.portal-table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.15s ease;
+}
+
+.portal-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.portal-table tbody tr:hover {
+  background: var(--surface-hover);
+}
+
+.portal-table td {
+  padding: 14px 18px;
+  font-size: 13.5px;
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.portal-table-footer {
+  padding: 14px 20px;
+  background: var(--surface-muted);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   5. TOOLBARS, PILLS & FILTERS (SCHEDULE & PROGRESS)
+   ========================================================================== */
+.portal-filter-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.portal-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 14px;
+  align-items: flex-end;
+}
+
+@media (min-width: 640px) {
+  .portal-filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .portal-filter-grid {
+    grid-template-columns: 2.5fr 2.5fr 2fr 2fr 2fr;
+  }
+}
+
+.portal-pill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.portal-pills {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.portal-pill-btn {
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.portal-pill-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.portal-pill-btn.active {
+  background: var(--primary-subtle);
+  color: var(--primary);
+  border-color: var(--primary-border, #bfdbfe);
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   6. ATTENDANCE MULTI-SEGMENT & 6-STAT GRID
+   ========================================================================== */
+.attendance-6kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 640px) {
+  .attendance-6kpi-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .attendance-6kpi-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+.attendance-mini-card {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 12px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+}
+
+.attendance-mini-card.highlight {
+  background: var(--primary-subtle);
+  border-color: var(--primary-border, #bfdbfe);
+}
+
+.attendance-mini-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.attendance-mini-val {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.1;
+  margin-top: 2px;
+}
+
+.attendance-mini-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Multi-segment Progress Track */
+.attendance-track-box {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.attendance-track-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.attendance-multi-bar {
+  width: 100%;
+  height: 10px;
+  background-color: var(--border);
+  border-radius: 9999px;
+  overflow: hidden;
+  display: flex;
+}
+
+.attendance-bar-seg {
+  height: 100%;
+  transition: width 0.6s ease;
+}
+
+.attendance-bar-seg.seg-present { background-color: var(--success); }
+.attendance-bar-seg.seg-late { background-color: var(--warning); }
+.attendance-bar-seg.seg-excused { background-color: var(--primary); }
+.attendance-bar-seg.seg-unexcused { background-color: var(--danger); }
+
+.attendance-track-legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.attendance-legend-items {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.attendance-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* ==========================================================================
+   7. BENCHMARK & GROWTH CARDS (PROGRESS VIEW)
+   ========================================================================== */
+.benchmark-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+@media (min-width: 900px) {
+  .benchmark-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.benchmark-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ==========================================================================
+   8. ADVISORY RIBBON
+   ========================================================================== */
+.advisory-ribbon {
+  background: var(--primary-subtle);
+  border: 1px solid var(--primary-border, #bfdbfe);
+  border-radius: var(--radius-lg);
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+@media (min-width: 768px) {
+  .advisory-ribbon {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.advisory-ribbon-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.advisory-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.advisory-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.advisory-desc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin: 2px 0 0 0;
+}

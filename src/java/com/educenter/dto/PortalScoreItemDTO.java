@@ -65,6 +65,17 @@ public class PortalScoreItemDTO implements Serializable {
         return score.compareTo(new BigDecimal("5.0")) >= 0;
     }
 
+    public String getGradeRating() {
+        if (score == null) return "Chưa có điểm";
+        BigDecimal max = (maxScore != null && maxScore.compareTo(BigDecimal.ZERO) > 0) ? maxScore : BigDecimal.TEN;
+        double ratio = score.doubleValue() / max.doubleValue();
+        if (ratio >= 0.90) return "Xuất sắc";
+        if (ratio >= 0.80) return "Giỏi";
+        if (ratio >= 0.65) return "Khá";
+        if (ratio >= 0.50) return "Đạt";
+        return "Cần cố gắng";
+    }
+
     public String getTypeNameVi() {
         if (assessmentType == null) return "Bài kiểm tra";
         return switch (assessmentType.toUpperCase()) {

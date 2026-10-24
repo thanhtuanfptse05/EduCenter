@@ -257,6 +257,9 @@ public class PortalRepository {
             dto.setId(c.getId());
             dto.setCode(c.getCode());
             dto.setName(c.getName());
+            if (c.getCourse() != null && c.getCourse().getSubject() != null) {
+                dto.setSubjectName(c.getCourse().getSubject().getName());
+            }
             dto.setRoomName(c.getRoom() != null ? c.getRoom().getName() : "Chưa xếp phòng");
             dto.setTeacherName(c.getTeacher().getFullName());
             dto.setCapacity(c.getCapacity());

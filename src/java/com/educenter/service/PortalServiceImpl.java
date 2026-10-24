@@ -196,6 +196,8 @@ public class PortalServiceImpl implements PortalService {
         summary.setStudentCode(student.getCode());
         summary.setGradeLevel(student.getGradeLevel());
         summary.setSchool(student.getSchool());
+        summary.setTargetGoal(student.getTargetGoal());
+        summary.setStatus(student.getStatus());
 
         // Enrolled classes
         List<ClassItemDTO> enrolledClasses = portalRepository.findEnrolledClassesByStudentId(em, student.getId());
