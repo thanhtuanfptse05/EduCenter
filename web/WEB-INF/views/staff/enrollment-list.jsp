@@ -466,78 +466,7 @@
                     </c:if>
                 </div>
 
-                <!-- Quick Batch & Capacity Insights Strip -->
-                <!-- Quick Batch & Capacity Insights Strip -->
-                <div class="mgmt-protocol-grid-3">
-                    <!-- Active Cohort Distribution -->
-                    <div class="mgmt-protocol-card" style="flex-direction: column; justify-content: space-between;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                            <span class="mgmt-kpi-label" style="margin: 0;">TỶ LỆ LẤP ĐẦY LỚP TUYỂN SINH</span>
-                            <span class="mgmt-code-badge" style="background: rgba(16, 185, 129, 0.12); color: #059669; border: 1px solid rgba(16, 185, 129, 0.25);">92.4%</span>
-                        </div>
-                        <div style="width: 100%; margin: 10px 0;">
-                            <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 5px;">
-                                <span>Toán Tư Duy ĐGNL ĐHQG (L12-DGNL-01)</span>
-                                <span style="color: var(--primary);">36/40</span>
-                            </div>
-                            <div class="cap-bar-wrap" style="width: 100%; height: 6px;">
-                                <div class="cap-bar-fill" style="width: 90%; background: var(--primary);"></div>
-                            </div>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 8px;">
-                            <span>Lớp kế tiếp khai giảng: 01/10/2026</span>
-                            <a href="${pageContext.request.contextPath}/staff/classes" style="color: var(--primary); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
-                                <span>Xem sĩ số</span>
-                                <svg style="width: 12px; height: 12px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                            </a>
-                        </div>
-                    </div>
 
-                    <!-- Revenue Snapshot for Current Session -->
-                    <div class="mgmt-protocol-card" style="flex-direction: column; justify-content: space-between;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                            <span class="mgmt-kpi-label" style="margin: 0;">DOANH THU ĐỢT GHI DANH NÀY</span>
-                            <div class="mgmt-protocol-card-icon secondary" style="width: 32px; height: 32px;">
-                                <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
-                            </div>
-                        </div>
-                        <div style="margin: 10px 0;">
-                            <div style="font-size: 1.5rem; font-weight: 700; color: var(--text); line-height: 1.1;">
-                                334.800.000 <span style="font-size: 13px; font-weight: 600; color: var(--primary);">VNĐ</span>
-                            </div>
-                            <div style="font-size: 12px; color: #059669; font-weight: 600; margin-top: 4px; display: flex; align-items: center; gap: 4px;">
-                                <svg style="width: 13px; height: 13px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                                <span>+18.5% so với kỳ chiêu sinh hè</span>
-                            </div>
-                        </div>
-                        <div style="font-size: 11.5px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 8px; width: 100%;">
-                            Tổng hợp doanh thu từ các lượt ghi danh và xuất biên lai học phí.
-                        </div>
-                    </div>
-
-                    <!-- Operation Protocol Shortcuts -->
-                    <div class="mgmt-protocol-card" style="flex-direction: column; justify-content: space-between;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                            <span class="mgmt-kpi-label" style="margin: 0;">TÁC VỤ HỌC VỤ ĐỒNG LOẠT</span>
-                            <div class="mgmt-protocol-card-icon primary" style="width: 32px; height: 32px;">
-                                <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                            </div>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin: 8px 0;">
-                            <button type="button" class="mgmt-btn mgmt-btn-outline" style="font-size: 12px; padding: 6px 10px; justify-content: center;" onclick="alert('Đã gửi thông báo SMS biểu phí và hạn nộp tới phụ huynh các học viên mới ghi danh.')">
-                                <svg style="width: 13px; height: 13px; color: var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h9"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/><path d="m16 19 2 2 4-4"/></svg>
-                                <span>Gửi SMS biểu phí</span>
-                            </button>
-                            <button type="button" class="mgmt-btn mgmt-btn-outline" style="font-size: 12px; padding: 6px 10px; justify-content: center;" onclick="alert('Danh sách lớp học phần đã được chốt và đồng bộ sang sổ điểm danh điện tử.')">
-                                <svg style="width: 13px; height: 13px; color: #059669;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                                <span>Khóa danh sách</span>
-                            </button>
-                        </div>
-                        <div style="font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 8px; width: 100%;">
-                            * Các thay đổi về xếp lớp sẽ tự động cập nhật sổ điểm danh và thẻ học viên điện tử.
-                        </div>
-                    </div>
-                </div>
             </div>
         </main>
     </div>
