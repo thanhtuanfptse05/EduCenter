@@ -74,6 +74,8 @@ public class AttendanceSessionViewDTO implements Serializable {
 
     public String getSessionStatus() { return sessionStatus; }
     public void setSessionStatus(String sessionStatus) { this.sessionStatus = sessionStatus; }
+    public String getStatus() { return sessionStatus; }
+    public void setStatus(String status) { this.sessionStatus = status; }
 
     public int getTotalStudents() { return totalStudents; }
     public void setTotalStudents(int totalStudents) { this.totalStudents = totalStudents; }

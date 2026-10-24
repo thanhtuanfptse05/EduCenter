@@ -18,12 +18,26 @@ public class AssessmentRepository {
 
     public List<EduClass> findClassesByTeacher(EntityManager em, Long teacherUserId, boolean isAdmin) {
         if (isAdmin || teacherUserId == null) {
-            return em.createQuery("SELECT c FROM EduClass c WHERE c.status IN ('OPEN', 'ONGOING') ORDER BY c.code ASC", EduClass.class)
-                    .getResultList();
+            return em.createQuery(
+                    "SELECT DISTINCT c FROM EduClass c " +
+                    "JOIN FETCH c.course cr " +
+                    "LEFT JOIN FETCH cr.subject sub " +
+                    "LEFT JOIN FETCH c.room r " +
+                    "WHERE c.status IN ('OPEN', 'ONGOING') " +
+                    "ORDER BY c.code ASC",
+                    EduClass.class
+            ).getResultList();
         }
-        return em.createQuery("SELECT c FROM EduClass c WHERE c.teacher.user.id = :userId AND c.status IN ('OPEN', 'ONGOING') ORDER BY c.code ASC", EduClass.class)
-                .setParameter("userId", teacherUserId)
-                .getResultList();
+        return em.createQuery(
+                "SELECT DISTINCT c FROM EduClass c " +
+                "JOIN FETCH c.course cr " +
+                "LEFT JOIN FETCH cr.subject sub " +
+                "LEFT JOIN FETCH c.room r " +
+                "WHERE c.teacher.user.id = :userId AND c.status IN ('OPEN', 'ONGOING') " +
+                "ORDER BY c.code ASC",
+                EduClass.class
+        ).setParameter("userId", teacherUserId)
+         .getResultList();
     }
 
     public List<AssessmentListItemDTO> findAssessments(EntityManager em, Long teacherUserId, boolean isAdmin, Long classId, String status) {

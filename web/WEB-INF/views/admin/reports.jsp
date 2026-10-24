@@ -76,14 +76,17 @@
         }
     </style>
 </head>
-<body class="dashboard-body">
-<div class="dashboard-container">
+<body>
+<c:set var="internalShell" value="true" scope="request"/>
+<div class="admin-layout">
+    <c:set var="activeNav" value="reports" scope="request" />
+    <c:set var="breadcrumb" value="Báo cáo & Thống kê" scope="request" />
     <%@ include file="/WEB-INF/views/common/sidebar.jspf" %>
 
-    <div class="dashboard-main">
+    <div class="admin-main">
         <%@ include file="/WEB-INF/views/common/header.jspf" %>
 
-        <div class="dashboard-content">
+        <main class="admin-content">
             <!-- Breadcrumb -->
             <div style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
                 <a href="${pageContext.request.contextPath}/admin/dashboard" style="color: var(--primary); text-decoration: none;">Bảng điều khiển</a>
@@ -288,7 +291,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
 
         <%@ include file="/WEB-INF/views/common/footer.jspf" %>
     </div>

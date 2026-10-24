@@ -135,14 +135,17 @@
         }
     </style>
 </head>
-<body class="dashboard-body">
-<div class="dashboard-container">
+<body>
+<c:set var="internalShell" value="true" scope="request"/>
+<div class="admin-layout">
+    <c:set var="activeNav" value="dashboard" scope="request" />
+    <c:set var="breadcrumb" value="Bảng điều khiển Giám đốc & Quản trị" scope="request" />
     <%@ include file="/WEB-INF/views/common/sidebar.jspf" %>
 
-    <div class="dashboard-main">
+    <div class="admin-main">
         <%@ include file="/WEB-INF/views/common/header.jspf" %>
 
-        <div class="dashboard-content">
+        <main class="admin-content">
             <!-- Header title & Action -->
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 24px;">
                 <div>
@@ -397,7 +400,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
 
         <%@ include file="/WEB-INF/views/common/footer.jspf" %>
     </div>

@@ -192,10 +192,10 @@
                                             <span style="color: var(--text-muted);">—</span>
                                             <span style="font-weight: 500; font-size: 14px; color: var(--text);"><c:out value="${s.className}"/></span>
                                             <c:choose>
-                                                <c:when test="${s.status == 'COMPLETED'}">
+                                                <c:when test="${s.sessionStatus == 'COMPLETED' || s.status == 'COMPLETED'}">
                                                     <span class="status-pill status-completed">Đã hoàn thành</span>
                                                 </c:when>
-                                                <c:when test="${s.status == 'CANCELLED'}">
+                                                <c:when test="${s.sessionStatus == 'CANCELLED' || s.status == 'CANCELLED'}">
                                                     <span class="status-pill status-cancelled">Đã hủy</span>
                                                 </c:when>
                                                 <c:otherwise>

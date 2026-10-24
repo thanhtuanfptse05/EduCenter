@@ -77,3 +77,13 @@
 - [x] **Task 7.1**: Chạy biên dịch toàn bộ mã Java và kiểm tra 149 Unit Test.
 - [x] **Task 7.2**: Chạy kiểm tra xác minh JSP và HTTP bằng scripts sẵn có.
 - [x] **Task 7.3**: Thực hiện Git Commit và Push lên `main` theo quy tắc dự án.
+
+---
+
+## Task Group 8: Dashboard Layout Fix & Lazy Initialization Resolution (FR-COMP-021, FR-COMP-022)
+
+- [x] **Task 8.1**: Cập nhật `AssessmentRepository.findClassesByTeacher` dùng `JOIN FETCH c.course cr LEFT JOIN FETCH cr.subject LEFT JOIN FETCH c.room` để triệt tiêu lỗi `LazyInitializationException` gây trắng trang `/teacher/dashboard`.
+- [x] **Task 8.2**: Bổ sung selector fallback `.dashboard-container`, `.dashboard-main`, `.dashboard-content` trong `web/assets/css/admin.css`.
+- [x] **Task 8.3**: Chuẩn hóa `web/WEB-INF/views/admin/dashboard.jsp` và `web/WEB-INF/views/admin/reports.jsp` sang cấu trúc chuẩn `<div class="admin-layout">`, `<div class="admin-main">`, `<main class="admin-content">` và đặt `internalShell=true`.
+- [x] **Task 8.4**: Chuẩn hóa `web/WEB-INF/views/staff/lead-list.jsp` và `web/WEB-INF/views/staff/lead-detail.jsp` sang cấu trúc chuẩn `<div class="admin-layout">`, `<div class="admin-main">`, `<main class="admin-content">` và đặt `internalShell=true`.
+- [x] **Task 8.5**: Kiểm thử trực tiếp bằng HTTP request tới các endpoint `/admin/dashboard`, `/teacher/dashboard`, `/student/dashboard`, `/parent/dashboard`, `/staff/leads` bảo đảm trả về Status 200 và giao diện hoàn chỉnh.

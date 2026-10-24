@@ -119,6 +119,8 @@ Tách rời phụ thuộc CSDL thật trong `AttendanceServiceImpl` bằng cách
 - **FR-COMP-018**: Hệ thống MUST cung cấp `TeacherDashboardServlet` phục vụ màn hình `/teacher/dashboard` với dữ liệu lịch dạy, lớp học phụ trách và lối tắt nghiệp vụ.
 - **FR-COMP-019**: `AttendanceServiceImpl` MUST hỗ trợ tiêm `EntityManager` / `Supplier<EntityManager>` để chạy 100% Unit Test trong môi trường cô lập không cần CSDL thật.
 - **FR-COMP-020**: CSDL MUST có bộ script Seed Data chia tách theo thứ tự `01` - `08`, cung cấp dữ liệu dồi dào, chạy được ngay bằng SSMS hoặc script PowerShell/Batch.
+- **FR-COMP-021**: `AssessmentRepository.findClassesByTeacher` MUST sử dụng `JOIN FETCH` để nạp sẵn `c.course cr`, `cr.subject`, và `c.room` nhằm triệt tiêu hoàn toàn lỗi `LazyInitializationException` khi giáo viên xem Dashboard giảng dạy ngoài phiên EntityManager.
+- **FR-COMP-022**: Chuẩn hóa cấu trúc layout nội bộ trong `admin/dashboard.jsp`, `admin/reports.jsp`, `staff/lead-list.jsp`, `staff/lead-detail.jsp` sang cấu trúc chuẩn `<div class="admin-layout">`, `<div class="admin-main">`, `<main class="admin-content">` và định nghĩa fallback tokens/classes `.dashboard-container`, `.dashboard-main`, `.dashboard-content` trong `admin.css` để bảo đảm giao diện không bị lệch layout, xô đẩy thanh topbar hay tạo khoảng trắng bất thường.
 
 ---
 
@@ -130,3 +132,5 @@ Tách rời phụ thuộc CSDL thật trong `AttendanceServiceImpl` bằng cách
 - **SC-004**: 100% các nút thao tác trên JSP không bị lỗi JavaScript khi tên hoặc ghi chú chứa dấu nháy đơn, nháy kép hoặc ký tự đặc biệt.
 - **SC-005**: 100% liên kết chính sách chân trang (`/terms`, `/privacy`, `/refund-policy`, `/support`) truy cập thành công, hiển thị giao diện chuẩn `design.md`.
 - **SC-006**: Bộ script CSDL được chia tách rõ ràng, người mới có thể khởi tạo toàn bộ CSDL và dữ liệu kiểm thử chỉ với một lệnh.
+- **SC-007**: Bàn làm việc giáo viên (`/teacher/dashboard`) tải thành công 100% cho mọi tài khoản giáo viên, không còn bị lỗi đóng kết nối / màn hình trắng.
+- **SC-008**: Bảng điều khiển Admin (`/admin/dashboard`), Báo cáo (`/admin/reports`) và CRM Tuyển sinh (`/staff/leads`) hiển thị chuẩn xác layout flexbox, không bị chèn khoảng trắng hay tràn vỡ layout.
