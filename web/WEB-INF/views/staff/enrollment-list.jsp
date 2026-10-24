@@ -6,91 +6,8 @@
 <head>
     <%@ include file="/WEB-INF/views/common/head.jspf" %>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css">
-    <style>
-        .badge-active { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-        .badge-reserved { background: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
-        .badge-transferred { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-        .badge-dropped { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
-        .badge-completed { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 1050;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
-        .modal.show { display: flex; }
-        .modal-dialog {
-            background: var(--surface, #ffffff);
-            border-radius: var(--radius-lg, 12px);
-            width: 100%;
-            max-width: 620px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--border, #e2e8f0);
-            overflow: hidden;
-            animation: modalFadeIn 0.2s ease-out;
-        }
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-10px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .modal-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border, #e2e8f0);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .modal-title { font-size: 1.125rem; font-weight: 600; color: var(--text, #0f172a); margin: 0; }
-        .modal-close {
-            background: none; border: none; font-size: 1.25rem; color: var(--text-muted, #64748b);
-            cursor: pointer; padding: 4px; border-radius: var(--radius-sm, 6px);
-            display: flex; align-items: center; justify-content: center;
-        }
-        .modal-close:hover { color: var(--text, #0f172a); background: var(--bg-hover, #f1f5f9); }
-        .modal-body { padding: 20px; max-height: calc(85vh - 120px); overflow-y: auto; }
-        .modal-footer {
-            padding: 14px 20px;
-            border-top: 1px solid var(--border, #e2e8f0);
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            background: var(--bg-subtle, #f8fafc);
-        }
-        .form-group { margin-bottom: 16px; }
-        .form-label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--text, #0f172a); margin-bottom: 6px; }
-        .form-label .required { color: var(--danger, #ef4444); }
-        .form-control, .form-select {
-            width: 100%;
-            padding: 9px 12px;
-            border: 1px solid var(--border, #cbd5e1);
-            border-radius: var(--radius-md, 8px);
-            background: var(--surface, #ffffff);
-            color: var(--text, #0f172a);
-            font-size: 0.875rem;
-            transition: border-color 0.15s ease, box-shadow 0.15s ease;
-        }
-        .form-control:focus, .form-select:focus {
-            outline: none;
-            border-color: var(--primary, #2563eb);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-        }
-        .info-callout {
-            background: #eff6ff;
-            border-left: 4px solid var(--primary, #2563eb);
-            padding: 12px 14px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            color: #1e40af;
-            margin-bottom: 16px;
-            line-height: 1.5;
-        }
-    </style>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/staff-management.css">
+    <title>Quản lý Ghi danh & Xếp lớp | EduCenter</title>
 </head>
 <body>
 <c:set var="internalShell" value="true" scope="request"/>
@@ -103,513 +20,763 @@
         <%@ include file="/WEB-INF/views/common/header.jspf" %>
 
         <main class="admin-content">
-            <!-- Page Header -->
-            <div class="page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
-                <div>
-                    <h1 class="page-title">Quản lý Ghi danh & Xếp lớp</h1>
-                    <p class="page-subtitle">Thực hiện ghi danh học viên, xếp lớp, quản lý chuyển lớp, bảo lưu và khởi tạo hóa đơn học phí (ADM-12)</p>
-                </div>
-                <div>
-                    <button type="button" class="btn btn-primary" onclick="openEnrollModal()" style="display: inline-flex; align-items: center; gap: 8px;">
-                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.5;">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        <span>Ghi danh học viên mới</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Flash Alerts -->
-            <%@ include file="/WEB-INF/views/common/alert.jsp" %>
-
-            <!-- KPI Summary Cards -->
-            <div class="kpi-grid">
-                <div class="kpi-card" style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div class="kpi-label">Đang theo học (Active)</div>
-                        <div class="kpi-value" style="color: var(--success, #16a34a);"><c:out value="${pageData.totalActive}" /></div>
+            <div class="mgmt-wrap">
+                <!-- Top Header Action Area -->
+                <div class="mgmt-header">
+                    <div class="mgmt-header-left">
+                        <nav class="mgmt-breadcrumb">
+                            <a href="${pageContext.request.contextPath}/staff/dashboard">Học vụ & CRM</a>
+                            <span style="color: var(--text-muted); opacity: 0.6;">/</span>
+                            <span style="color: var(--primary); font-weight: 600;">Ghi danh & Xếp lớp</span>
+                        </nav>
+                        <div class="mgmt-title-row">
+                            <h1 class="mgmt-title">Quản lý Ghi danh & Xếp lớp</h1>
+                            <span class="mgmt-badge-version">ADM-12</span>
+                        </div>
+                        <p class="mgmt-subtitle">
+                            Thực hiện ghi danh học viên, xếp lớp, quản lý chuyển lớp, bảo lưu và khởi tạo hóa đơn học phí tự động.
+                        </p>
                     </div>
-                    <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--success-subtle, #dcfce7); color: var(--success, #16a34a); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                        <svg class="icon icon-md" style="width: 24px; height: 24px;" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <polyline points="16 11 18 13 22 9"></polyline>
-                        </svg>
-                    </div>
-                </div>
-                <div class="kpi-card" style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div class="kpi-label">Đang bảo lưu (Reserved)</div>
-                        <div class="kpi-value" style="color: #b45309;"><c:out value="${pageData.totalReserved}" /></div>
-                    </div>
-                    <div style="width: 48px; height: 48px; border-radius: 12px; background: #fef9c3; color: #b45309; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                        <svg class="icon icon-md" style="width: 24px; height: 24px;" viewBox="0 0 24 24" aria-hidden="true">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
+                    <div class="mgmt-header-actions">
+                        <button type="button" class="mgmt-btn mgmt-btn-outline" onclick="window.print()">
+                            <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            <span>Xuất dữ liệu</span>
+                        </button>
+                        <button type="button" class="mgmt-btn mgmt-btn-primary" onclick="openEnrollModal()">
+                            <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <line x1="19" y1="8" x2="19" y2="14"></line>
+                                <line x1="22" y1="11" x2="16" y2="11"></line>
+                            </svg>
+                            <span>+ Ghi danh học viên mới</span>
+                        </button>
                     </div>
                 </div>
-                <div class="kpi-card" style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div class="kpi-label">Đã chuyển lớp (Transferred)</div>
-                        <div class="kpi-value" style="color: #0284c7;"><c:out value="${pageData.totalTransferred}" /></div>
+
+                <!-- Flash Alerts -->
+                <%@ include file="/WEB-INF/views/common/alert.jsp" %>
+
+                <!-- Stat Cards: 4 Column Metrics Grid -->
+                <div class="mgmt-kpi-grid">
+                    <!-- Active Enrollment -->
+                    <div class="mgmt-kpi-card">
+                        <div class="mgmt-kpi-info">
+                            <span class="mgmt-kpi-label">ĐANG THEO HỌC (ACTIVE)</span>
+                            <div class="mgmt-kpi-value-row">
+                                <span class="mgmt-kpi-val" style="color: #16a34a;"><c:out value="${pageData.totalActive}" /></span>
+                                <span class="mgmt-kpi-subval positive">học viên chính thức</span>
+                            </div>
+                        </div>
+                        <div class="mgmt-kpi-icon-wrap secondary">
+                            <svg class="mgmt-kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <polyline points="16 11 18 13 22 9"></polyline>
+                            </svg>
+                        </div>
                     </div>
-                    <div style="width: 48px; height: 48px; border-radius: 12px; background: #e0f2fe; color: #0284c7; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                        <svg class="icon icon-md" style="width: 24px; height: 24px;" viewBox="0 0 24 24" aria-hidden="true">
-                            <path d="m16 3 4 4-4 4"></path>
-                            <path d="M20 7H4"></path>
-                            <path d="m8 21-4-4 4-4"></path>
-                            <path d="M4 17h16"></path>
-                        </svg>
+
+                    <!-- Reserved / On Hold -->
+                    <div class="mgmt-kpi-card">
+                        <div class="mgmt-kpi-info">
+                            <span class="mgmt-kpi-label">ĐANG BẢO LƯU (RESERVED)</span>
+                            <div class="mgmt-kpi-value-row">
+                                <span class="mgmt-kpi-val" style="color: #b45309;"><c:out value="${pageData.totalReserved}" /></span>
+                                <span class="mgmt-kpi-subval warning">hồ sơ bảo lưu</span>
+                            </div>
+                        </div>
+                        <div class="mgmt-kpi-icon-wrap tertiary">
+                            <svg class="mgmt-kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Transferred -->
+                    <div class="mgmt-kpi-card">
+                        <div class="mgmt-kpi-info">
+                            <span class="mgmt-kpi-label">ĐÃ CHUYỂN LỚP (TRANSFERRED)</span>
+                            <div class="mgmt-kpi-value-row">
+                                <span class="mgmt-kpi-val" style="color: #0284c7;"><c:out value="${pageData.totalTransferred}" /></span>
+                                <span class="mgmt-kpi-subval">yêu cầu điều chuyển</span>
+                            </div>
+                        </div>
+                        <div class="mgmt-kpi-icon-wrap primary">
+                            <svg class="mgmt-kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="m16 3 4 4-4 4"></path>
+                                <path d="M20 7H4"></path>
+                                <path d="m8 21-4-4 4-4"></path>
+                                <path d="M4 17h16"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Dropped -->
+                    <div class="mgmt-kpi-card">
+                        <div class="mgmt-kpi-info">
+                            <span class="mgmt-kpi-label">ĐÃ THÔI HỌC (DROPPED)</span>
+                            <div class="mgmt-kpi-value-row">
+                                <span class="mgmt-kpi-val" style="color: #dc2626;"><c:out value="${pageData.totalDropped}" /></span>
+                                <span class="mgmt-kpi-subval warning">học viên dừng học</span>
+                            </div>
+                        </div>
+                        <div class="mgmt-kpi-icon-wrap" style="background: rgba(220, 38, 38, 0.1); color: #dc2626;">
+                            <svg class="mgmt-kpi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                        </div>
                     </div>
                 </div>
-                <div class="kpi-card" style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div class="kpi-label">Đã thôi học (Dropped)</div>
-                        <div class="kpi-value" style="color: var(--danger, #dc2626);"><c:out value="${pageData.totalDropped}" /></div>
-                    </div>
-                    <div style="width: 48px; height: 48px; border-radius: 12px; background: #fee2e2; color: #dc2626; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                        <svg class="icon icon-md" style="width: 24px; height: 24px;" viewBox="0 0 24 24" aria-hidden="true">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="15" y1="9" x2="9" y2="15"></line>
-                            <line x1="9" y1="9" x2="15" y2="15"></line>
-                        </svg>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Filter & Search Toolbar -->
-            <div class="filter-toolbar">
-                <form action="${pageContext.request.contextPath}/staff/enrollments" method="get" class="filter-form" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-                    <!-- Search Keyword -->
-                    <div class="filter-search input-wrapper" style="flex: 1; min-width: 260px;">
-                        <svg class="icon icon-sm input-icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                        <input type="text" name="q" class="form-control" placeholder="Tìm theo tên học viên, SĐT..."
-                               value="<c:out value='${pageData.keyword}' />">
-                    </div>
-
-                    <!-- Class Filter -->
-                    <select name="classId" class="filter-select" style="min-width: 220px;">
-                        <option value="">-- Tất cả lớp học --</option>
-                        <c:forEach var="c" items="${pageData.classOptions}">
-                            <option value="${c.classId}" ${pageData.classId == c.classId ? 'selected' : ''}>
-                                <c:out value="${c.classCode}"/> - <c:out value="${c.className}"/> (<c:out value="${c.currentEnrolled}"/>/<c:out value="${c.capacity}"/>)
-                            </option>
-                        </c:forEach>
-                    </select>
-
-                    <!-- Status Filter -->
-                    <select name="status" class="filter-select" style="min-width: 170px;">
-                        <option value="">-- Trạng thái --</option>
-                        <option value="ACTIVE" ${pageData.status == 'ACTIVE' ? 'selected' : ''}>Đang học (ACTIVE)</option>
-                        <option value="RESERVED" ${pageData.status == 'RESERVED' ? 'selected' : ''}>Bảo lưu (RESERVED)</option>
-                        <option value="TRANSFERRED" ${pageData.status == 'TRANSFERRED' ? 'selected' : ''}>Đã chuyển lớp (TRANSFERRED)</option>
-                        <option value="DROPPED" ${pageData.status == 'DROPPED' ? 'selected' : ''}>Thôi học (DROPPED)</option>
-                        <option value="COMPLETED" ${pageData.status == 'COMPLETED' ? 'selected' : ''}>Hoàn thành (COMPLETED)</option>
-                    </select>
-
-                    <button type="submit" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 6px;">
-                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                        </svg>
-                        <span>Lọc kết quả</span>
-                    </button>
-                    <c:if test="${not empty pageData.keyword or not empty pageData.status or not empty pageData.classId}">
-                        <a href="${pageContext.request.contextPath}/staff/enrollments" class="btn btn-ghost" style="color: var(--text-muted);">Xóa lọc</a>
-                    </c:if>
-                </form>
-            </div>
-
-            <!-- Enrollment List Table -->
-            <div class="admin-card">
-                <c:choose>
-                    <c:when test="${not empty pageData.items}">
-                        <div class="table-responsive">
-                            <table class="table" style="width: 100%; border-collapse: collapse;">
-                                <thead>
-                                <tr>
-                                    <th style="width: 48px; text-align: center;">#</th>
-                                    <th>Học viên</th>
-                                    <th>Lớp học & Môn</th>
-                                    <th>Học phí khóa</th>
-                                    <th>Ngày bắt đầu</th>
-                                    <th>Trạng thái</th>
-                                    <th>Hóa đơn</th>
-                                    <th style="text-align: right; width: 150px;">Thao tác</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach var="item" items="${pageData.items}" varStatus="loop">
-                                    <tr>
-                                        <td style="text-align: center; color: var(--text-muted); font-size: 0.85rem;">
-                                            ${(pageData.currentPage - 1) * pageData.pageSize + loop.count}
-                                        </td>
-                                        <td>
-                                            <div style="font-weight: 600; color: var(--text);">
-                                                <c:out value="${item.studentName}" />
-                                            </div>
-                                            <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; gap: 8px; margin-top: 2px;">
-                                                <span>Mã: <strong><c:out value="${item.studentCode}" /></strong></span>
-                                                <c:if test="${not empty item.studentPhone}">
-                                                    <span>• SĐT: <c:out value="${item.studentPhone}" /></span>
-                                                </c:if>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style="font-weight: 500; color: var(--text);">
-                                                <c:out value="${item.className}" />
-                                            </div>
-                                            <div style="font-size: 0.8rem; color: var(--text-muted);">
-                                                Mã lớp: <code><c:out value="${item.classCode}" /></code> • Môn: <c:out value="${item.subjectName}" />
-                                            </div>
-                                        </td>
-                                        <td style="font-weight: 600; color: var(--primary);">
-                                            <fmt:formatNumber value="${item.courseFee}" type="currency" currencySymbol="₫" maxFractionDigits="0"/>
-                                        </td>
-                                        <td>
-                                            <div style="font-size: 0.875rem;"><c:out value="${item.startDate}" /></div>
-                                            <div style="font-size: 0.75rem; color: var(--text-muted);">
-                                                Ghi danh: <c:out value="${item.enrolledAtFormatted}" />
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <c:choose>
-                                                <c:when test="${item.status == 'ACTIVE'}">
-                                                    <span class="status-badge badge-active">Đang học</span>
-                                                </c:when>
-                                                <c:when test="${item.status == 'RESERVED'}">
-                                                    <span class="status-badge badge-reserved">Bảo lưu</span>
-                                                </c:when>
-                                                <c:when test="${item.status == 'TRANSFERRED'}">
-                                                    <span class="status-badge badge-transferred">Đã chuyển lớp</span>
-                                                </c:when>
-                                                <c:when test="${item.status == 'DROPPED'}">
-                                                    <span class="status-badge badge-dropped">Thôi học</span>
-                                                </c:when>
-                                                <c:when test="${item.status == 'COMPLETED'}">
-                                                    <span class="status-badge badge-completed">Hoàn thành</span>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span class="status-badge badge-neutral"><c:out value="${item.status}" /></span>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </td>
-                                        <td>
-                                            <c:choose>
-                                                <c:when test="${not empty item.invoiceCode}">
-                                                    <div style="font-family: monospace; font-size: 0.85rem; font-weight: 500;">
-                                                        <c:out value="${item.invoiceCode}" />
-                                                    </div>
-                                                    <span style="font-size: 0.75rem; color: ${item.invoiceStatus == 'PAID' ? 'var(--success)' : '#eab308'}; font-weight: 600;">
-                                                        <c:out value="${item.invoiceStatus}" />
-                                                    </span>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <span style="color: var(--text-muted); font-size: 0.8rem;">Chưa có</span>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </td>
-                                        <td style="text-align: right;">
-                                            <div style="display: inline-flex; gap: 4px;">
-                                                <c:if test="${item.status == 'ACTIVE'}">
-                                                    <!-- Nút Chuyển lớp -->
-                                                    <button type="button" class="btn btn-ghost btn-sm" title="Chuyển lớp cho học viên"
-                                                            data-id="${item.enrollmentId}"
-                                                            data-student-name="<c:out value='${item.studentName}'/>"
-                                                            data-class-id="${item.classId}"
-                                                            data-class-name="<c:out value='${item.className}'/>"
-                                                            onclick="openTransferModalFromBtn(this)">
-                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                                            <path d="m16 3 4 4-4 4"></path>
-                                                            <path d="M20 7H4"></path>
-                                                            <path d="m8 21-4-4 4-4"></path>
-                                                            <path d="M4 17h16"></path>
-                                                        </svg>
-                                                    </button>
-                                                    <!-- Nút Bảo lưu -->
-                                                    <button type="button" class="btn btn-ghost btn-sm" title="Bảo lưu học tập"
-                                                            data-id="${item.enrollmentId}"
-                                                            data-student-name="<c:out value='${item.studentName}'/>"
-                                                            data-class-name="<c:out value='${item.className}'/>"
-                                                            onclick="openReserveModalFromBtn(this)">
-                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                                            <circle cx="12" cy="12" r="10"></circle>
-                                                            <polyline points="12 6 12 12 16 14"></polyline>
-                                                        </svg>
-                                                    </button>
-                                                    <!-- Nút Thôi học -->
-                                                    <button type="button" class="btn btn-ghost btn-sm" style="color: var(--danger);" title="Thôi học / Rút hồ sơ"
-                                                            data-id="${item.enrollmentId}"
-                                                            data-student-name="<c:out value='${item.studentName}'/>"
-                                                            data-class-name="<c:out value='${item.className}'/>"
-                                                            onclick="openDropModalFromBtn(this)">
-                                                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                                            <circle cx="12" cy="12" r="10"></circle>
-                                                            <line x1="15" y1="9" x2="9" y2="15"></line>
-                                                            <line x1="9" y1="9" x2="15" y2="15"></line>
-                                                        </svg>
-                                                    </button>
-                                                </c:if>
-
-                                                <c:if test="${item.status == 'RESERVED'}">
-                                                    <!-- Nút Phục hồi học tập -->
-                                                    <form action="${pageContext.request.contextPath}/staff/enrollments/resume" method="post" style="display: inline;"
-                                                          data-student-name="<c:out value='${item.studentName}'/>"
-                                                          onsubmit="return confirm('Xác nhận phục hồi học tập cho học viên ' + this.getAttribute('data-student-name') + '? (Sẽ kiểm tra sĩ số lớp)');">
-                                                        <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
-                                                        <input type="hidden" name="enrollmentId" value="${item.enrollmentId}">
-                                                        <button type="submit" class="btn btn-ghost btn-sm" style="color: var(--success);" title="Quay lại học">
-                                                            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
-                                                                <polyline points="23 4 23 10 17 10"></polyline>
-                                                                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-                                                            </svg>
-                                                        </button>
-                                                    </form>
-                                                </c:if>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                                </tbody>
-                            </table>
+                <!-- Filter & Search Bar -->
+                <div class="mgmt-filter-card">
+                    <form action="${pageContext.request.contextPath}/staff/enrollments" method="get" class="mgmt-filter-grid">
+                        <div class="mgmt-filter-item">
+                            <label class="mgmt-label" for="filterKeyword">Tìm kiếm học viên</label>
+                            <div class="mgmt-input-wrap">
+                                <svg class="mgmt-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                </svg>
+                                <input type="text" name="q" id="filterKeyword" class="mgmt-input" placeholder="Tìm theo tên học viên, SĐT..."
+                                       value="<c:out value='${pageData.keyword}' />">
+                            </div>
                         </div>
 
-                        <!-- Pagination -->
-                        <c:if test="${pageData.totalPages > 1}">
-                            <div class="pagination-wrapper" style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-top: 1px solid var(--border);">
-                                <div style="font-size: 0.875rem; color: var(--text-muted);">
-                                    Hiển thị trang <strong>${pageData.currentPage}</strong> / ${pageData.totalPages} (Tổng số <strong>${pageData.totalRecords}</strong> bản ghi)
-                                </div>
-                                <div class="pagination" style="display: flex; gap: 6px;">
-                                    <c:if test="${pageData.hasPrevious()}">
-                                        <a href="${pageContext.request.contextPath}/staff/enrollments?page=${pageData.currentPage - 1}&classId=${pageData.classId}&status=${pageData.status}&q=${pageData.keyword}" class="btn btn-secondary btn-sm">Trước</a>
-                                    </c:if>
-                                    <c:forEach begin="1" end="${pageData.totalPages}" var="p">
-                                        <a href="${pageContext.request.contextPath}/staff/enrollments?page=${p}&classId=${pageData.classId}&status=${pageData.status}&q=${pageData.keyword}"
-                                           class="btn btn-sm ${p == pageData.currentPage ? 'btn-primary' : 'btn-ghost'}">${p}</a>
+                        <div class="mgmt-filter-item" style="max-width: 300px;">
+                            <label class="mgmt-label" for="filterClassId">Lớp học</label>
+                            <div class="mgmt-select-wrap">
+                                <select name="classId" id="filterClassId" class="mgmt-select">
+                                    <option value="">-- Tất cả lớp học --</option>
+                                    <c:forEach var="c" items="${pageData.classOptions}">
+                                        <option value="${c.classId}" ${pageData.classId == c.classId ? 'selected' : ''}>
+                                            <c:out value="${c.classCode}"/> - <c:out value="${c.className}"/> (<c:out value="${c.currentEnrolled}"/>/<c:out value="${c.capacity}"/>)
+                                        </option>
                                     </c:forEach>
-                                    <c:if test="${pageData.hasNext()}">
-                                        <a href="${pageContext.request.contextPath}/staff/enrollments?page=${pageData.currentPage + 1}&classId=${pageData.classId}&status=${pageData.status}&q=${pageData.keyword}" class="btn btn-secondary btn-sm">Sau</a>
-                                    </c:if>
-                                </div>
-                            </div>
-                        </c:if>
-                    </c:when>
-                    <c:otherwise>
-                        <!-- Empty State -->
-                        <div class="empty-state" style="padding: 60px 20px; text-align: center;">
-                            <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--bg-subtle); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: var(--text-muted);">
-                                <svg class="icon icon-lg" style="width: 32px; height: 32px;" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="9" cy="7" r="4"></circle>
-                                    <polyline points="16 11 18 13 22 9"></polyline>
+                                </select>
+                                <svg class="mgmt-select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
                             </div>
-                            <h3 style="font-size: 1.125rem; font-weight: 600; color: var(--text); margin-bottom: 6px;">Chưa có dữ liệu ghi danh</h3>
-                            <p style="font-size: 0.875rem; color: var(--text-muted); max-width: 420px; margin: 0 auto 20px;">
-                                Chưa có học viên nào được ghi danh theo bộ lọc này hoặc trung tâm chưa khởi tạo lượt ghi danh nào.
-                            </p>
-                            <button type="button" class="btn btn-primary" onclick="openEnrollModal()">
-                                Ghi danh học viên ngay
+                        </div>
+
+                        <div class="mgmt-filter-item" style="max-width: 220px;">
+                            <label class="mgmt-label" for="filterStatus">Trạng thái ghi danh</label>
+                            <div class="mgmt-select-wrap">
+                                <select name="status" id="filterStatus" class="mgmt-select">
+                                    <option value="">-- Trạng thái --</option>
+                                    <option value="ACTIVE" ${pageData.status == 'ACTIVE' ? 'selected' : ''}>Đang học (ACTIVE)</option>
+                                    <option value="RESERVED" ${pageData.status == 'RESERVED' ? 'selected' : ''}>Bảo lưu (RESERVED)</option>
+                                    <option value="TRANSFERRED" ${pageData.status == 'TRANSFERRED' ? 'selected' : ''}>Đã chuyển lớp (TRANSFERRED)</option>
+                                    <option value="DROPPED" ${pageData.status == 'DROPPED' ? 'selected' : ''}>Thôi học (DROPPED)</option>
+                                    <option value="COMPLETED" ${pageData.status == 'COMPLETED' ? 'selected' : ''}>Hoàn thành (COMPLETED)</option>
+                                </select>
+                                <svg class="mgmt-select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="mgmt-filter-actions">
+                            <button type="submit" class="mgmt-btn mgmt-btn-primary">
+                                <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                                </svg>
+                                <span>Lọc kết quả</span>
+                            </button>
+                            <c:if test="${not empty pageData.keyword or not empty pageData.status or not empty pageData.classId}">
+                                <a href="${pageContext.request.contextPath}/staff/enrollments" class="mgmt-btn mgmt-btn-outline" title="Xóa bộ lọc">
+                                    <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                                        <path d="M3 3v5h5"></path>
+                                    </svg>
+                                    <span>Xóa lọc</span>
+                                </a>
+                            </c:if>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Primary Roster & Allocation Datagrid -->
+                <div class="mgmt-table-card">
+                    <!-- Table Meta Header -->
+                    <div class="mgmt-table-meta-header">
+                        <div class="mgmt-table-meta-left">
+                            <span class="mgmt-table-meta-title">Danh sách Ghi danh & Xếp lớp</span>
+                            <span class="mgmt-table-meta-badge"><c:out value="${pageData.totalRecords}" /> bản ghi</span>
+                        </div>
+                        <div class="mgmt-table-meta-right">
+                            <button type="button" class="mgmt-btn-tool" onclick="location.reload()">
+                                <svg class="mgmt-btn-tool-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                </svg>
+                                <span>Làm mới</span>
                             </button>
                         </div>
-                    </c:otherwise>
-                </c:choose>
+                    </div>
+
+                    <!-- Datagrid -->
+                    <div class="mgmt-table-responsive">
+                        <table class="mgmt-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 48px; text-align: center;">#</th>
+                                    <th style="min-width: 200px;">Học viên</th>
+                                    <th style="min-width: 260px;">Lớp học & Môn</th>
+                                    <th style="text-align: right; width: 140px;">Học phí khóa</th>
+                                    <th style="width: 160px;">Ngày bắt đầu</th>
+                                    <th style="text-align: center; width: 130px;">Trạng thái</th>
+                                    <th style="width: 140px;">Hóa đơn</th>
+                                    <th style="text-align: center; width: 130px;">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:choose>
+                                    <c:when test="${not empty pageData.items}">
+                                        <c:forEach var="item" items="${pageData.items}" varStatus="loop">
+                                            <tr>
+                                                <td class="align-top text-center" style="color: var(--text-muted); font-size: 12.5px;">
+                                                    ${(pageData.currentPage - 1) * pageData.pageSize + loop.count}
+                                                </td>
+                                                <td class="align-top">
+                                                    <div style="display: flex; flex-direction: column;">
+                                                        <span style="font-size: 14px; font-weight: 700; color: var(--text);">
+                                                            <c:out value="${item.studentName}" />
+                                                        </span>
+                                                        <div style="font-size: 11.5px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                                                            <span class="mgmt-code-badge" style="padding: 1px 6px; font-size: 11px;"><c:out value="${item.studentCode}" /></span>
+                                                            <c:if test="${not empty item.studentPhone}">
+                                                                <span>• <c:out value="${item.studentPhone}" /></span>
+                                                            </c:if>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="align-top">
+                                                    <div style="display: flex; flex-direction: column;">
+                                                        <span style="font-size: 13.5px; font-weight: 600; color: var(--text);">
+                                                            <c:out value="${item.className}" />
+                                                        </span>
+                                                        <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">
+                                                            Mã lớp: <code style="font-weight: 600; color: var(--primary);"><c:out value="${item.classCode}" /></code> • Môn: <c:out value="${item.subjectName}" />
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="align-top" style="text-align: right; font-weight: 700; color: var(--primary); font-size: 14px;">
+                                                    <fmt:formatNumber value="${item.courseFee}" type="currency" currencySymbol="đ" maxFractionDigits="0"/>
+                                                </td>
+                                                <td class="align-top" style="font-size: 12.5px;">
+                                                    <div style="font-weight: 600; color: var(--text);"><c:out value="${item.startDate}" /></div>
+                                                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                                                        Ghi danh: <c:out value="${item.enrolledAtFormatted}" />
+                                                    </div>
+                                                </td>
+                                                <td class="align-top text-center">
+                                                    <c:choose>
+                                                        <c:when test="${item.status == 'ACTIVE'}">
+                                                            <span class="badge-status badge-enrolled-active">
+                                                                <span class="mgmt-dot mgmt-dot-pulse"></span>
+                                                                <span>Đang học</span>
+                                                            </span>
+                                                        </c:when>
+                                                        <c:when test="${item.status == 'RESERVED'}">
+                                                            <span class="badge-status badge-enrolled-reserved">
+                                                                <span class="mgmt-dot"></span>
+                                                                <span>Bảo lưu</span>
+                                                            </span>
+                                                        </c:when>
+                                                        <c:when test="${item.status == 'TRANSFERRED'}">
+                                                            <span class="badge-status badge-enrolled-transferred">
+                                                                <span class="mgmt-dot"></span>
+                                                                <span>Đã chuyển lớp</span>
+                                                            </span>
+                                                        </c:when>
+                                                        <c:when test="${item.status == 'DROPPED'}">
+                                                            <span class="badge-status badge-enrolled-dropped">
+                                                                <span class="mgmt-dot"></span>
+                                                                <span>Thôi học</span>
+                                                            </span>
+                                                        </c:when>
+                                                        <c:when test="${item.status == 'COMPLETED'}">
+                                                            <span class="badge-status badge-cancelled">
+                                                                <span class="mgmt-dot"></span>
+                                                                <span>Hoàn thành</span>
+                                                            </span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="badge-status badge-empty"><c:out value="${item.status}" /></span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                                <td class="align-top">
+                                                    <c:choose>
+                                                        <c:when test="${not empty item.invoiceCode}">
+                                                            <div style="display: flex; flex-direction: column; gap: 3px;">
+                                                                <a href="${pageContext.request.contextPath}/staff/invoices/detail?id=${item.invoiceId}" style="font-size: 12px; font-weight: 600; color: var(--primary); text-decoration: none;">
+                                                                    <c:out value="${item.invoiceCode}" />
+                                                                </a>
+                                                                <div>
+                                                                    <c:choose>
+                                                                        <c:when test="${item.invoiceStatus == 'PAID'}">
+                                                                            <span class="badge-status badge-paid" style="font-size: 10px; padding: 1.5px 6px;">PAID</span>
+                                                                        </c:when>
+                                                                        <c:when test="${item.invoiceStatus == 'PARTIALLY_PAID'}">
+                                                                            <span class="badge-status badge-partial" style="font-size: 10px; padding: 1.5px 6px;">PARTIAL</span>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <span class="badge-status badge-unpaid" style="font-size: 10px; padding: 1.5px 6px;">UNPAID</span>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </div>
+                                                            </div>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span style="color: var(--text-muted); font-size: 12px; font-style: italic;">Chưa phát sinh</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
+                                                <td class="align-top text-center">
+                                                    <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                                                        <c:if test="${item.status == 'ACTIVE'}">
+                                                            <!-- Nút Chuyển lớp -->
+                                                            <button type="button" class="mgmt-btn-icon-sq" title="Chuyển lớp học cho học viên"
+                                                                    data-id="${item.enrollmentId}"
+                                                                    data-student-name="<c:out value='${item.studentName}'/>"
+                                                                    data-class-id="${item.classId}"
+                                                                    data-class-name="<c:out value='${item.className}'/>"
+                                                                    onclick="openTransferModalFromBtn(this)">
+                                                                <svg class="mgmt-btn-icon" style="color: #0284c7;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                                    <path d="m16 3 4 4-4 4"></path>
+                                                                    <path d="M20 7H4"></path>
+                                                                    <path d="m8 21-4-4 4-4"></path>
+                                                                    <path d="M4 17h16"></path>
+                                                                </svg>
+                                                            </button>
+                                                            <!-- Nút Bảo lưu -->
+                                                            <button type="button" class="mgmt-btn-icon-sq" title="Bảo lưu học tập"
+                                                                    data-id="${item.enrollmentId}"
+                                                                    data-student-name="<c:out value='${item.studentName}'/>"
+                                                                    data-class-name="<c:out value='${item.className}'/>"
+                                                                    onclick="openReserveModalFromBtn(this)">
+                                                                <svg class="mgmt-btn-icon" style="color: #b45309;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                                                </svg>
+                                                            </button>
+                                                            <!-- Nút Thôi học -->
+                                                            <button type="button" class="mgmt-btn-icon-sq" title="Thôi học / Rút hồ sơ"
+                                                                    data-id="${item.enrollmentId}"
+                                                                    data-student-name="<c:out value='${item.studentName}'/>"
+                                                                    data-class-name="<c:out value='${item.className}'/>"
+                                                                    onclick="openDropModalFromBtn(this)">
+                                                                <svg class="mgmt-btn-icon" style="color: #dc2626;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                                    <circle cx="12" cy="12" r="10"></circle>
+                                                                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                                                                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                                                                </svg>
+                                                            </button>
+                                                        </c:if>
+
+                                                        <c:if test="${item.status == 'RESERVED'}">
+                                                            <!-- Nút Phục hồi học tập -->
+                                                            <form action="${pageContext.request.contextPath}/staff/enrollments/resume" method="post" style="display: inline;"
+                                                                  data-student-name="<c:out value='${item.studentName}'/>"
+                                                                  onsubmit="return confirm('Xác nhận phục hồi học tập cho học viên ' + this.getAttribute('data-student-name') + '? (Sẽ kiểm tra sĩ số lớp)');">
+                                                                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+                                                                <input type="hidden" name="enrollmentId" value="${item.enrollmentId}">
+                                                                <button type="submit" class="mgmt-btn-icon-sq" style="color: #16a34a;" title="Quay lại học tập (Resume)">
+                                                                    <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                                        <polyline points="23 4 23 10 17 10"></polyline>
+                                                                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                                                                    </svg>
+                                                                </button>
+                                                            </form>
+                                                        </c:if>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <tr>
+                                            <td colspan="8">
+                                                <div class="mgmt-empty-state">
+                                                    <div class="mgmt-empty-icon-wrap">
+                                                        <svg class="mgmt-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                                            <circle cx="9" cy="7" r="4"></circle>
+                                                            <polyline points="16 11 18 13 22 9"></polyline>
+                                                        </svg>
+                                                    </div>
+                                                    <h3 class="mgmt-empty-title">Chưa có dữ liệu ghi danh</h3>
+                                                    <p class="mgmt-empty-desc">
+                                                        Chưa có học viên nào được ghi danh theo bộ lọc này hoặc trung tâm chưa khởi tạo lượt ghi danh nào.
+                                                    </p>
+                                                    <button type="button" class="mgmt-btn mgmt-btn-primary" onclick="openEnrollModal()">
+                                                        <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                                                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                                                        </svg>
+                                                        <span>Ghi danh học viên ngay</span>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </c:otherwise>
+                                </c:choose>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <c:if test="${pageData.totalPages > 1}">
+                        <div class="mgmt-table-footer">
+                            <div class="mgmt-table-footer-left">
+                                <span>Hiển thị trang <strong style="color: var(--text);">${pageData.currentPage}</strong> / <strong style="color: var(--text);">${pageData.totalPages}</strong> (Tổng số <strong style="color: var(--primary);">${pageData.totalRecords}</strong> bản ghi)</span>
+                            </div>
+                            <div class="mgmt-pagination">
+                                <c:if test="${pageData.hasPrevious()}">
+                                    <a href="${pageContext.request.contextPath}/staff/enrollments?page=${pageData.currentPage - 1}&classId=${pageData.classId}&status=${pageData.status}&q=${pageData.keyword}" class="mgmt-page-btn">
+                                        <svg style="width: 15px; height: 15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="15 18 9 12 15 6"></polyline>
+                                        </svg>
+                                    </a>
+                                </c:if>
+                                <c:forEach begin="1" end="${pageData.totalPages}" var="p">
+                                    <a href="${pageContext.request.contextPath}/staff/enrollments?page=${p}&classId=${pageData.classId}&status=${pageData.status}&q=${pageData.keyword}"
+                                       class="mgmt-page-btn ${p == pageData.currentPage ? 'active' : ''}">${p}</a>
+                                </c:forEach>
+                                <c:if test="${pageData.hasNext()}">
+                                    <a href="${pageContext.request.contextPath}/staff/enrollments?page=${pageData.currentPage + 1}&classId=${pageData.classId}&status=${pageData.status}&q=${pageData.keyword}" class="mgmt-page-btn">
+                                        <svg style="width: 15px; height: 15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </a>
+                                </c:if>
+                            </div>
+                        </div>
+                    </c:if>
+                </div>
+
+                <!-- Quick Batch & Capacity Insights Strip -->
+                <div class="mgmt-protocol-grid-3">
+                    <div class="mgmt-protocol-card">
+                        <div class="mgmt-protocol-card-icon primary">
+                            <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+                                <path d="M6 6h10"></path>
+                                <path d="M6 10h10"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="mgmt-protocol-card-title">Tự động kiểm tra sĩ số (BR04)</h4>
+                            <p class="mgmt-protocol-card-desc">
+                                Lớp học vượt quá chỉ tiêu sẽ tự động khóa ghi danh mới để đảm bảo tiêu chuẩn chất lượng giảng dạy và an toàn phòng học.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mgmt-protocol-card">
+                        <div class="mgmt-protocol-card-icon secondary">
+                            <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="mgmt-protocol-card-title">Xung đột lịch học (BR07)</h4>
+                            <p class="mgmt-protocol-card-desc">
+                                Khi xếp lớp cho học viên đã đăng ký môn khác, hệ thống tự động kiểm tra đối chiếu thời khóa biểu tránh trùng ca học.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mgmt-protocol-card">
+                        <div class="mgmt-protocol-card-icon tertiary">
+                            <svg style="width: 20px; height: 20px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23"></line>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="mgmt-protocol-card-title">Khởi tạo hóa đơn tức thì (BR12)</h4>
+                            <p class="mgmt-protocol-card-desc">
+                                Ngay khi ghi danh thành công, hóa đơn học phí tương ứng được sinh tự động trong cùng một giao dịch toàn vẹn CSDL.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 </div>
 
 <!-- Modal 1: Ghi danh mới (Save Enrollment) -->
-<div class="modal" id="enrollModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Ghi danh học viên vào lớp học</h3>
-                <button type="button" class="modal-close" onclick="closeModal('enrollModal')">&times;</button>
+<div class="mgmt-modal-overlay" id="enrollModal">
+    <div class="mgmt-modal-card">
+        <div class="mgmt-modal-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 34px; height: 34px; border-radius: 8px; background: rgba(37, 99, 235, 0.1); color: var(--primary); display: flex; align-items: center; justify-content: center;">
+                    <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <line x1="19" y1="8" x2="19" y2="14"></line>
+                        <line x1="22" y1="11" x2="16" y2="11"></line>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="mgmt-modal-title">Ghi danh & Xếp lớp học viên</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin: 2px 0 0 0;">Cấp mã lớp và khởi tạo hóa đơn thu phí</p>
+                </div>
             </div>
-            <form action="${pageContext.request.contextPath}/staff/enrollments/save" method="post">
-                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
-                <div class="modal-body">
-                    <div class="info-callout">
-                        <strong>Quy tắc nghiệp vụ:</strong> Hệ thống sẽ tự động kiểm tra sĩ số lớp học (BR04), xung đột thời khóa biểu buổi học (BR07), và đồng thời khởi tạo hóa đơn học phí tương ứng (BR12) trong cùng một giao dịch.
-                    </div>
-
-                    <!-- Chọn học sinh -->
-                    <div class="form-group">
-                        <label class="form-label">Chọn học viên <span class="required">*</span></label>
-                        <select name="studentId" class="form-select" required>
-                            <option value="">-- Chọn học viên từ danh sách hồ sơ --</option>
-                            <c:forEach var="s" items="${pageData.studentOptions}">
-                                <option value="${s.id}">
-                                    <c:out value="${s.fullName}"/> - Mã: <c:out value="${s.code}"/> (<c:out value="${s.phone}"/>)
-                                </option>
-                            </c:forEach>
-                        </select>
-                    </div>
-
-                    <!-- Chọn lớp học -->
-                    <div class="form-group">
-                        <label class="form-label">Chọn lớp học tiếp nhận <span class="required">*</span></label>
-                        <select name="classId" id="enrollClassSelect" class="form-select" required onchange="handleClassSelectChange(this)">
-                            <option value="" data-fee="0" data-start="">-- Chọn lớp học mở (OPEN/ONGOING) --</option>
-                            <c:forEach var="c" items="${pageData.classOptions}">
-                                <option value="${c.classId}" data-fee="${c.fee}" data-start="${c.startDate}" ${c.full ? 'disabled' : ''}>
-                                    <c:out value="${c.classCode}"/> - <c:out value="${c.className}"/>
-                                    [Sĩ số: <c:out value="${c.currentEnrolled}"/>/<c:out value="${c.capacity}"/>]
-                                    <c:if test="${c.full}"> - ĐÃ ĐẦY</c:if>
-                                </option>
-                            </c:forEach>
-                        </select>
-                    </div>
-
-                    <!-- Ngày bắt đầu học -->
-                    <div class="form-group">
-                        <label class="form-label">Ngày bắt đầu học <span class="required">*</span></label>
-                        <input type="date" name="startDate" id="enrollStartDate" class="form-control" required value="<%= java.time.LocalDate.now() %>">
-                        <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 4px; display: block;">
-                            Ngày bắt đầu phải nằm trong khoảng thời gian khai giảng và kết thúc của lớp.
-                        </small>
-                    </div>
-
-                    <!-- Ghi chú -->
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Ghi chú ghi danh</label>
-                        <textarea name="notes" class="form-control" rows="2" placeholder="Ví dụ: Đăng ký đợt 1, đã tư vấn lộ trình..."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-ghost" onclick="closeModal('enrollModal')">Hủy bỏ</button>
-                    <button type="submit" class="btn btn-primary">Xác nhận ghi danh</button>
-                </div>
-            </form>
+            <button type="button" class="mgmt-btn-icon-sq" onclick="closeModal('enrollModal')">
+                <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
         </div>
+        <form action="${pageContext.request.contextPath}/staff/enrollments/save" method="post">
+            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+            <div class="mgmt-modal-body">
+                <div class="mgmt-callout primary" style="margin-bottom: 16px;">
+                    <svg class="mgmt-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <div>
+                        <strong>Quy tắc nghiệp vụ:</strong> Hệ thống tự động kiểm tra sĩ số (BR04), đối soát xung đột TKB (BR07) và khởi tạo hóa đơn học phí (BR12) trong cùng một giao dịch toàn vẹn.
+                    </div>
+                </div>
+
+                <!-- Chọn học sinh -->
+                <div class="mgmt-form-group">
+                    <label class="mgmt-label">Chọn học viên tiếp nhận <span style="color: #dc2626;">*</span></label>
+                    <select name="studentId" class="mgmt-select" required>
+                        <option value="">-- Chọn học viên từ danh sách hồ sơ --</option>
+                        <c:forEach var="s" items="${pageData.studentOptions}">
+                            <option value="${s.id}">
+                                <c:out value="${s.fullName}"/> - Mã: <c:out value="${s.code}"/> (<c:out value="${s.phone}"/>)
+                            </option>
+                        </c:forEach>
+                    </select>
+                </div>
+
+                <!-- Chọn lớp học -->
+                <div class="mgmt-form-group">
+                    <label class="mgmt-label">Chọn lớp học tiếp nhận <span style="color: #dc2626;">*</span></label>
+                    <select name="classId" id="enrollClassSelect" class="mgmt-select" required onchange="handleClassSelectChange(this)">
+                        <option value="" data-fee="0" data-start="">-- Chọn lớp học mở (OPEN/ONGOING) --</option>
+                        <c:forEach var="c" items="${pageData.classOptions}">
+                            <option value="${c.classId}" data-fee="${c.fee}" data-start="${c.startDate}" ${c.full ? 'disabled' : ''}>
+                                <c:out value="${c.classCode}"/> - <c:out value="${c.className}"/>
+                                [Sĩ số: <c:out value="${c.currentEnrolled}"/>/<c:out value="${c.capacity}"/>]
+                                <c:if test="${c.full}"> - ĐÃ ĐẦY</c:if>
+                            </option>
+                        </c:forEach>
+                    </select>
+                </div>
+
+                <!-- Ngày bắt đầu học -->
+                <div class="mgmt-form-group">
+                    <label class="mgmt-label">Ngày bắt đầu học <span style="color: #dc2626;">*</span></label>
+                    <input type="date" name="startDate" id="enrollStartDate" class="mgmt-input" required value="<%= java.time.LocalDate.now() %>">
+                    <small style="color: var(--text-muted); font-size: 11.5px; margin-top: 4px; display: block;">
+                        Ngày bắt đầu phải nằm trong khoảng thời gian khai giảng và kết thúc của lớp.
+                    </small>
+                </div>
+
+                <!-- Ghi chú -->
+                <div class="mgmt-form-group">
+                    <label class="mgmt-label">Ghi chú ghi danh</label>
+                    <textarea name="notes" class="mgmt-textarea" rows="2" placeholder="Ví dụ: Đăng ký đợt 1, đã tư vấn lộ trình..."></textarea>
+                </div>
+            </div>
+            <div class="mgmt-modal-footer">
+                <button type="button" class="mgmt-btn mgmt-btn-outline" onclick="closeModal('enrollModal')">Hủy bỏ</button>
+                <button type="submit" class="mgmt-btn mgmt-btn-primary">Xác nhận ghi danh</button>
+            </div>
+        </form>
     </div>
 </div>
 
 <!-- Modal 2: Chuyển lớp (Transfer Class) -->
-<div class="modal" id="transferModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Chuyển lớp học cho học viên</h3>
-                <button type="button" class="modal-close" onclick="closeModal('transferModal')">&times;</button>
+<div class="mgmt-modal-overlay" id="transferModal">
+    <div class="mgmt-modal-card">
+        <div class="mgmt-modal-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 34px; height: 34px; border-radius: 8px; background: rgba(2, 132, 199, 0.1); color: #0284c7; display: flex; align-items: center; justify-content: center;">
+                    <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m16 3 4 4-4 4"></path>
+                        <path d="M20 7H4"></path>
+                        <path d="m8 21-4-4 4-4"></path>
+                        <path d="M4 17h16"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="mgmt-modal-title">Chuyển lớp học cho học viên</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin: 2px 0 0 0;">Điều chuyển học sinh sang lớp cùng học phần</p>
+                </div>
             </div>
-            <form action="${pageContext.request.contextPath}/staff/enrollments/transfer" method="post">
-                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
-                <input type="hidden" name="enrollmentId" id="transferEnrollmentId">
-                <div class="modal-body">
-                    <div class="info-callout">
-                        Học viên: <strong id="transferStudentName"></strong><br>
-                        Lớp học hiện tại: <span id="transferCurrentClass"></span>
-                    </div>
-
-                    <!-- Chọn lớp mới -->
-                    <div class="form-group">
-                        <label class="form-label">Lớp học chuyển đến <span class="required">*</span></label>
-                        <select name="newClassId" id="transferNewClassSelect" class="form-select" required>
-                            <option value="">-- Chọn lớp học mới còn chỗ --</option>
-                            <c:forEach var="c" items="${pageData.classOptions}">
-                                <option value="${c.classId}" ${c.full ? 'disabled' : ''}>
-                                    <c:out value="${c.classCode}"/> - <c:out value="${c.className}"/>
-                                    [Sĩ số: <c:out value="${c.currentEnrolled}"/>/<c:out value="${c.capacity}"/>]
-                                </option>
-                            </c:forEach>
-                        </select>
-                    </div>
-
-                    <!-- Ngày chuyển -->
-                    <div class="form-group">
-                        <label class="form-label">Ngày hiệu lực chuyển lớp</label>
-                        <input type="date" name="transferDate" class="form-control" value="<%= java.time.LocalDate.now() %>">
-                    </div>
-
-                    <!-- Ghi chú lý do chuyển -->
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Lý do chuyển lớp</label>
-                        <textarea name="notes" class="form-control" rows="2" placeholder="Nhập lý do chuyển lớp..."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-ghost" onclick="closeModal('transferModal')">Đóng</button>
-                    <button type="submit" class="btn btn-primary">Xác nhận chuyển lớp</button>
-                </div>
-            </form>
+            <button type="button" class="mgmt-btn-icon-sq" onclick="closeModal('transferModal')">
+                <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
         </div>
+        <form action="${pageContext.request.contextPath}/staff/enrollments/transfer" method="post">
+            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+            <input type="hidden" name="enrollmentId" id="transferEnrollmentId">
+            <div class="mgmt-modal-body">
+                <div class="mgmt-callout primary" style="margin-bottom: 16px;">
+                    <div>
+                        Học viên: <strong id="transferStudentName" style="color: var(--text);"></strong><br>
+                        Lớp học hiện tại: <span id="transferCurrentClass" style="color: var(--text-muted);"></span>
+                    </div>
+                </div>
+
+                <!-- Chọn lớp mới -->
+                <div class="mgmt-form-group">
+                    <label class="mgmt-label">Lớp học chuyển đến <span style="color: #dc2626;">*</span></label>
+                    <select name="newClassId" id="transferNewClassSelect" class="mgmt-select" required>
+                        <option value="">-- Chọn lớp học mới còn chỗ --</option>
+                        <c:forEach var="c" items="${pageData.classOptions}">
+                            <option value="${c.classId}" ${c.full ? 'disabled' : ''}>
+                                <c:out value="${c.classCode}"/> - <c:out value="${c.className}"/>
+                                [Sĩ số: <c:out value="${c.currentEnrolled}"/>/<c:out value="${c.capacity}"/>]
+                            </option>
+                        </c:forEach>
+                    </select>
+                </div>
+
+                <!-- Ngày chuyển -->
+                <div class="mgmt-form-group">
+                    <label class="mgmt-label">Ngày hiệu lực chuyển lớp</label>
+                    <input type="date" name="transferDate" class="mgmt-input" value="<%= java.time.LocalDate.now() %>">
+                </div>
+
+                <!-- Ghi chú lý do chuyển -->
+                <div class="mgmt-form-group">
+                    <label class="mgmt-label">Lý do chuyển lớp</label>
+                    <textarea name="notes" class="mgmt-textarea" rows="2" placeholder="Nhập lý do chuyển lớp..."></textarea>
+                </div>
+            </div>
+            <div class="mgmt-modal-footer">
+                <button type="button" class="mgmt-btn mgmt-btn-outline" onclick="closeModal('transferModal')">Đóng</button>
+                <button type="submit" class="mgmt-btn mgmt-btn-primary">Xác nhận chuyển lớp</button>
+            </div>
+        </form>
     </div>
 </div>
 
 <!-- Modal 3: Bảo lưu học tập (Reserve) -->
-<div class="modal" id="reserveModal">
-    <div class="modal-dialog" style="max-width: 480px;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Bảo lưu học tập</h3>
-                <button type="button" class="modal-close" onclick="closeModal('reserveModal')">&times;</button>
+<div class="mgmt-modal-overlay" id="reserveModal">
+    <div class="mgmt-modal-card" style="max-width: 500px;">
+        <div class="mgmt-modal-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 34px; height: 34px; border-radius: 8px; background: rgba(180, 83, 9, 0.1); color: #b45309; display: flex; align-items: center; justify-content: center;">
+                    <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="mgmt-modal-title">Bảo lưu học tập</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin: 2px 0 0 0;">Tạm ngưng khóa học và giải phóng chỗ</p>
+                </div>
             </div>
-            <form action="${pageContext.request.contextPath}/staff/enrollments/reserve" method="post">
-                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
-                <input type="hidden" name="enrollmentId" id="reserveEnrollmentId">
-                <div class="modal-body">
-                    <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 12px;">
-                        Xác nhận bảo lưu cho học viên <strong id="reserveStudentName"></strong> tại lớp <span id="reserveClassName"></span>. Chỗ học trong lớp sẽ được giải phóng cho học viên khác.
-                    </p>
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Lý do bảo lưu <span class="required">*</span></label>
-                        <textarea name="reason" class="form-control" rows="3" required placeholder="Nhập lý do bảo lưu theo đơn yêu cầu..."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-ghost" onclick="closeModal('reserveModal')">Hủy bỏ</button>
-                    <button type="submit" class="btn btn-warning" style="background: #eab308; color: #fff; border: none;">Bảo lưu ngay</button>
-                </div>
-            </form>
+            <button type="button" class="mgmt-btn-icon-sq" onclick="closeModal('reserveModal')">
+                <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
         </div>
+        <form action="${pageContext.request.contextPath}/staff/enrollments/reserve" method="post">
+            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+            <input type="hidden" name="enrollmentId" id="reserveEnrollmentId">
+            <div class="mgmt-modal-body">
+                <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.5; margin: 0 0 14px 0;">
+                    Xác nhận bảo lưu cho học viên <strong id="reserveStudentName" style="color: var(--text);"></strong> tại lớp <span id="reserveClassName" style="color: var(--primary); font-weight: 600;"></span>. Chỗ học trong lớp sẽ được giải phóng cho học viên khác.
+                </p>
+                <div class="mgmt-form-group">
+                    <label class="mgmt-label">Lý do bảo lưu <span style="color: #dc2626;">*</span></label>
+                    <textarea name="reason" class="mgmt-textarea" rows="3" required placeholder="Nhập lý do bảo lưu theo đơn yêu cầu..."></textarea>
+                </div>
+            </div>
+            <div class="mgmt-modal-footer">
+                <button type="button" class="mgmt-btn mgmt-btn-outline" onclick="closeModal('reserveModal')">Hủy bỏ</button>
+                <button type="submit" class="mgmt-btn" style="background: #eab308; color: #ffffff;">Bảo lưu ngay</button>
+            </div>
+        </form>
     </div>
 </div>
 
 <!-- Modal 4: Thôi học / Hủy ghi danh (Drop) -->
-<div class="modal" id="dropModal">
-    <div class="modal-dialog" style="max-width: 480px;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" style="color: var(--danger);">Thôi học / Rút khỏi lớp</h3>
-                <button type="button" class="modal-close" onclick="closeModal('dropModal')">&times;</button>
+<div class="mgmt-modal-overlay" id="dropModal">
+    <div class="mgmt-modal-card" style="max-width: 500px;">
+        <div class="mgmt-modal-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 34px; height: 34px; border-radius: 8px; background: rgba(220, 38, 38, 0.1); color: #dc2626; display: flex; align-items: center; justify-content: center;">
+                    <svg style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="mgmt-modal-title" style="color: #dc2626;">Thôi học / Rút khỏi lớp</h3>
+                    <p style="font-size: 12px; color: var(--text-muted); margin: 2px 0 0 0;">Cập nhật trạng thái ngừng học tập</p>
+                </div>
             </div>
-            <form action="${pageContext.request.contextPath}/staff/enrollments/status" method="post">
-                <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
-                <input type="hidden" name="enrollmentId" id="dropEnrollmentId">
-                <input type="hidden" name="newStatus" value="DROPPED">
-                <div class="modal-body">
-                    <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 12px;">
-                        Bạn có chắc chắn muốn cập nhật trạng thái <strong>THÔI HỌC (DROPPED)</strong> cho học viên <strong id="dropStudentName"></strong> tại lớp <span id="dropClassName"></span>?
-                    </p>
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Lý do thôi học</label>
-                        <textarea name="reason" class="form-control" rows="2" placeholder="Nhập lý do học viên dừng học..."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-ghost" onclick="closeModal('dropModal')">Hủy</button>
-                    <button type="submit" class="btn btn-danger">Xác nhận thôi học</button>
-                </div>
-            </form>
+            <button type="button" class="mgmt-btn-icon-sq" onclick="closeModal('dropModal')">
+                <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
         </div>
+        <form action="${pageContext.request.contextPath}/staff/enrollments/status" method="post">
+            <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
+            <input type="hidden" name="enrollmentId" id="dropEnrollmentId">
+            <input type="hidden" name="newStatus" value="DROPPED">
+            <div class="mgmt-modal-body">
+                <p style="font-size: 13.5px; color: var(--text-muted); line-height: 1.5; margin: 0 0 14px 0;">
+                    Bạn có chắc chắn muốn cập nhật trạng thái <strong style="color: #dc2626;">THÔI HỌC (DROPPED)</strong> cho học viên <strong id="dropStudentName" style="color: var(--text);"></strong> tại lớp <span id="dropClassName" style="color: var(--primary); font-weight: 600;"></span>?
+                </p>
+                <div class="mgmt-form-group">
+                    <label class="mgmt-label">Lý do thôi học</label>
+                    <textarea name="reason" class="mgmt-textarea" rows="2" placeholder="Nhập lý do học viên dừng học..."></textarea>
+                </div>
+            </div>
+            <div class="mgmt-modal-footer">
+                <button type="button" class="mgmt-btn mgmt-btn-outline" onclick="closeModal('dropModal')">Hủy</button>
+                <button type="submit" class="mgmt-btn mgmt-btn-danger">Xác nhận thôi học</button>
+            </div>
+        </form>
     </div>
 </div>
 
 <script>
     function openModal(id) {
         var el = document.getElementById(id);
-        if (el) el.classList.add('show');
+        if (el) el.classList.add('active');
     }
     function closeModal(id) {
         var el = document.getElementById(id);
-        if (el) el.classList.remove('show');
+        if (el) el.classList.remove('active');
     }
 
     function openEnrollModal() {
@@ -657,7 +824,6 @@
         document.getElementById('transferStudentName').textContent = studentName;
         document.getElementById('transferCurrentClass').textContent = className;
 
-        // Vô hiệu hóa lớp hiện tại trong danh sách chọn lớp mới
         var select = document.getElementById('transferNewClassSelect');
         for (var i = 0; i < select.options.length; i++) {
             if (select.options[i].value === classId) {
@@ -681,14 +847,20 @@
         openModal('dropModal');
     }
 
-    // Đóng modal khi click ra ngoài dialog
     window.addEventListener('click', function(event) {
-        var modals = document.querySelectorAll('.modal.show');
+        var modals = document.querySelectorAll('.mgmt-modal-overlay.active');
         modals.forEach(function(modal) {
             if (event.target === modal) {
-                modal.classList.remove('show');
+                modal.classList.remove('active');
             }
         });
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            var activeModals = document.querySelectorAll('.mgmt-modal-overlay.active');
+            activeModals.forEach(function(m) { m.classList.remove('active'); });
+        }
     });
 </script>
 </body>
