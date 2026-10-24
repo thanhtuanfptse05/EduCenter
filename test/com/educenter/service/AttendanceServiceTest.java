@@ -286,4 +286,47 @@ public class AttendanceServiceTest {
         assertEquals(1, mockRepo.attendances.size());
         assertNotNull(mockRepo.attendances.get(0).getRecordedBy());
     }
+
+    @Test
+    @DisplayName("FR-004: Chặn lưu điểm danh cho ca học tương lai (chưa đến ngày học)")
+    void testSaveAttendance_FutureSession_ThrowsValidationException() {
+        mockRepo.session.setSessionDate(LocalDate.now().plusDays(2));
+        List<AttendanceRosterItemDTO> roster = new ArrayList<>();
+        roster.add(new AttendanceRosterItemDTO(1L, "HV0001", "Học sinh 1", "0912345678", "PRESENT", ""));
+
+        ValidationException ex = assertThrows(ValidationException.class, () -> {
+            attendanceService.saveAttendance(10L, roster, 50L, false);
+        });
+        assertTrue(ex.getMessage().contains("Chưa đến ngày diễn ra ca học"));
+    }
+
+    @Test
+    @DisplayName("FR-004: Chặn chốt hoàn tất điểm danh cho ca học tương lai")
+    void testCompleteSession_FutureSession_ThrowsValidationException() {
+        mockRepo.session.setSessionDate(LocalDate.now().plusDays(3));
+
+        ValidationException ex = assertThrows(ValidationException.class, () -> {
+            attendanceService.completeSessionAttendance(10L, 50L, false);
+        });
+        assertTrue(ex.getMessage().contains("Chưa đến ngày diễn ra ca học"));
+    }
+
+    @Test
+    @DisplayName("FR-004: DTO isFutureSession và isAttendanceOpen phản ánh chính xác theo sessionDate")
+    void testAttendanceSessionViewDTO_FutureSessionFlags() {
+        AttendanceSessionViewDTO dtoFuture = new AttendanceSessionViewDTO();
+        dtoFuture.setSessionDate(LocalDate.now().plusDays(1));
+        assertTrue(dtoFuture.isFutureSession());
+        assertFalse(dtoFuture.isAttendanceOpen());
+
+        AttendanceSessionViewDTO dtoToday = new AttendanceSessionViewDTO();
+        dtoToday.setSessionDate(LocalDate.now());
+        assertFalse(dtoToday.isFutureSession());
+        assertTrue(dtoToday.isAttendanceOpen());
+
+        AttendanceSessionViewDTO dtoPast = new AttendanceSessionViewDTO();
+        dtoPast.setSessionDate(LocalDate.now().minusDays(1));
+        assertFalse(dtoPast.isFutureSession());
+        assertTrue(dtoPast.isAttendanceOpen());
+    }
 }

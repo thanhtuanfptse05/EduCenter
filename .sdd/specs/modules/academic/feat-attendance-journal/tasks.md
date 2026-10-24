@@ -36,3 +36,12 @@
 - [x] Task 8.4: Nâng cấp check constraint `CK_ClassSessions_Status` trong SQL Server để hỗ trợ `IN_PROGRESS` và bảo vệ giao dịch `saveAttendance`.
 - [x] Task 8.5: Khử trùng lặp `studentId` và fallback `actor` an toàn trong `AttendanceServiceImpl.java`.
 - [x] Task 8.6: Kiểm thử tự động và xác minh luồng người dùng thực tế.
+
+## Phase 9: Date-based Attendance Lock (Chặn điểm danh trước ngày học)
+- [x] Task 9.1: Thêm `isFutureSession()` và `isAttendanceOpen()` trong `AttendanceSessionViewDTO.java`.
+- [x] Task 9.2: Kiểm tra `session.getSessionDate().isAfter(LocalDate.now())` trong `AttendanceServiceImpl.java` (`saveAttendance` và `completeSessionAttendance`), chặn điểm danh buổi học tương lai.
+- [x] Task 9.3: Cập nhật giao diện `attendance.jsp` để khóa các nút tương tác điểm danh khi ca học chưa đến ngày diễn ra, hiển thị thông báo thời gian mở.
+- [x] Task 9.4: Cập nhật `attendance-sessions.jsp` hiển thị badge "Chưa tới ngày" và nút "Chưa mở" cho ca học tương lai.
+- [x] Task 9.5: Cập nhật `AttendanceServiceTest.java` với test case kiểm thử chặn điểm danh ca học tương lai.
+- [x] Task 9.6: Biên dịch, chạy test, nghiệm thu thực tế và push lên `main`.
+

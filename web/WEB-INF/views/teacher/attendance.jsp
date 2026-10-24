@@ -72,6 +72,12 @@
                                 <c:out value="${sessionData.classCode}" />
                             </span>
                             <c:choose>
+                                <c:when test="${sessionData.futureSession}">
+                                    <span class="badge" style="background: #F1F5F9; color: #475569; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;" id="sessionStatusBadge">
+                                        <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                        <span>CHƯA TỚI NGÀY HỌC</span>
+                                    </span>
+                                </c:when>
                                 <c:when test="${sessionData.sessionStatus == 'COMPLETED'}">
                                     <span class="badge" style="background: #DCFCE7; color: #15803D; font-weight: 700; display: inline-flex; align-items: center; gap: 5px;" id="sessionStatusBadge">
                                         <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -128,6 +134,16 @@
                         </button>
                     </div>
                 </div>
+
+                <!-- Future Session Warning Banner -->
+                <c:if test="${sessionData.futureSession}">
+                    <div class="alert alert-warning" style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; border-radius: var(--radius-md); padding: 14px 18px; background: #FFFBEB; border: 1px solid #FDE68A; color: #92400E;">
+                        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true" style="color: #D97706; flex-shrink: 0; margin-top: 2px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                        <div style="font-size: 13.5px; line-height: 1.5;">
+                            <strong>Chưa đến ngày học:</strong> Buổi học này được xếp lịch vào ngày <strong><c:out value="${sessionData.sessionDate}" /></strong> (tương lai). Theo quy chuẩn học vụ, hệ thống chỉ mở điểm danh khi đến ngày diễn ra ca học. Các thao tác ghi nhận điểm danh tạm thời bị khóa.
+                        </div>
+                    </div>
+                </c:if>
 
                 <!-- 3. Live Stat Matrix Metrics Strip (6 Columns) -->
                 <div class="ops-metrics-grid cols-6">
@@ -201,16 +217,24 @@
                 <!-- 4. Bulk Actions & Quick Filter Toolbar -->
                 <div class="ops-toolbar no-print">
                     <div class="ops-toolbar-actions">
-                        <c:if test="${true}">
-                            <button type="button" class="btn btn-secondary btn-sm" onclick="setAllAttendance('PRESENT')" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
-                                <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--success);"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                <span>Đánh dấu tất cả CÓ MẶT</span>
-                            </button>
-                            <button type="button" class="btn btn-ghost btn-sm" onclick="resetAllAttendance()" style="display: inline-flex; align-items: center; gap: 6px;">
-                                <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
-                                <span>Đặt lại lựa chọn</span>
-                            </button>
-                        </c:if>
+                        <c:choose>
+                            <c:when test="${sessionData.futureSession}">
+                                <span style="font-size: 13px; color: var(--text-muted); display: inline-flex; align-items: center; gap: 6px; font-weight: 500;">
+                                    <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                    Điểm danh chưa mở (Chưa đến ngày ca học)
+                                </span>
+                            </c:when>
+                            <c:otherwise>
+                                <button type="button" class="btn btn-secondary btn-sm" onclick="setAllAttendance('PRESENT')" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+                                    <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--success);"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    <span>Đánh dấu tất cả CÓ MẶT</span>
+                                </button>
+                                <button type="button" class="btn btn-ghost btn-sm" onclick="resetAllAttendance()" style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                                    <span>Đặt lại lựa chọn</span>
+                                </button>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
 
                     <!-- Client-side Fast Search -->
@@ -266,12 +290,12 @@
                                                         <c:out value="${not empty item.studentPhone ? item.studentPhone : '--'}" />
                                                     </td>
                                                     <td style="text-align: center;">
-                                                        <div class="att-segment-group" role="group">
+                                                        <div class="att-segment-group" role="group" style="${sessionData.futureSession ? 'opacity: 0.65; pointer-events: none;' : ''}">
                                                             <!-- Có mặt -->
                                                             <label class="att-segment-btn btn-present ${item.attendanceStatus == 'PRESENT' ? 'is-active' : ''} ">
                                                                 <input type="radio" name="status_${item.studentId}" value="PRESENT"
                                                                        ${item.attendanceStatus == 'PRESENT' ? 'checked' : ''}
-                                                                       
+                                                                       ${sessionData.futureSession ? 'disabled' : ''}
                                                                        onchange="onAttendanceStatusChange(this, ${item.studentId})">
                                                                 <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                                                 <span>Có mặt</span>
@@ -281,7 +305,7 @@
                                                             <label class="att-segment-btn btn-late ${item.attendanceStatus == 'LATE' ? 'is-active' : ''} ">
                                                                 <input type="radio" name="status_${item.studentId}" value="LATE"
                                                                        ${item.attendanceStatus == 'LATE' ? 'checked' : ''}
-                                                                       
+                                                                       ${sessionData.futureSession ? 'disabled' : ''}
                                                                        onchange="onAttendanceStatusChange(this, ${item.studentId})">
                                                                 <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                                                                 <span>Đi muộn</span>
@@ -291,7 +315,7 @@
                                                             <label class="att-segment-btn btn-excused ${item.attendanceStatus == 'ABSENT_EXCUSED' ? 'is-active' : ''} ">
                                                                 <input type="radio" name="status_${item.studentId}" value="ABSENT_EXCUSED"
                                                                        ${item.attendanceStatus == 'ABSENT_EXCUSED' ? 'checked' : ''}
-                                                                       
+                                                                       ${sessionData.futureSession ? 'disabled' : ''}
                                                                        onchange="onAttendanceStatusChange(this, ${item.studentId})">
                                                                 <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
                                                                 <span>Có phép</span>
@@ -301,7 +325,7 @@
                                                             <label class="att-segment-btn btn-unexcused ${item.attendanceStatus == 'ABSENT_UNEXCUSED' ? 'is-active' : ''} ">
                                                                 <input type="radio" name="status_${item.studentId}" value="ABSENT_UNEXCUSED"
                                                                        ${item.attendanceStatus == 'ABSENT_UNEXCUSED' ? 'checked' : ''}
-                                                                       
+                                                                       ${sessionData.futureSession ? 'disabled' : ''}
                                                                        onchange="onAttendanceStatusChange(this, ${item.studentId})">
                                                                 <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                                                 <span>Không phép</span>
@@ -312,6 +336,7 @@
                                                         <input type="text" name="remarks_${item.studentId}" class="form-control form-control-sm"
                                                                placeholder="Lý do đi muộn / nghỉ / thái độ học tập..."
                                                                value="<c:out value='${item.remarks}' />"
+                                                               ${sessionData.futureSession ? 'disabled' : ''}
                                                                >
                                                     </td>
                                                 </tr>
@@ -360,25 +385,29 @@
                                 Quay lại
                             </a>
 
-                            <c:if test="${true}">
-                                <c:choose>
-                                    <c:when test="${sessionData.sessionStatus == 'COMPLETED'}">
-                                        <button type="submit" class="btn btn-primary btn-sm" onclick="document.getElementById('completeAfterSave').value='false';" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
-                                            <span>Lưu chỉnh sửa điểm danh</span>
-                                        </button>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <button type="submit" class="btn btn-secondary btn-sm" onclick="document.getElementById('completeAfterSave').value='false';" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
-                                            <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                                            <span>Lưu tạm điểm danh</span>
-                                        </button>
-                                        <button type="button" class="btn btn-primary btn-sm" onclick="confirmCompleteAttendance()" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
-                                            <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                            <span>Chốt hoàn tất ca học &amp; Điểm danh</span>
-                                        </button>
-                                    </c:otherwise>
-                                </c:choose>
-                            </c:if>
+                            <c:choose>
+                                <c:when test="${sessionData.futureSession}">
+                                    <span class="badge" style="background: #F1F5F9; color: #475569; padding: 8px 14px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                                        <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                        Chưa mở điểm danh (Ngày học: <c:out value="${sessionData.sessionDate}" />)
+                                    </span>
+                                </c:when>
+                                <c:when test="${sessionData.sessionStatus == 'COMPLETED'}">
+                                    <button type="submit" class="btn btn-primary btn-sm" onclick="document.getElementById('completeAfterSave').value='false';" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+                                        <span>Lưu chỉnh sửa điểm danh</span>
+                                    </button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button type="submit" class="btn btn-secondary btn-sm" onclick="document.getElementById('completeAfterSave').value='false';" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+                                        <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                                        <span>Lưu tạm điểm danh</span>
+                                    </button>
+                                    <button type="button" class="btn btn-primary btn-sm" onclick="confirmCompleteAttendance()" style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600;">
+                                        <svg class="icon icon-xs" viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                        <span>Chốt hoàn tất ca học &amp; Điểm danh</span>
+                                    </button>
+                                </c:otherwise>
+                            </c:choose>
                         </div>
                     </div>
                 </form>

@@ -129,6 +129,11 @@ public class AttendanceServiceImpl implements AttendanceService {
 
             validateTeacherPermission(session, actorUserId, isAdmin);
 
+            // FR-004: Chưa đến ngày diễn ra ca học thì không được mở điểm danh
+            if (session.getSessionDate() != null && session.getSessionDate().isAfter(LocalDate.now())) {
+                throw new ValidationException("Chưa đến ngày diễn ra ca học (" + session.getSessionDate() + "). Bạn chỉ có thể điểm danh khi đến ngày học!");
+            }
+
             // FR-005 (v1.1): giáo viên thực dạy (đã qua validateTeacherPermission) được sửa buổi COMPLETED
             if ("CANCELLED".equalsIgnoreCase(session.getStatus())) {
                 throw new ValidationException("Buổi học đã bị hủy, không thể điểm danh!");
@@ -226,6 +231,11 @@ public class AttendanceServiceImpl implements AttendanceService {
                     .orElseThrow(() -> new ValidationException("Buổi học không tồn tại!"));
 
             validateTeacherPermission(session, actorUserId, isAdmin);
+
+            // FR-004: Chưa đến ngày diễn ra ca học thì không thể chốt
+            if (session.getSessionDate() != null && session.getSessionDate().isAfter(LocalDate.now())) {
+                throw new ValidationException("Chưa đến ngày diễn ra ca học (" + session.getSessionDate() + "). Không thể chốt hoàn tất ca học tương lai!");
+            }
 
             if ("CANCELLED".equalsIgnoreCase(session.getStatus())) {
                 throw new ValidationException("Buổi học đã bị hủy, không thể hoàn tất!");

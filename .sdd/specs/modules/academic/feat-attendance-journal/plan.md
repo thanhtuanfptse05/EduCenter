@@ -63,3 +63,12 @@
   - Sắp xếp DOM hợp lệ: Đặt input hidden `studentIds` vào trong thẻ `<td>` của hàng học viên, tránh lỗi foster-parenting của trình duyệt.
   - Cập nhật ràng buộc CSDL: Đảm bảo bảng `ClassSessions` hỗ trợ đầy đủ trạng thái `IN_PROGRESS` trong check constraint `CK_ClassSessions_Status`, tránh rollback transaction khi lưu điểm danh.
   - Kiểm soát giao dịch Backend: Khử trùng lặp studentId trước khi persist, fallback `actor` an toàn để không vi phạm NOT NULL trên `recorded_by`.
+- **Phase 9: Date-based Attendance Lock (Chặn điểm danh trước ngày học - FR-004)**
+  - Tầng Service (`AttendanceServiceImpl.java`): Bổ sung kiểm tra `session.getSessionDate().isAfter(LocalDate.now())` trong cả `saveAttendance` và `completeSessionAttendance`, ném `ValidationException` giải thích rõ ràng không thể điểm danh ca học tương lai.
+  - DTO (`AttendanceSessionViewDTO.java`): Thêm phương thức tiện ích `isFutureSession()` và `isAttendanceOpen()`.
+  - Tầng View (`attendance.jsp` & `attendance-sessions.jsp`):
+    - Khóa toàn bộ các nút radio và controls điểm danh khi `sessionData.futureSession == true`.
+    - Ẩn/disable nút "Đánh dấu tất cả", "Đặt lại", "Lưu tạm", "Chốt ca học", thay bằng cảnh báo thời gian mở điểm danh.
+    - Tại danh sách ca học, hiển thị badge "Chưa tới ngày" và nút hành động chuyển sang "Chưa mở" cho ca học tương lai.
+  - Unit Test (`AttendanceServiceTest.java`): Bổ sung ca kiểm thử chặn lưu điểm danh và chốt ca học tương lai.
+

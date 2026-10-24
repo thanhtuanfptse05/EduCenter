@@ -103,4 +103,13 @@ public class AttendanceSessionViewDTO implements Serializable {
 
     public List<AttendanceRosterItemDTO> getRoster() { return roster; }
     public void setRoster(List<AttendanceRosterItemDTO> roster) { this.roster = roster; }
+
+    public boolean isFutureSession() {
+        return sessionDate != null && sessionDate.isAfter(LocalDate.now());
+    }
+
+    public boolean isAttendanceOpen() {
+        return sessionDate != null && !sessionDate.isAfter(LocalDate.now());
+    }
 }
+

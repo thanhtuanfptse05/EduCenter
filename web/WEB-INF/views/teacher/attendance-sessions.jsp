@@ -251,6 +251,11 @@
                                                                 Đã hủy ca
                                                             </span>
                                                         </c:when>
+                                                        <c:when test="${s.futureSession}">
+                                                            <span class="mgmt-badge badge-status-draft" style="background: #F1F5F9; color: #64748B; border: 1px solid #CBD5E1;">
+                                                                Chưa tới ngày
+                                                            </span>
+                                                        </c:when>
                                                         <c:otherwise>
                                                             <span class="mgmt-badge badge-status-draft">
                                                                 Chưa điểm danh
@@ -277,14 +282,26 @@
                                                 </td>
                                                 <td style="text-align: right;">
                                                     <div style="display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px;">
-                                                        <a href="${pageContext.request.contextPath}/teacher/attendance?sessionId=${s.sessionId}" class="btn btn-primary btn-sm" title="Tiến hành điểm danh">
-                                                            <svg class="icon icon-sm" style="width: 13px; height: 13px;" viewBox="0 0 24 24" aria-hidden="true">
-                                                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                                                <circle cx="9" cy="7" r="4"></circle>
-                                                                <polyline points="16 11 18 13 22 9"></polyline>
-                                                            </svg>
-                                                            <span>${s.sessionStatus == 'COMPLETED' ? 'Xem lại' : 'Điểm danh'}</span>
-                                                        </a>
+                                                        <c:choose>
+                                                            <c:when test="${s.futureSession}">
+                                                                <a href="${pageContext.request.contextPath}/teacher/attendance?sessionId=${s.sessionId}" class="btn btn-secondary btn-sm" title="Ca học tương lai (${s.sessionDate}) — Chưa mở điểm danh" style="opacity: 0.85;">
+                                                                    <svg class="icon icon-sm" style="width: 13px; height: 13px;" viewBox="0 0 24 24" aria-hidden="true">
+                                                                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                                                    </svg>
+                                                                    <span>Chưa mở</span>
+                                                                </a>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <a href="${pageContext.request.contextPath}/teacher/attendance?sessionId=${s.sessionId}" class="btn btn-primary btn-sm" title="Tiến hành điểm danh">
+                                                                    <svg class="icon icon-sm" style="width: 13px; height: 13px;" viewBox="0 0 24 24" aria-hidden="true">
+                                                                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                                                        <circle cx="9" cy="7" r="4"></circle>
+                                                                        <polyline points="16 11 18 13 22 9"></polyline>
+                                                                    </svg>
+                                                                    <span>${s.sessionStatus == 'COMPLETED' ? 'Xem lại' : 'Điểm danh'}</span>
+                                                                </a>
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                         <a href="${pageContext.request.contextPath}/teacher/journal?sessionId=${s.sessionId}" class="btn btn-secondary btn-sm" title="Ghi sổ đầu bài &amp; Nhật ký dạy">
                                                             <svg class="icon icon-sm" style="width: 13px; height: 13px;" viewBox="0 0 24 24" aria-hidden="true">
                                                                 <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
