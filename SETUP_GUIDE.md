@@ -2,13 +2,13 @@
 
 > **Dành cho:** Thành viên mới, người review mã nguồn, giảng viên và sinh viên bắt đầu tiếp cận dự án **EduCenter ERP**.  
 > **Phiên bản tài liệu:** v1.2.0 | **Cập nhật:** 2026-10-25  
-> **Mã nguồn:** [GitHub Repository](https://github.com/thanhtuanfptse05/EduCenter.git)
+> **Đóng gói mã nguồn:** File nén ZIP đầy đủ cấu trúc & thư viện phụ thuộc (`EduCenter.zip`)
 
 ---
 
 ## 📑 Mục Lục
 1. [Yêu Cầu Môi Trường Bắt Buộc (Prerequisites)](#1-yêu-cầu-môi-trường-bắt-buộc-prerequisites)
-2. [Bước 1: Tải Mã Nguồn Về Máy (Clone Repository)](#bước-1-tải-mã-nguồn-về-máy-clone-repository)
+2. [Bước 1: Tải File ZIP Về Máy & Giải Nén](#bước-1-tải-file-zip-về-máy--giải-nén)
 3. [Bước 2: Cài Đặt & Nạp Cơ Sở Dữ Liệu SQL Server](#bước-2-cài-đặt--nạp-cơ-sở-dữ-liệu-sql-server)
 4. [Bước 3: Cấu Hình Kết Nối CSDL Trong Mã Nguồn](#bước-3-cấu-hình-kết-nối-csdl-trong-mã-nguồn)
 5. [Bước 4: Cấu Hình & Chạy Dự Án Trên NetBeans IDE 17](#bước-4-cấu-hình--chạy-dự-án-trên-netbeans-ide-17)
@@ -28,21 +28,17 @@ Dự án EduCenter được phát triển theo chuẩn **Jakarta EE 10 / Servlet
 | 3 | **Integrated Development Environment** | **NetBeans IDE 17+** (Khuyên dùng) | IDE chuẩn phát triển Java Web Ant | [Apache NetBeans Releases](https://netbeans.apache.org/front/main/download/) |
 | 4 | **Database Management System** | **Microsoft SQL Server 2019 / 2022** | Hệ quản trị CSDL quan hệ chính thức | [SQL Server Downloads](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) |
 | 5 | **Công cụ quản trị CSDL** | **SQL Server Management Studio (SSMS)** | Giao diện chạy script và xem bảng | [Tải SSMS](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms) |
-| 6 | **Version Control** | **Git** | Tải và đồng bộ mã nguồn | [Git SCM](https://git-scm.com/) |
 
 > ⚠️ **LƯU Ý CỰC KỲ QUAN TRỌNG VỀ TOMCAT:**  
 > Tuyệt đối **KHÔNG dùng Tomcat 9 trở xuống** (Tomcat 9 dùng namespace cũ `javax.servlet.*`). Dự án EduCenter dùng **Tomcat 10.1+** với namespace chuẩn mới `jakarta.servlet.*` và `jakarta.persistence.*`.
 
 ---
 
-## Bước 1: Tải Mã Nguồn Về Máy (Clone Repository)
+## Bước 1: Tải File ZIP Về Máy & Giải Nén
 
-Mở **Terminal** (macOS/Linux) hoặc **Command Prompt / PowerShell** (Windows) và chạy lệnh:
-
-```bash
-git clone https://github.com/thanhtuanfptse05/EduCenter.git
-cd EduCenter
-```
+1. Tải hoặc nhận file nén `.zip` của dự án **EduCenter** về máy tính của bạn.
+2. Nhấp chuột phải vào file `.zip` vừa tải về và chọn **Extract All...** (hoặc dùng WinRAR, 7-Zip) để giải nén vào thư mục bạn muốn lưu trữ (Ví dụ: `D:\EduCenter` hoặc `C:\Users\YourName\Documents\NetBeansProjects\EduCenter`).
+3. Mở thư mục vừa giải nén, bạn sẽ thấy toàn bộ cấu trúc mã nguồn của dự án cùng các thư mục `src`, `web`, `docs`, `nbproject`,...
 
 > **Gợi ý:** Toàn bộ các thư viện `.jar` cần thiết (Hibernate 6.4, Jakarta Persistence, SQL Server JDBC driver, BCrypt, JSTL 3.0...) đã được đóng gói sẵn trong thư mục `web/WEB-INF/lib/` và `allowedlib/`. Bạn **không cần tải thêm bất kỳ file JAR ngoài nào**.
 
@@ -50,40 +46,10 @@ cd EduCenter
 
 ## Bước 2: Cài Đặt & Nạp Cơ Sở Dữ Liệu SQL Server
 
-EduCenter có sẵn bộ dữ liệu mẫu chuẩn nghiệp vụ gồm 30 bảng, 15+ khóa học, 14 lớp học, phòng học, lịch học và hơn 30 tài khoản thử nghiệm. Bạn có thể chọn **1 trong 3 cách** nạp dữ liệu dưới đây:
+EduCenter có sẵn bộ dữ liệu mẫu chuẩn nghiệp vụ gồm 30 bảng, 15+ khóa học, 14 lớp học, phòng học, lịch học và hơn 30 tài khoản thử nghiệm. Bạn tiến hành nạp dữ liệu bằng **SQL Server Management Studio (SSMS)**:
 
-### 🚀 Cách 1: Nạp Tự Động 1-Click Bằng File Batch (Khuyên Dùng — 5 Giây Xong)
-Nếu SQL Server của bạn có tài khoản `sa` với mật khẩu mặc định là `123`:
-1. Mở thư mục dự án: `EduCenter\docs\database\`.
-2. Nhấp đúp chuột (Double-click) vào file **`run_all_seeds.bat`**.
-3. Cửa sổ Command Prompt sẽ chạy tự động 8 bước từ tạo CSDL `EduCenterDB` đến nạp toàn bộ dữ liệu. Kết thúc hiện thông báo màu xanh lá báo thành công!
-
----
-
-### 💻 Cách 2: Nạp Bằng PowerShell (Tùy biến tài khoản / Instance)
-Nếu bạn đặt mật khẩu `sa` khác hoặc dùng bản **SQL Server Express** / **Windows Authentication**:
-
-* **Trường hợp A: Dùng tài khoản `sa` với mật khẩu riêng của bạn:**
-  ```powershell
-  .\docs\database\run_all_seeds.ps1 -Server "localhost" -User "sa" -Password "MatKhauCuaBan"
-  ```
-
-* **Trường hợp B: Dùng Windows Authentication (Không cần mật khẩu sa):**
-  ```powershell
-  .\docs\database\run_all_seeds.ps1 -Server "localhost" -UseWindowsAuth
-  ```
-
-* **Trường hợp C: Dùng SQL Server Express (`localhost\SQLEXPRESS`):**
-  ```powershell
-  .\docs\database\run_all_seeds.ps1 -Server "localhost\SQLEXPRESS" -UseWindowsAuth
-  ```
-
----
-
-### 🖥️ Cách 3: Nạp Thủ Công Bằng SQL Server Management Studio (SSMS)
-Nếu bạn muốn theo dõi trực quan từng bước:
 1. Mở **SSMS** và kết nối vào SQL Server của bạn (`.` hoặc `localhost` hoặc `localhost\SQLEXPRESS`).
-2. Vào menu `File` -> `Open` -> `File...` (hoặc `Ctrl + O`), điều hướng tới `docs\database\seeds\`.
+2. Vào menu `File` -> `Open` -> `File...` (hoặc phím tắt `Ctrl + O`), điều hướng tới thư mục `docs\database\seeds\` bên trong thư mục dự án vừa giải nén.
 3. Mở và nhấn **F5** (hoặc nút **Execute**) lần lượt theo đúng thứ tự 8 file sau:
    - `01_schema_baseline.sql` *(Tạo database EduCenterDB và 30 bảng)*
    - `02_roles_and_settings.sql` *(Tạo 5 vai trò và tham số cấu hình)*
@@ -248,14 +214,12 @@ Tất cả các tài khoản mẫu đều dùng chung mật khẩu mặc định
 
 ---
 
-## 📞 Hỗ Trợ & Đóng Góp
+## 📞 Hỗ Trợ & Liên Hệ
 
-Nếu bạn gặp bất kỳ vấn đề nào ngoài danh sách trên trong quá trình cài đặt:
-1. Mở issue trên GitHub: [EduCenter Issues](https://github.com/thanhtuanfptse05/EduCenter/issues)
-2. Liên hệ nhóm phát triển EduCenter:
-   - **Thành viên 01 (Academic Module):** Quản lý Đào tạo, Khóa học, Giáo viên, Lịch học.
-   - **Thành viên 02 (Admission Module):** Tuyển sinh, Giỏ hàng, Tư vấn, Học viên, Phụ huynh.
-   - **Thành viên 03 (Finance & Admin Module):** Tài chính, Thu học phí, Người dùng, Cấu hình hệ thống.
+Nếu bạn gặp bất kỳ vấn đề nào ngoài danh sách trên trong quá trình cài đặt và trải nghiệm hệ thống, vui lòng liên hệ nhóm phát triển EduCenter:
+- **Thành viên 01 (Academic Module):** Quản lý Đào tạo, Khóa học, Giáo viên, Lịch học.
+- **Thành viên 02 (Admission Module):** Tuyển sinh, Giỏ hàng, Tư vấn, Học viên, Phụ huynh.
+- **Thành viên 03 (Finance & Admin Module):** Tài chính, Thu học phí, Người dùng, Cấu hình hệ thống.
 
 ---
 *Chúc bạn cài đặt thành công và có trải nghiệm tuyệt vời cùng hệ thống EduCenter!* 🎉
