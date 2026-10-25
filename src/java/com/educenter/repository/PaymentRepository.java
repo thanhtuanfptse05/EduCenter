@@ -106,8 +106,31 @@ public class PaymentRepository {
             }
         }
         if (keyword != null && !keyword.trim().isEmpty()) {
-            jpql.append("AND (LOWER(s.fullName) LIKE :keyword OR LOWER(s.code) LIKE :keyword OR LOWER(s.phone) LIKE :keyword OR LOWER(i.invoiceCode) LIKE :keyword) ");
+            Long studentId = parseStudentId(keyword);
+            if (studentId != null) {
+                jpql.append("AND (LOWER(s.fullName) LIKE :keyword OR LOWER(s.phone) LIKE :keyword OR LOWER(i.invoiceCode) LIKE :keyword OR s.id = :studentId) ");
+            } else {
+                jpql.append("AND (LOWER(s.fullName) LIKE :keyword OR LOWER(s.phone) LIKE :keyword OR LOWER(i.invoiceCode) LIKE :keyword) ");
+            }
         }
+    }
+
+    private Long parseStudentId(String keyword) {
+        if (keyword == null) return null;
+        String trimmed = keyword.trim().toUpperCase();
+        if (trimmed.startsWith("HV-") || trimmed.startsWith("HV")) {
+            String digits = trimmed.replaceAll("[^0-9]", "");
+            if (!digits.isEmpty()) {
+                try {
+                    return Long.parseLong(digits);
+                } catch (NumberFormatException ignored) {}
+            }
+        } else if (trimmed.matches("^\\d+$")) {
+            try {
+                return Long.parseLong(trimmed);
+            } catch (NumberFormatException ignored) {}
+        }
+        return null;
     }
 
     private void setParameters(TypedQuery<?> query, Long classId, String status, String keyword) {
@@ -119,6 +142,10 @@ public class PaymentRepository {
         }
         if (keyword != null && !keyword.trim().isEmpty()) {
             query.setParameter("keyword", "%" + keyword.trim().toLowerCase() + "%");
+            Long studentId = parseStudentId(keyword);
+            if (studentId != null) {
+                query.setParameter("studentId", studentId);
+            }
         }
     }
 
