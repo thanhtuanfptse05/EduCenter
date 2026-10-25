@@ -660,4 +660,23 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         }
         return dtos;
     }
+
+    @Override
+    public Long getCourseIdFromLead(Long leadId) {
+        if (leadId == null || leadId <= 0) return null;
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            Lead lead = em.find(Lead.class, leadId);
+            if (lead == null || lead.getNotes() == null) return null;
+            List<Course> allCourses = em.createQuery("SELECT c FROM Course c WHERE c.status = 'OPEN'", Course.class).getResultList();
+            for (Course c : allCourses) {
+                if (lead.getNotes().contains("[" + c.getCode() + "]") || lead.getNotes().contains(c.getName())) {
+                    return c.getId();
+                }
+            }
+            return null;
+        } finally {
+            em.close();
+        }
+    }
 }

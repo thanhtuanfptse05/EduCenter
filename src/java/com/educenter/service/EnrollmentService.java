@@ -90,4 +90,9 @@ public interface EnrollmentService {
      * Lấy danh sách tất cả các khóa học mở tiếp nhận học viên.
      */
     List<com.educenter.dto.CourseAdminViewDTO> getOpenCourses();
+
+    /**
+     * Nhận diện mã khóa học mà khách hàng (Lead) đã quan tâm/đăng ký trực tuyến từ thông tin tư vấn.
+     */
+    Long getCourseIdFromLead(Long leadId);
 }

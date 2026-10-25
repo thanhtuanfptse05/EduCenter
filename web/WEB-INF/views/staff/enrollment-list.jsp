@@ -10,7 +10,7 @@
     <title>Quản lý Ghi danh & Xếp lớp | EduCenter</title>
 </head>
 <body>
-<c:set var="baseEnrollPath" value="${empty enrollmentBasePath ? pageContext.request.contextPath.concat(sessionScope.currentUser.admin ? '/admin/enrollments' : '/staff/enrollments') : enrollmentBasePath}" scope="request"/>
+<c:set var="baseEnrollPath" value="${empty enrollmentBasePath ? pageContext.request.contextPath.concat(sessionScope.currentUser.admin ? '/admin/enrollments' : '/staff/enrollments') : (enrollmentBasePath.startsWith(pageContext.request.contextPath) ? enrollmentBasePath : pageContext.request.contextPath.concat(enrollmentBasePath))}" scope="request"/>
 <c:set var="internalShell" value="true" scope="request"/>
 <div class="admin-layout">
     <c:set var="activeNav" value="enrollments" scope="request" />
@@ -539,7 +539,7 @@
                     <select name="courseId" id="enrollCourseSelect" class="mgmt-select" required onchange="handleCourseChange(this.value)">
                         <option value="">-- Chọn khóa học tiếp nhận --</option>
                         <c:forEach var="crs" items="${pageData.courseOptions}">
-                            <option value="${crs.id}" data-code="${crs.code}" data-name="${crs.name}" data-fee="${crs.fee}">
+                            <option value="${crs.id}" data-code="${crs.code}" data-name="${crs.name}" data-fee="${crs.fee}" ${preselectedCourseId == crs.id ? 'selected' : ''}>
                                 [<c:out value="${crs.code}"/>] <c:out value="${crs.name}"/> - <fmt:formatNumber value="${crs.fee}" type="currency" currencySymbol="đ" maxFractionDigits="0"/>
                             </option>
                         </c:forEach>
@@ -854,44 +854,58 @@
             startInput.value = new Date().toISOString().split('T')[0];
         }
         var studentSelect = document.getElementById('enrollStudentSelect');
+        var courseSelect = document.getElementById('enrollCourseSelect');
+        var preselectedCourseId = ${preselectedCourseId != null ? preselectedCourseId : 'null'};
+
         if (studentSelect && studentSelect.value) {
-            handleStudentChange(studentSelect);
+            handleStudentChange(studentSelect, preselectedCourseId);
+        } else if (courseSelect && courseSelect.value) {
+            handleCourseChange(courseSelect.value);
         } else {
             validateEnrollFormState();
         }
         openModal('enrollModal');
     }
 
-    function handleStudentChange(select) {
+    function handleStudentChange(select, preferredCourseId) {
         var studentId = select.value;
         var badge = document.getElementById('studentRegistrationBadge');
         var badgeText = document.getElementById('studentRegistrationText');
+        var courseSelect = document.getElementById('enrollCourseSelect');
 
         if (!studentId) {
             if (badge) badge.style.display = 'none';
             window.CURRENT_STUDENT_CLASSES = null;
-            var courseSelect = document.getElementById('enrollCourseSelect');
             handleCourseChange(courseSelect ? courseSelect.value : '');
             return;
         }
 
+        var currentCourseVal = preferredCourseId || (courseSelect ? courseSelect.value : '');
+
         fetch('${baseEnrollPath}/student-options?studentId=' + encodeURIComponent(studentId))
             .then(function(res) {
-                if (!res.ok) throw new Error('Network error');
+                if (!res.ok) throw new Error('Network error ' + res.status);
                 return res.json();
             })
             .then(function(data) {
                 window.CURRENT_STUDENT_CLASSES = data.classes || [];
-                var courseSelect = document.getElementById('enrollCourseSelect');
-                if (data.registeredCourseIds && data.registeredCourseIds.length > 0) {
-                    var regCourseId = data.registeredCourseIds[0];
-                    if (courseSelect) {
-                        courseSelect.value = regCourseId;
-                        var opt = courseSelect.options[courseSelect.selectedIndex];
-                        if (badge && badgeText) {
-                            badgeText.textContent = 'Học viên đã đăng ký khóa học: ' + (opt ? opt.text : '');
-                            badge.style.display = 'flex';
-                        }
+                var targetCourseId = currentCourseVal;
+                if (!targetCourseId && data.registeredCourseIds && data.registeredCourseIds.length > 0) {
+                    targetCourseId = data.registeredCourseIds[0];
+                }
+                if (targetCourseId && courseSelect) {
+                    courseSelect.value = targetCourseId;
+                    var opt = courseSelect.options[courseSelect.selectedIndex];
+                    if (badge && badgeText && opt && opt.value) {
+                        badgeText.textContent = 'Học viên đã đăng ký khóa học: ' + opt.text;
+                        badge.style.display = 'flex';
+                    }
+                } else if (data.registeredCourseIds && data.registeredCourseIds.length > 0 && courseSelect) {
+                    courseSelect.value = data.registeredCourseIds[0];
+                    var opt = courseSelect.options[courseSelect.selectedIndex];
+                    if (badge && badgeText && opt && opt.value) {
+                        badgeText.textContent = 'Học viên đã đăng ký khóa học: ' + opt.text;
+                        badge.style.display = 'flex';
                     }
                 } else {
                     if (badge) badge.style.display = 'none';
@@ -902,7 +916,6 @@
                 console.warn('Could not load student options:', err);
                 if (badge) badge.style.display = 'none';
                 window.CURRENT_STUDENT_CLASSES = null;
-                var courseSelect = document.getElementById('enrollCourseSelect');
                 handleCourseChange(courseSelect ? courseSelect.value : '');
             });
     }
@@ -984,6 +997,10 @@
                 opt.textContent = c.classCode + ' - ' + c.className + ' [Sĩ số: ' + c.currentEnrolled + '/' + c.capacity + ']' + statusText;
                 classSelect.appendChild(opt);
             });
+
+            if (available.length === 1) {
+                classSelect.value = available[0].classId;
+            }
         }
 
         handleClassSelectChange(classSelect);

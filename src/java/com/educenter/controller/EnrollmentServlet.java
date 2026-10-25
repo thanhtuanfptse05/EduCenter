@@ -68,6 +68,7 @@ public class EnrollmentServlet extends HttpServlet {
 
         Long preselectedStudentId = null;
         Long preselectedLeadId = null;
+        Long preselectedCourseId = null;
         boolean autoOpenModal = path.endsWith("/create");
 
         String leadIdStr = req.getParameter("leadId");
@@ -79,6 +80,7 @@ public class EnrollmentServlet extends HttpServlet {
                     preselectedStudentId = student.getId();
                     autoOpenModal = true;
                 }
+                preselectedCourseId = enrollmentService.getCourseIdFromLead(preselectedLeadId);
             } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "Không thể chuyển đổi Lead sang học viên: " + leadIdStr, e);
             }
@@ -89,6 +91,22 @@ public class EnrollmentServlet extends HttpServlet {
             try {
                 preselectedStudentId = Long.parseLong(studentIdStr.trim());
                 autoOpenModal = true;
+            } catch (NumberFormatException ignored) {}
+        }
+
+        if (preselectedCourseId == null && preselectedStudentId != null) {
+            try {
+                List<Long> regCourseIds = enrollmentService.getStudentRegisteredCourseIds(preselectedStudentId);
+                if (regCourseIds != null && !regCourseIds.isEmpty()) {
+                    preselectedCourseId = regCourseIds.get(0);
+                }
+            } catch (Exception ignored) {}
+        }
+
+        String courseIdStr = req.getParameter("courseId");
+        if (courseIdStr != null && !courseIdStr.isBlank()) {
+            try {
+                preselectedCourseId = Long.parseLong(courseIdStr.trim());
             } catch (NumberFormatException ignored) {}
         }
 
@@ -117,10 +135,11 @@ public class EnrollmentServlet extends HttpServlet {
         req.setAttribute("pageData", pageData);
         req.setAttribute("preselectedStudentId", preselectedStudentId);
         req.setAttribute("preselectedLeadId", preselectedLeadId);
+        req.setAttribute("preselectedCourseId", preselectedCourseId);
         req.setAttribute("autoOpenModal", autoOpenModal);
         req.setAttribute("pageTitle", "Quản lý ghi danh & Xếp lớp — EduCenter ERP");
         req.setAttribute("activeNav", isAdminContext ? "admin-enrollments" : "enrollments");
-        req.setAttribute("enrollmentBasePath", isAdminContext ? "/admin/enrollments" : "/staff/enrollments");
+        req.setAttribute("enrollmentBasePath", req.getContextPath() + (isAdminContext ? "/admin/enrollments" : "/staff/enrollments"));
         req.setAttribute("isAdminContext", isAdminContext);
         req.setAttribute("internalShell", true);
         req.getRequestDispatcher("/WEB-INF/views/staff/enrollment-list.jsp").forward(req, resp);
