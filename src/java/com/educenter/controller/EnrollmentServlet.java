@@ -262,8 +262,11 @@ public class EnrollmentServlet extends HttpServlet {
 
             // FR-014: Kiểm tra thông tin nộp tiền học phí
             String paymentConfirmedStr = req.getParameter("paymentConfirmed");
-            boolean paymentConfirmed = "true".equalsIgnoreCase(paymentConfirmedStr) || "on".equalsIgnoreCase(paymentConfirmedStr);
+            boolean paymentConfirmed = "true".equalsIgnoreCase(paymentConfirmedStr) || "on".equalsIgnoreCase(paymentConfirmedStr) || "1".equals(paymentConfirmedStr);
             String paymentMethod = req.getParameter("paymentMethod");
+            if (paymentMethod == null || paymentMethod.isBlank()) {
+                paymentMethod = "CASH";
+            }
             String transactionRef = req.getParameter("transactionRef");
 
             LocalDate startDate = LocalDate.parse(startDateStr);

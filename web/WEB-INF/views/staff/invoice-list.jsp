@@ -347,7 +347,7 @@
                                         <c:forEach var="item" items="${pageData.items}">
                                             <tr class="${item.debtAmount > 0 ? 'row-unpaid-debt' : ''}" style="${item.overdue ? 'background: rgba(239, 68, 68, 0.04);' : ''}">
                                                 <td class="align-top">
-                                                    <a href="${pageContext.request.contextPath}/staff/invoices/detail?id=${item.id}" class="mgmt-code-badge" style="text-decoration: none;">
+                                                    <a href="${pageContext.request.contextPath}/staff/invoices/detail?id=${item.id}&fromEnrollment=${fromEnrollment ? '1' : param.fromEnrollment}&studentId=${not empty returnStudentId ? returnStudentId : param.studentId}&leadId=${not empty returnLeadId ? returnLeadId : param.leadId}" class="mgmt-code-badge" style="text-decoration: none;">
                                                         <c:out value="${item.invoiceCode}" />
                                                     </a>
                                                 </td>
@@ -419,7 +419,7 @@
                                                     </c:choose>
                                                 </td>
                                                 <td class="align-top text-center">
-                                                    <a href="${pageContext.request.contextPath}/staff/invoices/detail?id=${item.id}" class="mgmt-btn mgmt-btn-outline" style="padding: 4px 10px; height: 30px; font-size: 12px; gap: 4px; text-decoration: none;">
+                                                    <a href="${pageContext.request.contextPath}/staff/invoices/detail?id=${item.id}&fromEnrollment=${fromEnrollment ? '1' : param.fromEnrollment}&studentId=${not empty returnStudentId ? returnStudentId : param.studentId}&leadId=${not empty returnLeadId ? returnLeadId : param.leadId}" class="mgmt-btn mgmt-btn-outline" style="padding: 4px 10px; height: 30px; font-size: 12px; gap: 4px; text-decoration: none;">
                                                         <svg style="width: 14px; height: 14px; color: var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                             <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path>
                                                             <circle cx="12" cy="12" r="3"></circle>

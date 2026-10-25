@@ -78,7 +78,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         }
 
         String paymentMethod = form.getPaymentMethod();
-        if (paymentMethod == null || (!"CASH".equalsIgnoreCase(paymentMethod.trim()) && !"BANK_TRANSFER".equalsIgnoreCase(paymentMethod.trim()))) {
+        if (paymentMethod == null || paymentMethod.trim().isEmpty()) {
+            paymentMethod = "CASH";
+            form.setPaymentMethod("CASH");
+        } else if (!"CASH".equalsIgnoreCase(paymentMethod.trim()) && !"BANK_TRANSFER".equalsIgnoreCase(paymentMethod.trim())) {
             throw new ValidationException("Vui lòng chọn hình thức nộp tiền học phí hợp lệ: Tiền mặt (CASH) hoặc Chuyển khoản (BANK_TRANSFER).");
         }
         paymentMethod = paymentMethod.trim().toUpperCase();

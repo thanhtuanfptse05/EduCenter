@@ -593,7 +593,7 @@
                     </div>
 
                     <div style="display: flex; gap: 8px;">
-                        <a href="${pageContext.request.contextPath}/staff/enrollments?<c:if test='${not empty returnStudentId}'>studentId=${returnStudentId}&</c:if><c:if test='${not empty param.studentId}'>studentId=${param.studentId}&</c:if><c:if test='${empty returnStudentId && empty param.studentId && not empty invoice.student.id}'>studentId=${invoice.student.id}&</c:if><c:if test='${not empty returnLeadId}'>leadId=${returnLeadId}&</c:if><c:if test='${not empty param.leadId}'>leadId=${param.leadId}&</c:if>paid=1" 
+                        <a href="${pageContext.request.contextPath}/staff/enrollments?<c:if test='${not empty returnStudentId}'>studentId=${returnStudentId}&</c:if><c:if test='${not empty param.studentId}'>studentId=${param.studentId}&</c:if><c:if test='${empty returnStudentId && empty param.studentId && not empty invoice.studentId}'>studentId=${invoice.studentId}&</c:if><c:if test='${not empty returnLeadId}'>leadId=${returnLeadId}&</c:if><c:if test='${not empty param.leadId}'>leadId=${param.leadId}&</c:if>paid=1" 
                            class="mgmt-btn mgmt-btn-primary" style="background: #16a34a; border-color: #16a34a; font-weight: 600;" 
                            title="Quay lại Ghi danh & Xếp lớp">
                             <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -631,7 +631,7 @@
                                 </p>
                             </div>
                         </div>
-                        <a href="${pageContext.request.contextPath}/staff/enrollments?<c:if test='${not empty returnStudentId}'>studentId=${returnStudentId}&</c:if><c:if test='${not empty param.studentId}'>studentId=${param.studentId}&</c:if><c:if test='${empty returnStudentId && empty param.studentId && not empty invoice.student.id}'>studentId=${invoice.student.id}&</c:if><c:if test='${not empty returnLeadId}'>leadId=${returnLeadId}&</c:if><c:if test='${not empty param.leadId}'>leadId=${param.leadId}&</c:if>paid=1" class="mgmt-btn mgmt-btn-primary" style="white-space: nowrap; font-weight: 600; background: #16a34a; border-color: #16a34a;">
+                        <a href="${pageContext.request.contextPath}/staff/enrollments?<c:if test='${not empty returnStudentId}'>studentId=${returnStudentId}&</c:if><c:if test='${not empty param.studentId}'>studentId=${param.studentId}&</c:if><c:if test='${empty returnStudentId && empty param.studentId && not empty invoice.studentId}'>studentId=${invoice.studentId}&</c:if><c:if test='${not empty returnLeadId}'>leadId=${returnLeadId}&</c:if><c:if test='${not empty param.leadId}'>leadId=${param.leadId}&</c:if>paid=1" class="mgmt-btn mgmt-btn-primary" style="white-space: nowrap; font-weight: 600; background: #16a34a; border-color: #16a34a;">
                             <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="9 14 4 9 9 4"></polyline>
                                 <path d="M20 20v-7a4 4 0 0 0-4-4H4"></path>
@@ -1066,7 +1066,7 @@
                                             </div>
                                         </div>
                                         <div style="margin-top: 14px;">
-                                            <a href="${pageContext.request.contextPath}/staff/enrollments?<c:if test='${not empty returnStudentId}'>studentId=${returnStudentId}&</c:if><c:if test='${not empty param.studentId}'>studentId=${param.studentId}&</c:if><c:if test='${empty returnStudentId && empty param.studentId && not empty invoice.student.id}'>studentId=${invoice.student.id}&</c:if><c:if test='${not empty returnLeadId}'>leadId=${returnLeadId}&</c:if><c:if test='${not empty param.leadId}'>leadId=${param.leadId}&</c:if>paid=1" 
+                                            <a href="${pageContext.request.contextPath}/staff/enrollments?<c:if test='${not empty returnStudentId}'>studentId=${returnStudentId}&</c:if><c:if test='${not empty param.studentId}'>studentId=${param.studentId}&</c:if><c:if test='${empty returnStudentId && empty param.studentId && not empty invoice.studentId}'>studentId=${invoice.studentId}&</c:if><c:if test='${not empty returnLeadId}'>leadId=${returnLeadId}&</c:if><c:if test='${not empty param.leadId}'>leadId=${param.leadId}&</c:if>paid=1" 
                                                class="mgmt-btn mgmt-btn-primary" style="width: 100%; justify-content: center; font-weight: 600; padding: 10px; background: #16a34a; border-color: #16a34a; display: inline-flex; align-items: center; gap: 8px;">
                                                 <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <polyline points="9 14 4 9 9 4"></polyline>
@@ -1085,7 +1085,7 @@
                                             <input type="hidden" name="invoiceId" value="${invoice.id}">
                                             <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
                                             <input type="hidden" name="fromEnrollment" value="${fromEnrollment ? '1' : param.fromEnrollment}">
-                                            <input type="hidden" name="studentId" value="${not empty returnStudentId ? returnStudentId : (not empty param.studentId ? param.studentId : invoice.student.id)}">
+                                            <input type="hidden" name="studentId" value="${not empty returnStudentId ? returnStudentId : (not empty param.studentId ? param.studentId : invoice.studentId)}">
                                             <input type="hidden" name="leadId" value="${not empty returnLeadId ? returnLeadId : param.leadId}">
 
                                             <!-- Số tiền thu -->

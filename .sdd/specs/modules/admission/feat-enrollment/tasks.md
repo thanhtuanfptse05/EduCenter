@@ -65,3 +65,10 @@
 - [x] Task 9.2: Hỗ trợ tự động tick xác nhận nộp tiền (`paid=1`) và hiển thị thông báo đã nộp tiền (`#paidNotice`) khi quay lại từ luồng thanh toán.
 - [x] Task 9.3: Bổ sung nút hành động "Quay lại Ghi danh & Xếp lớp" trên danh sách hóa đơn (`invoice-list.jsp`), chi tiết hóa đơn (`invoice-detail.jsp`) và phiếu thu (`receipt.jsp`).
 - [x] Task 9.4: Cập nhật `TuitionPaymentServlet.java` và `EnrollmentServlet.java` duy trì ngữ cảnh `fromEnrollment`, `studentId`, `leadId`, `paid`.
+
+## Phase 10: Khắc phục lỗi trang Chi tiết hóa đơn và Đồng bộ hóa trạng thái công nợ khi ghi danh (FR-017)
+- [x] Task 10.1: Sửa lỗi EL PropertyNotFoundException trong `web/WEB-INF/views/staff/invoice-detail.jsp` (thay `invoice.student.id` bằng `invoice.studentId`).
+- [x] Task 10.2: Truyền tham số ngữ cảnh `fromEnrollment`, `studentId`, `leadId` trong các liên kết "Chi tiết" tại `web/WEB-INF/views/staff/invoice-list.jsp`.
+- [x] Task 10.3: Rà soát và hoàn thiện ràng buộc bắt buộc nộp tiền khi ghi danh và đồng bộ trạng thái công nợ (`EnrollmentServlet.java`, `EnrollmentServiceImpl.java`, `enrollment-list.jsp`).
+- [x] Task 10.4: Chạy kiểm thử toàn bộ `ant verify` (166+ tests) và đồng bộ class vào Tomcat, sau đó commit và push lên nhánh `main`.
+

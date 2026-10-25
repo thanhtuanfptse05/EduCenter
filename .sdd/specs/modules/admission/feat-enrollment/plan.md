@@ -72,4 +72,9 @@
   - Thêm liên kết trực tiếp "Đến mục thanh toán" ngay tại thẻ cảnh báo chưa nộp tiền trên modal ghi danh, chuyển người dùng đến `/staff/invoices` kèm theo tham số ngữ cảnh `keyword` (mã/tên học viên), `studentId`, `leadId`, `fromEnrollment=1`.
   - Cập nhật phân hệ Quản lý Hóa đơn & Thu phí (`invoice-list.jsp`, `invoice-detail.jsp`, `receipt.jsp`): khi hoàn tất nộp tiền hoặc khi hóa đơn đã thanh toán đủ (`PAID`), hiển thị nút/banner điều hướng "Quay lại Ghi danh & Xếp lớp" trỏ về `/staff/enrollments?studentId=...&leadId=...&paid=1`.
   - Trên modal ghi danh, xử lý tự động nhận diện tham số `paid=1`: tự động đánh dấu checkbox "Xác nhận học viên đã nộp đủ tiền học phí", ẩn thông báo cảnh báo chưa nộp tiền và hiển thị thông báo thành công "Đã xác nhận thu đủ học phí", mở khóa nút submit ghi danh.
+- **Phase 10: Khắc phục lỗi trang Chi tiết hóa đơn và Đồng bộ hóa trạng thái công nợ khi ghi danh (FR-017)**
+  - Khắc phục lỗi PropertyNotFoundException `student` trên `InvoiceDetailDTO` trong `web/WEB-INF/views/staff/invoice-detail.jsp` (thay thế `${invoice.student.id}` bằng `${invoice.studentId}`).
+  - Bổ sung truyền tham số ngữ cảnh `fromEnrollment`, `studentId`, `leadId` trong các liên kết "Chi tiết" tại `web/WEB-INF/views/staff/invoice-list.jsp`.
+  - Rà soát toàn diện quy trình ghi danh: bảo đảm học viên bắt buộc phải nộp tiền trước khi ghi danh và khi ô tick xác nhận nộp tiền được chọn, hóa đơn tương ứng được khởi tạo trạng thái `PAID` kèm bản ghi `Payment`, bên danh sách công nợ thể hiện dư nợ bằng 0 đ.
+
 
