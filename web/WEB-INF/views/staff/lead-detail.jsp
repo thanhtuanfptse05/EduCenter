@@ -179,11 +179,6 @@
                                 </select>
                             </div>
 
-                            <div style="margin-bottom: 16px;">
-                                <label class="form-label" style="font-size: 0.875rem; font-weight: 600; display: block; margin-bottom: 6px;">Ghi chú cập nhật tiến trình</label>
-                                <input type="text" name="notes" class="form-control" placeholder="Ví dụ: Đã tư vấn học phí, phụ huynh hẹn thứ 7 đưa con đến...">
-                            </div>
-
                             <button type="submit" class="btn btn-primary" style="width: 100%;">
                                 Cập nhật trạng thái
                             </button>

@@ -539,8 +539,8 @@
                     <select name="courseId" id="enrollCourseSelect" class="mgmt-select" required onchange="handleCourseChange(this.value)">
                         <option value="">-- Chọn khóa học tiếp nhận --</option>
                         <c:forEach var="crs" items="${pageData.courseOptions}">
-                            <option value="${crs.id}" data-code="${crs.code}" data-name="${crs.name}" data-fee="${crs.tuitionFee}">
-                                [<c:out value="${crs.code}"/>] <c:out value="${crs.name}"/> - <fmt:formatNumber value="${crs.tuitionFee}" type="currency" currencySymbol="đ" maxFractionDigits="0"/>
+                            <option value="${crs.id}" data-code="${crs.code}" data-name="${crs.name}" data-fee="${crs.fee}">
+                                [<c:out value="${crs.code}"/>] <c:out value="${crs.name}"/> - <fmt:formatNumber value="${crs.fee}" type="currency" currencySymbol="đ" maxFractionDigits="0"/>
                             </option>
                         </c:forEach>
                     </select>

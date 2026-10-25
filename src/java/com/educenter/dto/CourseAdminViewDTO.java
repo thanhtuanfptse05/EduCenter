@@ -56,6 +56,9 @@ public class CourseAdminViewDTO implements Serializable {
     public BigDecimal getFee() { return fee; }
     public void setFee(BigDecimal fee) { this.fee = fee; }
 
+    public BigDecimal getTuitionFee() { return fee; }
+    public void setTuitionFee(BigDecimal tuitionFee) { this.fee = tuitionFee; }
+
     public String getFormattedFee() {
         if (fee == null) return "0 đ";
         DecimalFormat df = new DecimalFormat("#,###");
