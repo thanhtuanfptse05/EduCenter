@@ -54,8 +54,14 @@
 - [x] Task 7.3: Commit và push lên nhánh `main`.
 
 ## Phase 8: Lọc lớp theo khóa đăng ký, cảnh báo lịch/chỗ trống, bắt buộc nộp tiền & Admin routing (FR-013, FR-014, FR-015)
-- [ ] Task 8.1: Cập nhật `EnrollmentServlet.java` hỗ trợ urlPatterns `/admin/enrollments*` và thêm endpoint lấy danh sách khóa học đăng ký / lớp học khả dụng theo học sinh.
-- [ ] Task 8.2: Mở rộng `ClassEnrollmentOptionDTO` và `EnrollmentRepository` hỗ trợ `courseId`, kiểm tra sức chứa và xung đột lịch theo học sinh.
-- [ ] Task 8.3: Bổ sung xác nhận nộp tiền học phí (`paymentConfirmed`, `paymentMethod`, `transactionRef`) vào `EnrollmentFormDTO` và kiểm tra bắt buộc nộp tiền trong `EnrollmentServiceImpl.enrollStudent`, sinh `PAID` invoice và `Payment`.
-- [ ] Task 8.4: Nâng cấp `web/WEB-INF/views/staff/enrollment-list.jsp` hiển thị khóa học đăng ký của học sinh, lọc lớp tự động, cảnh báo khi không có lớp trống (kèm link tạo lớp `/admin/classes`), và giao diện thu tiền học phí bắt buộc.
-- [ ] Task 8.5: Cập nhật unit test `EnrollmentServiceTest.java` kiểm tra quy tắc bắt buộc nộp tiền và lọc lớp.
+- [x] Task 8.1: Cập nhật `EnrollmentServlet.java` hỗ trợ urlPatterns `/admin/enrollments*` và thêm endpoint lấy danh sách khóa học đăng ký / lớp học khả dụng theo học sinh.
+- [x] Task 8.2: Mở rộng `ClassEnrollmentOptionDTO` và `EnrollmentRepository` hỗ trợ `courseId`, kiểm tra sức chứa và xung đột lịch theo học sinh.
+- [x] Task 8.3: Bổ sung xác nhận nộp tiền học phí (`paymentConfirmed`, `paymentMethod`, `transactionRef`) vào `EnrollmentFormDTO` và kiểm tra bắt buộc nộp tiền trong `EnrollmentServiceImpl.enrollStudent`, sinh `PAID` invoice và `Payment`.
+- [x] Task 8.4: Nâng cấp `web/WEB-INF/views/staff/enrollment-list.jsp` hiển thị khóa học đăng ký của học sinh, lọc lớp tự động, cảnh báo khi không có lớp trống (kèm link tạo lớp `/admin/classes`), và giao diện thu tiền học phí bắt buộc.
+- [x] Task 8.5: Cập nhật unit test `EnrollmentServiceTest.java` kiểm tra quy tắc bắt buộc nộp tiền và lọc lớp.
+
+## Phase 9: Liên kết thanh toán từ Ghi danh và điều hướng quay lại sau thanh toán (FR-016)
+- [x] Task 9.1: Bổ sung liên kết trực tiếp "Đến mục thanh toán" trong thẻ cảnh báo chưa nộp tiền trên modal ghi danh (`enrollment-list.jsp`), truyền động mã/tên học viên sang module Hóa đơn & Thu phí.
+- [x] Task 9.2: Hỗ trợ tự động tick xác nhận nộp tiền (`paid=1`) và hiển thị thông báo đã nộp tiền (`#paidNotice`) khi quay lại từ luồng thanh toán.
+- [x] Task 9.3: Bổ sung nút hành động "Quay lại Ghi danh & Xếp lớp" trên danh sách hóa đơn (`invoice-list.jsp`), chi tiết hóa đơn (`invoice-detail.jsp`) và phiếu thu (`receipt.jsp`).
+- [x] Task 9.4: Cập nhật `TuitionPaymentServlet.java` và `EnrollmentServlet.java` duy trì ngữ cảnh `fromEnrollment`, `studentId`, `leadId`, `paid`.

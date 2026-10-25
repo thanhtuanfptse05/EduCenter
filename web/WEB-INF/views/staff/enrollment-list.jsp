@@ -611,11 +611,28 @@
                         </label>
                     </div>
 
-                    <!-- Cảnh báo nếu chưa nộp tiền -->
-                    <div id="unpaidNotice" style="border-left: 4px solid #dc2626; background: rgba(220, 38, 38, 0.08); padding: 8px 12px; border-radius: 4px;">
-                        <span style="color: #dc2626; font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
-                            <svg style="width: 16px; height: 16px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                            Chưa nộp tiền: Học viên bắt buộc phải nộp tiền học phí mới được ghi danh vào lớp!
+                    <!-- Cảnh báo nếu chưa nộp tiền kèm liên kết đến mục thanh toán -->
+                    <div id="unpaidNotice" style="border-left: 4px solid #dc2626; background: rgba(220, 38, 38, 0.08); padding: 10px 14px; border-radius: 6px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                            <span style="color: #dc2626; font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                                <svg style="width: 16px; height: 16px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                                Chưa nộp tiền: Học viên bắt buộc phải nộp tiền học phí mới được ghi danh vào lớp!
+                            </span>
+                            <a id="btnGoToPayment" href="${pageContext.request.contextPath}/staff/invoices?fromEnrollment=1" class="mgmt-btn mgmt-btn-outline" style="padding: 4px 10px; font-size: 12px; color: #dc2626; border-color: #dc2626; background: var(--surface); text-decoration: none; display: inline-flex; align-items: center; gap: 5px; font-weight: 600;">
+                                <svg style="width: 13px; height: 13px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                                    <line x1="2" x2="22" y1="10" y2="10"></line>
+                                </svg>
+                                <span>Đến mục thanh toán &raquo;</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Thông báo khi đã xác nhận thanh toán xong -->
+                    <div id="paidNotice" style="display: none; border-left: 4px solid #16a34a; background: rgba(22, 163, 74, 0.08); padding: 10px 14px; border-radius: 6px; margin-bottom: 8px;">
+                        <span style="color: #16a34a; font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                            <svg style="width: 16px; height: 16px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            Đã xác nhận thu đủ học phí. Vui lòng chọn lớp và nhấn "Xác nhận ghi danh & xếp lớp" bên dưới!
                         </span>
                     </div>
 
@@ -848,6 +865,30 @@
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount || 0);
     }
 
+    function updatePaymentLink(studentId) {
+        var btn = document.getElementById('btnGoToPayment');
+        if (!btn) return;
+        var base = '${pageContext.request.contextPath}/staff/invoices?fromEnrollment=1';
+        var leadIdInput = document.querySelector('input[name="leadId"]');
+        var leadId = leadIdInput ? leadIdInput.value : '';
+        if (leadId) base += '&leadId=' + encodeURIComponent(leadId);
+        if (studentId) {
+            base += '&studentId=' + encodeURIComponent(studentId);
+            var studentSelect = document.getElementById('enrollStudentSelect');
+            if (studentSelect && studentSelect.selectedIndex > 0) {
+                var text = studentSelect.options[studentSelect.selectedIndex].text;
+                var codeMatch = text.match(/Mã:\s*([A-Za-z0-9\-]+)/);
+                if (codeMatch && codeMatch[1]) {
+                    base += '&keyword=' + encodeURIComponent(codeMatch[1].trim());
+                } else {
+                    var nameOnly = text.split('-')[0].trim();
+                    base += '&keyword=' + encodeURIComponent(nameOnly);
+                }
+            }
+        }
+        btn.href = base;
+    }
+
     function openEnrollModal() {
         var startInput = document.getElementById('enrollStartDate');
         if (startInput && !startInput.value) {
@@ -857,7 +898,15 @@
         var courseSelect = document.getElementById('enrollCourseSelect');
         var preselectedCourseId = ${preselectedCourseId != null ? preselectedCourseId : 'null'};
 
+        var preselectedPaid = ${preselectedPaid ? 'true' : 'false'};
+        var paymentCb = document.getElementById('paymentConfirmed');
+        if (preselectedPaid && paymentCb) {
+            paymentCb.checked = true;
+            handlePaymentConfirmedChange(paymentCb);
+        }
+
         if (studentSelect && studentSelect.value) {
+            updatePaymentLink(studentSelect.value);
             handleStudentChange(studentSelect, preselectedCourseId);
         } else if (courseSelect && courseSelect.value) {
             handleCourseChange(courseSelect.value);
@@ -869,6 +918,7 @@
 
     function handleStudentChange(select, preferredCourseId) {
         var studentId = select.value;
+        updatePaymentLink(studentId);
         var badge = document.getElementById('studentRegistrationBadge');
         var badgeText = document.getElementById('studentRegistrationText');
         var courseSelect = document.getElementById('enrollCourseSelect');
@@ -1029,12 +1079,15 @@
 
     function handlePaymentConfirmedChange(cb) {
         var unpaidNotice = document.getElementById('unpaidNotice');
+        var paidNotice = document.getElementById('paidNotice');
         var paymentDetails = document.getElementById('paymentDetailsSection');
         if (cb.checked) {
             if (unpaidNotice) unpaidNotice.style.display = 'none';
+            if (paidNotice) paidNotice.style.display = 'block';
             if (paymentDetails) paymentDetails.style.display = 'block';
         } else {
             if (unpaidNotice) unpaidNotice.style.display = 'block';
+            if (paidNotice) paidNotice.style.display = 'none';
             if (paymentDetails) paymentDetails.style.display = 'none';
         }
         validateEnrollFormState();

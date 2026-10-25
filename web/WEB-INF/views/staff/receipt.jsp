@@ -144,9 +144,16 @@
     <a href="${pageContext.request.contextPath}/staff/invoices/detail?id=${receipt.invoiceId}" class="btn btn-secondary">
         &larr; Quay lại chi tiết hóa đơn
     </a>
-    <button onclick="window.print();" class="btn btn-primary">
-        In biên lai / Lưu PDF
-    </button>
+    <div style="display: flex; gap: 8px;">
+        <a href="${pageContext.request.contextPath}/staff/enrollments?<c:if test='${not empty returnStudentId}'>studentId=${returnStudentId}&</c:if><c:if test='${not empty param.studentId}'>studentId=${param.studentId}&</c:if><c:if test='${not empty returnLeadId}'>leadId=${returnLeadId}&</c:if><c:if test='${not empty param.leadId}'>leadId=${param.leadId}&</c:if>paid=1" 
+           class="btn btn-secondary" style="border-color: #16a34a; color: #16a34a; font-weight: 600;">
+            <svg style="width: 15px; height: 15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 14 4 9 9 4"></polyline><path d="M20 20v-7a4 4 0 0 0-4-4H4"></path></svg>
+            <span>Quay lại Ghi danh & Xếp lớp</span>
+        </a>
+        <button onclick="window.print();" class="btn btn-primary">
+            In biên lai / Lưu PDF
+        </button>
+    </div>
 </div>
 
 <div class="receipt-card">

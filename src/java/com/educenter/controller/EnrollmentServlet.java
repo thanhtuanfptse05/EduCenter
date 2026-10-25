@@ -131,11 +131,21 @@ public class EnrollmentServlet extends HttpServlet {
 
         EnrollmentPageDTO pageData = enrollmentService.getEnrollmentsPaged(classId, status, keyword, page, 10);
 
+        String paidStr = req.getParameter("paid");
+        if (paidStr == null || paidStr.isBlank()) {
+            paidStr = req.getParameter("paymentConfirmed");
+        }
+        boolean preselectedPaid = "1".equals(paidStr) || "true".equalsIgnoreCase(paidStr);
+        if (preselectedPaid) {
+            autoOpenModal = true;
+        }
+
         boolean isAdminContext = path.startsWith("/admin");
         req.setAttribute("pageData", pageData);
         req.setAttribute("preselectedStudentId", preselectedStudentId);
         req.setAttribute("preselectedLeadId", preselectedLeadId);
         req.setAttribute("preselectedCourseId", preselectedCourseId);
+        req.setAttribute("preselectedPaid", preselectedPaid);
         req.setAttribute("autoOpenModal", autoOpenModal);
         req.setAttribute("pageTitle", "Quản lý ghi danh & Xếp lớp — EduCenter ERP");
         req.setAttribute("activeNav", isAdminContext ? "admin-enrollments" : "enrollments");

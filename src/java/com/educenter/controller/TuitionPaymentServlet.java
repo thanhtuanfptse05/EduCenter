@@ -83,6 +83,9 @@ public class TuitionPaymentServlet extends HttpServlet {
         String status = req.getParameter("status");
         String keyword = req.getParameter("keyword");
         String pageStr = req.getParameter("page");
+        String fromEnrollment = req.getParameter("fromEnrollment");
+        String studentIdStr = req.getParameter("studentId");
+        String leadIdStr = req.getParameter("leadId");
 
         Long classId = null;
         if (classIdStr != null && !classIdStr.isBlank()) {
@@ -106,6 +109,9 @@ public class TuitionPaymentServlet extends HttpServlet {
         req.setAttribute("selectedClassId", classId);
         req.setAttribute("selectedStatus", status);
         req.setAttribute("keyword", keyword);
+        req.setAttribute("fromEnrollment", "1".equals(fromEnrollment) || "true".equalsIgnoreCase(fromEnrollment));
+        req.setAttribute("returnStudentId", studentIdStr);
+        req.setAttribute("returnLeadId", leadIdStr);
         req.setAttribute("activeNav", "invoices");
 
         req.getRequestDispatcher("/WEB-INF/views/staff/invoice-list.jsp").forward(req, resp);
@@ -113,6 +119,10 @@ public class TuitionPaymentServlet extends HttpServlet {
 
     private void handleInvoiceDetail(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String idStr = req.getParameter("id");
+        String fromEnrollment = req.getParameter("fromEnrollment");
+        String studentIdStr = req.getParameter("studentId");
+        String leadIdStr = req.getParameter("leadId");
+
         if (idStr == null || idStr.isBlank()) {
             FlashMessageUtil.setError(req, "Vui lòng chọn hóa đơn cần xem.");
             resp.sendRedirect(req.getContextPath() + "/staff/invoices");
@@ -123,6 +133,9 @@ public class TuitionPaymentServlet extends HttpServlet {
             Long invoiceId = Long.parseLong(idStr.trim());
             InvoiceDetailDTO invoice = paymentService.getInvoiceDetail(invoiceId);
             req.setAttribute("invoice", invoice);
+            req.setAttribute("fromEnrollment", "1".equals(fromEnrollment) || "true".equalsIgnoreCase(fromEnrollment));
+            req.setAttribute("returnStudentId", studentIdStr);
+            req.setAttribute("returnLeadId", leadIdStr);
             req.setAttribute("activeNav", "invoices");
             req.getRequestDispatcher("/WEB-INF/views/staff/invoice-detail.jsp").forward(req, resp);
         } catch (ValidationException e) {
@@ -136,6 +149,10 @@ public class TuitionPaymentServlet extends HttpServlet {
 
     private void handlePaymentReceipt(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String paymentIdStr = req.getParameter("paymentId");
+        String fromEnrollment = req.getParameter("fromEnrollment");
+        String studentIdStr = req.getParameter("studentId");
+        String leadIdStr = req.getParameter("leadId");
+
         if (paymentIdStr == null || paymentIdStr.isBlank()) {
             FlashMessageUtil.setError(req, "Vui lòng chọn phiếu thu cần in.");
             resp.sendRedirect(req.getContextPath() + "/staff/invoices");
@@ -146,6 +163,9 @@ public class TuitionPaymentServlet extends HttpServlet {
             Long paymentId = Long.parseLong(paymentIdStr.trim());
             ReceiptViewDTO receipt = paymentService.getPaymentReceipt(paymentId);
             req.setAttribute("receipt", receipt);
+            req.setAttribute("fromEnrollment", "1".equals(fromEnrollment) || "true".equalsIgnoreCase(fromEnrollment));
+            req.setAttribute("returnStudentId", studentIdStr);
+            req.setAttribute("returnLeadId", leadIdStr);
             req.getRequestDispatcher("/WEB-INF/views/staff/receipt.jsp").forward(req, resp);
         } catch (ValidationException e) {
             FlashMessageUtil.setError(req, e.getMessage());
@@ -163,6 +183,20 @@ public class TuitionPaymentServlet extends HttpServlet {
         String paymentMethod = req.getParameter("paymentMethod");
         String transactionRef = req.getParameter("transactionRef");
         String notes = req.getParameter("notes");
+        String fromEnrollment = req.getParameter("fromEnrollment");
+        String studentIdStr = req.getParameter("studentId");
+        String leadIdStr = req.getParameter("leadId");
+
+        String redirectParams = "";
+        if ("1".equals(fromEnrollment) || "true".equalsIgnoreCase(fromEnrollment)) {
+            redirectParams += "&fromEnrollment=1";
+            if (studentIdStr != null && !studentIdStr.isBlank()) {
+                redirectParams += "&studentId=" + studentIdStr.trim();
+            }
+            if (leadIdStr != null && !leadIdStr.isBlank()) {
+                redirectParams += "&leadId=" + leadIdStr.trim();
+            }
+        }
 
         Long invoiceId = null;
         try {
@@ -185,7 +219,7 @@ public class TuitionPaymentServlet extends HttpServlet {
                 amount = new BigDecimal(cleanAmount);
             } catch (NumberFormatException e) {
                 FlashMessageUtil.setError(req, "Số tiền nhập vào không đúng định dạng số.");
-                resp.sendRedirect(req.getContextPath() + "/staff/invoices/detail?id=" + invoiceId);
+                resp.sendRedirect(req.getContextPath() + "/staff/invoices/detail?id=" + invoiceId + redirectParams);
                 return;
             }
         }
@@ -200,14 +234,14 @@ public class TuitionPaymentServlet extends HttpServlet {
         try {
             PaymentRecordDTO record = paymentService.recordManualPayment(form, user.getUserId());
             FlashMessageUtil.setSuccess(req, "Xác nhận thu tiền thành công! Mã phiếu thu: " + record.getPaymentCode());
-            resp.sendRedirect(req.getContextPath() + "/staff/invoices/detail?id=" + invoiceId);
+            resp.sendRedirect(req.getContextPath() + "/staff/invoices/detail?id=" + invoiceId + redirectParams);
         } catch (ValidationException e) {
             FlashMessageUtil.setError(req, e.getMessage());
-            resp.sendRedirect(req.getContextPath() + "/staff/invoices/detail?id=" + invoiceId);
+            resp.sendRedirect(req.getContextPath() + "/staff/invoices/detail?id=" + invoiceId + redirectParams);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Lỗi không xác định khi thu tiền thủ công: " + e.getMessage(), e);
             FlashMessageUtil.setError(req, "Có lỗi xảy ra trong quá trình xử lý thu tiền. Vui lòng thử lại.");
-            resp.sendRedirect(req.getContextPath() + "/staff/invoices/detail?id=" + invoiceId);
+            resp.sendRedirect(req.getContextPath() + "/staff/invoices/detail?id=" + invoiceId + redirectParams);
         }
     }
 }

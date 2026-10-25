@@ -68,3 +68,8 @@
   - Cung cấp API/dữ liệu nhận diện khóa học học viên đăng ký (từ Cart/Lead/Học sinh) và lọc danh sách lớp thuộc đúng khóa học đó.
   - Kiểm tra trạng thái chỗ trống và lịch học của từng lớp: nếu không có lớp nào phù hợp hoặc các lớp đều đầy/trùng lịch, hiển thị cảnh báo trực quan kèm liên kết tạo lớp học mới (`/admin/classes`).
   - Thực thi quy tắc bắt buộc nộp tiền học phí trước khi ghi danh (FR-014): Kiểm tra xác nhận nộp tiền, chặn nếu chưa nộp tiền; khi xác nhận nộp tiền thì tạo Enrollment `ACTIVE`, Invoice `PAID` và ghi nhận `Payment` đồng bộ trong cùng một transaction.
+- **Phase 9: Liên kết thanh toán từ Ghi danh và điều hướng quay lại sau thanh toán (FR-016)**
+  - Thêm liên kết trực tiếp "Đến mục thanh toán" ngay tại thẻ cảnh báo chưa nộp tiền trên modal ghi danh, chuyển người dùng đến `/staff/invoices` kèm theo tham số ngữ cảnh `keyword` (mã/tên học viên), `studentId`, `leadId`, `fromEnrollment=1`.
+  - Cập nhật phân hệ Quản lý Hóa đơn & Thu phí (`invoice-list.jsp`, `invoice-detail.jsp`, `receipt.jsp`): khi hoàn tất nộp tiền hoặc khi hóa đơn đã thanh toán đủ (`PAID`), hiển thị nút/banner điều hướng "Quay lại Ghi danh & Xếp lớp" trỏ về `/staff/enrollments?studentId=...&leadId=...&paid=1`.
+  - Trên modal ghi danh, xử lý tự động nhận diện tham số `paid=1`: tự động đánh dấu checkbox "Xác nhận học viên đã nộp đủ tiền học phí", ẩn thông báo cảnh báo chưa nộp tiền và hiển thị thông báo thành công "Đã xác nhận thu đủ học phí", mở khóa nút submit ghi danh.
+

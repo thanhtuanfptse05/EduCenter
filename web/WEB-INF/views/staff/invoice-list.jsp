@@ -38,6 +38,16 @@
                         </p>
                     </div>
                     <div class="mgmt-header-actions">
+                        <c:if test="${fromEnrollment || not empty returnStudentId || not empty param.fromEnrollment}">
+                            <a href="${pageContext.request.contextPath}/staff/enrollments?<c:if test='${not empty returnStudentId}'>studentId=${returnStudentId}&</c:if><c:if test='${not empty param.studentId}'>studentId=${param.studentId}&</c:if><c:if test='${not empty returnLeadId}'>leadId=${returnLeadId}&</c:if><c:if test='${not empty param.leadId}'>leadId=${param.leadId}&</c:if>paid=1" 
+                               class="mgmt-btn mgmt-btn-primary" style="background: #16a34a; border-color: #16a34a; font-weight: 600;">
+                                <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="9 14 4 9 9 4"></polyline>
+                                    <path d="M20 20v-7a4 4 0 0 0-4-4H4"></path>
+                                </svg>
+                                <span>Quay lại Ghi danh & Xếp lớp</span>
+                            </a>
+                        </c:if>
                         <button type="button" class="mgmt-btn mgmt-btn-outline" onclick="window.print()">
                             <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -46,19 +56,44 @@
                             </svg>
                             <span>Xuất báo cáo công nợ</span>
                         </button>
-                        <a href="${pageContext.request.contextPath}/staff/enrollments" class="mgmt-btn mgmt-btn-primary">
+                        <a href="${pageContext.request.contextPath}/staff/enrollments" class="mgmt-btn mgmt-btn-outline">
                             <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <line x1="12" y1="8" x2="12" y2="16"></line>
                                 <line x1="8" y1="12" x2="16" y2="12"></line>
                             </svg>
-                            <span>Tạo hóa đơn từ Ghi danh</span>
+                            <span>Danh sách Ghi danh</span>
                         </a>
                     </div>
                 </div>
 
                 <!-- Flash Alerts -->
                 <%@ include file="/WEB-INF/views/common/alert.jsp" %>
+
+                <c:if test="${fromEnrollment || not empty returnStudentId || not empty param.fromEnrollment}">
+                    <div class="mgmt-callout primary" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; background: rgba(37, 99, 235, 0.08); border-left: 4px solid var(--primary); padding: 12px 16px; border-radius: 6px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <svg class="mgmt-callout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px; color: var(--primary);">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <div>
+                                <strong style="color: var(--primary); font-size: 13.5px;">Chuyển tiếp từ quy trình Ghi danh:</strong>
+                                <p style="margin: 2px 0 0 0; font-size: 12.5px; color: var(--text-muted);">
+                                    Thu tiền hoặc kiểm tra hóa đơn học phí của học viên, sau đó nhấn nút "Quay lại Ghi danh & Xếp lớp" để hoàn tất xếp lớp.
+                                </p>
+                            </div>
+                        </div>
+                        <a href="${pageContext.request.contextPath}/staff/enrollments?<c:if test='${not empty returnStudentId}'>studentId=${returnStudentId}&</c:if><c:if test='${not empty param.studentId}'>studentId=${param.studentId}&</c:if><c:if test='${not empty returnLeadId}'>leadId=${returnLeadId}&</c:if><c:if test='${not empty param.leadId}'>leadId=${param.leadId}&</c:if>paid=1" class="mgmt-btn mgmt-btn-primary" style="white-space: nowrap; font-weight: 600; background: #16a34a; border-color: #16a34a;">
+                            <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="9 14 4 9 9 4"></polyline>
+                                <path d="M20 20v-7a4 4 0 0 0-4-4H4"></path>
+                            </svg>
+                            <span>Quay lại Ghi danh & Xếp lớp</span>
+                        </a>
+                    </div>
+                </c:if>
 
                 <!-- Calculate collection rate percentage -->
                 <c:set var="collectionRate" value="0" />
