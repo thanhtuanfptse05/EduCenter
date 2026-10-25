@@ -11,6 +11,8 @@ public class ClassEnrollmentOptionDTO implements Serializable {
     private Long classId;
     private String classCode;
     private String className;
+    private Long courseId;
+    private String courseCode;
     private String courseName;
     private String subjectName;
     private int currentEnrolled;
@@ -19,6 +21,8 @@ public class ClassEnrollmentOptionDTO implements Serializable {
     private LocalDate startDate;
     private LocalDate endDate;
     private String status;
+    private boolean hasScheduleConflict;
+    private String conflictReason;
 
     public ClassEnrollmentOptionDTO() {}
 
@@ -30,6 +34,12 @@ public class ClassEnrollmentOptionDTO implements Serializable {
 
     public String getClassName() { return className; }
     public void setClassName(String className) { this.className = className; }
+
+    public Long getCourseId() { return courseId; }
+    public void setCourseId(Long courseId) { this.courseId = courseId; }
+
+    public String getCourseCode() { return courseCode; }
+    public void setCourseCode(String courseCode) { this.courseCode = courseCode; }
 
     public String getCourseName() { return courseName; }
     public void setCourseName(String courseName) { this.courseName = courseName; }
@@ -54,6 +64,12 @@ public class ClassEnrollmentOptionDTO implements Serializable {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public boolean isHasScheduleConflict() { return hasScheduleConflict; }
+    public void setHasScheduleConflict(boolean hasScheduleConflict) { this.hasScheduleConflict = hasScheduleConflict; }
+
+    public String getConflictReason() { return conflictReason; }
+    public void setConflictReason(String conflictReason) { this.conflictReason = conflictReason; }
 
     public boolean isFull() {
         return currentEnrolled >= capacity;

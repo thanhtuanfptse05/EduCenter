@@ -2,9 +2,11 @@ package com.educenter.repository;
 
 import com.educenter.dto.ClassEnrollmentOptionDTO;
 import com.educenter.dto.EnrollmentViewDTO;
+import com.educenter.entity.Course;
 import com.educenter.entity.EduClass;
 import com.educenter.entity.Enrollment;
 import com.educenter.entity.Invoice;
+import com.educenter.entity.Lead;
 import com.educenter.entity.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -204,6 +206,8 @@ public class EnrollmentRepository {
             dto.setClassId(c.getId());
             dto.setClassCode(c.getCode());
             dto.setClassName(c.getName());
+            dto.setCourseId(c.getCourse().getId());
+            dto.setCourseCode(c.getCourse().getCode());
             dto.setCourseName(c.getCourse().getName());
             dto.setSubjectName(c.getCourse().getSubject().getName());
             dto.setCurrentEnrolled((int) activeCount);
@@ -215,6 +219,67 @@ public class EnrollmentRepository {
             options.add(dto);
         }
         return options;
+    }
+
+    public List<ClassEnrollmentOptionDTO> findOpenClassOptionsForStudent(EntityManager em, Long studentId) {
+        List<ClassEnrollmentOptionDTO> list = findOpenClassOptions(em);
+        if (studentId != null && studentId > 0) {
+            for (ClassEnrollmentOptionDTO dto : list) {
+                if (hasScheduleConflict(em, studentId, dto.getClassId())) {
+                    dto.setHasScheduleConflict(true);
+                    dto.setConflictReason("Trùng lịch học với lớp đang theo học của học viên");
+                }
+            }
+        }
+        return list;
+    }
+
+    public List<Long> findStudentRegisteredCourseIds(EntityManager em, Long studentId) {
+        List<Long> result = new ArrayList<>();
+        if (studentId == null || studentId <= 0) return result;
+        Student s = em.find(Student.class, studentId);
+        if (s == null) return result;
+
+        // 1. Check RegistrationCartItems if student has User
+        if (s.getUser() != null) {
+            try {
+                List<Long> cartCourseIds = em.createQuery(
+                        "SELECT r.course.id FROM RegistrationCartItem r WHERE r.user.id = :uid", Long.class)
+                        .setParameter("uid", s.getUser().getId())
+                        .getResultList();
+                for (Long cid : cartCourseIds) {
+                    if (!result.contains(cid)) result.add(cid);
+                }
+            } catch (Exception ignored) {}
+        }
+
+        // 2. Check Leads by phone or email
+        List<Lead> leads = new ArrayList<>();
+        if (s.getPhone() != null && !s.getPhone().isBlank()) {
+            leads.addAll(em.createQuery("SELECT l FROM Lead l WHERE l.phone = :phone", Lead.class)
+                    .setParameter("phone", s.getPhone().trim())
+                    .getResultList());
+        }
+        if (s.getEmail() != null && !s.getEmail().isBlank()) {
+            leads.addAll(em.createQuery("SELECT l FROM Lead l WHERE l.email = :email", Lead.class)
+                    .setParameter("email", s.getEmail().trim())
+                    .getResultList());
+        }
+
+        List<Course> allCourses = em.createQuery("SELECT c FROM Course c WHERE c.status = 'OPEN'", Course.class).getResultList();
+        for (Lead l : leads) {
+            if (l.getNotes() != null) {
+                for (Course c : allCourses) {
+                    if (l.getNotes().contains("[" + c.getCode() + "]") || l.getNotes().contains(c.getName())) {
+                        if (!result.contains(c.getId())) {
+                            result.add(c.getId());
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     public List<Student> findActiveStudents(EntityManager em) {

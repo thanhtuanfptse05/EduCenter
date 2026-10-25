@@ -245,16 +245,19 @@ public class AuthServlet extends HttpServlet {
         String email = req.getParameter("email");
         try {
             String rawToken = authService.requestPasswordReset(email);
-            // Unified public response for security (FR-004)
-            FlashMessageUtil.setSuccess(req, "Nếu địa chỉ email tồn tại trên hệ thống, yêu cầu đặt lại mật khẩu đã được khởi tạo.");
             if (rawToken != null) {
-                // For PRJ301 evaluator and demo convenience
                 String resetLink = req.getContextPath() + "/reset-password?token=" + rawToken;
-                req.getSession(true).setAttribute("demo_reset_link", resetLink);
+                HttpSession session = req.getSession(true);
+                session.setAttribute("demo_reset_link", resetLink);
+                session.setAttribute("reset_link", resetLink);
+                session.setAttribute("reset_email", (email != null) ? email.trim() : "");
+                session.removeAttribute("preserved_email");
+                FlashMessageUtil.setSuccess(req, "Xác thực email thành công! Bạn có thể mở liên kết dưới đây để đặt lại mật khẩu mới.");
             }
             resp.sendRedirect(req.getContextPath() + "/forgot-password");
         } catch (ValidationException e) {
             FlashMessageUtil.setError(req, e.getMessage());
+            req.getSession(true).setAttribute("preserved_email", email);
             resp.sendRedirect(req.getContextPath() + "/forgot-password");
         }
     }

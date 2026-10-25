@@ -63,3 +63,8 @@
   - Chạy `verify.ps1` kiểm tra tất cả tests và build WAR.
   - Chạy `validate_specs.py` kiểm tra tính toàn vẹn tài liệu spec.
   - Commit và push lên nhánh `main`.
+- **Phase 8: Lọc lớp theo khóa đăng ký, cảnh báo lịch/chỗ trống, bắt buộc nộp tiền & Admin routing (FR-013, FR-014, FR-015)**
+  - Mở rộng `EnrollmentServlet` hỗ trợ urlPatterns `/admin/enrollments*` để Admin có quyền truy cập trực tiếp như Staff.
+  - Cung cấp API/dữ liệu nhận diện khóa học học viên đăng ký (từ Cart/Lead/Học sinh) và lọc danh sách lớp thuộc đúng khóa học đó.
+  - Kiểm tra trạng thái chỗ trống và lịch học của từng lớp: nếu không có lớp nào phù hợp hoặc các lớp đều đầy/trùng lịch, hiển thị cảnh báo trực quan kèm liên kết tạo lớp học mới (`/admin/classes`).
+  - Thực thi quy tắc bắt buộc nộp tiền học phí trước khi ghi danh (FR-014): Kiểm tra xác nhận nộp tiền, chặn nếu chưa nộp tiền; khi xác nhận nộp tiền thì tạo Enrollment `ACTIVE`, Invoice `PAID` và ghi nhận `Payment` đồng bộ trong cùng một transaction.

@@ -52,3 +52,10 @@
 - [x] Task 7.1: Chạy `scripts\verify.ps1` đảm bảo 100% tests pass và WAR build thành công.
 - [x] Task 7.2: Chạy `validate_specs.py` đảm bảo cấu trúc spec đồng bộ.
 - [x] Task 7.3: Commit và push lên nhánh `main`.
+
+## Phase 8: Lọc lớp theo khóa đăng ký, cảnh báo lịch/chỗ trống, bắt buộc nộp tiền & Admin routing (FR-013, FR-014, FR-015)
+- [ ] Task 8.1: Cập nhật `EnrollmentServlet.java` hỗ trợ urlPatterns `/admin/enrollments*` và thêm endpoint lấy danh sách khóa học đăng ký / lớp học khả dụng theo học sinh.
+- [ ] Task 8.2: Mở rộng `ClassEnrollmentOptionDTO` và `EnrollmentRepository` hỗ trợ `courseId`, kiểm tra sức chứa và xung đột lịch theo học sinh.
+- [ ] Task 8.3: Bổ sung xác nhận nộp tiền học phí (`paymentConfirmed`, `paymentMethod`, `transactionRef`) vào `EnrollmentFormDTO` và kiểm tra bắt buộc nộp tiền trong `EnrollmentServiceImpl.enrollStudent`, sinh `PAID` invoice và `Payment`.
+- [ ] Task 8.4: Nâng cấp `web/WEB-INF/views/staff/enrollment-list.jsp` hiển thị khóa học đăng ký của học sinh, lọc lớp tự động, cảnh báo khi không có lớp trống (kèm link tạo lớp `/admin/classes`), và giao diện thu tiền học phí bắt buộc.
+- [ ] Task 8.5: Cập nhật unit test `EnrollmentServiceTest.java` kiểm tra quy tắc bắt buộc nộp tiền và lọc lớp.

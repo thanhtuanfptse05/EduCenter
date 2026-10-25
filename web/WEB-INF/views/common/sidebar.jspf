@@ -152,7 +152,7 @@
                 </svg>
                 <span>Phụ huynh & Giám hộ</span>
             </a>
-            <a href="${pageContext.request.contextPath}/staff/enrollments" class="nav-link ${activeNav == 'enrollments' ? 'active' : ''}">
+            <a href="${pageContext.request.contextPath}/${sessionScope.currentUser.admin ? 'admin' : 'staff'}/enrollments" class="nav-link ${activeNav == 'enrollments' ? 'active' : ''}">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                     <circle cx="9" cy="7" r="4"></circle>

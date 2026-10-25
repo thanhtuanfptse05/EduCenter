@@ -329,13 +329,13 @@ public class AuthServiceImpl implements AuthService {
             Optional<User> userOpt = userRepository.findByEmail(em, normalizedEmail);
             if (userOpt.isEmpty()) {
                 tx.commit();
-                return null; // Return null safely so caller handles public response
+                throw new ValidationException("Không tìm thấy tài khoản nào liên kết với email '" + normalizedEmail + "'. Vui lòng kiểm tra lại địa chỉ email của bạn!");
             }
 
             User user = userRepository.findByIdWithLock(em, userOpt.get().getId()).orElseThrow();
             if (!user.isActive()) {
                 tx.commit();
-                return null;
+                throw new ValidationException("Tài khoản liên kết với email này hiện đang bị khóa hoặc ngưng hoạt động. Vui lòng liên hệ ban quản trị trung tâm!");
             }
 
             // Invalidate any unconsumed tokens for this user
@@ -359,6 +359,9 @@ public class AuthServiceImpl implements AuthService {
         } catch (Exception e) {
             if (tx.isActive()) {
                 tx.rollback();
+            }
+            if (e instanceof ValidationException) {
+                throw (ValidationException) e;
             }
             LOGGER.log(Level.SEVERE, "Lỗi khi yêu cầu đặt lại mật khẩu: " + e.getMessage(), e);
             throw new ValidationException("Không thể gửi yêu cầu đặt lại mật khẩu lúc này.");

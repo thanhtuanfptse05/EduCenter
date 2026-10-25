@@ -75,4 +75,19 @@ public interface EnrollmentService {
      * Cập nhật trạng thái Lead sang ENROLLED sau khi ghi danh thành công.
      */
     void markLeadAsEnrolled(Long leadId);
+
+    /**
+     * Lấy danh sách mã khóa học (ID) mà học viên đã đăng ký (từ Cart hoặc Lead).
+     */
+    List<Long> getStudentRegisteredCourseIds(Long studentId);
+
+    /**
+     * Lấy danh sách lớp mở cho một học viên cụ thể (có đánh dấu trùng lịch).
+     */
+    List<ClassEnrollmentOptionDTO> getOpenClassOptionsForStudent(Long studentId);
+
+    /**
+     * Lấy danh sách tất cả các khóa học mở tiếp nhận học viên.
+     */
+    List<com.educenter.dto.CourseAdminViewDTO> getOpenCourses();
 }

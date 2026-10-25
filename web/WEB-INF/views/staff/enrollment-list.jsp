@@ -10,10 +10,11 @@
     <title>Quản lý Ghi danh & Xếp lớp | EduCenter</title>
 </head>
 <body>
+<c:set var="baseEnrollPath" value="${empty enrollmentBasePath ? pageContext.request.contextPath.concat(sessionScope.currentUser.admin ? '/admin/enrollments' : '/staff/enrollments') : enrollmentBasePath}" scope="request"/>
 <c:set var="internalShell" value="true" scope="request"/>
 <div class="admin-layout">
     <c:set var="activeNav" value="enrollments" scope="request" />
-    <c:set var="breadcrumb" value="Tuyển sinh & Khách hàng / Ghi danh & Xếp lớp" scope="request" />
+    <c:set var="breadcrumb" value="${sessionScope.currentUser.admin ? 'Quản trị & Học vụ / Ghi danh & Xếp lớp' : 'Tuyển sinh & Khách hàng / Ghi danh & Xếp lớp'}" scope="request" />
     <%@ include file="/WEB-INF/views/common/sidebar.jspf" %>
 
     <div class="admin-main">
@@ -25,7 +26,7 @@
                 <div class="mgmt-header">
                     <div class="mgmt-header-left">
                         <nav class="mgmt-breadcrumb">
-                            <a href="${pageContext.request.contextPath}/staff/dashboard">Học vụ & CRM</a>
+                            <a href="${pageContext.request.contextPath}/${sessionScope.currentUser.admin ? 'admin/dashboard' : 'staff/dashboard'}">${sessionScope.currentUser.admin ? 'Quản trị' : 'Học vụ & CRM'}</a>
                             <span style="color: var(--text-muted); opacity: 0.6;">/</span>
                             <span style="color: var(--primary); font-weight: 600;">Ghi danh & Xếp lớp</span>
                         </nav>
@@ -138,7 +139,7 @@
 
                 <!-- Filter & Search Bar -->
                 <div class="mgmt-filter-card">
-                    <form action="${pageContext.request.contextPath}/staff/enrollments" method="get" class="mgmt-filter-grid">
+                    <form action="${baseEnrollPath}" method="get" class="mgmt-filter-grid">
                         <div class="mgmt-filter-item">
                             <label class="mgmt-label" for="filterKeyword">Tìm kiếm học viên</label>
                             <div class="mgmt-input-wrap">
@@ -193,7 +194,7 @@
                                 <span>Lọc kết quả</span>
                             </button>
                             <c:if test="${not empty pageData.keyword or not empty pageData.status or not empty pageData.classId}">
-                                <a href="${pageContext.request.contextPath}/staff/enrollments" class="mgmt-btn mgmt-btn-outline" title="Xóa bộ lọc">
+                                <a href="${baseEnrollPath}" class="mgmt-btn mgmt-btn-outline" title="Xóa bộ lọc">
                                     <svg class="mgmt-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
                                         <path d="M3 3v5h5"></path>
@@ -387,7 +388,7 @@
 
                                                         <c:if test="${item.status == 'RESERVED'}">
                                                             <!-- Nút Phục hồi học tập -->
-                                                            <form action="${pageContext.request.contextPath}/staff/enrollments/resume" method="post" style="display: inline;"
+                                                            <form action="${baseEnrollPath}/resume" method="post" style="display: inline;"
                                                                   data-student-name="<c:out value='${item.studentName}'/>"
                                                                   onsubmit="return confirm('Xác nhận phục hồi học tập cho học viên ' + this.getAttribute('data-student-name') + '? (Sẽ kiểm tra sĩ số lớp)');">
                                                                 <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
@@ -444,18 +445,18 @@
                             </div>
                             <div class="mgmt-pagination">
                                 <c:if test="${pageData.hasPrevious()}">
-                                    <a href="${pageContext.request.contextPath}/staff/enrollments?page=${pageData.currentPage - 1}&classId=${pageData.classId}&status=${pageData.status}&q=${pageData.keyword}" class="mgmt-page-btn">
+                                    <a href="${baseEnrollPath}?page=${pageData.currentPage - 1}&classId=${pageData.classId}&status=${pageData.status}&q=${pageData.keyword}" class="mgmt-page-btn">
                                         <svg style="width: 15px; height: 15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <polyline points="15 18 9 12 15 6"></polyline>
                                         </svg>
                                     </a>
                                 </c:if>
                                 <c:forEach begin="1" end="${pageData.totalPages}" var="p">
-                                    <a href="${pageContext.request.contextPath}/staff/enrollments?page=${p}&classId=${pageData.classId}&status=${pageData.status}&q=${pageData.keyword}"
+                                    <a href="${baseEnrollPath}?page=${p}&classId=${pageData.classId}&status=${pageData.status}&q=${pageData.keyword}"
                                        class="mgmt-page-btn ${p == pageData.currentPage ? 'active' : ''}">${p}</a>
                                 </c:forEach>
                                 <c:if test="${pageData.hasNext()}">
-                                    <a href="${pageContext.request.contextPath}/staff/enrollments?page=${pageData.currentPage + 1}&classId=${pageData.classId}&status=${pageData.status}&q=${pageData.keyword}" class="mgmt-page-btn">
+                                    <a href="${baseEnrollPath}?page=${pageData.currentPage + 1}&classId=${pageData.classId}&status=${pageData.status}&q=${pageData.keyword}" class="mgmt-page-btn">
                                         <svg style="width: 15px; height: 15px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <polyline points="9 18 15 12 9 6"></polyline>
                                         </svg>
@@ -497,7 +498,7 @@
                 </svg>
             </button>
         </div>
-        <form action="${pageContext.request.contextPath}/staff/enrollments/save" method="post">
+        <form action="${baseEnrollPath}/save" method="post" id="enrollForm" onsubmit="return validateEnrollSubmit(event);">
             <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
             <input type="hidden" name="leadId" value="<c:out value='${preselectedLeadId}' />">
             <div class="mgmt-modal-body">
@@ -508,14 +509,14 @@
                         <line x1="12" y1="8" x2="12.01" y2="8"></line>
                     </svg>
                     <div>
-                        <strong>Quy tắc nghiệp vụ:</strong> Hệ thống tự động kiểm tra sĩ số (BR04), đối soát xung đột TKB (BR07) và khởi tạo hóa đơn học phí (BR12) trong cùng một giao dịch toàn vẹn.
+                        <strong>Quy tắc nghiệp vụ:</strong> Học viên bắt buộc phải nộp học phí trước khi ghi danh (BR12). Hệ thống tự động kiểm tra sĩ số (BR04), đối soát xung đột TKB (BR07) và đồng bộ trạng thái trong cùng một giao dịch.
                     </div>
                 </div>
 
                 <!-- Chọn học sinh -->
                 <div class="mgmt-form-group">
-                    <label class="mgmt-label">Chọn học viên tiếp nhận <span style="color: #dc2626;">*</span></label>
-                    <select name="studentId" class="mgmt-select" required>
+                    <label class="mgmt-label" for="enrollStudentSelect">Chọn học viên tiếp nhận <span style="color: #dc2626;">*</span></label>
+                    <select name="studentId" id="enrollStudentSelect" class="mgmt-select" required onchange="handleStudentChange(this)">
                         <option value="">-- Chọn học viên từ danh sách hồ sơ --</option>
                         <c:forEach var="s" items="${pageData.studentOptions}">
                             <option value="${s.id}" ${preselectedStudentId == s.id ? 'selected' : ''}>
@@ -523,41 +524,133 @@
                             </option>
                         </c:forEach>
                     </select>
+                    <!-- Badge nhận diện khóa học đã đăng ký -->
+                    <div id="studentRegistrationBadge" style="display:none; margin-top: 6px; font-size: 12px; color: var(--primary); background: rgba(37, 99, 235, 0.08); padding: 6px 10px; border-radius: 6px; align-items: center; gap: 6px;">
+                        <svg style="width: 14px; height: 14px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        <span id="studentRegistrationText">Học viên đã đăng ký khóa học</span>
+                    </div>
                 </div>
 
-                <!-- Chọn lớp học -->
+                <!-- Chọn khóa học -->
                 <div class="mgmt-form-group">
-                    <label class="mgmt-label">Chọn lớp học tiếp nhận <span style="color: #dc2626;">*</span></label>
-                    <select name="classId" id="enrollClassSelect" class="mgmt-select" required onchange="handleClassSelectChange(this)">
-                        <option value="" data-fee="0" data-start="">-- Chọn lớp học mở (OPEN/ONGOING) --</option>
-                        <c:forEach var="c" items="${pageData.classOptions}">
-                            <option value="${c.classId}" data-fee="${c.fee}" data-start="${c.startDate}" ${c.full ? 'disabled' : ''}>
-                                <c:out value="${c.classCode}"/> - <c:out value="${c.className}"/>
-                                [Sĩ số: <c:out value="${c.currentEnrolled}"/>/<c:out value="${c.capacity}"/>]
-                                <c:if test="${c.full}"> - ĐÃ ĐẦY</c:if>
+                    <label class="mgmt-label" for="enrollCourseSelect">Khóa học đăng ký tiếp nhận <span style="color: #dc2626;">*</span></label>
+                    <select name="courseId" id="enrollCourseSelect" class="mgmt-select" required onchange="handleCourseChange(this.value)">
+                        <option value="">-- Chọn khóa học tiếp nhận --</option>
+                        <c:forEach var="crs" items="${pageData.courseOptions}">
+                            <option value="${crs.id}" data-code="${crs.code}" data-name="${crs.name}" data-fee="${crs.tuitionFee}">
+                                [<c:out value="${crs.code}"/>] <c:out value="${crs.name}"/> - <fmt:formatNumber value="${crs.tuitionFee}" type="currency" currencySymbol="đ" maxFractionDigits="0"/>
                             </option>
                         </c:forEach>
                     </select>
                 </div>
 
+                <!-- Chọn lớp học tiếp nhận -->
+                <div class="mgmt-form-group">
+                    <label class="mgmt-label" for="enrollClassSelect">Chọn lớp học tiếp nhận <span style="color: #dc2626;">*</span></label>
+                    <select name="classId" id="enrollClassSelect" class="mgmt-select" required onchange="handleClassSelectChange(this)">
+                        <option value="" data-fee="0" data-start="">-- Vui lòng chọn khóa học trước --</option>
+                    </select>
+
+                    <!-- Alert thông báo khi không có lớp phù hợp hoặc hết chỗ / không có lịch trống -->
+                    <div id="noClassAlert" style="display:none; margin-top: 8px; border-left: 4px solid #f59e0b; background: rgba(245, 158, 11, 0.08); padding: 10px 12px; border-radius: 6px;">
+                        <div style="display: flex; gap: 8px; align-items: flex-start;">
+                            <svg style="width: 18px; height: 18px; color: #d97706; flex-shrink: 0; margin-top: 2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            <div>
+                                <strong style="color: #b45309; font-size: 13px;">Không có lớp học phù hợp còn lịch trống hoặc còn chỗ!</strong>
+                                <p style="margin: 3px 0 6px 0; font-size: 12px; color: var(--text-muted); line-height: 1.4;">
+                                    Hiện không tìm thấy lớp học nào thuộc khóa học này có lịch trống hoặc còn chỗ trống để tiếp nhận học viên. Vui lòng tạo thêm lớp mới hoặc sắp xếp lại thời khóa biểu trước khi ghi danh.
+                                </p>
+                                <c:choose>
+                                    <c:when test="${sessionScope.currentUser.admin}">
+                                        <a href="${pageContext.request.contextPath}/admin/classes" target="_blank" class="mgmt-btn mgmt-btn-outline" style="padding: 4px 10px; font-size: 12px; display: inline-flex; align-items: center; gap: 5px;">
+                                            <svg style="width: 14px; height: 14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            <span>+ Mở trang tạo lớp học mới</span>
+                                        </a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span style="font-size: 12px; color: #b45309; font-weight: 500;">(Vui lòng liên hệ Quản trị viên/Học vụ để mở thêm lớp học)</span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Ngày bắt đầu học -->
                 <div class="mgmt-form-group">
-                    <label class="mgmt-label">Ngày bắt đầu học <span style="color: #dc2626;">*</span></label>
-                    <input type="date" name="startDate" id="enrollStartDate" class="mgmt-input" required>
+                    <label class="mgmt-label" for="enrollStartDate">Ngày bắt đầu học <span style="color: #dc2626;">*</span></label>
+                    <input type="date" name="startDate" id="enrollStartDate" class="mgmt-input" required onchange="validateEnrollFormState()">
                     <small style="color: var(--text-muted); font-size: 11.5px; margin-top: 4px; display: block;">
                         Ngày bắt đầu phải nằm trong khoảng thời gian khai giảng và kết thúc của lớp.
                     </small>
                 </div>
 
+                <!-- Thẻ Xác nhận nộp tiền (Bắt buộc) -->
+                <div style="margin-top: 16px; border: 1px solid var(--border); border-radius: 8px; padding: 14px; background: var(--surface);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-weight: 700; font-size: 13.5px; color: var(--text); display: flex; align-items: center; gap: 6px;">
+                            <svg style="width: 16px; height: 16px; color: var(--primary);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"></rect><line x1="2" x2="22" y1="10" y2="10"></line></svg>
+                            HỌC PHÍ & THANH TOÁN (BẮT BUỘC)
+                        </span>
+                        <span id="feeAmountBadge" style="font-weight: 700; font-size: 15px; color: var(--primary);">0 đ</span>
+                    </div>
+                    <input type="hidden" name="paymentAmount" id="paymentAmountInput" value="0">
+
+                    <div style="margin-bottom: 10px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;">
+                            <input type="checkbox" name="paymentConfirmed" id="paymentConfirmed" value="true" style="width: 17px; height: 17px; cursor: pointer;" onchange="handlePaymentConfirmedChange(this)">
+                            <span style="font-weight: 600; font-size: 13px; color: var(--text);">
+                                Xác nhận học viên đã nộp đủ tiền học phí <span style="color: #dc2626;">*</span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Cảnh báo nếu chưa nộp tiền -->
+                    <div id="unpaidNotice" style="border-left: 4px solid #dc2626; background: rgba(220, 38, 38, 0.08); padding: 8px 12px; border-radius: 4px;">
+                        <span style="color: #dc2626; font-size: 12.5px; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                            <svg style="width: 16px; height: 16px; flex-shrink: 0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                            Chưa nộp tiền: Học viên bắt buộc phải nộp tiền học phí mới được ghi danh vào lớp!
+                        </span>
+                    </div>
+
+                    <!-- Khối thông tin thanh toán khi đã tick xác nhận -->
+                    <div id="paymentDetailsSection" style="display: none; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border);">
+                        <div class="mgmt-form-group" style="margin-bottom: 10px;">
+                            <label class="mgmt-label" style="font-size: 12px;">Phương thức nộp tiền <span style="color: #dc2626;">*</span></label>
+                            <div style="display: flex; gap: 16px; font-size: 13px;">
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                    <input type="radio" name="paymentMethod" value="CASH" checked onchange="handlePaymentMethodChange(this.value)">
+                                    <span>Tiền mặt tại quầy</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                    <input type="radio" name="paymentMethod" value="BANK_TRANSFER" onchange="handlePaymentMethodChange(this.value)">
+                                    <span>Chuyển khoản ngân hàng / QR</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mgmt-form-group" id="bankTransferGroup" style="display: none; margin-bottom: 0;">
+                            <label class="mgmt-label" for="transactionRefInput" style="font-size: 12px;">Mã giao dịch / Mã tham chiếu ngân hàng <span style="color: #dc2626;">*</span></label>
+                            <input type="text" name="transactionRef" id="transactionRefInput" class="mgmt-input" placeholder="Ví dụ: VCB-9823482, MB-192842..." oninput="validateEnrollFormState()">
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Ghi chú -->
-                <div class="mgmt-form-group">
-                    <label class="mgmt-label">Ghi chú ghi danh</label>
-                    <textarea name="notes" class="mgmt-textarea" rows="2" placeholder="Ví dụ: Đăng ký đợt 1, đã tư vấn lộ trình..."></textarea>
+                <div class="mgmt-form-group" style="margin-top: 14px;">
+                    <label class="mgmt-label" for="enrollNotes">Ghi chú ghi danh</label>
+                    <textarea name="notes" id="enrollNotes" class="mgmt-textarea" rows="2" placeholder="Ví dụ: Đăng ký đợt 1, đã tư vấn lộ trình..."></textarea>
                 </div>
             </div>
             <div class="mgmt-modal-footer">
                 <button type="button" class="mgmt-btn mgmt-btn-outline" onclick="closeModal('enrollModal')">Hủy bỏ</button>
-                <button type="submit" class="mgmt-btn mgmt-btn-primary">Xác nhận ghi danh</button>
+                <button type="submit" id="btnSubmitEnroll" class="mgmt-btn mgmt-btn-primary" disabled>Xác nhận ghi danh</button>
             </div>
         </form>
     </div>
@@ -588,7 +681,7 @@
                 </svg>
             </button>
         </div>
-        <form action="${pageContext.request.contextPath}/staff/enrollments/transfer" method="post">
+        <form action="${baseEnrollPath}/transfer" method="post">
             <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
             <input type="hidden" name="enrollmentId" id="transferEnrollmentId">
             <div class="mgmt-modal-body">
@@ -656,7 +749,7 @@
                 </svg>
             </button>
         </div>
-        <form action="${pageContext.request.contextPath}/staff/enrollments/reserve" method="post">
+        <form action="${baseEnrollPath}/reserve" method="post">
             <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
             <input type="hidden" name="enrollmentId" id="reserveEnrollmentId">
             <div class="mgmt-modal-body">
@@ -700,7 +793,7 @@
                 </svg>
             </button>
         </div>
-        <form action="${pageContext.request.contextPath}/staff/enrollments/status" method="post">
+        <form action="${baseEnrollPath}/status" method="post">
             <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}">
             <input type="hidden" name="enrollmentId" id="dropEnrollmentId">
             <input type="hidden" name="newStatus" value="DROPPED">
@@ -722,6 +815,26 @@
 </div>
 
 <script>
+    window.INITIAL_CLASSES = [
+        <c:forEach var="c" items="${pageData.classOptions}" varStatus="st">
+        {
+            classId: ${c.classId},
+            classCode: "<c:out value='${c.classCode}'/>",
+            className: "<c:out value='${c.className}'/>",
+            courseId: ${c.courseId != null ? c.courseId : 'null'},
+            courseCode: "<c:out value='${c.courseCode}'/>",
+            fee: ${c.fee != null ? c.fee : 0},
+            startDate: "<c:out value='${c.startDate}'/>",
+            currentEnrolled: ${c.currentEnrolled},
+            capacity: ${c.capacity},
+            isFull: ${c.full},
+            hasScheduleConflict: ${c.hasScheduleConflict},
+            conflictReason: "<c:out value='${c.conflictReason}'/>"
+        }${!st.last ? ',' : ''}
+        </c:forEach>
+    ];
+    window.CURRENT_STUDENT_CLASSES = null;
+
     function openModal(id) {
         var el = document.getElementById(id);
         if (el) el.classList.add('active');
@@ -731,20 +844,247 @@
         if (el) el.classList.remove('active');
     }
 
+    function formatCurrencyVND(amount) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount || 0);
+    }
+
     function openEnrollModal() {
         var startInput = document.getElementById('enrollStartDate');
         if (startInput && !startInput.value) {
             startInput.value = new Date().toISOString().split('T')[0];
         }
+        var studentSelect = document.getElementById('enrollStudentSelect');
+        if (studentSelect && studentSelect.value) {
+            handleStudentChange(studentSelect);
+        } else {
+            validateEnrollFormState();
+        }
         openModal('enrollModal');
     }
 
+    function handleStudentChange(select) {
+        var studentId = select.value;
+        var badge = document.getElementById('studentRegistrationBadge');
+        var badgeText = document.getElementById('studentRegistrationText');
+
+        if (!studentId) {
+            if (badge) badge.style.display = 'none';
+            window.CURRENT_STUDENT_CLASSES = null;
+            var courseSelect = document.getElementById('enrollCourseSelect');
+            handleCourseChange(courseSelect ? courseSelect.value : '');
+            return;
+        }
+
+        fetch('${baseEnrollPath}/student-options?studentId=' + encodeURIComponent(studentId))
+            .then(function(res) {
+                if (!res.ok) throw new Error('Network error');
+                return res.json();
+            })
+            .then(function(data) {
+                window.CURRENT_STUDENT_CLASSES = data.classes || [];
+                var courseSelect = document.getElementById('enrollCourseSelect');
+                if (data.registeredCourseIds && data.registeredCourseIds.length > 0) {
+                    var regCourseId = data.registeredCourseIds[0];
+                    if (courseSelect) {
+                        courseSelect.value = regCourseId;
+                        var opt = courseSelect.options[courseSelect.selectedIndex];
+                        if (badge && badgeText) {
+                            badgeText.textContent = 'Học viên đã đăng ký khóa học: ' + (opt ? opt.text : '');
+                            badge.style.display = 'flex';
+                        }
+                    }
+                } else {
+                    if (badge) badge.style.display = 'none';
+                }
+                handleCourseChange(courseSelect ? courseSelect.value : '');
+            })
+            .catch(function(err) {
+                console.warn('Could not load student options:', err);
+                if (badge) badge.style.display = 'none';
+                window.CURRENT_STUDENT_CLASSES = null;
+                var courseSelect = document.getElementById('enrollCourseSelect');
+                handleCourseChange(courseSelect ? courseSelect.value : '');
+            });
+    }
+
+    function handleCourseChange(courseId) {
+        var classSelect = document.getElementById('enrollClassSelect');
+        var noClassAlert = document.getElementById('noClassAlert');
+        var feeBadge = document.getElementById('feeAmountBadge');
+        var feeInput = document.getElementById('paymentAmountInput');
+        var courseSelect = document.getElementById('enrollCourseSelect');
+
+        var courseFee = 0;
+        if (courseSelect && courseSelect.selectedIndex > 0) {
+            var selectedCourseOpt = courseSelect.options[courseSelect.selectedIndex];
+            courseFee = parseFloat(selectedCourseOpt.getAttribute('data-fee') || '0');
+        }
+        if (feeBadge) feeBadge.textContent = formatCurrencyVND(courseFee);
+        if (feeInput) feeInput.value = courseFee;
+
+        classSelect.innerHTML = '';
+
+        if (!courseId) {
+            var opt = document.createElement('option');
+            opt.value = '';
+            opt.textContent = '-- Vui lòng chọn khóa học trước --';
+            classSelect.appendChild(opt);
+            if (noClassAlert) noClassAlert.style.display = 'none';
+            validateEnrollFormState();
+            return;
+        }
+
+        var sourceClasses = window.CURRENT_STUDENT_CLASSES || window.INITIAL_CLASSES;
+        var matched = sourceClasses.filter(function(c) {
+            return String(c.courseId) === String(courseId);
+        });
+        var available = matched.filter(function(c) {
+            return !c.isFull && !c.hasScheduleConflict;
+        });
+
+        if (available.length === 0) {
+            if (noClassAlert) noClassAlert.style.display = 'block';
+
+            var emptyOpt = document.createElement('option');
+            emptyOpt.value = '';
+            emptyOpt.textContent = '-- Không có lớp phù hợp còn lịch trống hoặc còn chỗ --';
+            classSelect.appendChild(emptyOpt);
+
+            matched.forEach(function(c) {
+                var opt = document.createElement('option');
+                opt.value = c.classId;
+                opt.disabled = true;
+                var reason = c.isFull ? 'ĐÃ ĐẦY SĨ SỐ' : (c.hasScheduleConflict ? ('TRÙNG LỊCH: ' + (c.conflictReason || '')) : 'KHÔNG KHẢ DỤNG');
+                opt.textContent = c.classCode + ' - ' + c.className + ' [' + c.currentEnrolled + '/' + c.capacity + '] (' + reason + ')';
+                classSelect.appendChild(opt);
+            });
+        } else {
+            if (noClassAlert) noClassAlert.style.display = 'none';
+
+            var defaultOpt = document.createElement('option');
+            defaultOpt.value = '';
+            defaultOpt.setAttribute('data-fee', courseFee);
+            defaultOpt.setAttribute('data-start', '');
+            defaultOpt.textContent = '-- Chọn lớp học phù hợp (' + available.length + ' lớp khả dụng) --';
+            classSelect.appendChild(defaultOpt);
+
+            matched.forEach(function(c) {
+                var opt = document.createElement('option');
+                opt.value = c.classId;
+                opt.setAttribute('data-fee', c.fee || courseFee);
+                opt.setAttribute('data-start', c.startDate || '');
+                var statusText = '';
+                if (c.isFull) {
+                    opt.disabled = true;
+                    statusText = ' - ĐÃ ĐẦY';
+                } else if (c.hasScheduleConflict) {
+                    opt.disabled = true;
+                    statusText = ' - TRÙNG LỊCH: ' + (c.conflictReason || '');
+                }
+                opt.textContent = c.classCode + ' - ' + c.className + ' [Sĩ số: ' + c.currentEnrolled + '/' + c.capacity + ']' + statusText;
+                classSelect.appendChild(opt);
+            });
+        }
+
+        handleClassSelectChange(classSelect);
+    }
+
     function handleClassSelectChange(select) {
+        if (!select || select.selectedIndex < 0) {
+            validateEnrollFormState();
+            return;
+        }
         var option = select.options[select.selectedIndex];
         var startDate = option.getAttribute('data-start');
         if (startDate && startDate !== "") {
-            document.getElementById('enrollStartDate').value = startDate;
+            var startInput = document.getElementById('enrollStartDate');
+            if (startInput) startInput.value = startDate;
         }
+        var fee = option.getAttribute('data-fee');
+        if (fee && parseFloat(fee) > 0) {
+            var feeBadge = document.getElementById('feeAmountBadge');
+            var feeInput = document.getElementById('paymentAmountInput');
+            if (feeBadge) feeBadge.textContent = formatCurrencyVND(parseFloat(fee));
+            if (feeInput) feeInput.value = fee;
+        }
+        validateEnrollFormState();
+    }
+
+    function handlePaymentConfirmedChange(cb) {
+        var unpaidNotice = document.getElementById('unpaidNotice');
+        var paymentDetails = document.getElementById('paymentDetailsSection');
+        if (cb.checked) {
+            if (unpaidNotice) unpaidNotice.style.display = 'none';
+            if (paymentDetails) paymentDetails.style.display = 'block';
+        } else {
+            if (unpaidNotice) unpaidNotice.style.display = 'block';
+            if (paymentDetails) paymentDetails.style.display = 'none';
+        }
+        validateEnrollFormState();
+    }
+
+    function handlePaymentMethodChange(val) {
+        var bankGroup = document.getElementById('bankTransferGroup');
+        if (bankGroup) {
+            bankGroup.style.display = (val === 'BANK_TRANSFER') ? 'block' : 'none';
+        }
+        validateEnrollFormState();
+    }
+
+    function validateEnrollFormState() {
+        var studentSelect = document.getElementById('enrollStudentSelect');
+        var courseSelect = document.getElementById('enrollCourseSelect');
+        var classSelect = document.getElementById('enrollClassSelect');
+        var startInput = document.getElementById('enrollStartDate');
+        var paymentCb = document.getElementById('paymentConfirmed');
+        var submitBtn = document.getElementById('btnSubmitEnroll');
+
+        var studentId = studentSelect ? studentSelect.value : '';
+        var courseId = courseSelect ? courseSelect.value : '';
+        var classId = classSelect ? classSelect.value : '';
+        var startDate = startInput ? startInput.value : '';
+        var paymentConfirmed = paymentCb ? paymentCb.checked : false;
+
+        var methodEl = document.querySelector('input[name="paymentMethod"]:checked');
+        var method = methodEl ? methodEl.value : 'CASH';
+        var txRefInput = document.getElementById('transactionRefInput');
+        var txRef = txRefInput ? txRefInput.value.trim() : '';
+
+        var validPayment = paymentConfirmed;
+        if (method === 'BANK_TRANSFER' && !txRef) {
+            validPayment = false;
+        }
+
+        var isComplete = (studentId !== '' && courseId !== '' && classId !== '' && startDate !== '' && validPayment);
+        if (submitBtn) {
+            submitBtn.disabled = !isComplete;
+        }
+        return isComplete;
+    }
+
+    function validateEnrollSubmit(event) {
+        var paymentCb = document.getElementById('paymentConfirmed');
+        if (!paymentCb || !paymentCb.checked) {
+            alert('Học viên chưa nộp tiền học phí! Bắt buộc phải nộp tiền trước khi thực hiện ghi danh.');
+            event.preventDefault();
+            return false;
+        }
+        var classSelect = document.getElementById('enrollClassSelect');
+        if (!classSelect || !classSelect.value) {
+            alert('Vui lòng chọn lớp học tiếp nhận phù hợp còn chỗ và lịch trống.');
+            event.preventDefault();
+            return false;
+        }
+        var methodEl = document.querySelector('input[name="paymentMethod"]:checked');
+        var method = methodEl ? methodEl.value : 'CASH';
+        var txRefInput = document.getElementById('transactionRefInput');
+        if (method === 'BANK_TRANSFER' && (!txRefInput || !txRefInput.value.trim())) {
+            alert('Vui lòng nhập Mã giao dịch / Mã tham chiếu ngân hàng khi nộp bằng chuyển khoản.');
+            if (txRefInput) txRefInput.focus();
+            event.preventDefault();
+            return false;
+        }
+        return true;
     }
 
     function openTransferModalFromBtn(btn) {

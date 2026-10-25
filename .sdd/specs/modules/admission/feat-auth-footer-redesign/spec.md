@@ -46,7 +46,7 @@ Các yêu cầu áp dụng đồng thời QG01–QG12. Cột nghiệm thu là k�
 |---|---|---|---|
 | FR-001 | THE SYSTEM SHALL dựng login với label/focus/password toggle/validation và navigation chung; không hứa nhớ30ngày hoặc bảo mật chưa có. | UC02; design.md | Login dùng đúng policy/session của auth, không đoạn giới thiệu nội dung giả. |
 | FR-002 | THE SYSTEM SHALL đăng ký chỉ Student/Parent với hướng dẫn password đúng policy, không badge BR01/SRS/SSL kỹ thuật ở flow người dùng. | UC01; BR01; QG09 | Role nội bộ không xuất hiện; lỗi rõ ràng, không autofill/demo account. |
-| FR-003 | THE SYSTEM SHALL trình bày quên mật khẩu bằng phản hồi chung từ auth, không hiện link reset hoặc hướng dẫn chấm thử. | UC03; D04 | Email tồn tại/không có cùng response; SMTP lỗi không lộ token. |
+| FR-003 | THE SYSTEM SHALL xác thực địa chỉ email khi yêu cầu khôi phục mật khẩu. Nếu email không tồn tại trong hệ thống, thông báo lỗi rõ ràng. Nếu email chính xác, hệ thống phát hành token an toàn và hiển thị trực tiếp liên kết/nút bấm mở phiên đổi mật khẩu cho email đó mà không cần cấu hình SMTP ngoài. | UC03; D04 | Email không tồn tại báo lỗi rõ ràng; Email đúng phát hành token và cung cấp link reset mở trực tiếp. |
 | FR-004 | THE SYSTEM SHALL lấy token validity/expiry thật từ backend ở reset và hiển thị đúng thời gian còn lại nếu có countdown; không giữ hardcode15phút. | UC03; auth FR-004 | Token30phút còn10phút hiển thị10; hết hạn/reuse không có form đổi hợp lệ. |
 | FR-005 | THE SYSTEM SHALL dùng footer chung từ center settings thật, một cơ sở, link chính sách có trang thật; không ISO/TLS/uptime/hotline giả. | M01; M12; QG03 | Thiếu trường không điền mẫu; auth/public/errors có cùng navigation ở4 độ rộng. |
 

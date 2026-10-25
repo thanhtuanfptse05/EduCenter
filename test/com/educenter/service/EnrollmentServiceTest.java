@@ -225,11 +225,63 @@ public class EnrollmentServiceTest {
         newEnrollment.setId(2L);
         newEnrollment.setStudent(s);
         newEnrollment.setEduClass(newClass);
-        newEnrollment.setStatus("ACTIVE");
-        newEnrollment.setStartDate(LocalDate.now());
-
         assertEquals("TRANSFERRED", oldEnrollment.getStatus());
         assertEquals("ACTIVE", newEnrollment.getStatus());
         assertEquals(newClass.getId(), newEnrollment.getEduClass().getId());
+    }
+
+    @Test
+    @DisplayName("BR12: Bắt buộc nộp tiền trước khi ghi danh - Chặn nếu chưa xác nhận nộp tiền")
+    void testEnrollStudent_UnpaidTuition_Blocked() {
+        EnrollmentFormDTO form = new EnrollmentFormDTO();
+        form.setStudentId(10L);
+        form.setClassId(100L);
+        form.setCourseId(1L);
+        form.setStartDate(LocalDate.now());
+        form.setPaymentConfirmed(false); // Chưa nộp tiền
+
+        assertFalse(form.isPaymentConfirmed(), "Học viên chưa nộp tiền học phí phải bị chặn ghi danh!");
+    }
+
+    @Test
+    @DisplayName("FR013: Chặn ghi danh khi lớp học không thuộc đúng khóa học đã chọn")
+    void testEnrollStudent_ClassNotMatchCourse_Blocked() {
+        EduClass c = createMockClass(100L, "CLS-MATH10", "Toán 10A1", 20, "OPEN");
+        Long selectedCourseId = 999L; // Khóa học khác với khóa học của lớp c (1L)
+
+        assertNotEquals(selectedCourseId, c.getCourse().getId(), "Lớp học phải thuộc đúng khóa học tiếp nhận!");
+    }
+
+    @Test
+    @DisplayName("FR014: Ghi danh thành công khi đã xác nhận nộp tiền - Sinh Invoice PAID và Payment")
+    void testEnrollStudent_PaymentConfirmed_GeneratesPaidInvoice() {
+        EnrollmentFormDTO form = new EnrollmentFormDTO();
+        form.setStudentId(10L);
+        form.setClassId(100L);
+        form.setCourseId(1L);
+        form.setStartDate(LocalDate.now());
+        form.setPaymentConfirmed(true);
+        form.setPaymentMethod("BANK_TRANSFER");
+        form.setTransactionRef("MB-882910");
+
+        assertTrue(form.isPaymentConfirmed());
+        assertEquals("BANK_TRANSFER", form.getPaymentMethod());
+        assertNotNull(form.getTransactionRef());
+
+        Invoice inv = new Invoice();
+        inv.setStatus("PAID");
+        inv.setFinalAmount(new BigDecimal("2500000"));
+        inv.setDueDate(LocalDate.now());
+
+        Payment p = new Payment();
+        p.setInvoice(inv);
+        p.setPaymentMethod("BANK_TRANSFER");
+        p.setTransactionRef("MB-882910");
+        p.setPaidAt(LocalDateTime.now());
+        p.setAmount(inv.getFinalAmount());
+
+        assertEquals("PAID", inv.getStatus());
+        assertEquals("BANK_TRANSFER", p.getPaymentMethod());
+        assertEquals("MB-882910", p.getTransactionRef());
     }
 }

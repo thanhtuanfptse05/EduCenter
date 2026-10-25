@@ -26,7 +26,7 @@
   - [x] 4.4 Tích hợp CSRF token, checkbox điều khoản, và flash messages.
 
 - [x] **Task 5: Thiết kế lại Trang Quên & Đặt Lại Mật Khẩu (`forgot-password.jsp` & `reset-password.jsp`)**
-  - [x] 5.1 Viết lại `web/WEB-INF/views/auth/forgot-password.jsp` dạng Centered Card với huy hiệu bảo mật, email input, Sentinel Guard shield, và evaluator note nếu có `sessionScope.demo_reset_link`.
+  - [x] 5.1 Viết lại `web/WEB-INF/views/auth/forgot-password.jsp` dạng Centered Card với kiểm tra email hợp lệ, báo lỗi rõ nếu không tìm thấy email, và tạo thẻ hành động mở liên kết đổi mật khẩu trực tiếp (`reset_link`) cho người dùng.
   - [x] 5.2 Viết lại `web/WEB-INF/views/auth/reset-password.jsp` với thanh đếm ngược hiệu lực token (15 phút), kiểm tra độ mạnh mật khẩu mới, xác nhận khớp, và banner token hết hạn.
 
 - [x] **Task 6: Kiểm thử & Triển khai hoàn tất**

@@ -1,5 +1,6 @@
 package com.educenter.controller;
 
+import com.educenter.dto.ClassEnrollmentOptionDTO;
 import com.educenter.dto.EnrollmentFormDTO;
 import com.educenter.dto.EnrollmentPageDTO;
 import com.educenter.dto.UserPrincipalDTO;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,7 +29,16 @@ import java.util.logging.Logger;
         "/staff/enrollments/transfer",
         "/staff/enrollments/reserve",
         "/staff/enrollments/resume",
-        "/staff/enrollments/status"
+        "/staff/enrollments/status",
+        "/staff/enrollments/student-options",
+        "/admin/enrollments",
+        "/admin/enrollments/create",
+        "/admin/enrollments/save",
+        "/admin/enrollments/transfer",
+        "/admin/enrollments/reserve",
+        "/admin/enrollments/resume",
+        "/admin/enrollments/status",
+        "/admin/enrollments/student-options"
 })
 public class EnrollmentServlet extends HttpServlet {
 
@@ -43,14 +54,21 @@ public class EnrollmentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String path = req.getServletPath();
-        if (!"/staff/enrollments".equals(path) && !"/staff/enrollments/create".equals(path)) {
+
+        if (path.endsWith("/student-options")) {
+            handleGetStudentOptions(req, resp);
+            return;
+        }
+
+        if (!"/staff/enrollments".equals(path) && !"/staff/enrollments/create".equals(path)
+                && !"/admin/enrollments".equals(path) && !"/admin/enrollments/create".equals(path)) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
         Long preselectedStudentId = null;
         Long preselectedLeadId = null;
-        boolean autoOpenModal = "/staff/enrollments/create".equals(path);
+        boolean autoOpenModal = path.endsWith("/create");
 
         String leadIdStr = req.getParameter("leadId");
         if (leadIdStr != null && !leadIdStr.isBlank()) {
@@ -95,12 +113,15 @@ public class EnrollmentServlet extends HttpServlet {
 
         EnrollmentPageDTO pageData = enrollmentService.getEnrollmentsPaged(classId, status, keyword, page, 10);
 
+        boolean isAdminContext = path.startsWith("/admin");
         req.setAttribute("pageData", pageData);
         req.setAttribute("preselectedStudentId", preselectedStudentId);
         req.setAttribute("preselectedLeadId", preselectedLeadId);
         req.setAttribute("autoOpenModal", autoOpenModal);
         req.setAttribute("pageTitle", "Quản lý ghi danh & Xếp lớp — EduCenter ERP");
-        req.setAttribute("activeNav", "enrollments");
+        req.setAttribute("activeNav", isAdminContext ? "admin-enrollments" : "enrollments");
+        req.setAttribute("enrollmentBasePath", isAdminContext ? "/admin/enrollments" : "/staff/enrollments");
+        req.setAttribute("isAdminContext", isAdminContext);
         req.setAttribute("internalShell", true);
         req.getRequestDispatcher("/WEB-INF/views/staff/enrollment-list.jsp").forward(req, resp);
     }
@@ -116,31 +137,117 @@ public class EnrollmentServlet extends HttpServlet {
             return;
         }
 
-        switch (path) {
-            case "/staff/enrollments/save" -> handleSaveEnrollment(req, resp, user);
-            case "/staff/enrollments/transfer" -> handleTransferClass(req, resp, user);
-            case "/staff/enrollments/reserve" -> handleReserve(req, resp, user);
-            case "/staff/enrollments/resume" -> handleResume(req, resp, user);
-            case "/staff/enrollments/status" -> handleUpdateStatus(req, resp, user);
-            default -> resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        if (path.endsWith("/save")) {
+            handleSaveEnrollment(req, resp, user, path);
+        } else if (path.endsWith("/transfer")) {
+            handleTransferClass(req, resp, user, path);
+        } else if (path.endsWith("/reserve")) {
+            handleReserve(req, resp, user, path);
+        } else if (path.endsWith("/resume")) {
+            handleResume(req, resp, user, path);
+        } else if (path.endsWith("/status")) {
+            handleUpdateStatus(req, resp, user, path);
+        } else {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
-    private void handleSaveEnrollment(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO user) throws IOException {
+    private void handleGetStudentOptions(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.setContentType("application/json;charset=UTF-8");
+        String studentIdStr = req.getParameter("studentId");
+        if (studentIdStr == null || studentIdStr.isBlank()) {
+            resp.getWriter().write("{\"registeredCourseIds\":[],\"classes\":[]}");
+            return;
+        }
+
+        try {
+            Long studentId = Long.parseLong(studentIdStr.trim());
+            List<Long> regCourseIds = enrollmentService.getStudentRegisteredCourseIds(studentId);
+            List<ClassEnrollmentOptionDTO> classes = enrollmentService.getOpenClassOptionsForStudent(studentId);
+
+            StringBuilder json = new StringBuilder();
+            json.append("{");
+            json.append("\"studentId\":").append(studentId).append(",");
+            json.append("\"registeredCourseIds\":[");
+            for (int i = 0; i < regCourseIds.size(); i++) {
+                if (i > 0) json.append(",");
+                json.append(regCourseIds.get(i));
+            }
+            json.append("],");
+            json.append("\"classes\":[");
+            for (int i = 0; i < classes.size(); i++) {
+                ClassEnrollmentOptionDTO c = classes.get(i);
+                if (i > 0) json.append(",");
+                json.append("{");
+                json.append("\"classId\":").append(c.getClassId()).append(",");
+                json.append("\"classCode\":\"").append(escapeJson(c.getClassCode())).append("\",");
+                json.append("\"className\":\"").append(escapeJson(c.getClassName())).append("\",");
+                json.append("\"courseId\":").append(c.getCourseId() != null ? c.getCourseId() : 0).append(",");
+                json.append("\"courseCode\":\"").append(escapeJson(c.getCourseCode())).append("\",");
+                json.append("\"courseName\":\"").append(escapeJson(c.getCourseName())).append("\",");
+                json.append("\"fee\":").append(c.getFee() != null ? c.getFee() : 0).append(",");
+                json.append("\"currentEnrolled\":").append(c.getCurrentEnrolled()).append(",");
+                json.append("\"capacity\":").append(c.getCapacity()).append(",");
+                json.append("\"isFull\":").append(c.isFull()).append(",");
+                json.append("\"hasScheduleConflict\":").append(c.isHasScheduleConflict()).append(",");
+                json.append("\"conflictReason\":\"").append(escapeJson(c.getConflictReason())).append("\",");
+                json.append("\"startDate\":\"").append(c.getStartDate() != null ? c.getStartDate().toString() : "").append("\"");
+                json.append("}");
+            }
+            json.append("]");
+            json.append("}");
+            resp.getWriter().write(json.toString());
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Lỗi khi lấy student options: " + e.getMessage(), e);
+            resp.getWriter().write("{\"registeredCourseIds\":[],\"classes\":[],\"error\":\"" + escapeJson(e.getMessage()) + "\"}");
+        }
+    }
+
+    private static String escapeJson(String s) {
+        if (s == null) return "";
+        return s.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\b", "\\b")
+                .replace("\f", "\\f")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
+    }
+
+    private String getRedirectBase(String path) {
+        return path.startsWith("/admin") ? "/admin/enrollments" : "/staff/enrollments";
+    }
+
+    private void handleSaveEnrollment(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO user, String path) throws IOException {
+        String redirectBase = getRedirectBase(path);
         try {
             Long studentId = Long.parseLong(req.getParameter("studentId"));
             Long classId = Long.parseLong(req.getParameter("classId"));
+
+            String courseIdStr = req.getParameter("courseId");
+            Long courseId = (courseIdStr != null && !courseIdStr.isBlank()) ? Long.parseLong(courseIdStr.trim()) : null;
+
             String startDateStr = req.getParameter("startDate");
             String notes = req.getParameter("notes");
             String leadIdStr = req.getParameter("leadId");
+
+            // FR-014: Kiểm tra thông tin nộp tiền học phí
+            String paymentConfirmedStr = req.getParameter("paymentConfirmed");
+            boolean paymentConfirmed = "true".equalsIgnoreCase(paymentConfirmedStr) || "on".equalsIgnoreCase(paymentConfirmedStr);
+            String paymentMethod = req.getParameter("paymentMethod");
+            String transactionRef = req.getParameter("transactionRef");
 
             LocalDate startDate = LocalDate.parse(startDateStr);
 
             EnrollmentFormDTO form = new EnrollmentFormDTO();
             form.setStudentId(studentId);
+            form.setCourseId(courseId);
             form.setClassId(classId);
             form.setStartDate(startDate);
             form.setNotes(notes);
+            form.setPaymentConfirmed(paymentConfirmed);
+            form.setPaymentMethod(paymentMethod);
+            form.setTransactionRef(transactionRef);
 
             enrollmentService.enrollStudent(form, user.getUserId());
 
@@ -153,7 +260,7 @@ public class EnrollmentServlet extends HttpServlet {
                 }
             }
 
-            FlashMessageUtil.setSuccess(req, "Ghi danh thành công học sinh vào lớp học! Hóa đơn học phí ban đầu đã được khởi tạo.");
+            FlashMessageUtil.setSuccess(req, "Ghi danh thành công học sinh vào lớp học! Học phí đã được thu đầy đủ và hóa đơn đã được chuyển sang trạng thái ĐÃ THANH TOÁN (PAID).");
         } catch (NumberFormatException | DateTimeParseException e) {
             FlashMessageUtil.setError(req, "Dữ liệu nhập vào không hợp lệ (mã học sinh, lớp hoặc ngày bắt đầu)!");
         } catch (ValidationException e) {
@@ -163,10 +270,11 @@ public class EnrollmentServlet extends HttpServlet {
             FlashMessageUtil.setError(req, "Không thể ghi danh: " + e.getMessage());
         }
 
-        resp.sendRedirect(req.getContextPath() + "/staff/enrollments");
+        resp.sendRedirect(req.getContextPath() + redirectBase);
     }
 
-    private void handleTransferClass(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO user) throws IOException {
+    private void handleTransferClass(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO user, String path) throws IOException {
+        String redirectBase = getRedirectBase(path);
         try {
             Long enrollmentId = Long.parseLong(req.getParameter("enrollmentId"));
             Long newClassId = Long.parseLong(req.getParameter("newClassId"));
@@ -187,10 +295,11 @@ public class EnrollmentServlet extends HttpServlet {
             FlashMessageUtil.setError(req, "Không thể chuyển lớp: " + e.getMessage());
         }
 
-        resp.sendRedirect(req.getContextPath() + "/staff/enrollments");
+        resp.sendRedirect(req.getContextPath() + redirectBase);
     }
 
-    private void handleReserve(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO user) throws IOException {
+    private void handleReserve(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO user, String path) throws IOException {
+        String redirectBase = getRedirectBase(path);
         try {
             Long enrollmentId = Long.parseLong(req.getParameter("enrollmentId"));
             String reason = req.getParameter("reason");
@@ -206,10 +315,11 @@ public class EnrollmentServlet extends HttpServlet {
             FlashMessageUtil.setError(req, "Không thể bảo lưu: " + e.getMessage());
         }
 
-        resp.sendRedirect(req.getContextPath() + "/staff/enrollments");
+        resp.sendRedirect(req.getContextPath() + redirectBase);
     }
 
-    private void handleResume(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO user) throws IOException {
+    private void handleResume(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO user, String path) throws IOException {
+        String redirectBase = getRedirectBase(path);
         try {
             Long enrollmentId = Long.parseLong(req.getParameter("enrollmentId"));
 
@@ -224,10 +334,11 @@ public class EnrollmentServlet extends HttpServlet {
             FlashMessageUtil.setError(req, "Không thể phục hồi học tập: " + e.getMessage());
         }
 
-        resp.sendRedirect(req.getContextPath() + "/staff/enrollments");
+        resp.sendRedirect(req.getContextPath() + redirectBase);
     }
 
-    private void handleUpdateStatus(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO user) throws IOException {
+    private void handleUpdateStatus(HttpServletRequest req, HttpServletResponse resp, UserPrincipalDTO user, String path) throws IOException {
+        String redirectBase = getRedirectBase(path);
         try {
             Long enrollmentId = Long.parseLong(req.getParameter("enrollmentId"));
             String newStatus = req.getParameter("newStatus");
@@ -244,6 +355,6 @@ public class EnrollmentServlet extends HttpServlet {
             FlashMessageUtil.setError(req, "Không thể cập nhật trạng thái: " + e.getMessage());
         }
 
-        resp.sendRedirect(req.getContextPath() + "/staff/enrollments");
+        resp.sendRedirect(req.getContextPath() + redirectBase);
     }
 }

@@ -42,19 +42,29 @@
           <!-- Flash Alerts -->
           <%@ include file="/WEB-INF/views/common/alert.jsp" %>
 
-          <!-- PRJ301 Evaluation Convenience Link (if generated) -->
-          <c:if test="${not empty sessionScope.demo_reset_link}">
-            <div class="alert alert-info mb-4" style="border-radius: var(--radius-md); font-size: 13px;">
-              <div style="font-weight: 600; margin-bottom: 4px;">Liên kết đặt lại mật khẩu của bạn:</div>
-              <p style="margin: 0 0 8px 0; color: var(--text-muted);">
-                Do môi trường thực hành nội bộ không gửi email ra internet, bạn có thể nhấp vào nút dưới đây để tiếp tục quy trình:
-              </p>
-              <a href="${sessionScope.demo_reset_link}" class="btn btn-secondary btn-sm" style="text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
-                <span>Mở phiên đặt lại mật khẩu</span>
-                <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </a>
+          <!-- Active Reset Password Link Card -->
+          <c:set var="activeResetLink" value="${not empty sessionScope.reset_link ? sessionScope.reset_link : sessionScope.demo_reset_link}"/>
+          <c:if test="${not empty activeResetLink}">
+            <div class="alert alert-success mb-4" style="border-radius: var(--radius-md); padding: 16px; border-left: 4px solid #16a34a; background: rgba(22, 163, 74, 0.08); margin-bottom: 20px;">
+              <div style="display: flex; align-items: flex-start; gap: 12px;">
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: #16a34a; color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div style="flex: 1;">
+                  <div style="font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 4px;">Liên kết đổi mật khẩu đã sẵn sàng!</div>
+                  <p style="margin: 0 0 10px 0; font-size: 13px; color: var(--text-muted); line-height: 1.4;">
+                    Đã xác thực thành công tài khoản <c:if test="${not empty sessionScope.reset_email}"><strong><c:out value="${sessionScope.reset_email}"/></strong></c:if>. Nhấp vào nút bên dưới để tiến hành đổi mật khẩu mới ngay:
+                  </p>
+                  <a href="${activeResetLink}" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; padding: 10px 18px; border-radius: var(--radius-sm); font-size: 13px;">
+                    <span>Mở trang đổi mật khẩu ngay</span>
+                    <svg class="icon icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                  </a>
+                </div>
+              </div>
             </div>
             <c:remove var="demo_reset_link" scope="session"/>
+            <c:remove var="reset_link" scope="session"/>
+            <c:remove var="reset_email" scope="session"/>
           </c:if>
 
           <!-- Request Form -->
@@ -72,8 +82,10 @@
                   <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                 </span>
                 <input class="form-control" id="recoveryEmail" name="email" type="email"
+                       value="<c:out value='${sessionScope.preserved_email}'/>"
                        placeholder="ten.nguoidung@educenter.vn" required maxlength="255" autocomplete="email"/>
               </div>
+              <c:remove var="preserved_email" scope="session"/>
               <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 12px; color: var(--text-muted);">
                 <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                 <span>Chấp nhận email tên miền trường (@educenter.vn) hoặc email cá nhân đã xác thực.</span>

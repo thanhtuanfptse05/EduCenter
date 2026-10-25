@@ -29,6 +29,7 @@ public class EnrollmentPageDTO implements Serializable {
     // Options for forms/filters
     private List<ClassEnrollmentOptionDTO> classOptions = new ArrayList<>();
     private List<Student> studentOptions = new ArrayList<>();
+    private List<CourseAdminViewDTO> courseOptions = new ArrayList<>();
 
     public EnrollmentPageDTO() {
         this.currentPage = 1;
@@ -99,4 +100,7 @@ public class EnrollmentPageDTO implements Serializable {
 
     public List<Student> getStudentOptions() { return studentOptions; }
     public void setStudentOptions(List<Student> studentOptions) { this.studentOptions = studentOptions; }
+
+    public List<CourseAdminViewDTO> getCourseOptions() { return courseOptions; }
+    public void setCourseOptions(List<CourseAdminViewDTO> courseOptions) { this.courseOptions = courseOptions; }
 }

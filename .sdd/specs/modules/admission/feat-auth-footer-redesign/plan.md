@@ -55,7 +55,7 @@
 6. **`web/WEB-INF/views/auth/register.jsp`**:
    - Implement the 2-column registration layout with 2-option role selector (`STUDENT` / `PARENT`), real form fields, password strength & checklist, and right column trust showcase.
 7. **`web/WEB-INF/views/auth/forgot-password.jsp`**:
-   - Implement centered card with lock emblem, email input, bot shield element, PRJ301 evaluator note if `demo_reset_link` exists, and link back to login.
+   - Implement centered card with lock emblem, email input, direct error alert if email not found, and prominent direct reset password link card/button when valid email is entered, linking to `/reset-password?token=...`.
 8. **`web/WEB-INF/views/auth/reset-password.jsp`**:
    - Implement centered card with 15-minute countdown timer, valid/expired state conditional rendering, new password strength meter, match indicator, and revoke session option.
 9. **`web/WEB-INF/views/common/public-footer.jspf`**:

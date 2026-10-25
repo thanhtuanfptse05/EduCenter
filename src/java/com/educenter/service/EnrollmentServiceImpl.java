@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,6 +55,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             // Dropdown options
             pageDTO.setClassOptions(enrollmentRepository.findOpenClassOptions(em));
             pageDTO.setStudentOptions(enrollmentRepository.findActiveStudents(em));
+            pageDTO.setCourseOptions(getOpenCoursesInternal(em));
 
             return pageDTO;
         } finally {
@@ -68,6 +70,23 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         }
         if (form.getStartDate() == null) {
             throw new ValidationException("Ngày bắt đầu học không được để trống!");
+        }
+
+        // FR-014: Kiểm tra bắt buộc nộp tiền học phí trước khi ghi danh
+        if (form.getPaymentConfirmed() == null || !Boolean.TRUE.equals(form.getPaymentConfirmed())) {
+            throw new ValidationException("Học viên chưa nộp tiền học phí! Theo quy định, bắt buộc phải hoàn tất nộp tiền học phí trước khi ghi danh chính thức vào lớp học.");
+        }
+
+        String paymentMethod = form.getPaymentMethod();
+        if (paymentMethod == null || (!"CASH".equalsIgnoreCase(paymentMethod.trim()) && !"BANK_TRANSFER".equalsIgnoreCase(paymentMethod.trim()))) {
+            throw new ValidationException("Vui lòng chọn hình thức nộp tiền học phí hợp lệ: Tiền mặt (CASH) hoặc Chuyển khoản (BANK_TRANSFER).");
+        }
+        paymentMethod = paymentMethod.trim().toUpperCase();
+
+        if ("BANK_TRANSFER".equals(paymentMethod)) {
+            if (form.getTransactionRef() == null || form.getTransactionRef().trim().isEmpty()) {
+                throw new ValidationException("Phương thức nộp tiền chuyển khoản ngân hàng bắt buộc phải nhập mã tham chiếu giao dịch!");
+            }
         }
 
         EntityManager em = JPAUtil.getEntityManager();
@@ -90,6 +109,13 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             EduClass eduClass = em.find(EduClass.class, form.getClassId());
             if (eduClass == null) {
                 throw new ValidationException("Lớp học không tồn tại!");
+            }
+
+            // FR-013: Kiểm tra lớp học phải phù hợp với khóa học đăng ký của học sinh
+            if (form.getCourseId() != null && form.getCourseId() > 0) {
+                if (eduClass.getCourse() == null || !form.getCourseId().equals(eduClass.getCourse().getId())) {
+                    throw new ValidationException("Lớp học đã chọn (" + eduClass.getCode() + ") không thuộc khóa học đăng ký của học sinh!");
+                }
             }
 
             // B07: Kiểm tra trạng thái khóa học
@@ -116,7 +142,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
 
             // BR07: Kiểm tra xung đột thời khóa biểu
             if (enrollmentRepository.hasScheduleConflict(em, student.getId(), eduClass.getId())) {
-                throw new ValidationException("Học sinh bị xung đột lịch học giữa lớp " + eduClass.getCode() + " và lớp học khác đang tham gia!");
+                throw new ValidationException("Lớp học " + eduClass.getCode() + " bị xung đột lịch học với lớp khác học sinh đang theo học!");
             }
 
             tx.begin();
@@ -124,10 +150,10 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             // B07: Khóa kiểm tra sĩ số bên trong transaction để bảo vệ chỗ cuối
             long currentActive = enrollmentRepository.countActiveByClassId(em, eduClass.getId());
             if (currentActive >= eduClass.getCapacity()) {
-                throw new ValidationException("Lớp học đã đạt sĩ số tối đa (" + eduClass.getCapacity() + " học viên). Không thể ghi danh thêm!");
+                throw new ValidationException("Lớp học " + eduClass.getCode() + " đã đạt sĩ số tối đa (" + eduClass.getCapacity() + " học viên). Không còn chỗ trống để ghi danh!");
             }
 
-            // 1. Tạo Enrollment
+            // 1. Tạo Enrollment ACTIVE
             Enrollment enrollment = new Enrollment();
             enrollment.setStudent(student);
             enrollment.setEduClass(eduClass);
@@ -141,7 +167,7 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             enrollmentRepository.save(em, enrollment);
             em.flush(); // Lấy ID của enrollment
 
-            // 2. Tạo Initial Invoice đồng bộ (FR-005, BR12)
+            // 2. Tạo Hóa đơn PAID đồng bộ do đã nộp tiền (FR-014, BR12)
             BigDecimal courseFee = eduClass.getCourse().getFee() != null ? eduClass.getCourse().getFee() : BigDecimal.ZERO;
             Invoice invoice = new Invoice();
             String codeSuffix = String.format("%05d", (System.currentTimeMillis() % 100000));
@@ -151,18 +177,9 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             invoice.setTotalAmount(courseFee);
             invoice.setDiscountAmount(BigDecimal.ZERO);
             invoice.setFinalAmount(courseFee);
-            invoice.setStatus("UNPAID");
-
-            // B13: Đọc thời hạn nộp học phí từ SystemSetting
-            int dueDays = 10;
-            try {
-                String dueDaysSetting = systemSettingRepository.getValueByKey(em, SystemSettingServiceImpl.KEY_TUITION_DUE_DAYS);
-                if (dueDaysSetting != null && !dueDaysSetting.isBlank()) {
-                    dueDays = Integer.parseInt(dueDaysSetting.trim());
-                }
-            } catch (Exception ignored) {}
-            invoice.setDueDate(LocalDate.now().plusDays(dueDays));
-            invoice.setNotes("Hóa đơn học phí ban đầu ghi danh lớp " + eduClass.getName());
+            invoice.setStatus("PAID"); // Đã thanh toán đầy đủ khi ghi danh
+            invoice.setDueDate(LocalDate.now());
+            invoice.setNotes("Hóa đơn đã thu đủ học phí khi ghi danh vào lớp " + eduClass.getName() + " (" + ("CASH".equals(paymentMethod) ? "Tiền mặt" : "Chuyển khoản") + ")");
             invoice.setCreatedAt(LocalDateTime.now());
             invoice.setUpdatedAt(LocalDateTime.now());
 
@@ -175,9 +192,39 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             invoice.addItem(item);
 
             enrollmentRepository.saveInvoice(em, invoice);
+            em.flush();
+
+            // 3. Tạo bản ghi Thanh toán (Payment) tương ứng
+            String datePart = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            String suffix = UUID.randomUUID().toString().substring(0, 5).toUpperCase();
+            String paymentCode = "PAY-" + datePart + "-" + suffix;
+
+            Payment payment = new Payment();
+            payment.setPaymentCode(paymentCode);
+            payment.setInvoice(invoice);
+            payment.setAmount(courseFee);
+            payment.setPaymentMethod(paymentMethod);
+            payment.setTransactionRef("BANK_TRANSFER".equals(paymentMethod) && form.getTransactionRef() != null ? form.getTransactionRef().trim() : null);
+            payment.setPaidAt(LocalDateTime.now());
+            User confirmedActor = null;
+            if (actorId != null) {
+                confirmedActor = em.find(User.class, actorId);
+            }
+            if (confirmedActor == null) {
+                List<User> staffUsers = em.createQuery("SELECT u FROM User u WHERE u.status = 'ACTIVE' ORDER BY u.id ASC", User.class)
+                        .setMaxResults(1).getResultList();
+                if (!staffUsers.isEmpty()) {
+                    confirmedActor = staffUsers.get(0);
+                }
+            }
+            payment.setConfirmedBy(confirmedActor);
+            payment.setNotes("Thu tiền học phí khi hoàn tất ghi danh vào lớp " + eduClass.getCode());
+            payment.setStatus("CONFIRMED");
+            payment.setCreatedAt(LocalDateTime.now());
+            em.persist(payment);
 
             tx.commit();
-            LOGGER.info("Ghi danh thành công học sinh " + student.getFullName() + " vào lớp " + eduClass.getCode() + ", Hóa đơn: " + invoice.getInvoiceCode());
+            LOGGER.info("Ghi danh thành công học sinh " + student.getFullName() + " vào lớp " + eduClass.getCode() + ", Đã thu học phí: " + courseFee + ", Hóa đơn: " + invoice.getInvoiceCode());
 
             EnrollmentViewDTO dto = new EnrollmentViewDTO();
             dto.setEnrollmentId(enrollment.getId());
@@ -558,5 +605,59 @@ public class EnrollmentServiceImpl implements EnrollmentService {
         } finally {
             em.close();
         }
+    }
+
+    @Override
+    public List<Long> getStudentRegisteredCourseIds(Long studentId) {
+        if (studentId == null || studentId <= 0) return List.of();
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return enrollmentRepository.findStudentRegisteredCourseIds(em, studentId);
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<ClassEnrollmentOptionDTO> getOpenClassOptionsForStudent(Long studentId) {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return enrollmentRepository.findOpenClassOptionsForStudent(em, studentId);
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<CourseAdminViewDTO> getOpenCourses() {
+        EntityManager em = JPAUtil.getEntityManager();
+        try {
+            return getOpenCoursesInternal(em);
+        } finally {
+            em.close();
+        }
+    }
+
+    private List<CourseAdminViewDTO> getOpenCoursesInternal(EntityManager em) {
+        jakarta.persistence.TypedQuery<Course> q = em.createQuery(
+                "SELECT c FROM Course c JOIN FETCH c.subject s WHERE c.status = 'OPEN' ORDER BY c.gradeLevel ASC, c.name ASC",
+                Course.class
+        );
+        List<Course> list = q.getResultList();
+        List<CourseAdminViewDTO> dtos = new java.util.ArrayList<>();
+        for (Course c : list) {
+            CourseAdminViewDTO dto = new CourseAdminViewDTO();
+            dto.setId(c.getId());
+            dto.setCode(c.getCode());
+            dto.setName(c.getName());
+            dto.setGradeLevel(c.getGradeLevel());
+            dto.setFee(c.getFee());
+            dto.setSubjectName(c.getSubject() != null ? c.getSubject().getName() : "");
+            dto.setTotalSessions(c.getTotalSessions());
+            dto.setMaxCapacity(c.getMaxCapacity());
+            dto.setStatus(c.getStatus());
+            dtos.add(dto);
+        }
+        return dtos;
     }
 }
